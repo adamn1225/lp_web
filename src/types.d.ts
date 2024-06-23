@@ -6,9 +6,5 @@ interface Property {
   bedrooms: number;
   bathroom: number;
   livingArea: number;
-  realtor?: {
-    name: string;
-    phone: string;
-    photo: string;
-  }
+
 }
