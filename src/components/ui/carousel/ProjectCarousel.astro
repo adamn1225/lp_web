@@ -1,0 +1,58 @@
+---
+import { projects } from '@data/properties'
+import { Icon } from 'astro-icon/components'
+import PolkaDots from '../PolkaDots.astro'
+---
+
+<div class="relative">
+  <!-- Polka dots -->
+  <div class="absolute top-3 -start-11"><PolkaDots /></div>
+  <div class="absolute -bottom-10 -end-11"><PolkaDots /></div>
+
+  <div x-data="projectsSwiper" class="relative z-[2]">
+    <div class="flex justify-end mb-6">
+      <button
+        @click="swiper.slidePrev()"
+        class="flex justify-center items-center outline-none h-8 aspect-square text-lg rounded-md cursor-pointer transition-colors duration-300 bg-none hover:bg-muted-100 hover:dark:bg-muted-800 group"
+      >
+        <Icon class="text-muted-500 group-hover:text-muted-900 pointer-events-none dark:group-hover:text-white size-4 aspect-auto" name="lucide:arrow-left" />
+      </button>
+
+      <button
+        @click="swiper.slideNext()"
+        class="flex justify-center items-center outline-none h-8 aspect-square text-lg rounded-md cursor-pointer transition-colors duration-300 bg-none hover:bg-muted-100 hover:dark:bg-muted-800 group"
+      >
+        <Icon class="text-muted-500 group-hover:text-muted-900 pointer-events-none dark:group-hover:text-white size-4 aspect-auto" name="lucide:arrow-right" />
+      </button>
+    </div>
+    <div class="overflow-hidden" x-ref="container">
+      <div class="swiper-wrapper">
+        <!-- Slides -->
+        {
+          [...projects, ...projects].map((project) => (
+            <div class="swiper-slide">
+              <a>
+                <div class="relative">
+                  <img class="h-[352px] lg:h-[390px] w-full object-cover" src={project.image} alt={project.title} />
+                  <div class="hover:opacity-100 absolute top-0 h-full w-full opacity-0 transition-opacity duration-300 start-0">
+                    <div class="absolute top-0 h-full w-full bg-gradient-to-t from-muted-900 z-0 start-0">
+                      <div class="absolute top-6 start-6 flex items-center justify-center h-10 aspect-square rounded-full bg-muted-900">
+                        <img src={project.flag} class="size-8 aspect-square rounded-full" alt="Slide icon" />
+                      </div>
+                      <div class="relative h-full w-full flex flex-col justify-end">
+                        <div class="p-6">
+                          <h3 class="font-sans text-white font-medium text-xl">{project.title}</h3>
+                          <p class="opacity-70 text-muted-200 text-sm">{project.location}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>

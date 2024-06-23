@@ -1,0 +1,45 @@
+---
+import HeroAbout from '@components/sections/HeroAbout.astro'
+import SideStats from '@components/sections/SideStats.astro'
+import FeatureBoxes from '@components/sections/FeatureBoxes.astro'
+import SideIllustrations from '@components/sections/SideIllustrations.astro'
+import IconMatrix from '@components/sections/IconMatrix.astro'
+import MasonryGrid from '@components/sections/MasonryGrid.astro'
+
+import BoxedCta from '@components/sections/BoxedCta.astro'
+import CustomerLogos from '@components/sections/CustomerLogos.astro'
+import Testimonials from '@components/sections/Testimonials.astro'
+import Layout from '@layouts/Split.astro'
+import icon from 'astro-icon'
+---
+
+<Layout title="About">
+  <main id="About">
+    <!--About Hero-->
+    <HeroAbout />
+
+    <!--Founder section-->
+    <SideStats />
+
+    <!--Feature boxes-->
+    <FeatureBoxes />
+
+    <!--Side Illustrations-->
+    <SideIllustrations />
+
+    <!--Icon matrix-->
+    <IconMatrix />
+
+    <!--Masonry grid-->
+    <MasonryGrid />
+
+    <!--Testimonials-->
+    <Testimonials centerText={true} />
+
+    <!--Customer Logos-->
+    <CustomerLogos />
+
+    <!--Boxed Cta-->
+    <BoxedCta />
+  </main>
+</Layout>

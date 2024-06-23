@@ -1,0 +1,13 @@
+---
+interface Props {
+  fluid?: boolean
+}
+
+const { fluid = false } = Astro.props
+---
+
+<div class="w-full mx-auto" class:list={[
+  fluid ? '' : 'max-w-7xl'
+]}>
+  <slot />
+</div>

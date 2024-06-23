@@ -1,0 +1,52 @@
+---
+import { Icon } from 'astro-icon/components'
+import Section from '@components/Section.astro'
+import Container from '@components/Container.astro'
+---
+
+<Section>
+  <Container>
+    <div class="flex flex-col md:flex-row items-center gap-6">
+      <div class="md:w-1/2 flex md:justify-center">
+        <div class="max-w-[340px] relative">
+          <img class="h-full relative z-0" alt="A robust partnership" src="/images/photo/buildings/8.webp" />
+          <!-- composition -->
+          <div
+            class="absolute z-[2] border border-muted-200 dark:border-muted-800 -end-12 md:-end-12 -bottom-8 p-6 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20 w-[280px] bg-white dark:bg-muted-950"
+          >
+            <p class="mb-2 flex justify-between items-center text-muted-900 dark:text-white font-sans text-base font-semibold">
+              Simply incredible
+              <Icon name="fluent:star-emphasis-24-filled" class="size-4 text-yellow-400" />
+            </p>
+            <p class="text-muted-500 dark:text-muted-400 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <div class="flex items-center gap-2 mt-4">
+              <img src="/images/avatars/5.webp" alt="Author" width={310} class="h-8 w-8 rounded-full" />
+              <span class="text-muted-400 text-sm">Chris Stappler — Barton Inc.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="md:w-1/2 p-3 md:pe-[98px]">
+        <h3 class="text-muted-900 dark:text-white font-sans text-3xl leading-9 font-medium">A robust partnership</h3>
+        <p class="text-muted-500 dark:text-muted-400 text-base py-2">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Illud non continuo, ut aeque incontentae. Duo Reges: constructio interrete. Si qua in iis corrigere voluit, deteriora fecit. Sit enim
+          idem caecus, debilis.
+        </p>
+        <ul class="py-4 ps-6">
+          <li class="flex items-center gap-2 py-2">
+            <Icon name="lucide:check" class="size-4 text-success aspect-square" />
+            <span class="text-muted-500 dark:text-muted-400">Weekly status meetings</span>
+          </li>
+          <li class="flex items-center gap-2 py-2">
+            <Icon name="lucide:check" class="size-4 text-success aspect-square" />
+            <span class="text-muted-500 dark:text-muted-400">Project monitoring</span>
+          </li>
+          <li class="flex items-center gap-2 py-2">
+            <Icon name="lucide:check" class="size-4 text-success aspect-square" />
+            <span class="text-muted-500 dark:text-muted-400">Quarterly process audits</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </Container>
+</Section>

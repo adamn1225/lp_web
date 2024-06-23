@@ -1,0 +1,131 @@
+---
+import Layout from '@layouts/Split.astro'
+import HeroCarousel from '@components/sections/HeroCarousel.astro'
+import Process from '@components/sections/Process.astro'
+import RecentProjects from '@components/sections/RecentProjects.astro'
+import SideVideoTwo from '@components/sections/SideVideoTwo.astro'
+import SideFeatureOne from '@components/sections/SideFeatureOne.astro'
+import SideFeatureTwo from '@components/sections/SideFeatureTwo.astro'
+import ProjectGrid from '@components/sections/ProjectGrid.astro'
+import Testimonials from '@components/sections/Testimonials.astro'
+import CustomerLogos from '@components/sections/CustomerLogos.astro'
+import BoxedCta from '@components/sections/BoxedCta.astro'
+---
+
+<Layout title="Home">
+  <main id="Home">
+    <!--Header -->
+    <HeroCarousel />
+
+    <!--Process section-->
+    <Process />
+
+    <!--Recent projects carousel-->
+    <RecentProjects />
+
+    <!--Side Video-->
+    <SideVideoTwo />
+
+    <!--Side Feature-->
+    <SideFeatureOne />
+
+    <!--Side Feature-->
+    <SideFeatureTwo />
+
+    <!--Project grid-->
+    <ProjectGrid />
+
+    <!--Testimonials-->
+    <Testimonials />
+
+    <!--Customer Logos-->
+    <CustomerLogos />
+
+    <!-- ENGAGE/CTA-->
+    <BoxedCta />
+  </main>
+</Layout>
+
+<script>
+  //@ts-ignore
+  import Swiper, { Autoplay } from 'swiper'
+  import 'swiper/css'
+
+  document.addEventListener('alpine:init', () => {
+    //@ts-ignore
+    Alpine.data('homeSwiper', () => ({
+      swiper: null,
+      init() {
+        //@ts-ignore
+        this.swiper = new Swiper(this.$refs.container, {
+          modules: [Autoplay],
+          loop: true,
+          autoplay: {
+            delay: 5000,
+          },
+          slidesPerView: 1,
+          spaceBetween: 0,
+          effect: 'fade',
+          fadeEffect: {
+            crossFade: true,
+          },
+          pagination: {
+            el: '.carousel-pagination',
+            type: 'bullets',
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+            },
+            768: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+            },
+            1024: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+            },
+          },
+        })
+      },
+    }))
+
+    //@ts-ignore
+    Alpine.data('projectsSwiper', () => ({
+      swiper: null,
+      init() {
+        //@ts-ignore
+        this.swiper = new Swiper(this.$refs.container, {
+          modules: [Autoplay],
+          loop: true,
+          autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+          },
+
+          slidesPerView: 4,
+          spaceBetween: 20,
+          pagination: {
+            el: '.carousel-pagination',
+            type: 'bullets',
+          },
+          breakpoints: {
+            340: {
+              slidesPerView: 1.5,
+              spaceBetween: 20,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 20,
+            },
+          },
+        })
+      },
+    }))
+  })
+</script>

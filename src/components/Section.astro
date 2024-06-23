@@ -1,0 +1,15 @@
+---
+interface Props {
+  oveflow?: boolean
+  gray?: boolean
+}
+
+const { oveflow = false, gray = false } = Astro.props
+---
+
+<section class="py-16 px-6 overflow-hidden md:overflow-auto" class:list={[
+  oveflow ? '' : 'overflow-hidden',
+  gray ? 'bg-muted-50 dark:bg-muted-900' : 'bg-white dark:bg-muted-900 '
+]}>
+  <slot />
+</section>

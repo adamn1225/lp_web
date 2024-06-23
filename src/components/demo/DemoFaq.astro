@@ -1,0 +1,140 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<script is:inline>
+  function collapse() {
+    return {
+      isOpen: false,
+      open() {
+        this.isOpen = true
+      },
+      close() {
+        this.isOpen = false
+      },
+    }
+  }
+</script>
+
+<div class="pb-16">
+  <div class="w-full">
+    <!--Section title-->
+    <div class="w-full max-w-md mb-8">
+      <h2 class="font-sans font-semibold text-3xl text-muted-800 dark:text-white mb-4">FAQs</h2>
+      <p class="font-sans text-muted-500 dark:text-muted-400">
+        You probably already have a lot of questions. You can open a support ticket, or read some answers to the most common questions asked by our customers.
+      </p>
+    </div>
+
+    <!--Grid-->
+    <div class="flex flex-col md:flex-row lg:flex-row flex-wrap -m-3">
+      <!--Grid item-->
+      <div class="w-full p-2">
+        <div
+          class="bg-white dark:bg-muted-700/50 rounded-md border border-muted-200 dark:border-muted-600 p-6 transition-all duration-300"
+          x-data="collapse()"
+          x-bind:class="isOpen && 'shadow-xl shadow-muted-400/10 dark:shadow-muted-800/10'"
+        >
+          <button type="button" class="w-full flex items-center justify-between" x-on:click="open()">
+            <h4 class="font-sans text-muted-600 dark:text-white pe-6" x-bind:class="{'text-primary-400 dark:text-primary-400 font-medium' : isOpen}">What is the difference between your licenses?</h4>
+            <Icon name="lucide:chevron-down" class="w-5 min-w-[1.25rem] h-5 text-muted-500 dark:text-muted-400 transition-transform duration-300" x-bind:class="isOpen && 'rotate-180'" />
+          </button>
+          <div x-show="isOpen" x-collapse x-on:click.away="close()" class="mt-3" x-bind:class="isOpen ?'text-muted-600' : ''">
+            <p class="font-sans text-muted-500 dark:text-muted-400">
+              The main difference between our licenses is the number and type of projects that you can build with our templates. There are also some special perks that come with upper licenses. The
+              <a class="underline-offset-4 text-primary-500 hover:underline" href="https://cssninja.io/about/license-starter"> starter license </a>
+              allows you to build a single project with limited support from the discord community. However, if you are a professional developer or a freelancer, you might consider purchasing a
+              <a class="underline-offset-4 text-primary-500 hover:underline" href="https://cssninja.io/about/license-developer"> developer license </a>
+              , granting you access to the Github repository, and allowing you to build SaaS projects, or the
+              <a class="underline-offset-4 text-primary-500 hover:underline" href="https://cssninja.io/about/license-business"> business license </a>
+              , which allows unlimited projects, building complex SaaS products and access to private member areas and special sales.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!--Grid item-->
+      <div class="w-full p-2">
+        <div
+          class="bg-white dark:bg-muted-700/50 rounded-md border border-muted-200 dark:border-muted-600 p-6 transition-all duration-300"
+          x-data="collapse()"
+          x-bind:class="isOpen && 'shadow-xl shadow-muted-400/10 dark:shadow-muted-800/10'"
+        >
+          <button type="button" class="w-full flex items-center justify-between" x-on:click="open()">
+            <h4 class="font-sans text-muted-600 dark:text-white pe-6" x-bind:class="{'text-primary-400 dark:text-primary-400 font-medium' : isOpen}">What about licensing and SaaS projects?</h4>
+            <Icon name="lucide:chevron-down" class="w-5 min-w-[1.25rem] h-5 text-muted-500 dark:text-muted-400 transition-transform duration-300" x-bind:class="isOpen && 'rotate-180'" />
+          </button>
+          <div x-show="isOpen" x-collapse x-on:click.away="close()" class="mt-3" x-bind:class="isOpen ?'text-muted-600' : ''">
+            <p class="font-sans text-muted-500 dark:text-muted-400">
+              Unlike other platforms, it doesn't matter to us if your customers will need to pay to get access to your product. You can build SaaS products with our templates starting from the
+              <a class="underline-offset-4 text-primary-500 hover:underline" href="https://cssninja.io/about/license-developer"> developer license </a>
+              and the
+              <a class="underline-offset-4 text-primary-500 hover:underline" href="https://cssninja.io/about/license-business"> business license </a>
+              . Take the time to check each license for details about usage.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!--Grid item-->
+      <div class="w-full p-2">
+        <div
+          class="bg-white dark:bg-muted-700/50 rounded-md border border-muted-200 dark:border-muted-600 p-6 transition-all duration-300"
+          x-data="collapse()"
+          x-bind:class="isOpen && 'shadow-xl shadow-muted-400/10 dark:shadow-muted-800/10'"
+        >
+          <button type="button" class="w-full flex items-center justify-between" x-on:click="open()">
+            <h4 class="font-sans text-muted-600 dark:text-white pe-6" x-bind:class="{'text-primary-400 dark:text-primary-400 font-medium' : isOpen}">What about theme customization?</h4>
+            <Icon name="lucide:chevron-down" class="w-5 min-w-[1.25rem] h-5 text-muted-500 dark:text-muted-400 transition-transform duration-300" x-bind:class="isOpen && 'rotate-180'" />
+          </button>
+          <div x-show="isOpen" x-collapse x-on:click.away="close()" class="mt-3" x-bind:class="isOpen ?'text-muted-600' : ''">
+            <p class="font-sans text-muted-500 dark:text-muted-400">
+              Theme customization is not part of our regular services and therefore not included in a product purchase. If you need customization services, feel free to reach us and make sure to send
+              us your requirements so we can issue a quote for you or your company.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!--Grid item-->
+      <div class="w-full p-2">
+        <div
+          class="bg-white dark:bg-muted-700/50 rounded-md border border-muted-200 dark:border-muted-600 p-6 transition-all duration-300"
+          x-data="collapse()"
+          x-bind:class="isOpen && 'shadow-xl shadow-muted-400/10 dark:shadow-muted-800/10'"
+        >
+          <button type="button" class="w-full flex items-center justify-between" x-on:click="open()">
+            <h4 class="font-sans text-muted-600 dark:text-white pe-6" x-bind:class="{'text-primary-400 dark:text-primary-400 font-medium' : isOpen}">What about the support scope?</h4>
+            <Icon name="lucide:chevron-down" class="w-5 min-w-[1.25rem] h-5 text-muted-500 dark:text-muted-400 transition-transform duration-300" x-bind:class="isOpen && 'rotate-180'" />
+          </button>
+          <div x-show="isOpen" x-collapse x-on:click.away="close()" class="mt-3" x-bind:class="isOpen ?'text-muted-600' : ''">
+            <p class="font-sans text-muted-500 dark:text-muted-400">
+              Our support guidelines are very clear. We only support what is directly related to the template UI. Anything else remains optional. We do not support 3rd party plugins as well though we
+              can provide some guidance on how to use them best, but not on how to implement them or fix your own implementation.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!--Grid item-->
+      <div class="w-full p-2">
+        <div
+          class="bg-white dark:bg-muted-700/50 rounded-md border border-muted-200 dark:border-muted-600 p-6 transition-all duration-300"
+          x-data="collapse()"
+          x-bind:class="isOpen && 'shadow-xl shadow-muted-400/10 dark:shadow-muted-800/10'"
+        >
+          <button type="button" class="w-full flex items-center justify-between" x-on:click="open()">
+            <h4 class="font-sans text-muted-600 dark:text-white pe-6" x-bind:class="{'text-primary-400 dark:text-primary-400 font-medium' : isOpen}">Can I have a refund if Iam not happy?</h4>
+            <Icon name="lucide:chevron-down" class="w-5 min-w-[1.25rem] h-5 text-muted-500 dark:text-muted-400 transition-transform duration-300" x-bind:class="isOpen && 'rotate-180'" />
+          </button>
+          <div x-show="isOpen" x-collapse x-on:click.away="close()" class="mt-3" x-bind:class="isOpen ?'text-muted-600' : ''">
+            <p class="font-sans text-muted-500 dark:text-muted-400">
+              If the product doesn't suit your needs you can always ask us to get a refund under 14 days after product purchase. After, that delay you won't be eligible for a refund anymore. Refund
+              requests should always explain why you are returning the product.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

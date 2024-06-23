@@ -1,0 +1,51 @@
+---
+import { Icon } from 'astro-icon/components'
+import Section from '@components/Section.astro'
+import Container from '@components/Container.astro'
+import Video from '@components/ui/Video.astro'
+---
+
+<Section>
+  <Container>
+    <div class="flex flex-col">
+      <h2 class="dark:text-white font-sans text-muted-900 text-4xl leading-9">Talented and experienced Architects</h2>
+      <div class="flex lg:flex-row flex-col py-8 gap-6">
+        <!-- player -->
+        <div class="player w-full lg:w-1/2">
+          <Video
+            poster="/images/video/poster-square.webp"
+            sources={[
+              { src: '/images/video/hands.mp4', type: 'video/mp4' },
+              { src: '/images/video/hands.webm', type: 'video/webm' },
+            ]}
+          />
+        </div>
+        <!-- Features -->
+        <div class="w-full lg:w-1/2 flex justify-center lg:justify-start items-center">
+          <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-8">
+            <div>
+              <Icon name="ph:buildings-duotone" class="size-6 mb-2 aspect-square text-primary-500" />
+              <h5 class="text-base font-sans font-semibold text-muted-900 dark:text-white">Solid Expertise</h5>
+              <p class="text-sm text-muted-400 max-w-xs">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed videbimus.</p>
+            </div>
+            <div>
+              <Icon name="ph:medal-duotone" class="size-6 mb-2 aspect-square text-primary-500" />
+              <h5 class="text-base font-sans font-semibold text-muted-900 dark:text-white">Award Winning</h5>
+              <p class="text-sm text-muted-400 max-w-xs">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed videbimus.</p>
+            </div>
+            <div>
+              <Icon name="ph:sparkle-duotone" class="size-6 mb-2 aspect-square text-primary-500" />
+              <h5 class="text-base font-sans font-semibold text-muted-900 dark:text-white">Creativity</h5>
+              <p class="text-sm text-muted-400 max-w-xs">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed videbimus.</p>
+            </div>
+            <div>
+              <Icon name="ph:gear-six-duotone" class="size-6 mb-2 aspect-square text-primary-500" />
+              <h5 class="text-base font-sans font-semibold text-muted-900 dark:text-white">Technicity</h5>
+              <p class="text-sm text-muted-400 max-w-xs">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed videbimus.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>

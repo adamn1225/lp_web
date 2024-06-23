@@ -1,0 +1,125 @@
+<script is:inline>
+  function purchase() {
+    return {
+      activeTab: 'starter',
+      toggleTabs(e) {
+        const target = e.target.getAttribute('data-tab')
+        this.activeTab = target
+      },
+    }
+  }
+</script>
+
+<div
+  x-data="purchase()"
+  class="sticky inset-x-0 top-28 start-0 p-8 ptablet:max-w-md ptablet:mx-auto ptablet:-mt-8 ltablet:p-6 bg-white dark:bg-muted-800 border border-muted-200 dark:border-muted-700 rounded-md shadow-xl shadow-muted-400/10 dark:shadow-muted-800/10"
+>
+  <div class="w-full">
+    <div class="w-full relative flex rounded-md bg-muted-100 dark:bg-muted-900">
+      <button
+        type="button"
+        class="relative h-12 flex-1 flex items-center justify-center font-sans z-10 cursor-pointer select-none"
+        x-bind:class="activeTab === 'starter'? 'text-muted-800 dark:text-muted-100' : 'text-muted-400'"
+        data-tab="starter"
+        x-on:click="toggleTabs($event)"
+      >
+        Starter
+      </button>
+      <button
+        type="button"
+        class="relative h-12 flex-1 flex items-center justify-center font-sans z-10 cursor-pointer select-none"
+        x-bind:class="activeTab === 'developer'? 'text-muted-800 dark:text-muted-100' : 'text-muted-400'"
+        data-tab="developer"
+        x-on:click="toggleTabs($event)"
+      >
+        Developer
+      </button>
+      <button
+        type="button"
+        class="relative h-12 flex-1 flex items-center justify-center font-sans z-10 cursor-pointer select-none"
+        data-tab="business"
+        x-bind:class="activeTab === 'business'? 'text-muted-800 dark:text-muted-100' : 'text-muted-400'"
+        x-on:click="toggleTabs($event)"
+      >
+        Business
+      </button>
+      <span
+        class="block absolute h-full w-1/3 rounded-md bg-white dark:bg-muted-800 border border-muted-200 dark:border-muted-700 shadow-xl shadow-muted-400/10 dark:shadow-muted-800/10 transition-all duration-300"
+        x-bind:class=`[
+          activeTab === 'starter' && 'ms-0' ,
+          activeTab === 'developer' && 'ms-[33.3%]' ,
+          activeTab === 'business' && 'ms-[66.6%]' 
+        ]`></span>
+    </div>
+
+    <div class="pt-4">
+      <div class="inner-content">
+        <!--Starter price-->
+        <div x-show="activeTab === 'starter'" class="w-full flex items-center gap-6 pb-7 mb-6 border-b border-muted-200 dark:border-muted-700">
+          <h3 class="font-sans font-bold text-[2.5rem] ltablet:text-4xl text-muted-800 dark:text-white">$29</h3>
+          <div class="max-w-xs">
+            <h4 class="font-sans font-bold text-lg ltablet:text-base text-muted-800 dark:text-white">Starter license</h4>
+            <p class="font-sans text-sm ltablet:text-xs text-muted-400">Use this template on a single domain / subdomain.</p>
+          </div>
+        </div>
+
+        <!--Developer price-->
+        <div x-show="activeTab === 'developer'" class="w-full flex items-center gap-6 pb-7 mb-6 border-b border-muted-200 dark:border-muted-700">
+          <h3 class="font-sans font-bold text-[2.5rem] ltablet:text-4xl text-muted-800 dark:text-white">$49</h3>
+          <div class="max-w-xs">
+            <h4 class="font-sans font-bold text-lg ltablet:text-base text-muted-800 dark:text-white">Developer license</h4>
+            <p class="font-sans text-sm ltablet:text-xs text-muted-400">Same as starter license with private Github access.</p>
+          </div>
+        </div>
+
+        <!--Business price-->
+        <div x-show="activeTab === 'business'" class="w-full flex items-center gap-6 pb-7 mb-6 border-b border-muted-200 dark:border-muted-700">
+          <h3 class="font-sans font-bold text-[2.5rem] ltablet:text-4xl text-muted-800 dark:text-white">$149</h3>
+          <div class="max-w-xs">
+            <h4 class="font-sans font-bold text-lg ltablet:text-base text-muted-800 dark:text-white">Business license</h4>
+            <p class="font-sans text-sm ltablet:text-xs text-muted-400">Use this template on unlimited domains / subdomains.</p>
+          </div>
+        </div>
+
+        <!--Benefits-->
+        <div class="mb-8">
+          <ul class="list-disc space-y-2 font-sans ps-4">
+            <li x-show="activeTab !== 'business'" class="text-sm text-muted-500 dark:text-muted-400">
+              <span>Up to 1 domain / subdomain</span>
+            </li>
+            <li x-show="activeTab === 'business'" class="text-sm text-muted-500 dark:text-muted-400">
+              <span>Unlimited domains / subdomains</span>
+            </li>
+            <li
+              class="text-sm text-muted-500 dark:text-muted-400 decoration-inherit"
+              x-bind:class=`{
+                'line-through opacity-75 pointer-events-none cursor-not-allowed': activeTab === 'starter'
+              }`
+            >
+              <span>Access to Github repository</span>
+            </li>
+            <li class="text-sm text-muted-500 dark:text-muted-400">
+              <span>Lifetime updates</span>
+            </li>
+            <li x-show="activeTab !== 'starter'" class="text-sm text-muted-500 dark:text-muted-400">
+              <span>6 months included support</span>
+            </li>
+            <li x-show="activeTab === 'starter'" class="text-sm text-muted-500 dark:text-muted-400">
+              <span>Community support</span>
+            </li>
+          </ul>
+        </div>
+
+        <!--Action-->
+        <div>
+          <a
+            href="https://go.cssninja.io/buy-masonry/"
+            class="relative font-sans font-normal inline-flex items-center justify-center leading-5 no-underline w-full space-x-1 text-white bg-primary-600 h-12 px-5 py-3 text-base rounded hover:bg-primary-500 hover:shadow-xl hover:shadow-primary-500/20 tw-accessibility transition-all duration-300"
+          >
+            Purchase Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

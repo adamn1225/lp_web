@@ -1,0 +1,56 @@
+---
+import { Icon } from 'astro-icon/components'
+import Section from '@components/Section.astro'
+import Container from '@components/Container.astro'
+---
+
+<Section>
+  <Container>
+    <div class="pb-16 mb-4">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="p-3 md:ms-[8.3%] md:w-2/5">
+          <span class="grid place-items-center rounded text-xs leading-none px-3 text-primary-500 mb-2 border border-primary-500 w-max uppercase h-10">ABOUT US</span>
+          <h3 class="font-sans font-light text-3xl text-muted-900 dark:text-white leading-tight">Joshua Stevens, our Founder</h3>
+          <p class="py-2 max-w-md text-muted-500 dark:text-muted-400">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Illud non continuo, ut aeque incontentae. Duo Reges: constructio interrete. Si qua in iis corrigere voluit.
+          </p>
+          <div class="grid grid-cols-3 py-8">
+            <div>
+              <div class="flex items-center gap-2 text-muted-900 dark:text-white">
+                <Icon class="size-5" name="lucide:building" />
+                <span class="font-bold text-xl">30K</span>
+              </div>
+              <div>
+                <p class="text-sm text-muted-400">Housings sold</p>
+              </div>
+            </div>
+            <div>
+              <div class="flex gap-2 items-center text-muted-900 dark:text-white">
+                <Icon class="size-5" name="lucide:crown" />
+                <span class="font-bold text-xl">50K</span>
+              </div>
+              <div>
+                <p class="text-sm text-muted-400">Happy clients</p>
+              </div>
+            </div>
+            <div>
+              <div class="flex gap-2 items-center text-muted-900 dark:text-white">
+                <Icon class="size-5" name="lucide:briefcase" />
+                <span class="font-bold text-xl">247</span>
+              </div>
+              <div>
+                <p class="text-sm text-muted-400">Live projects</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="p-3 md:w-1/2">
+          <div class="relative flex flex-col justify-end max-w-[480px] min-h-[380px] md:min-h-[450px] -mt-8 mx-auto">
+            <img height={676} width={500} class="block absolute bottom-0 start-1/2 -translate-x-1/2 max-w-[280px] md:max-w-[320px] z-[2]" src="/images/photo/person-clip.webp" alt="" />
+            <div class="relative w-full pt-[58%] bg-primary-500/10"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>

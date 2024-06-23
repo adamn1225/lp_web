@@ -1,0 +1,123 @@
+---
+import type { Props as IAstroSEO } from 'astro-seo'
+import { SEO } from 'astro-seo'
+import { setDescription, setTitle } from '@utils/utils'
+import { GoogleFontsOptimizer } from 'astro-google-fonts-optimizer'
+import Navbar from '@components/Navbar.astro'
+import Footer from '@components/Footer.astro'
+import ScrollTop from '@components/ui/ScrollTop.astro'
+import '@/styles/global.scss'
+
+interface Props extends IAstroSEO {}
+const { title = '', description = '', ...props } = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/images/logo/logo.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <SEO title={setTitle(title)} description={setDescription(description)} {...props} />
+
+    <GoogleFontsOptimizer
+      url={[
+        'https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600',
+        'https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap',
+      ]}
+    />
+
+    <slot name="head" />
+  </head>
+  <body x-data :class="{'dark':$store.app.isDark}">
+    <div id="Top"></div>
+    <Navbar />
+    <slot />
+    <ScrollTop />
+    <Footer />
+
+    <script>
+      import { MASONRY_THEME, MASONRY_LOGGEDIN } from '@/constants'
+
+      document.addEventListener('alpine:init', () => {
+        //@ts-ignore
+        Alpine.store('app', {
+          init() {
+            this.isDark = MASONRY_THEME in localStorage ? localStorage.getItem(MASONRY_THEME) === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
+
+            this.isLoggedIn = MASONRY_LOGGEDIN in localStorage ? localStorage.getItem(MASONRY_LOGGEDIN) === 'true' : false
+          },
+          toggleTheme() {
+            this.isDark = !this.isDark
+            localStorage.setItem(MASONRY_THEME, this.isDark ? 'dark' : 'light')
+          },
+          login() {
+            this.isLoggedIn = true
+            localStorage.setItem(MASONRY_LOGGEDIN, 'true')
+          },
+          logout() {
+            this.isLoggedIn = false
+            localStorage.setItem(MASONRY_LOGGEDIN, 'false')
+          },
+          isDark: false,
+          isLoggedIn: false,
+        })
+      })
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // get all videos with a class of .lazy
+        const lazyVideos = [].slice.call(document.querySelectorAll('video.lazy'))
+        const lazyVideoObserver = new IntersectionObserver(function (entries, observer) {
+          entries.forEach((videoEntry) => {
+            if (videoEntry.isIntersecting) {
+              // Get the video element
+              const video = videoEntry.target as HTMLVideoElement
+
+              // Looping through video <source>
+              for (const sourceIndex in video.children) {
+                // get <source> at index sourceIndex
+                const videoSource = video.children[sourceIndex] as HTMLSourceElement
+                // verify if its <source> tag
+                if (typeof videoSource.tagName === 'string' && videoSource.tagName === 'SOURCE') {
+                  videoSource.src = videoSource.dataset.src as string
+                }
+              }
+
+              video.load()
+
+              const playBtn = video.nextElementSibling as HTMLButtonElement
+              playBtn.onclick = (e) => {
+                video.play()
+              }
+
+              // ON VIDEO PAUSED
+              video.onpause = (event) => {
+                playBtn.dataset.isPlaying = `false`
+                // HIDE CONTROLS
+                video.controls = false
+              }
+
+              // ON VIDEO PLAY
+              video.onplay = (event) => {
+                playBtn.dataset.isPlaying = `true`
+                // SHOW CONTROLS
+                video.controls = true
+              }
+
+              video.classList.remove('lazy')
+              lazyVideoObserver.unobserve(video)
+            }
+          })
+        })
+
+        lazyVideos.forEach((lazyVideo) => {
+          lazyVideoObserver.observe(lazyVideo)
+        })
+      })
+    </script>
+  </body>
+</html>

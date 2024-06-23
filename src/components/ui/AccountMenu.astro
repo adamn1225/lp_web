@@ -1,0 +1,66 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<div class="relative" :class="open && 'is-active'" x-data="accountDropdown" @click.away="close()">
+  <div class="dropdown-trigger">
+    <button class="button bg-transparent cursor-pointer flex items-center justify-center h-9 w-9 shrink-0" aria-haspopup="true" @click="toggle()">
+      <img height={280} width={280} class="h-9 w-9 shrink-0 rounded-full pointer-events-none" src="/images/avatars/4.webp" alt="avatar" />
+    </button>
+  </div>
+  <div x-show="open" x-cloak class="mt-2 min-w-64 top-full absolute end-0 z-20 bg-white dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20" role="menu">
+    <div class="border dark:border-muted-800 border-muted-200 p-2">
+      <div class="hover:bg-muted-100 dark:hover:bg-muted-800 rounded px-2 cursor-pointer transition-colors duration-300 group/item">
+        <a href="/account" class="menu-option flex gap-3 items-center p-2 cursor-pointer bg-transparent">
+          <Icon class="size-4 group-hover/item:text-primary-500 text-muted-400" name="lucide:user" />
+          <div class="leading-tight">
+            <h4 class="text-sm font-semibold text-muted-900 font-sans dark:muted-100">Account</h4>
+            <p class="text-muted-400 text-xs">Manage account</p>
+          </div>
+        </a>
+      </div>
+      <div class="hover:bg-muted-100 dark:hover:bg-muted-800 rounded px-2 cursor-pointer transition-colors duration-300 group/item">
+        <a href="/wishlist" class="menu-option flex gap-3 items-center p-2 cursor-pointer bg-transparent">
+          <Icon class="size-4 group-hover/item:text-primary-500 text-muted-400" name="lucide:heart" />
+          <div class="leading-tight">
+            <h4 class="text-sm font-semibold text-muted-900 font-sans dark:muted-100">Wishlist</h4>
+            <p class="text-muted-400 text-xs">View favorites</p>
+          </div>
+        </a>
+      </div>
+      <div class="hover:bg-muted-100 dark:hover:bg-muted-800 rounded px-2 cursor-pointer transition-colors duration-300 group/item">
+        <a href="/settings" class="menu-option flex gap-3 items-center p-2 cursor-pointer bg-transparent">
+          <Icon class="size-4 group-hover/item:text-primary-500 text-muted-400" name="lucide:settings" />
+          <div class="leading-tight">
+            <h4 class="text-sm font-semibold text-muted-900 font-sans dark:muted-100">Settings</h4>
+            <p class="text-muted-400 text-xs">Manage preferences</p>
+          </div>
+        </a>
+      </div>
+      <div class="hover:bg-muted-100 dark:hover:bg-muted-800 rounded px-2 cursor-pointer transition-colors duration-300 group/item">
+        <a class="menu-option flex gap-3 items-center p-2 cursor-pointer bg-transparent" @click.prevent="$store.app.logout()">
+          <Icon class="size-4 group-hover/item:text-primary-500 text-muted-400" name="lucide:log-out" />
+          <div class="leading-tight">
+            <h4 class="text-sm font-semibold text-muted-900 font-sans dark:muted-100">Logout</h4>
+            <p class="text-muted-400 text-xs">Logout from account</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    //@ts-ignore
+    Alpine.data('accountDropdown', () => ({
+      open: false,
+      toggle() {
+        this.open = !this.open
+      },
+      close() {
+        this.open = false
+      },
+    }))
+  })
+</script>

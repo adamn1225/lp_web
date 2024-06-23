@@ -1,0 +1,60 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<div class="relative" x-data="homeSwiper">
+  <div class="swiper-container relative max-h-[520px] overflow-hidden" x-ref="container">
+    <div class="swiper-caption bg-white dark:bg-muted-900 absolute bottom-8 end-8 max-w-[380px] z-[2]">
+      <div class="swiper-caption-inner hidden md:block relative w-full h-full p-8">
+        <h3 class="dark:text-white text-2xl font-sans text-muted-900 mb-2">High-end properties</h3>
+        <p class="text-sm mb-3 text-muted-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Non enim quaero quid verum, sed quid cuique dicendum sit.</p>
+        <div class="flex items-center justify-between">
+          <a href="#" class="text-sm underline-offset-4 hover:underline text-primary-500">Learn More</a>
+          <div class="carousel-controls flex justify-end">
+            <button
+              @click="swiper.slidePrev()"
+              class="flex items-center justify-center outline-none size-8 aspect-square text-lg rounded-md cursor-pointer transition-colors duration-300 text-muted-500 hover:text-muted-900 dark:hover:text-white hover:bg-semi-white-1 hover:dark:bg-dark-purple-3"
+            >
+              <Icon name="lucide:arrow-left" class="size-4 aspect-auto" />
+            </button>
+            <button
+              @click="swiper.slideNext()"
+              class="flex items-center justify-center outline-none size-8 aspect-square text-lg rounded-md cursor-pointer transition-colors duration-300 text-muted-500 hover:text-muted-900 dark:hover:text-white hover:bg-semi-white-1 hover:dark:bg-dark-purple-3"
+            >
+              <Icon name="lucide:arrow-right" class="size-4 aspect-auto" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-pagination absolute top-1/2 start-4 -translate-y-1/2 rotate-90 z-[3]"></div>
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      {
+        ['/images/photo/buildings/4.webp', '/images/photo/buildings/3.webp', '/images/photo/buildings/1.webp', '/images/photo/buildings/2.webp'].map((url) => (
+          <div class="swiper-slide">
+            <div class="slide-inner">
+              <div class="slide-content">
+                <img class="w-full object-cover h-[280px] md:h-[500px] lg:h-auto" src={url} alt="Slide Image" />
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style lang="scss">
+  .swiper-pagination-bullet {
+    background: none;
+    border: 2px solid #fff;
+    opacity: 1;
+    transition: background-color 0.3s;
+
+    &.swiper-pagination-bullet-active {
+      background: #fff;
+    }
+  }
+</style>

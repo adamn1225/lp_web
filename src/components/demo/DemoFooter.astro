@@ -1,0 +1,43 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<div class="w-full bg-white dark:bg-muted-900">
+  <div class="w-full max-w-7xl mx-auto">
+    <div class="w-full py-16 px-4">
+      <div class="flex items-center justify-between">
+        <a href="https://cssninja.io" class="block font-sans text-muted-500 dark:text-muted-400">
+          <img class="block w-full max-w-[150px] dark:invert" src="/images/logo/cssninja.svg" alt="css ninja logo" width="150" height="45" />
+          <div class="flex gap-2 text-sm">
+            <span class="block">&copy; 2018-{new Date().getFullYear()}.</span>
+            <span class="block">All Rights Reserved.</span>
+          </div>
+        </a>
+
+        <div class="flex items-center justify-end">
+          <a
+            href="https://github.com/cssninjaStudio"
+            class="flex items-center justify-center rounded-full h-8 w-8 text-muted-500 hover:text-muted-600 hover:bg-muted-100 dark:hover:bg-muted-800 dark:hover:text-muted-100 transition-colors duration-300"
+          >
+            <Icon name="brandico:github" class="w-4 h-4" />
+            <span class="sr-only">GitHub</span>
+          </a>
+          <a
+            href="https://www.facebook.com/cssninjaStudio"
+            class="flex items-center justify-center rounded-full h-8 w-8 text-muted-500 hover:text-muted-600 hover:bg-muted-100 dark:hover:bg-muted-800 dark:hover:text-muted-100 transition-colors duration-300"
+          >
+            <Icon name="brandico:facebook" class="w-4 h-4" />
+            <span class="sr-only">Facebook</span>
+          </a>
+          <a
+            href="https://twitter.com/cssninjaStudio"
+            class="flex items-center justify-center rounded-full h-8 w-8 text-muted-500 hover:text-muted-600 hover:bg-muted-100 dark:hover:bg-muted-800 dark:hover:text-muted-100 transition-colors duration-300"
+          >
+            <Icon name="brandico:twitter" class="w-4 h-4" />
+            <span class="sr-only">Twitter</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

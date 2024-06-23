@@ -1,0 +1,52 @@
+---
+import Layout from '@layouts/Minimal.astro'
+import DemoCta from '@components/demo/DemoCta.astro'
+import DemoFaq from '@components/demo/DemoFaq.astro'
+import DemoFeatures from '@components/demo/DemoFeatures.astro'
+import DemoFooter from '@components/demo/DemoFooter.astro'
+import DemoHero from '@components/demo/DemoHero.astro'
+import DemoNavbar from '@components/demo/DemoNavbar.astro'
+import DemoPurchase from '@components/demo/DemoPurchase.astro'
+import DemoScreenshot from '@components/demo/DemoScreenshot.astro'
+import DemoTechs from '@components/demo/DemoTechs.astro'
+---
+
+<Layout title="Masonry">
+  <DemoNavbar />
+  <DemoHero />
+
+  <section class="w-full py-12 px-4 bg-white dark:bg-muted-900">
+    <div class="w-full max-w-7xl mx-auto">
+      <!--Layout-->
+      <div class="w-full flex flex-col ltablet:flex-row lg:flex-row gap-0 ltablet:gap-10 lg:gap-28">
+        <!--Column-->
+        <div class="w-full ltablet:w-8/12 lg:w-8/12">
+          <!--Techs-->
+          <DemoTechs />
+
+          <!--Features-->
+          <DemoFeatures />
+
+          <!--Template demos-->
+          <DemoScreenshot />
+
+          <!--FAQ-->
+          <DemoFaq />
+        </div>
+        <!--Column-->
+        <div class="w-full ltablet:w-4/12 lg:w-4/12">
+          <div class="h-full pt-10">
+            <!--Purchase card-->
+            <DemoPurchase />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--Call to action-->
+  <DemoCta />
+
+  <!--Demo footer-->
+  <DemoFooter />
+</Layout>

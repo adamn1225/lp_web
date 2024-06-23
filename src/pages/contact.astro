@@ -1,0 +1,85 @@
+---
+import { APP } from '@data/config'
+import Layout from '@layouts/Minimal.astro'
+import Container from '@components/Container.astro'
+import Logo from '@components/ui/Logo.astro'
+---
+
+<Layout title="Contact">
+  <main id="Contact" class="relative">
+    <!-- embed map -->
+    <iframe
+      class="h-full w-full absolute z-0 top-0 start-0"
+      marginheight="0"
+      marginwidth="0"
+      title="map"
+      scrolling="no"
+      src="https://maps.google.com/maps?width=100%&height=100%&hl=en&q=Los%20Angeles+(Css%20Ninja)&center=-118.44958367724455,34.016818496913956&ie=UTF8&t=&z=14&iwloc=B&output=embed&zoom=12"
+      style="filter: grayscale(1) contrast(1.2) opacity(0.4)"
+      frameborder="0"></iframe>
+
+    <div class="absolute top-0 start-0 px-4 z-[3] w-full h-[70px] flex items-center">
+      <Container>
+        <a href="/" class="flex gap-4 items-center">
+          <Logo class="h-10 aspect-square" />
+          <p class="font-medium text-2xl font-sans text-muted-900 dark:text-white">
+            {APP.name}
+          </p>
+        </a>
+      </Container>
+    </div>
+    <div id="hero-map" class="min-h-screen flex items-stretch flex-col justify-between relative z-[2]">
+      <div class="flex items-center flex-grow md:p-12 relative z-[2]">
+        <Container>
+          <div class="flex flex-col-reverse md:flex-row items-center">
+            <div class="p-3 md:w-1/2"></div>
+            <div class="p-3 md:w-1/2">
+              <div
+                class="p-12 max-w-[440px] mx-auto shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20 bg-white dark:bg-muted-950 border border-muted-200 dark:border-muted-800 rounded relative"
+              >
+                <div class="relative">
+                  <h2 class="mb-6 text-xl dark:text-white font-semibold font-sans text-muted-900">Wondering about something? Feel free to write us a message.</h2>
+                  <form class="flex flex-col gap-3">
+                    <div class="relative">
+                      <div class="relative">
+                        <input
+                          type="text"
+                          class="w-full peer outline-none focus:outline-none p-3 dark:bg-muted-900 border border-muted-200 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded h-12 text-base"
+                          placeholder="Full Name"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="relative">
+                      <div class="relative">
+                        <input
+                          type="text"
+                          class="w-full peer outline-none focus:outline-none p-3 dark:bg-muted-900 border border-muted-200 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded h-12 text-base"
+                          placeholder="Email Address"
+                        />
+                      </div>
+                    </div>
+                    <div class="relative">
+                      <div class="relative">
+                        <textarea
+                          class="max-h-[40em] min-h-[8em] w-full peer outline-none focus:outline-none p-3 dark:bg-muted-900 border border-muted-200 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded text-base"
+                          placeholder="Your message..."></textarea>
+                      </div>
+                    </div>
+
+                    <div class="relative">
+                      <div class="relative">
+                        <a class="min-h-12 bg-primary-500 rounded font-medium text-sm w-full px-4 py-2 flex justify-center items-center text-white transition-all duration-300">Send Message</a>
+                      </div>
+                    </div>
+                    <a href="#" class="text-xs font-medium text-primary-500 mx-auto cursor-pointer">We always reply!</a>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </div>
+    </div>
+  </main>
+</Layout>

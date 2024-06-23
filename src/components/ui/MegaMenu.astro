@@ -1,0 +1,157 @@
+---
+import { Icon } from 'astro-icon/components'
+import MegaMenuLink from './MegaMenuLink.astro'
+---
+
+<section
+  id="MegaMenuWrapper"
+  class="absolute top-0 lg:top-full w-full transition-all bg-white dark:bg-muted-950 grid duration-300"
+  :class="megamenuOpened ? 'translate-y-0  opacity-100 pointer-events-auto shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20' : 'translate-y-2.5 opacity-0 pointer-events-none' "
+  x-cloak
+>
+  <div id="propertiesMega" x-show="openedMegamenu === 'megamenu-1'" class="w-full py-[60px] relative">
+    <button class="absolute top-2.5 end-2.5 h-10 w-10 lg:hidden grid place-content-center" @click="megamenuOpened = !megamenuOpened">
+      <Icon class="h-6 w-6 text-muted-500 dark:text-white" name="lucide:arrow-left" />
+    </button>
+    <ul class="w-full max-w-7xl mx-auto flex ltablet:flex-row lg:flex-row flex-col gap-x-5 gap-y-10">
+      <li class="ltablet:w-[30%] lg:w-[30%]">
+        <div class="px-12 ltablet:px-0 lg:px-0 ltablet:ms-10 lg:ms-0">
+          <div class="flex flex-col lg:flex-row gap-4">
+            <div>
+              <Icon name="ph:buildings-duotone" class="size-8 aspect-square text-primary-500" />
+            </div>
+
+            <div class="flex flex-col">
+              <h3 class="font-sans font-semibold text-xl dark:text-white text-muted-900 mb-3">Properties</h3>
+              <p class="mb-4 text-muted-400 text-sm max-w-sm">Masonry makes it easy to browse homes. When you’re ready, you can also connect with a local agent to explore financing solutions</p>
+              <a href="/properties" class="group/arrow flex items-center gap-1 text-primary-500">
+                <span>Explore all properties</span>
+                <Icon name="lucide:arrow-right" class="size-4 aspect-square group-hover/arrow:translate-x-1 transition-transform duration-300" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="ltablet:w-[20%] lg:w-[20%]">
+        <div class="px-12 ltablet:ps-10 lg:ps-10 md:pe-0">
+          <h4 class="text-sm font-sans font-semibold text-muted-900 dark:text-white uppercase">Categories</h4>
+          <ul class="flex flex-col gap-2 mt-3">
+            <li>
+              <MegaMenuLink title="Residences" href="#" />
+            </li>
+            <li>
+              <MegaMenuLink title="Apartments" href="#" />
+            </li>
+            <li>
+              <MegaMenuLink title="Houses" href="#" />
+            </li>
+            <li>
+              <MegaMenuLink title="Mansions" href="#" />
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="ltablet:w-1/2 lg:w-1/">
+        <div class="px-12 lg:px-0 flex gap-5">
+          <a href="#">
+            <img class="lg:h-[190px]" alt="showcase" src="/images/photo/megamenu/1.webp" />
+            <div class="flex items-center justify-between mt-1">
+              <div>
+                <h5 class="font-sans text-base text-muted-900 dark:text-white">Barnaby Tower</h5>
+                <p class="text-muted-400 text-sm">Private residence</p>
+              </div>
+              <Icon name="ph:house-duotone" class="size-5 aspect-square text-muted-400" />
+            </div>
+          </a>
+          <a href="#">
+            <img class="lg:h-[190px]" alt="showcase" src="/images/photo/megamenu/2.webp" />
+            <div class="flex items-center justify-between mt-1">
+              <div>
+                <h5 class="font-sans text-base text-muted-900 dark:text-white">High Hils</h5>
+                <p class="text-muted-400 text-sm">Private residence</p>
+              </div>
+              <Icon name="ph:house-duotone" class="size-5 aspect-square text-muted-400" />
+            </div>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div id="rentalsMega" x-show="openedMegamenu === 'megamenu-2'" class="w-full py-[60px] relative">
+    <button class="absolute top-2.5 end-2.5 h-10 w-10 lg:hidden grid place-content-center" @click="megamenuOpened = !megamenuOpened">
+      <Icon class="h-6 w-6 text-muted-500 dark:text-white" name="lucide:arrow-left" />
+    </button>
+    <ul class="w-full max-w-7xl mx-auto flex ltablet:flex-row lg:flex-row flex-col gap-x-5 gap-y-10">
+      <li class="ltablet:w-[30%] lg:w-[30%]">
+        <div class="px-12 ltablet:px-0 lg:px-0 ltablet:ms-10 lg:ms-0">
+          <div class="flex flex-col lg:flex-row gap-4">
+            <div>
+              <Icon name="ph:house-duotone" class="size-8 aspect-square text-primary-500" />
+            </div>
+
+            <div class="flex flex-col">
+              <h3 class="font-sans font-semibold text-xl dark:text-white text-muted-900 mb-3">Rentals</h3>
+              <p class="mb-4 text-muted-400 text-sm max-w-sm">Masonry makes it easy to browse homes. When you’re ready, you can also connect with a local agent to explore financing solutions</p>
+              <a href="/properties" class="group/arrow flex items-center gap-1 text-primary-500">
+                <span>Explore all properties</span>
+                <Icon name="lucide:arrow-right" class="size-4 aspect-square group-hover/arrow:translate-x-1 transition-transform duration-300" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="ltablet:w-[20%] lg:w-[20%]">
+        <div class="px-12 ltablet:ps-10 lg:ps-10 md:pe-0">
+          <h4 class="text-sm font-sans font-semibold text-muted-900 dark:text-white uppercase">Categories</h4>
+          <ul class="flex flex-col gap-2 mt-3">
+            <li>
+              <MegaMenuLink title="Residences" href="#" />
+            </li>
+            <li>
+              <MegaMenuLink title="Apartments" href="#" />
+            </li>
+            <li>
+              <MegaMenuLink title="Houses" href="#" />
+            </li>
+            <li>
+              <MegaMenuLink title="Mansions" href="#" />
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="ltablet:w-1/2 lg:w-1/2">
+        <div class="px-12 lg:px-0 flex gap-5">
+          <a href="#">
+            <img
+              class="lg:h-[190px]"
+              alt="showcase"
+              src="/images/photo/megamenu/3.webp"
+            />
+            <div class="flex items-center justify-between mt-1">
+              <div>
+                <h5 class="font-sans text-base text-muted-900 dark:text-white">Cozy Beach House</h5>
+                <p class="text-muted-400 text-sm">Private residence</p>
+              </div>
+              <Icon name="ph:house-duotone" class="size-5 aspect-square text-muted-400" />
+            </div>
+          </a>
+          <a href="#">
+            <img
+              class="lg:h-[190px]"
+              alt="showcase"
+              src="/images/photo/megamenu/4.webp"
+            />
+            <div class="flex items-center justify-between mt-1">
+              <div>
+                <h5 class="font-sans text-base text-muted-900 dark:text-white">Stanislas tower</h5>
+                <p class="text-muted-400 text-sm">Luxury Apartments</p>
+              </div>
+              <Icon name="ph:house-duotone" class="size-5 aspect-square text-muted-400" />
+            </div>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,72 @@
+<div
+  class="progress-wrap group fixed end-8 bottom-8 h-12 w-12 cursor-pointer block rounded-full shadow-lg z-[1000] opacity-0 translate-y-4 transition-all duration-200 ease-linear"
+  x-ref="progressWrap"
+  x-data="scrolltop"
+  @scroll.window="scroll()"
+  :class="scrolled ? 'active-progress opacity-100 visible translate-y-0' : 'invisible'"
+  @click="scrollTop()"
+>
+  <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+    <path x-ref="progressPath" class="fill-none stroke-primary-500 stroke-[4] transition-all duration-200 ease-linear" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
+  </svg>
+
+  <svg
+    class="inner-arrow group-hover:opacity-60 absolute font-extrabold text-center leading-6 text-base text-primary-500 start-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-6 w-6 cursor-pointer block z-[1] transition-all duration-200 ease-linear"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <line x1="12" y1="19" x2="12" y2="5"></line>
+    <polyline points="5 12 12 5 19 12"></polyline>
+  </svg>
+</div>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    //@ts-ignore
+    Alpine.data('scrolltop', () => ({
+      scrolled: false,
+      height: 60,
+      mobileOpen: false,
+      init() {
+        //@ts-ignore
+        this.pathLength = this.$refs.progressPath.getTotalLength()
+        //@ts-ignore
+        this.$refs.progressPath.style.transition = this.$refs.progressPath.style.WebkitTransition = 'none'
+        //@ts-ignore
+        this.$refs.progressPath.style.strokeDasharray = this.pathLength + ' ' + this.pathLength
+        //@ts-ignore
+        this.$refs.progressPath.style.strokeDashoffset = this.pathLength
+        //@ts-ignore
+        this.$refs.progressPath.getBoundingClientRect()
+        //@ts-ignore
+        this.$refs.progressPath.style.transition = this.$refs.progressPath.style.WebkitTransition = 'stroke-dashoffset 10ms linear'
+      },
+      updateProgress() {
+        let scrollValue = window.scrollY
+        let scrollHeight = document.body.scrollHeight - window.innerHeight
+        //@ts-ignore
+        let progress = this.pathLength - (scrollValue * this.pathLength) / scrollHeight
+        //@ts-ignore
+        this.$refs.progressPath.style.strokeDashoffset = progress
+      },
+      scroll() {
+        this.updateProgress()
+        let scrollValue = window.scrollY
+        if (scrollValue >= this.height) {
+          this.scrolled = true
+        } else {
+          this.scrolled = false
+        }
+      },
+      scrollTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return false
+      },
+    }))
+  })
+</script>

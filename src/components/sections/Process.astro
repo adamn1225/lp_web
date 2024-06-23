@@ -1,0 +1,35 @@
+---
+import Section from '@components/Section.astro'
+import Container from '@components/Container.astro'
+import NumberBox from '@components/ui/number-boxes/NumberBox.astro'
+---
+
+<Section>
+  <Container>
+    <div class="lg:max-w-4xl">
+      <h2 class="font-sans text-muted-900 dark:text-white font-sans text-3xl leading-9 text-start md:leading-8">
+        We make sure our lovely customers are always involved so, every transaction flow process in our company is a must for them.
+      </h2>
+    </div>
+
+    <div class="py-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          class="column py-3 relative before:content-[''] before:absolute before:top-0 before:rounded-[100rem] before:bg-primary-500 before:opacity-[0.07] before:h-[125%] before:w-40 before:z-0 before:rotate-45 before:-translate-y-16 before:translate-x-10"
+        >
+          <NumberBox title="Pre-Construction" number="01" />
+        </div>
+        <div
+          class="column py-3 relative before:content-[''] before:absolute before:top-0 before:rounded-[100rem] before:bg-primary-500 before:opacity-[0.07] before:h-[125%] before:w-40 before:z-0 before:rotate-45 before:-translate-y-[8rem] before:translate-x-20"
+        >
+          <NumberBox title="Construction" number="02" />
+        </div>
+        <div
+          class="column py-3 relative before:content-[''] before:absolute before:top-0 before:rounded-[100rem] before:bg-primary-500 before:opacity-[0.07] before:h-[125%] before:w-40 before:z-0 before:rotate-45 before:translate-x-full"
+        >
+          <NumberBox title="Post-Construction" number="03" />
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>

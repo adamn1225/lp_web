@@ -1,0 +1,156 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<script is:inline>
+  const demos = [
+    {
+      name: 'Home',
+      screenshotLight: '/images/screenshots/home.png',
+      screenshotDark: '/images/screenshots/home-dark.png',
+      link: '/home',
+      new: false,
+    },
+    {
+      name: 'Home v2',
+      screenshotLight: '/images/screenshots/landing.png',
+      screenshotDark: '/images/screenshots/landing-dark.png',
+      link: '/landing',
+      new: false,
+    },
+    {
+      name: 'Properties v1',
+      screenshotLight: '/images/screenshots/properties.png',
+      screenshotDark: '/images/screenshots/properties-dark.png',
+      link: '/properties',
+      new: false,
+    },
+    {
+      name: 'Properties v2',
+      screenshotLight: '/images/screenshots/properties-alt.png',
+      screenshotDark: '/images/screenshots/properties-alt-dark.png',
+      link: '/properties-alt',
+      new: false,
+    },
+    {
+      name: 'Property Details',
+      screenshotLight: '/images/screenshots/property.png',
+      screenshotDark: '/images/screenshots/property-dark.png',
+      link: '/property-details',
+      new: false,
+    },
+    {
+      name: 'About',
+      screenshotLight: '/images/screenshots/about.png',
+      screenshotDark: '/images/screenshots/about-dark.png',
+      link: '/about',
+      new: false,
+    },
+    {
+      name: 'Account',
+      screenshotLight: '/images/screenshots/account.png',
+      screenshotDark: '/images/screenshots/account-dark.png',
+      link: '/account',
+      new: false,
+    },
+    {
+      name: 'Settings',
+      screenshotLight: '/images/screenshots/settings.png',
+      screenshotDark: '/images/screenshots/settings-dark.png',
+      link: '/settings',
+      new: false,
+    },
+    {
+      name: 'Wishlist',
+      screenshotLight: '/images/screenshots/wishlist.png',
+      screenshotDark: '/images/screenshots/wishlist-dark.png',
+      link: '/wishlist',
+      new: false,
+    },
+    {
+      name: 'Quote Wizard',
+      screenshotLight: '/images/screenshots/quote.png',
+      screenshotDark: '/images/screenshots/quote-dark.png',
+      link: '/quote',
+      new: false,
+    },
+    {
+      name: 'Contact',
+      screenshotLight: '/images/screenshots/contact.png',
+      screenshotDark: '/images/screenshots/contact-dark.png',
+      link: '/contact',
+      new: false,
+    },
+    {
+      name: 'Login',
+      screenshotLight: '/images/screenshots/login.png',
+      screenshotDark: '/images/screenshots/login-dark.png',
+      link: '/login',
+      new: false,
+    },
+    {
+      name: 'Signup',
+      screenshotLight: '/images/screenshots/signup.png',
+      screenshotDark: '/images/screenshots/signup-dark.png',
+      link: '/signup',
+      new: false,
+    },
+    {
+      name: 'Error 404',
+      screenshotLight: '/images/screenshots/404.png',
+      screenshotDark: '/images/screenshots/404-dark.png',
+      link: '/404',
+      new: false,
+    },
+  ]
+
+  function renderScreenshots() {
+    return {
+      screenshots: demos,
+    }
+  }
+</script>
+
+<div class="pb-16">
+  <div class="w-full">
+    <!--Section title-->
+    <div class="w-full max-w-md mb-5">
+      <h2 class="font-sans font-light text-3xl text-muted-800 dark:text-white mb-4">Demo Pages</h2>
+      <p class="font-sans text-muted-500 dark:text-muted-400">
+        Masonry ships with elegant and minimalistic pages to help you get started as fast as possible, and build an outstanding and memorable website without effort.
+      </p>
+    </div>
+
+    <!--Template demos-->
+    <div id="template-demos" class="mt-8" x-data="renderScreenshots()">
+      <div class="grid md:grid-cols-2 gap-6">
+        <template x-for="screenshot in screenshots">
+          <a x-bind:href="screenshot.link" target="_blank" class="group block w-full rounded-md bg-white dark:bg-muted-800 border border-muted-200 dark:border-muted-700 p-3 text-center">
+            <div class="relative overflow-hidden">
+              <div class="relative">
+                <img class="w-full block dark:hidden rounded-md border border-muted-200" x-bind:src="screenshot.screenshotLight" alt="screenshot light image" width="350" height="198" />
+                <img class="w-full hidden dark:block rounded-md border border-muted-800" x-bind:src="screenshot.screenshotDark" alt="screenshot dark image" width="350" height="198" />
+                <template x-if="screenshot.new">
+                  <span class="block absolute bottom-4 end-4 py-1.5 px-3 font-sans text-xs font-semibold rounded-full bg-rose-500 text-white shadow-xl shadow-rose-500/20"> New </span>
+                </template>
+              </div>
+
+              <div class="circle-overlay is-landing"></div>
+              <div class="w-full pb-3 pt-4 px-1">
+                <div class="w-full flex items-center justify-between">
+                  <h4 class="font-sans font-medium text-muted-800 dark:text-muted-100" x-text="screenshot.name"></h4>
+                  <div class="block">
+                    <span class="font-sans text-sm flex items-center pe-1 gap-2 text-muted-500 dark:text-muted-400 group-hover:text-primary-500 transition-colors duration-300">
+                      <span>Go to demo</span>
+                      <Icon name="lucide:arrow-right" class="w-4 h-4 group-hover:text-primary-500 group-hover:translate-x-1 transition-all duration-300" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>

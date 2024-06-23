@@ -1,0 +1,172 @@
+---
+import { APP } from '@data/config'
+import { Icon } from 'astro-icon/components'
+import Logo from '@components/ui/Logo.astro'
+---
+
+<script is:inline>
+  function navbar() {
+    return {
+      scrolled: false,
+      height: 60,
+      mobileOpen: false,
+      isChecked: false,
+      megamenuOpened: false,
+      openedMegamenu: '',
+      scroll() {
+        let scrollValue = window.scrollY
+        if (scrollValue >= this.height) {
+          this.scrolled = true
+        } else {
+          this.scrolled = false
+        }
+      },
+      openSearch() {
+        const input = document.getElementById('navbar-search-field')
+        this.$store.app.searchOpened = true
+        input.focus()
+      },
+      initScrollAnchors() {
+        document.querySelectorAll('.scroll-link[href^="#"]').forEach((trigger) => {
+          trigger.onclick = function (e) {
+            e.preventDefault()
+            let hash = this.getAttribute('href')
+            let target = document.querySelector(hash)
+            let headerOffset = 100
+            let elementPosition = target.offsetTop
+            let offsetPosition = elementPosition - headerOffset
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth',
+            })
+          }
+        })
+      },
+    }
+  }
+</script>
+
+<nav
+  class="text-muted-700 body-font fixed w-full z-50 transition duration-300 ease-in-out flex flex-col lg:flex-row lg:items-center shrink-0 px-5"
+  x-data="navbar()"
+  x-init="initScrollAnchors()"
+  x-on:scroll.window="scroll()"
+  x-bind:class=`{
+        'bg-white dark:bg-muted-800 shadow-lg shadow-muted-400/10 dark:shadow-muted-800/10': scrolled,
+        '': !scrolled,
+        'bg-white dark:bg-muted-800': mobileOpen,
+        '': !mobileOpen
+    }`
+>
+  <div class="w-full max-w-7xl mx-auto flex flex-wrap py-2 flex-row items-center sm:justify-between">
+    <div class="flex justify-between items-center w-full lg:w-1/4">
+      <a href="/" class="group flex title-font font-light items-center gap-2 text-muted-900 dark:text-muted-100">
+        <div class="h-12 w-12 flex items-center justify-center group-hover:text-primary-500 transition-colors duration-300">
+          <!-- Logo -->
+          <Logo class="size-8 aspect-square" />
+        </div>
+        <span class="text-xl font-sans font-semibold tracking-wider">{APP.name}</span>
+      </a>
+
+      <!-- Hamburger -->
+      <button type="button" class="flex relative justify-center items-center ms-auto w-10 h-10 focus:outline-none lg:hidden" x-on:click="mobileOpen = !mobileOpen">
+        <div class="block top-1/2 start-6 w-4 -translate-x-1/2 -translate-y-1/2">
+          <span class="block absolute w-7 h-0.5 text-primary-500 bg-current transition duration-500 ease-in-out" x-bind:class="mobileOpen ? 'rotate-45' : '-translate-y-2'"></span>
+          <span class="block absolute w-5 h-0.5 text-primary-500 bg-current transition duration-500 ease-in-out" x-bind:class="mobileOpen ? 'opacity-0' : ''"></span>
+          <span class="block absolute w-7 h-0.5 text-primary-500 bg-current transition duration-500 ease-in-out" x-bind:class="mobileOpen ? '-rotate-45' : 'translate-y-2'"></span>
+        </div>
+      </button>
+    </div>
+    <div class="hidden text-center lg:flex grow" x-bind:class=`{
+          'block': mobileOpen,
+          'hidden': !mobileOpen
+      }`>
+      <ul class="ltablet:w-full ltablet:max-w-sm lg:w-full lg:max-w-sm ltablet:mx-auto flex flex-col mt-3 mb-1 lg:flex-row lg:mx-auto lg:mt-0 lg:mb-0 lg:gap-x-4">
+        <li class="ltablet:flex-1 lg:flex-1 flex items-center justify-center">
+          <a
+            href="https://go.cssninja.io/buy-masonry/"
+            class="block text-base font-sans hover:text-primary-500 dark:text-muted-200 dark:hover:text-primary-400 py-2 lg:rounded-md lg:px-4 lg:hover:bg-muted-100 dark:lg:hover:bg-muted-900 md:mx-2 tw-accessibility"
+          >
+            Product
+          </a>
+        </li>
+        <li class="ltablet:flex-1 lg:flex-1 flex items-center justify-center">
+          <a
+            href="#template-demos"
+            class="block text-base font-sans hover:text-primary-500 dark:text-muted-200 dark:hover:text-primary-400 py-2 lg:rounded-md lg:px-4 lg:hover:bg-muted-100 dark:lg:hover:bg-muted-900 md:mx-2 tw-accessibility scroll-link"
+          >
+            Demos
+          </a>
+        </li>
+        <li class="ltablet:flex-1 lg:flex-1 flex items-center justify-center">
+          <a
+            href="https://go.cssninja.io/docs-masonry/"
+            class="block text-base font-sans hover:text-primary-500 dark:text-muted-200 dark:hover:text-primary-400 py-2 lg:rounded-md lg:px-4 lg:hover:bg-muted-100 dark:lg:hover:bg-muted-900 md:mx-2 tw-accessibility"
+          >
+            Documentation
+          </a>
+        </li>
+      </ul>
+      <div class="flex flex-col my-3 lg:hidden">
+        <div class="flex justify-center items-center mb-4">
+          <!--Dark mode-->
+          <button
+            class="darkToggle relative overflow-hidden size-9 aspect-square rounded-full border [&>svg]:text-yellow-400 border-muted-200 bg-white dark:bg-muted-900 dark:border-muted-800"
+            @click="$store.app.toggleTheme()"
+          >
+            <!-- sun -->
+            <Icon
+              name="lucide:sun"
+              class="lightIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
+              :class="$store.app.isDark ? 'opacity-0 -translate-x-[45%] translate-y-[150%]' : 'opacity-100  -translate-x-1/2 -translate-y-1/2' "
+            />
+
+            <!-- moon -->
+            <Icon
+              name="lucide:moon"
+              class="darkIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
+              :class="$store.app.isDark ? 'opacity-100  -translate-x-[45%] -translate-y-1/2' : 'opacity-0 -translate-x-[45%] -translate-y-[150%]' "
+            />
+          </button>
+        </div>
+        <a
+          href="https://go.cssninja.io/support-masonry/"
+          class="relative w-full font-sans font-normal inline-flex items-center justify-center leading-5 no-underline min-w-[130px] space-x-1 text-white bg-primary-500 h-12 px-5 py-3 text-base rounded hover:bg-primary-600 hover:shadow-xl hover:shadow-primary-500/20 tw-accessibility transition-all duration-300"
+        >
+          Support
+        </a>
+      </div>
+    </div>
+
+    <div class="hidden lg:flex lg:w-1/4 lg:justify-end lg:gap-x-4">
+      <div class="h-12 flex items-center justify-center">
+        <!--Dark mode-->
+        <button
+          class="darkToggle relative overflow-hidden size-9 aspect-square rounded-full border [&>svg]:text-yellow-400 border-muted-200 bg-white dark:bg-muted-900 dark:border-muted-800"
+          @click="$store.app.toggleTheme()"
+        >
+          <!-- sun -->
+          <Icon
+            name="lucide:sun"
+            class="lightIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
+            :class="$store.app.isDark ? 'opacity-0 -translate-x-[45%] translate-y-[150%]' : 'opacity-100  -translate-x-1/2 -translate-y-1/2' "
+          />
+
+          <!-- moon -->
+          <Icon
+            name="lucide:moon"
+            class="darkIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
+            :class="$store.app.isDark ? 'opacity-100  -translate-x-[45%] -translate-y-1/2' : 'opacity-0 -translate-x-[45%] -translate-y-[150%]' "
+          />
+        </button>
+      </div>
+      <a
+        href="https://go.cssninja.io/support-masonry/"
+        class="relative font-sans font-normal inline-flex items-center justify-center leading-5 no-underline min-w-[110px] space-x-1 rounded text-white bg-muted-800 dark:bg-muted-900 h-12 px-5 py-3 text-sm hover:bg-muted-700 dark:hover:bg-muted-950 hover:shadow-xl hover:shadow-muted-300/20 dark:hover:shadow-muted-1000/20 tw-accessibility transition-all duration-300"
+      >
+        Support
+      </a>
+    </div>
+  </div>
+</nav>

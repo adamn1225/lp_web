@@ -1,0 +1,138 @@
+---
+import { APP } from '@data/config'
+import Layout from '@layouts/Minimal.astro'
+import Container from '@components/Container.astro'
+import Logo from '@components/ui/Logo.astro'
+import { Icon } from 'astro-icon/components'
+---
+
+<Layout title="Login">
+  <main id="Login" class="bg-muted-50 dark:bg-muted-900 relative">
+    <header class="absolute top-0 start-0 z-[5] w-full px-3">
+      <Container>
+        <div class="flex justify-between items-center gap-3 min-h-[4.5rem]">
+          <a href="/" class="flex gap-4 items-center">
+            <Logo class="size-8" />
+            <p class="font-medium text-2xl font-sans text-muted-900 dark:text-white">
+              {APP.name}
+            </p>
+          </a>
+          <button
+            class="cursor-pointer relative w-9 aspect-square rounded-full bg-white dark:bg-muted-950 border-muted-200 dark:border-muted-800 border [&>svg]:text-yellow-400"
+            @click="$store.app.toggleTheme()"
+          >
+            <!-- sun -->
+            <Icon
+              name="lucide:sun"
+              class="lightIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
+              x-cloak
+              :class="$store.app.isDark ? 'opacity-0 -translate-x-[45%] -translate-y-[150%]' : 'opacity-100  -translate-x-1/2 -translate-y-1/2' "
+            />
+
+            <!-- moon -->
+            <Icon
+              name="lucide:moon"
+              class="darkIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
+              x-cloak
+              :class="$store.app.isDark ? 'opacity-100  -translate-x-[45%] -translate-y-1/2' : 'opacity-0 -translate-x-[45%] -translate-y-[150%]' "
+            />
+          </button>
+        </div>
+      </Container>
+    </header>
+
+    <section class="min-h-screen relative flex flex-col justify-between items-stretch">
+      <div class="flex items-center py-12 px-6 md:px-12 flex-grow">
+        <Container>
+          <div class="flex flex-col lg:flex-row justify-center items-center">
+            <div class="column p-3">
+              <div class="max-w-md mb-6">
+                <h1 class="text-center text-4xl mb-2 font-medium font-sans text-muted-900 dark:text-white">Sign In</h1>
+                <p class="text-muted-500 dark:text-muted-400 text-center text-base">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Verum hoc idem saepe faciamus.</p>
+              </div>
+
+              <form class="max-w-md p-10 border border-muted-200 dark:border-muted-800 bg-white dark:bg-muted-950 flex flex-col gap-3" x-data="login">
+                <div>
+                  <label class="text-sm text-muted-500 dark:text-muted-400">Email Address</label>
+                  <div class="relative">
+                    <input
+                      type="text"
+                      class="w-full peer outline-none focus:outline-none p-3 ps-12 dark:bg-muted-900 border border-muted-200 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded h-12 text-base"
+                      placeholder="Enter your email"
+                    />
+                    <div class="peer-focus:[&>svg]:text-primary-500 absolute start-0 top-0 grid place-items-center h-12 w-12">
+                      <Icon class="h-4 w-4 text-muted-300 dark:text-muted-600 stroke-[1.6px] transition-all duration-300" name="lucide:mail" />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label class="text-sm text-muted-500 dark:text-muted-400">Password</label>
+                  <div class="relative">
+                    <input
+                      type="password"
+                      class="w-full peer outline-none focus:outline-none p-3 ps-12 dark:bg-muted-900 border border-muted-200 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded h-12 text-base"
+                      placeholder="Enter your password"
+                    />
+                    <div class="peer-focus:[&>svg]:text-primary-500 absolute start-0 top-0 grid place-items-center h-12 w-12">
+                      <Icon class="h-4 w-4 text-muted-300 dark:text-muted-600 stroke-[1.6px] transition-all duration-300" name="lucide:lock" />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 py-2">
+                    <label for="remember-me" class="inline-flex relative items-center cursor-pointer">
+                      <input id="remember-me" type="checkbox" class="appearance-none peer" />
+                      <div
+                        class="relative inline-block w-[48px] h-[28px] bg-muted-100 dark:bg-muted-900 border border-muted-200 dark:border-muted-800 peer-focus:outline-none after:border rounded-full peer-checked:bg-primary-500 transition-all duration-300 ease-linear before:content-[''] before:absolute before:w-[42px] before:h-[22px] before:dark:bg-muted-900 before:rounded-full before:bg-muted-100 before:[transform:translate3d(2px,2px,0)_scale3d(1,1,1)] before:transition-all before:duration-[0.25s] before:ease-linear after:content-[''] after:absolute after:w-[22px] after:h-[22px] after:bg-white after:rounded-full after:shadow-md after:[transform:translate3d(2px,2px,0)] peer-checked:before:[transform:translate3d(18px,2px,0)_scale3d(0,0,0)] peer-checked:after:[transform:translate3d(22px,2px,0)] after:transition-all after:duration-[0.2s] after:ease-in-out"
+                      >
+                      </div>
+                      <span class="ms-3 text-sm font-medium text-muted-400">Remember me</span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <div class="mt-4 mb-3">
+                    <button
+                      class="min-h-12 bg-primary-500 rounded font-medium text-sm w-full px-4 py-2 flex justify-center items-center text-white transition-all duration-300"
+                      :class="{'is-loading': isLoading }"
+                      @click.prevent="login()"
+                    >
+                      Login
+                    </button>
+                  </div>
+
+                  <div class="text-center">
+                    <a href="/forgot" class="underline-offset-4 hover:underline hover:text-primary-500 transition-colors duration-300 text-sm text-muted-400">Forgot Password?</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </Container>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    .is-loading {
+      @apply text-transparent pointer-events-none relative after:absolute after:start-[calc(50%-.5rem)] after:top-[calc(50%-.5rem)] after:animate-[spinAround_500ms_infinite_linear] after:border-[2px] after:rounded-full after:border-muted-200 after:border-t-transparent after:border-r-transparent after:block after:content-[''] after:h-4 after:w-4;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      //@ts-ignore
+      Alpine.data('login', () => ({
+        isLoading: false,
+        login() {
+          this.isLoading = true
+          setTimeout(() => {
+            //@ts-ignore
+            this.$store.app.login()
+            window.location.href = '/home'
+          }, 1500)
+        },
+      }))
+    })
+  </script>
+</Layout>

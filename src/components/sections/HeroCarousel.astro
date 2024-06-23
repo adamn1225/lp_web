@@ -1,0 +1,17 @@
+---
+import Section from '@components/Section.astro'
+import Container from '@components/Container.astro'
+import HeaderCarousel from '@components/ui/carousel/HeaderCarousel.astro'
+---
+
+<Section>
+  <Container>
+    <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-4 lg:gap-12 pt-24 pb-8">
+      <h1 class="font-sans text-muted-900 dark:text-white font-normal text-4xl md:text-5xl text-start md:leading-none">The home of excellence in the construction industry</h1>
+      <p class="mb-3 text-base text-muted-500 dark:text-muted-400">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Non enim quaero quid verum, sed quid cuique dicendum sit. Quid affers, cur Thorius, cur Caius.
+      </p>
+    </div>
+    <HeaderCarousel />
+  </Container>
+</Section>

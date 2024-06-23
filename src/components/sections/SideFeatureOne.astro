@@ -1,0 +1,48 @@
+---
+import { Icon } from 'astro-icon/components'
+import Section from '@components/Section.astro'
+import Container from '@components/Container.astro'
+---
+
+<Section>
+  <Container>
+    <div class="w-full flex flex-col md:flex-row items-center gap-6">
+      <div class="md:w-1/2 p-3 md:ps-[5%] lg:ps-[98px]">
+        <h3 class="dark:text-white font-sans text-muted-900 text-3xl leading-9 font-medium">Highest ranking standards</h3>
+        <p class="text-muted-500 dark:text-muted-400 text-base py-2">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Illud non continuo, ut aeque incontentae. Duo Reges: constructio interrete. Si qua in iis corrigere voluit, deteriora fecit. Sit enim
+          idem caecus, debilis.
+        </p>
+        <ul class="py-4 ps-6">
+          <li class="flex items-center gap-2 py-2">
+            <Icon name="lucide:check" class="size-4 text-success aspect-square" />
+            <span class="text-muted-500 dark:text-muted-400">AA+ construction standard</span>
+          </li>
+          <li class="flex items-center gap-2 py-2">
+            <Icon name="lucide:check" class="size-4 text-success aspect-square" />
+            <span class="text-muted-500 dark:text-muted-400">All-Risk insurance</span>
+          </li>
+          <li class="flex items-center gap-2 py-2">
+            <Icon name="lucide:check" class="size-4 text-success aspect-square" />
+            <span class="text-muted-500 dark:text-muted-400">Project live tracking</span>
+          </li>
+        </ul>
+      </div>
+      <div class="md:w-1/2 flex justify-center">
+        <div class="max-w-[340px] relative">
+          <img class="h-full relative z-0" alt="Highest ranking standards" src="/images/photo/buildings/6.webp" />
+          <!-- composition -->
+          <div
+            class="absolute z-[2] border border-muted-200 dark:border-muted-800 -start-8 -bottom-8 py-10 px-5 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20 w-[200px] bg-white dark:bg-muted-950"
+          >
+            <div class="bg-success-500 w-10 aspect-square mx-auto rounded-full grid place-items-center">
+              <Icon name="ion:flash" class="size-5 text-white aspect-square" />
+            </div>
+            <p class="text-center my-2 text-muted-900 font-sans text-base dark:text-white font-semibold">AA+ Standard</p>
+            <p class="text-center text-muted-400 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>

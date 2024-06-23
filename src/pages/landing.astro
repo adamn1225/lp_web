@@ -1,0 +1,51 @@
+---
+import { properties } from '@data/properties'
+import Layout from '@layouts/Default.astro'
+import HeroSplit from '@components/sections/HeroSplit.astro'
+import PopularProperties from '@components/sections/PopularProperties.astro'
+import PrivateLoft from '@components/sections/PrivateLoft.astro'
+import FadeBoxes from '@components/sections/FadeBoxes.astro'
+import SideFeatureTwo from '@components/sections/SideFeatureTwo.astro'
+import SideFeatureOne from '@components/sections/SideFeatureOne.astro'
+import SideVideoOne from '@components/sections/SideVideoOne.astro'
+import Testimonials from '@components/sections/Testimonials.astro'
+import CustomerLogos from '@components/sections/CustomerLogos.astro'
+import BoxedCta from '@components/sections/BoxedCta.astro'
+---
+
+<Layout title="Home">
+  <main id="Home">
+    <!--Split Hero-->
+    <HeroSplit />
+
+    <!--Popular properties (x3)-->
+    <PopularProperties properties={properties.slice(0, 3)} />
+
+    <!--Private Loft-->
+    <PrivateLoft />
+
+    <!--Fading hover boxes-->
+    <FadeBoxes />
+
+    <!--Popular properties (x6)-->
+    <PopularProperties properties={properties.slice(3)} />
+
+    <!-- TALENTED -->
+    <SideVideoOne />
+
+    <!-- RANKING -->
+    <SideFeatureOne />
+
+    <!-- PARTNERSHIP -->
+    <SideFeatureTwo />
+
+    <!-- WHAT THEY SAY -->
+    <Testimonials />
+
+    <!-- LOGOS -->
+    <CustomerLogos />
+
+    <!-- ENGAGE/CTA-->
+    <BoxedCta />
+  </main>
+</Layout>

@@ -1,0 +1,581 @@
+---
+import { Icon } from 'astro-icon/components'
+import { properties } from '@data/properties'
+import Layout from '@layouts/Split.astro'
+import Section from '@components/Section.astro'
+import Container from '@components/Container.astro'
+import PropertyCard from '@components/ui/PropertyCard.astro'
+---
+
+<Layout title="Property Details">
+  <main id="PropertyDetails">
+    <Section>
+      <Container>
+        <div class="pb-12 mb-12">
+          <section class="relative border-b border-muted-200 dark:border-muted-800 pb-12">
+            <!-- breadcrumb -->
+            <nav class="mt-12 mb-6" aria-label="breadcrumbs">
+              <ul class="flex items-center">
+                <li class="flex items-center">
+                  <a href="#" class="hover:text-primary-500 pe-3 text-muted-400" href="#">
+                    <Icon class="h-4 aspect-square" name="lucide:home" />
+                  </a>
+                </li>
+                <li class="flex items-center before:content-['/'] before:text-muted-400">
+                  <a href="#" class="hover:text-primary-500 px-3 text-muted-400" href="#">Properties</a>
+                </li>
+                <li class="flex items-center before:content-['/'] before:text-muted-400">
+                  <a href="#" class="hover:text-primary-500 px-3 text-muted-400" href="#">Buy</a>
+                </li>
+                <li class="is-active flex items-center before:content-['/'] before:text-muted-400">
+                  <a href="#" class="px-3 text-muted-400" href="#" aria-current="page">Details</a>
+                </li>
+              </ul>
+            </nav>
+            <!-- property details title -->
+            <div class="flex flex-col md:flex-row items-end justify-between mb-6">
+              <!-- left -->
+              <div class="left mb-8 md:m-0">
+                <h2 class="dark:text-white leading-9 text-3xl font-light font-sans text-muted-900 mb-2">High standing luxury apartment</h2>
+                <div class="flex gap-4 text-base dark:text-white text-muted-900">
+                  <a href="#" class="flex items-center gap-1 font-medium">
+                    <Icon class="size-4 aspect-square text-yellow-400 stroke-yellow text-yellow" name="lucide:star" />
+                    <span>4,92 (263)</span>
+                  </a>
+                  <a href="#" class="flex items-center font-medium relative underline-offset-4 hover:underline">San Diego, CA</a>
+                </div>
+              </div>
+              <!-- right -->
+              <div class="right flex gap-4">
+                <a href="#" class="gap-1 flex items-center font-medium text-muted-900 dark:text-white hover:text-primary-500 underline-offset-4 hover:underline">
+                  <Icon class="h-4 aspect-square" name="lucide:share-2" />
+                  <span class="relative">Share</span>
+                </a>
+                <a href="#" class="gap-1 flex items-center font-medium text-muted-900 dark:text-white hover:text-primary-500 underline-offset-4 hover:underline">
+                  <Icon class="h-4 aspect-square" name="lucide:heart" />
+                  <span class="relative">Save</span>
+                </a>
+              </div>
+            </div>
+            <!-- property details -->
+            <div class="flex flex-col lg:flex-row items-stretch gap-8">
+              <!-- left -->
+              <div class="flex-grow-[2]">
+                <!-- property images -->
+                <div class="flex flex-col md:flex-row items-stretch gap-4 mb-4">
+                  <div class="main-image md:flex-grow-[2]">
+                    <img class="block object-cover min-h-[450px]" src="/images/photo/properties/details-1.webp" alt="Main image" width={2000} height={1333} data-zoom />
+                  </div>
+                  <div class="flex flex-row md:flex-col gap-4 max-w-full md:max-w-[180px] md:w-full">
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src="/images/photo/properties/details-2.webp" alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src="/images/photo/properties/details-3.webp" alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src="/images/photo/properties/details-4.webp" alt="Sub image" width={2000} height={1333} data-zoom />
+                  </div>
+                </div>
+                <!-- property content -->
+                <div class="relative" x-data="{ activeTab: 'tab-1' }">
+                  <div class="tabs mb-6 flex text-base justify-between overflow-hidden overflow-x-auto">
+                    <ul class="flex items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none">
+                      <li :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-primary-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
+                        <a @click.prevent="activeTab = 'tab-1'" class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                          >Description</a
+                        >
+                      </li>
+                      <li :class="activeTab === 'tab-2' && 'is-active [&>a]:border-b-2 [&>a]:border-primary-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
+                        <a @click.prevent="activeTab = 'tab-2'" class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                          >Amenities</a
+                        >
+                      </li>
+                      <li :class="activeTab === 'tab-3' && 'is-active [&>a]:border-b-2 [&>a]:border-primary-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
+                        <a @click.prevent="activeTab = 'tab-3'" class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                          >Comments</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
+                    <p class="text-muted-500 dark:text-muted-400 text-base">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis est tam dissimile homini. Sedulo, inquam, faciam. Quae cum essent dicta, discessimus. Bona autem corporis huic sunt,
+                      quod posterius posui, similiora. Qui ita affectus, beatum esse numquam probabis; Restatis igitur vos; Duo Reges: constructio interrete.
+                    </p>
+                    <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
+                      Quae cum essent dicta, discessimus. Bona autem corporis huic sunt, quod posterius posui, similiora. Qui ita affectus, beatum esse numquam probabis; Restatis igitur vos; Duo
+                      Reges: constructio interrete. Prodest, inquit, mihi eo esse animo. Ea possunt paria non esse. Negare non possum.
+                    </p>
+                  </div>
+                  <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
+                    <div class="boxed-amenities grid grid-cols-2 lg:grid-cols-4 gap-4">
+                      <!-- Amenity -->
+                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                        <div class="dark:text-white font-bold gap-2 flex justify-center items-center text-muted-900">
+                          <svg
+                            class="h-6"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style="--darkreader-inline-stroke: currentColor;"
+                            data-darkreader-inline-stroke=""
+                            ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
+                          </svg>
+                          <span>3</span>
+                        </div>
+                        <div class="amenity-content text-center">
+                          <p class="text-sm text-muted-400">Bedrooms</p>
+                        </div>
+                      </div>
+                      <!-- Amenity -->
+                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                        <div class="dark:text-white font-bold gap-2 flex justify-center items-center text-muted-900">
+                          <svg
+                            class="h-6"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style="--darkreader-inline-stroke: currentColor;"
+                            data-darkreader-inline-stroke=""
+                            ><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"></path><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"></path><path d="M4 18v2"
+                            ></path><path d="M20 18v2"></path><path d="M12 4v9"></path></svg
+                          >
+                          <span>2</span>
+                        </div>
+                        <div class="amenity-content text-center">
+                          <p class="text-sm text-muted-400">Living rooms</p>
+                        </div>
+                      </div>
+                      <!-- Amenity -->
+                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                        <div class="dark:text-white font-bold gap-2 flex justify-center items-center text-muted-900">
+                          <svg
+                            class="h-6"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style="--darkreader-inline-stroke: currentColor;"
+                            data-darkreader-inline-stroke=""
+                            ><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path><line x1="10" y1="5" x2="8" y2="7"></line><line
+                              x1="2"
+                              y1="12"
+                              x2="22"
+                              y2="12"></line><line x1="7" y1="19" x2="7" y2="21"></line><line x1="17" y1="19" x2="17" y2="21"></line>
+                          </svg>
+                          <span>3</span>
+                        </div>
+                        <div class="amenity-content text-center">
+                          <p class="text-sm text-muted-400">Bathrooms</p>
+                        </div>
+                      </div>
+                      <!-- Amenity -->
+                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                        <div class="dark:text-white font-bold gap-2 flex justify-center items-center text-muted-900">
+                          <Icon class="text-2xl h-6" name="lucide:car" />
+                          <span>2</span>
+                        </div>
+                        <div class="amenity-content text-center">
+                          <p class="text-sm text-muted-400">Garage spots</p>
+                        </div>
+                      </div>
+                      <!-- Amenity -->
+                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                        <div class="dark:text-white font-bold gap-2 flex justify-center items-center text-muted-900">
+                          <Icon class="text-2xl h-6" name="lucide:droplets" />
+                          <span></span>
+                        </div>
+                        <div class="amenity-content text-center">
+                          <p class="text-sm text-muted-400">Swimming pool</p>
+                        </div>
+                      </div>
+                      <!-- Amenity -->
+                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                        <div class="dark:text-white font-bold gap-2 flex justify-center items-center text-muted-900">
+                          <Icon class="text-2xl h-6" name="lucide:sprout" />
+                          <span></span>
+                        </div>
+                        <div class="amenity-content text-center">
+                          <p class="text-sm text-muted-400">Private garden</p>
+                        </div>
+                      </div>
+                      <!-- Amenity -->
+                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                        <div class="dark:text-white font-bold gap-2 flex justify-center items-center text-muted-900">
+                          <Icon class="text-2xl h-6" name="lucide:thermometer-snowflake" />
+                          <span></span>
+                        </div>
+                        <div class="amenity-content text-center">
+                          <p class="text-sm text-muted-400">Air conditionning</p>
+                        </div>
+                      </div>
+                      <!-- Amenity -->
+                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                        <div class="dark:text-white font-bold gap-2 flex justify-center items-center text-muted-900">
+                          <Icon class="text-2xl h-6" name="lucide:webcam" />
+                          <span></span>
+                        </div>
+                        <div class="amenity-content text-center">
+                          <p class="text-sm text-muted-400">Connnected house</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
+                    <div class="relative">
+                      <div class="grid grid-cols-2 gap-6 max-w-xl">
+                        <!--Review-->
+                        <div class="relative">
+                          <div class="flex items-center justify-between max-w-xl">
+                            <div class="text-base text-muted-700 dark:text-muted-200">
+                              <span>Design</span>
+                            </div>
+                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                              <progress
+                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                                value="86"
+                                max="100"
+                              >
+                                86%
+                              </progress>
+                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.3</span>
+                            </div>
+                          </div>
+                        </div>
+                        <!--Review-->
+                        <div class="relative">
+                          <div class="flex items-center justify-between max-w-xl">
+                            <div class="text-base text-muted-700 dark:text-muted-200">
+                              <span>Space</span>
+                            </div>
+                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                              <progress
+                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                                value="84"
+                                max="100"
+                              >
+                                84%
+                              </progress>
+                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.2</span>
+                            </div>
+                          </div>
+                        </div>
+                        <!--Review-->
+                        <div class="relative">
+                          <div class="flex items-center justify-between max-w-xl">
+                            <div class="text-base text-muted-700 dark:text-muted-200">
+                              <span>Equipments</span>
+                            </div>
+                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                              <progress
+                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                                value="90"
+                                max="100"
+                              >
+                                90%
+                              </progress>
+                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.5</span>
+                            </div>
+                          </div>
+                        </div>
+                        <!--Review-->
+                        <div class="relative">
+                          <div class="flex items-center justify-between max-w-xl">
+                            <div class="text-base text-muted-700 dark:text-muted-200">
+                              <span>Light</span>
+                            </div>
+                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                              <progress
+                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                                value="94"
+                                max="100"
+                              >
+                                94%
+                              </progress>
+                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.7</span>
+                            </div>
+                          </div>
+                        </div>
+                        <!--Review-->
+                        <div class="relative">
+                          <div class="flex items-center justify-between max-w-xl">
+                            <div class="text-base text-muted-700 dark:text-muted-200">
+                              <span>Location</span>
+                            </div>
+                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                              <progress
+                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                                value="90"
+                                max="100"
+                              >
+                                90%
+                              </progress>
+                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.5</span>
+                            </div>
+                          </div>
+                        </div>
+                        <!--Review-->
+                        <div class="relative">
+                          <div class="flex items-center justify-between max-w-xl">
+                            <div class="text-base text-muted-700 dark:text-muted-200">
+                              <span>Price</span>
+                            </div>
+                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                              <progress
+                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                                value="86"
+                                max="100"
+                              >
+                                20%
+                              </progress>
+                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.3</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="pt-16">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
+                          <!--Comment-->
+                          <div class="relative">
+                            <div class="gap-4 mb-6 flex items-center">
+                              <a>
+                                <img class="h-11 w-11 rounded-full" height={400} width={400} src="/images/avatars/3.webp" alt="Visitor photo" />
+                              </a>
+                              <div class="meta">
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Helena</h4>
+                                <span class="text-base text-muted-400">3 days ago</span>
+                              </div>
+                            </div>
+                            <p class="text-muted-700 dark:text-muted-200 text-sm">
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt. Non risu
+                              potius quam oratione eiciendum? Istic sum, inquit. Ita prorsus, inquam.
+                            </p>
+                          </div>
+                          <!--Comment-->
+                          <div class="relative">
+                            <div class="gap-4 mb-6 flex items-center">
+                              <a>
+                                <img class="h-11 w-11 rounded-full" height={310} width={310} src="/images/avatars/6.webp" alt="Visitor photo" />
+                              </a>
+                              <div class="meta">
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Mathilda</h4>
+                                <span class="text-base text-muted-400">5 days ago</span>
+                              </div>
+                            </div>
+                            <p class="text-muted-700 dark:text-muted-200 text-sm">
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt.
+                            </p>
+                          </div>
+                          <!--Comment-->
+                          <div class="relative">
+                            <div class="gap-4 mb-6 flex items-center">
+                              <a>
+                                <img class="h-11 w-11 rounded-full" height={310} width={310} src="/images/avatars/5.webp" alt="Visitor photo" />
+                              </a>
+                              <div class="meta">
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">John</h4>
+                                <span class="text-base text-muted-400">a week ago</span>
+                              </div>
+                            </div>
+                            <p class="text-muted-700 dark:text-muted-200 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est.</p>
+                          </div>
+                          <!--Comment-->
+                          <div class="relative">
+                            <div class="gap-4 mb-6 flex items-center">
+                              <a>
+                                <img class="h-11 w-11 rounded-full" height={350} width={350} src="/images/avatars/7.webp" alt="Visitor photo" />
+                              </a>
+                              <div class="meta">
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Sara</h4>
+                                <span class="text-base text-muted-400">2 weeks ago</span>
+                              </div>
+                            </div>
+                            <p class="text-muted-700 dark:text-muted-200 text-sm">
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt. Non risu
+                              potius quam oratione eiciendum? Istic sum, inquit.
+                            </p>
+                          </div>
+                          <!--Comment-->
+                          <div class="relative">
+                            <div class="gap-4 mb-6 flex items-center">
+                              <a>
+                                <img class="h-11 w-11 rounded-full" height={205} width={205} src="/images/avatars/9.webp" alt="Visitor photo" />
+                              </a>
+                              <div class="meta">
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Christina</h4>
+                                <span class="text-base text-muted-400">2 weeks ago</span>
+                              </div>
+                            </div>
+                            <p class="text-muted-700 dark:text-muted-200 text-sm">
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt.
+                            </p>
+                          </div>
+                          <!--Comment-->
+                          <div class="relative">
+                            <div class="gap-4 mb-6 flex items-center">
+                              <a>
+                                <img class="h-11 w-11 rounded-full" height={350} width={350} src="/images/avatars/11.webp" alt="Visitor photo" />
+                              </a>
+                              <div class="meta">
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Michael</h4>
+                                <span class="text-base text-muted-400">2 weeks ago</span>
+                              </div>
+                            </div>
+                            <p class="text-muted-700 dark:text-muted-200 text-sm">
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt.
+                            </p>
+                          </div>
+                        </div>
+                        <div class="relatives-action mt-8">
+                          <button
+                            class="h-11 transition-all duration-300 text-sm rounded bg-white dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center text-muted-900 dark:text-muted-400"
+                            >See all comments</button
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- right -->
+              <div class="min-w-[300px]">
+                <h4 class="dark:text-white text-xl mb-6 font-light font-sans text-muted-900">Amenities</h4>
+                <div class="mb-6 grid grid-cols-3">
+                  <!-- bedroom -->
+                  <div class="flex flex-col">
+                    <div class="flex items-center gap-2 text-muted-900 dark:text-white">
+                      <svg
+                        class="size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        style="--darkreader-inline-stroke: currentColor;"
+                        data-darkreader-inline-stroke=""
+                        ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
+                      </svg>
+                      <p class="text-lg font-bold">3</p>
+                    </div>
+                    <p class="text-sm text-muted-400">Bedrooms</p>
+                  </div>
+                  <!-- bathroom -->
+                  <div class="flex flex-col">
+                    <div class="flex items-center gap-2 text-muted-900 dark:text-white">
+                      <svg
+                        class="size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        style="--darkreader-inline-stroke: currentColor;"
+                        data-darkreader-inline-stroke=""
+                        ><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path><line x1="10" y1="5" x2="8" y2="7"></line><line
+                          x1="2"
+                          y1="12"
+                          x2="22"
+                          y2="12"></line><line x1="7" y1="19" x2="7" y2="21"></line><line x1="17" y1="19" x2="17" y2="21"></line>
+                      </svg>
+                      <p class="text-lg font-bold">3</p>
+                    </div>
+                    <p class="text-sm text-muted-400">Bathrooms</p>
+                  </div>
+                  <!-- living area -->
+                  <div class="flex flex-col">
+                    <div class="flex items-center gap-2 text-muted-900 dark:text-white">
+                      <svg
+                        class="size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        style="--darkreader-inline-stroke: currentColor;"
+                        data-darkreader-inline-stroke=""
+                        ><path d="M5 3a2 2 0 0 0-2 2"></path><path d="M19 3a2 2 0 0 1 2 2"></path><path d="M21 19a2 2 0 0 1-2 2"></path><path d="M5 21a2 2 0 0 1-2-2"></path><path d="M9 3h1"
+                        ></path><path d="M9 21h1"></path><path d="M14 3h1"></path><path d="M14 21h1"></path><path d="M3 9v1"></path><path d="M21 9v1"></path><path d="M3 14v1"></path><path d="M21 14v1"
+                        ></path>
+                      </svg>
+                      <p class="text-lg font-bold">460m²</p>
+                    </div>
+                    <p class="text-sm text-muted-400">Living Area</p>
+                  </div>
+                </div>
+                <div class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex gap-2 flex-wrap">
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Guest toilet</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Open kitchen</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Swimming Pool</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Garden sharing</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Kids playground</span>
+                </div>
+                <div class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800">
+                  <div class="flex items-center justify-between text-sm">
+                    <p class="text-muted-400">Type</p>
+                    <p class="dark:text-white text-muted-900">Apartment</p>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <p class="text-muted-400">Status</p>
+                    <p class="dark:text-white text-muted-900">Available</p>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <p class="text-muted-400">Credit</p>
+                    <p class="dark:text-white text-muted-900">Yes</p>
+                  </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <p class="text-muted-400">Discount</p>
+                    <p class="dark:text-white text-muted-900">5%</p>
+                  </div>
+                </div>
+                <button
+                  class="bg-primary-500 mb-6 font-medium text-sm text-white rounded h-11 transition-all duration-300 py-2 px-4 flex items-center justify-center cursor-pointer w-full hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
+                >
+                  Apply Now
+                </button>
+                <!-- map -->
+                <iframe
+                  class="min-h-[220px] w-full"
+                  marginheight="0"
+                  marginwidth="0"
+                  title="map"
+                  scrolling="no"
+                  src="https://maps.google.com/maps?width=100%&height=100%&hl=en&q=Los%20Angeles+(Css%20Ninja)&center=-117.1627728,32.7174202&ie=UTF8&t=&z=14&iwloc=B&output=embed&zoom=12"
+                  style="filter: grayscale(1) contrast(1.2) opacity(0.4)"
+                  frameborder="0"></iframe>
+              </div>
+            </div>
+          </section>
+          <!-- cards -->
+          <div class="mt-12">
+            <div class="flex flex-col">
+              <h2 class="font-sans text-2xl text-muted-900 dark:text-white">You might also like</h2>
+              <p class="text-muted-500 dark:text-muted-400 text-base leading-6">Based on your previous matches</p>
+            </div>
+            <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {properties.slice(0, 3).map((property) => <PropertyCard {...property} />)}
+            </div>
+          </div>
+        </div>
+      </Container>
+    </Section>
+  </main>
+</Layout>

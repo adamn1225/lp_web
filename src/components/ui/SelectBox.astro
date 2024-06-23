@@ -1,0 +1,76 @@
+---
+import { Icon } from 'astro-icon/components'
+interface Props {
+  options: string[]
+  placeholder: string
+  id: string
+}
+const { id = '', options, placeholder = '' } = Astro.props
+---
+
+<div id={id + 'Select'} data-open="false" aria-label="Select Box" class="select relative w-full md:w-max min-w-[250px]">
+  <!-- options -->
+  {
+    options.length > 0 && (
+      <div
+        aria-label="Select Option"
+        class="options bg-white dark:bg-muted-900 shadow-sm border transition-all duration-200 z-20 border-muted-300 dark:border-muted-800 text-muted-600 rounded-lg mt-2 p-2 absolute top-full start-0 w-full overflow-hidden"
+      >
+        {options.map((option) => (
+          <div class="option py-2 px-3 rounded-md hover:bg-muted-100 dark:hover:bg-muted-800 text-muted-400 hover:text-muted-700 dark:hover:text-muted-100 cursor-pointer" data-option={option}>
+            {option}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  <div class="flex justify-between items-center gap-2 bg-white dark:bg-muted-900 px-4 py-4 rounded-lg cursor-pointer w-full h-full relative z-20">
+    <Icon name="lucide:home" class="size-4 text-muted-400" />
+    <!-- input -->
+    <input
+      aria-label="Select Input"
+      id={id}
+      name={id}
+      type="text"
+      class="peer focus:outline-none cursor-pointer dark:bg-muted-900 text-muted-700 dark:text-muted-300 placeholder:text-muted-300 dark:placeholder:text-muted-600 flex-1"
+      placeholder={placeholder}
+      readonly
+    />
+    <Icon name="lucide:chevron-down" class="size-4 text-muted-400 transition-all duration-200" />
+  </div>
+</div>
+
+<style>
+  [data-open='false'] .options {
+    @apply max-h-0 opacity-0;
+  }
+  [data-open='true'] .options {
+    @apply max-h-[200px] opacity-100;
+  }
+  [data-open='true'] svg:last-child {
+    @apply rotate-180;
+  }
+</style>
+
+<script>
+  ;[...document.querySelectorAll('.option')].forEach((option) => {
+    option.addEventListener('click', () => {
+      //@ts-ignore
+      option.parentElement.nextElementSibling.querySelector('input').value = option.dataset.option
+    })
+  })
+  ;[...document.querySelectorAll('.select')].forEach((select) => {
+    select.addEventListener('click', () => {
+      //@ts-ignore
+      const OPEN = select.dataset.open === 'true'
+      if (OPEN) {
+        //@ts-ignore
+        select.dataset.open = 'false'
+      } else {
+        //@ts-ignore
+        select.dataset.open = 'true'
+      }
+    })
+  })
+</script>
