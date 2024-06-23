@@ -6,12 +6,12 @@ import MegaMenu from './ui/MegaMenu.astro'
 import AccountMenu from './ui/AccountMenu.astro'
 ---
 
-<div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full z-50">
+<div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full z-50 bg-slate-50 shadow-lg border-zinc-100">
   <div
     id="header"
     :class="scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20': 'lg:bg-transparent' "
   >
-  <header id="MainHeader" class="min-h-[70px] w-full max-w-7xl mx-auto flex justify-start items-stretch gap-3 shadow lg:shadow-none px-3 lg:px-0">
+  <header id="MainHeader" class=" min-h-[70px] w-full max-w-7xl mx-auto flex justify-start items-stretch gap-3 shadow lg:shadow-none px-3 lg:px-0">
     <div class="flex justify-between lg:justify-start items-center w-full lg:w-auto min-h-[3.25rem]">
       <a href="/" class="flex gap-4 items-center py-2">
         <Logo class="size-8 aspect-square" />
@@ -121,7 +121,7 @@ import AccountMenu from './ui/AccountMenu.astro'
             <li class="w-full md:w-3/5 mx-auto lg:mx-0 lg:w-auto flex items-center justify-center">
               <a
                 href="/signup"
-                class="!h-[46px] w-full lg:w-auto min-w-[120px] font-medium text-sm leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 rounded bg-primary-500 text-white"
+                class="!h-[46px] bg-rose-600 w-full lg:w-auto min-w-[120px] font-medium text-sm leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 rounded bg-primary-500 text-white"
                 :class="{'shadow-lg shadow-primary-500/30': scrolled}">Register</a
               >
             </li>

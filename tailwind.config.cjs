@@ -9,6 +9,9 @@ module.exports = {
       sans: ['Titillium Web', 'sans-serif'],
     },
     extend: {
+      backgroundImage: {
+        'hero-pattern': "url('/img/hero.jpg')"
+      },
       screens: {
         xs: { max: '639px' },
         sm: '640px',
