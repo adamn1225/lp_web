@@ -11,14 +11,14 @@ import AccountMenu from './ui/AccountMenu.astro'
     id="header"
     :class="scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20': 'lg:bg-transparent' "
   >
-    <header id="MainHeader" class="min-h-[70px] w-full max-w-7xl mx-auto flex justify-start items-stretch gap-3 shadow lg:shadow-none px-3 lg:px-0">
-      <div class="flex justify-between lg:justify-start items-center w-full lg:w-auto min-h-[3.25rem]">
-        <a href="/" class="flex gap-4 items-center py-2">
-          <Logo class="size-8 aspect-square" />
-          <p class="font-medium text-2xl font-sans text-muted-900 dark:text-white">
-            {APP.name}
-          </p>
-        </a>
+  <header id="MainHeader" class="min-h-[70px] w-full max-w-7xl mx-auto flex justify-start items-stretch gap-3 shadow lg:shadow-none px-3 lg:px-0">
+    <div class="flex justify-between lg:justify-start items-center w-full lg:w-auto min-h-[3.25rem]">
+      <a href="/" class="flex gap-4 items-center py-2">
+        <Logo class="size-8 aspect-square" />
+        <p style="width:max-content" class="font-medium text-2xl font-sans text-muted-900 dark:text-white">
+       
+        </p>
+      </a>
         <div class="flex items-stretch gap-3">
           <button id="MenuToggle" class="lg:hidden" @click="mobileOpen = !mobileOpen">
             <Icon id="OpenIcon" x-show="!mobileOpen" name="lucide:menu" class="pointer-events-none text-muted-500 dark:text-white size-6 aspect-auto" />
@@ -39,36 +39,41 @@ import AccountMenu from './ui/AccountMenu.astro'
         :class="mobileOpen ? 'block pt-5 pb-8 lg:p-0 -translate-y-px border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20': 'hidden lg:flex'"
       >
         <ul id="LeftLinks" class="flex flex-col lg:flex-row items-stretch [&>li>a]:h-full">
-          <li>
-            <a
-              href="#"
-              x-on:mouseover="megamenuOpened = true, openedMegamenu = 'megamenu-1'"
-              @click="megamenuOpened = true, openedMegamenu = 'megamenu-2'"
-              class="py-2 px-3 leading-6 text-base group text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
-            >
-              <span>Properties</span>
-              <Icon name="lucide:chevron-down" class="size-4 group-hover:rotate-180 transition-transform duration-300" />
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              x-on:mouseover="megamenuOpened = true, openedMegamenu = 'megamenu-2'"
-              @click="megamenuOpened = true, openedMegamenu = 'megamenu-2'"
-              class="py-2 px-3 leading-6 text-base group text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
-            >
+          <!-- <li>
+            <a href="#" class="py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1">
               <span>Rentals</span>
               <Icon name="lucide:chevron-down" class="size-4 group-hover:rotate-180 transition-transform duration-300" />
             </a>
           </li>
+
+            <a
+              href="#"
+              x-on:mouseover="megamenuOpened = true, openedMegamenu = 'megamenu-2'"
+              @click="megamenuOpened = true, openedMegamenu = 'megamenu-2'"
+              class="py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+            >
+              <span>Rentals</span>
+              <Icon name="lucide:chevron-down" class="size-4 group-hover:rotate-180 transition-transform duration-300" />
+            </a>
+         </li>
           <li>
             <a href="/about" class="py-2 px-3 leading-6 grid place-items-center text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300">
               <span>About</span>
             </a>
-          </li>
+          </li> -->
         </ul>
 
         <ul id="RightLinks" class="flex flex-col lg:flex-row items-stretch gap-6 [&>li>a]:h-full [&>li>a]:grid [&>li>a]:place-items-center">
+          <li>
+            <a href="/about" class="py-2 px-3 leading-6 grid place-items-center text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300">
+              <span>How We Work</span>
+            </a>
+          </li>
+          <li>
+            <a href="/contact" class="py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1">
+              <span>Contact Us</span>
+            </a>
+            </li>
           <template x-if="$store.app.isLoggedIn === false">
             <li>
               <a href="/login" class="py-2 leading-6 text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300">
@@ -77,11 +82,11 @@ import AccountMenu from './ui/AccountMenu.astro'
             </li>
           </template>
           <!-- search -->
-          <li class="search lg:ps-6 hidden lg:block" :class="scrolled  ||  megamenuOpened ? 'border-muted-200 dark:border-muted-800': 'border-transparent',{'lg:border-l':!$store.app.isLoggedIn}">
+          <!-- <li class="search lg:ps-6 hidden lg:block" :class="scrolled  ||  megamenuOpened ? 'border-muted-200 dark:border-muted-800': 'border-transparent',{'lg:border-l':!$store.app.isLoggedIn}">
             <a href="#" class="inline-block text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300">
               <Icon name="lucide:search" class="size-4" />
             </a>
-          </li>
+          </li> -->
 
           <!-- whishlist -->
           <li class="hidden lg:block">
@@ -91,24 +96,24 @@ import AccountMenu from './ui/AccountMenu.astro'
           </li>
 
           <!-- dark/light mode switch -->
-          <li class="flex justify-center items-center">
+          <!-- <li class="flex justify-center items-center">
             <button
               class="darkToggle relative overflow-hidden size-9 aspect-square rounded-full border [&>svg]:text-yellow-400 border-muted-200 bg-white dark:bg-muted-900 dark:border-muted-800"
               @click="$store.app.toggleTheme()"
-            >
+            > -->
               <!-- sun -->
-              <Icon
+              <!-- <Icon
                 name="lucide:sun"
                 class="lightIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
                 :class="$store.app.isDark ? 'opacity-0 -translate-x-[45%] translate-y-[150%]' : 'opacity-100  -translate-x-1/2 -translate-y-1/2' "
-              />
+              /> -->
 
               <!-- moon -->
-              <Icon
+              <!-- <Icon
                 name="lucide:moon"
                 class="darkIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
                 :class="$store.app.isDark ? 'opacity-100  -translate-x-[45%] -translate-y-1/2' : 'opacity-0 -translate-x-[45%] -translate-y-[150%]' "
-              />
+              /> -->
             </button>
           </li>
           <template x-if="$store.app.isLoggedIn === false">

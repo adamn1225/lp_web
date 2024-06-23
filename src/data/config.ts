@@ -1,5 +1,5 @@
 export const APP = {
-  name: "Masonry",
+  name: "Line Properties",
   description:
-    "We are a Real Estate company. We bring freshness of modern design into your house and at your work. ",
+    "",
 };
