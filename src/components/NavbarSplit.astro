@@ -6,7 +6,7 @@ import MegaMenu from './ui/MegaMenu.astro'
 import AccountMenu from './ui/AccountMenu.astro'
 ---
 
-<div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full z-50 bg-slate-50 shadow-lg border-zinc-100">
+<div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full z-50 bg-slate-50 shadow-lg border-slate-100">
   <div
     id="header"
     :class="scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20': 'lg:bg-transparent' "

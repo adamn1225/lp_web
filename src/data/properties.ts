@@ -69,45 +69,38 @@ export const properties: Property[] = [
 
 export const projects: {
   image: string;
-  flag: string;
   title: string;
   location: string;
 }[] = [
   {
-    image: "/images/photo/buildings/carousel/1.webp",
-    flag: "/images/flags/united-states-of-america.svg",
-    title: "Schaeffer Tower",
-    location: "Philadelphia - USA",
+    image: "https://assets.guesty.com/image/upload/v1713834639/lwc6kzimpwpoahn2snjp.jpg",
+    title: "Property Title",
+    location: "City here - USA",
   },
   {
-    image: "/images/photo/buildings/carousel/2.webp",
-    flag: "/images/flags/germany.svg",
-    title: "Klauff Smart City",
-    location: "Berlin - Germany",
+    image: "https://assets.guesty.com/image/upload/v1713835764/m9ms3yqqwaetaqgf2fbi.jpg",
+    title: "Property Title",
+    location: "City here - USA",
   },
   {
-    image: "/images/photo/buildings/carousel/3.webp",
-    flag: "/images/flags/united-states-of-america.svg",
-    title: "Imperial Tower",
-    location: "New York - USA",
+    image: "https://assets.guesty.com/image/upload/v1713834549/kc4oizqwpj7pby2igjvx.jpg",
+    title: "Property Title",
+    location: "City here - USA",
   },
   {
-    image: "/images/photo/buildings/carousel/4.webp",
-    flag: "/images/flags/france.svg",
-    title: "Tour Crayon",
-    location: "Lyon - France",
+    image: "https://assets.guesty.com/image/upload/v1713836082/ijdct36qekz5hhlem1yj.jpg",
+    title: "Property Title",
+    location: "City here - USA",
   },
   {
-    image: "/images/photo/buildings/carousel/5.webp",
-    flag: "/images/flags/spain.svg",
-    title: "Centro Nacional",
-    location: "Madrid - Spain",
+    image: "https://assets.guesty.com/image/upload/v1713835764/m9ms3yqqwaetaqgf2fbi.jpg",
+    title: "Property Title",
+    location: "City here - USA",
   },
   {
-    image: "/images/photo/buildings/carousel/6.webp",
-    flag: "/images/flags/australia.svg",
-    title: "Convention Center",
-    location: "Melbourne - Australia",
+    image: "https://assets.guesty.com/image/upload/v1713835852/vwfjx5kz2rz4a4qkpdm0.jpg",
+    title: "Property Title",
+    location: "City here - USA",
   },
 ];
 
@@ -125,7 +118,7 @@ export const investmentProjects: {
     type: "Private residence",
     price: "$120M",
     units: "250 app.",
-    location: "UK",
+    location: "Location here",
   },
   {
     image: "/images/photo/buildings/10.webp",
