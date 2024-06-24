@@ -8,11 +8,11 @@ import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
-  // vite: {
-  //   ssr: {
-  //     noExternal: ["astro-google-fonts-optimizer", "plyr"]
-  //   }
-  // },
+  vite: {
+    ssr: {
+      noExternal: ["astro-google-fonts-optimizer", "plyr"]
+    }
+  },
   output: 'server',
   adapter: vercel({
     edgeMiddleware: true,

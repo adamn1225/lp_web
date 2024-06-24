@@ -10,7 +10,7 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        'hero-pattern': "url('/imgages/hero.jpg')"
+        homehero: "url('/images/hero.jpg')"
       },
       screens: {
         xs: { max: '639px' },
