@@ -14,8 +14,8 @@ const { centerText = false } = Astro.props
   <Container>
     <div class="w-full flex flex-col">
       <div class:list={['mb-8', { 'flex flex-col items-center': centerText }]}>
-        <h2 class="font-sans text-4xl font-medium leading-9 text-muted-900 dark:text-white">What they say about us</h2>
-        {centerText && <p class="mt-2 text-xl text-muted-400 text-center">Yeah, we know... That's a bunch of happy people</p>}
+        <h2 class="font-sans text-4xl font-medium leading-9 text-slate-900 dark:text-white">What Our Valued Vacationers Say</h2>
+        {centerText && <p class="mt-2 text-xl text-muted-400 text-center">Yeah, we know... Lots of happy people</p>}
       </div>
       <!--Grid-->
       <div class="py-8 flex flex-col lg:flex-row gap-6 bg-no-repeat" style="background-image: url('/images/shapes/1.svg');">
@@ -24,7 +24,6 @@ const { centerText = false } = Astro.props
           <Testimonial
             name="Nicole James"
             address="Los Angeles, CA"
-            image="/images/avatars/1.webp"
             review={`
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Confecta res esset.
               Aliter homines, aliter philosophos loqui putas oportere? Mihi, inquam, qui
@@ -34,7 +33,6 @@ const { centerText = false } = Astro.props
           <Testimonial
             name="MarK Coleo"
             address="San Francisco, CA"
-            image="/images/avatars/2.webp"
             review={`Lorem ipsum dolor sit amet, consectetur adipiscing elit. At enim hic etiam dolore. Quis negat. `}
           />
         </div>
@@ -43,13 +41,11 @@ const { centerText = false } = Astro.props
           <Testimonial
             name="Martha Stewart"
             address="San Bernardo, CA"
-            image="/images/avatars/3.webp"
             review={`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis negat? Atqui reperies, inquit, in hoc quidem pertinacem; Id Sextilius factum negabat. `}
           />
           <Testimonial
             name="Brian Welmingg"
             address="Los Angeles, CA"
-            image="/images/avatars/4.webp"
             review={`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Hanc ergo intuens debet institutum illud quasi signum absolvere. Satis est ad hoc responsum. Nos commodius agimus. `}
           />
         </div>
@@ -58,13 +54,11 @@ const { centerText = false } = Astro.props
           <Testimonial
             name="Chris Stappler"
             address="Barton Inc."
-            image="/images/avatars/5.webp"
             review={`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Hanc ergo intuens debet institutum illud quasi signum absolvere. Satis est ad hoc responsum. Nos commodius agimus. `}
           />
           <Testimonial 
             name="Nicole James" 
             address="Los Angeles, CA" 
-            image="/images/avatars/6.webp" 
             review={`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scisse enim. `} />
         </div>
       </div>
