@@ -9,6 +9,11 @@
       "@data/*": ["src/data/*"],
       "@/*": ["src/*"]
     },
+    "plugins": [
+      {
+        "name": "@astrojs/ts-plugin"
+      },
+    ],
     "types": ["astro/client"]
   }
 }
