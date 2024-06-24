@@ -4,19 +4,22 @@ import tailwind from "@astrojs/tailwind";
 import alpinejs from "@astrojs/alpinejs";
 import icon from "astro-icon";
 
+import vercel from "@astrojs/vercel/serverless";
+
 // https://astro.build/config
 export default defineConfig({
   vite: {
     ssr: {
-      noExternal: ["astro-google-fonts-optimizer", "plyr"],
-    },
+      noExternal: ["astro-google-fonts-optimizer", "plyr"]
+    }
   },
-  integrations: [
-    tailwind(),
-    // image({
-      // serviceEntryPoint: "@astrojs/image/sharp",
-    // }),
-    icon(),
-    alpinejs(),
-  ],
+  output: 'server',
+  adapter: vercelServerless(),
+  integrations: [tailwind(),
+  // image({
+  // serviceEntryPoint: "@astrojs/image/sharp",
+  // }),
+  icon(), alpinejs()],
+  output: "server",
+  adapter: vercel()
 });
