@@ -47,46 +47,15 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
         </div>
 
         <!-- pagination -->
-
-        <div class="py-12">
-          <nav class="flex flex-wrap justify-center md:justify-between items-center text-base gap-2" role="navigation">
-            <a
-              class="flex-1 md:flex-initial dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 dark:hover:border-primary dark:hover:text-primary-500 order-1 md:order-2 min-w-[40px] min-h-[40px] transition-all duration-300 hover:border-primary hover:text-primary-500 border border-muted-200 bg-white items-center justify-center inline-flex p-2 rounded cursor-pointer"
-            >
-              <Icon class="h-4" name="lucide:arrow-left" />
-            </a>
-            <a
-              class="flex-1 md:flex-initial dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 dark:hover:border-primary dark:hover:text-primary-500 order-2 md:order-3 min-w-[40px] min-h-[40px] transition-all duration-300 hover:border-primary hover:text-primary-500 border border-muted-200 bg-white justify-center items-center inline-flex p-2 rounded cursor-pointer"
-            >
-              <Icon class="h-4" name="lucide:arrow-right" />
-            </a>
+      <div>
+        <div class="pb-2 pt-12 w-full flex flex-row justify-center">
+          <nav class="flex flex-wrap justify-center md:justify-center items-center text-base gap-2" role="navigation">
             <ul class="flex-grow flex-shrink flex justify-center md:justify-start items-center gap-1 list-none w-full md:w-auto order-3 md:order-1">
-              <li>
-                <a
-                  class="min-w-10 dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 cursor-pointer rounded text-muted-900 border border-muted-200 bg-white shrink-0 justify-center inline-flex p-2 text-base"
-                  aria-label="Goto page 1">1</a
-                >
-              </li>
-              <li>
-                <span class="pagination-ellipsis text-muted-400 text-base p-2 justify-center flex">&hellip;</span>
-              </li>
-              <li>
-                <a
-                  class="min-w-10 dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 cursor-pointer rounded text-muted-900 border border-muted-200 bg-white shrink-0 justify-center inline-flex p-2 text-base"
-                  aria-label="Goto page 45">45</a
-                >
-              </li>
               <li>
                 <a
                   class="min-w-10 cursor-pointer rounded text-white border dark:border-primary-500 bg-primary-500 shrink-0 justify-center inline-flex p-2 text-base shadow-lg shadow-primary-500/20"
                   aria-label="Page 46"
-                  aria-current="page">46</a
-                >
-              </li>
-              <li>
-                <a
-                  class="min-w-10 dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 cursor-pointer rounded text-muted-900 border border-muted-200 bg-white shrink-0 justify-center inline-flex p-2 text-base"
-                  aria-label="Goto page 47">47</a
+                  aria-current="page">1</a
                 >
               </li>
               <li>
@@ -95,12 +64,38 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
               <li>
                 <a
                   class="min-w-10 dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 cursor-pointer rounded text-muted-900 border border-muted-200 bg-white shrink-0 justify-center inline-flex p-2 text-base"
-                  aria-label="Goto page 86">86</a
+                  aria-label="Goto page 45">4</a
                 >
               </li>
+              <li>
+                <a
+                  class="min-w-10 dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 cursor-pointer rounded text-muted-900 border border-muted-200 bg-white shrink-0 justify-center inline-flex p-2 text-base"
+                  aria-label="Goto page 1">5</a
+                >
+              </li>
+              <li>
+                <a
+                  class="min-w-10 dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 cursor-pointer rounded text-muted-900 border border-muted-200 bg-white shrink-0 justify-center inline-flex p-2 text-base"
+                  aria-label="Goto page 47">6</a
+                >
+
             </ul>
+
           </nav>
         </div>
+        <div class="flex justify-center items-start pb-6">
+          <a
+          class="flex-1 md:flex-initial dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 dark:hover:border-primary dark:hover:text-primary-500 order-1 md:order-2 min-w-[40px] min-h-[40px] transition-all duration-300 hover:border-primary hover:text-primary-500 border border-muted-200 bg-white items-center justify-center inline-flex p-2 rounded cursor-pointer"
+        >
+          <Icon class="h-4" name="lucide:arrow-left" />
+        </a>
+        <a
+          class="flex-1 md:flex-initial dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 dark:hover:border-primary dark:hover:text-primary-500 order-2 md:order-3 min-w-[40px] min-h-[40px] transition-all duration-300 hover:border-primary hover:text-primary-500 border border-muted-200 bg-white justify-center items-center inline-flex p-2 rounded cursor-pointer"
+        >
+          <Icon class="h-4" name="lucide:arrow-right" />
+        </a>
+        </div>
+      </div>
       </Container>
     </Section>
   </main>

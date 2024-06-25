@@ -22,10 +22,7 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                   </a>
                 </li>
                 <li class="flex items-center before:content-['/'] before:text-muted-400">
-                  <a href="#" class="hover:text-primary-500 px-3 text-muted-400" href="#">Properties</a>
-                </li>
-                <li class="flex items-center before:content-['/'] before:text-muted-400">
-                  <a href="#" class="hover:text-primary-500 px-3 text-muted-400" href="#">Buy</a>
+                  <a href="#" class="hover:text-primary-500 px-3 text-muted-400" href="/index">Properties</a>
                 </li>
                 <li class="is-active flex items-center before:content-['/'] before:text-muted-400">
                   <a href="#" class="px-3 text-muted-400" href="#" aria-current="page">Details</a>
@@ -36,13 +33,13 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
             <div class="flex flex-col md:flex-row items-end justify-between mb-6">
               <!-- left -->
               <div class="left mb-8 md:m-0">
-                <h2 class="dark:text-white leading-9 text-3xl font-light font-sans text-muted-900 mb-2">High standing luxury apartment</h2>
+                <h2 class="dark:text-white leading-9 text-3xl font-light font-sans text-muted-900 mb-2">Vacation Property Title</h2>
                 <div class="flex gap-4 text-base dark:text-white text-muted-900">
                   <a href="#" class="flex items-center gap-1 font-medium">
-                    <Icon class="size-4 aspect-square text-yellow-400 stroke-yellow text-yellow" name="lucide:star" />
-                    <span>4,92 (263)</span>
+                    <Icon class="size-4 aspect-square text-cyan-600 stroke-yellow text-yellow" name="lucide:star" />
+                    <span>4.92 (263)</span>
                   </a>
-                  <a href="#" class="flex items-center font-medium relative underline-offset-4 hover:underline">San Diego, CA</a>
+                  <a href="#" class="flex items-center font-medium relative underline-offset-4 hover:underline">Location</a>
                 </div>
               </div>
               <!-- right -->
@@ -235,48 +232,31 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                         <div class="relative">
                           <div class="flex items-center justify-between max-w-xl">
                             <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>Design</span>
+                              <span>Cleanliness</span>
                             </div>
                             <div class="flex items-center flex-grow-[2] max-w-[140px]">
                               <progress
                                 class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value="86"
+                                value="95"
                                 max="100"
                               >
-                                86%
+                                98%
                               </progress>
-                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.3</span>
+                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.8</span>
                             </div>
                           </div>
                         </div>
+
                         <!--Review-->
                         <div class="relative">
                           <div class="flex items-center justify-between max-w-xl">
                             <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>Space</span>
+                              <span>Amenities</span>
                             </div>
                             <div class="flex items-center flex-grow-[2] max-w-[140px]">
                               <progress
                                 class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value="84"
-                                max="100"
-                              >
-                                84%
-                              </progress>
-                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.2</span>
-                            </div>
-                          </div>
-                        </div>
-                        <!--Review-->
-                        <div class="relative">
-                          <div class="flex items-center justify-between max-w-xl">
-                            <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>Equipments</span>
-                            </div>
-                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                              <progress
-                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value="90"
+                                value="88"
                                 max="100"
                               >
                                 90%
@@ -289,7 +269,7 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                         <div class="relative">
                           <div class="flex items-center justify-between max-w-xl">
                             <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>Light</span>
+                              <span>Service</span>
                             </div>
                             <div class="flex items-center flex-grow-[2] max-w-[140px]">
                               <progress
@@ -317,7 +297,7 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                               >
                                 90%
                               </progress>
-                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.5</span>
+                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.6</span>
                             </div>
                           </div>
                         </div>
@@ -330,12 +310,12 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                             <div class="flex items-center flex-grow-[2] max-w-[140px]">
                               <progress
                                 class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value="86"
+                                value="94"
                                 max="100"
                               >
-                                20%
+                                94%
                               </progress>
-                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.3</span>
+                              <span class="ms-3 dark:text-white font-medium text-base text-muted-900">4.7</span>
                             </div>
                           </div>
                         </div>
@@ -345,11 +325,8 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                           <!--Comment-->
                           <div class="relative">
                             <div class="gap-4 mb-6 flex items-center">
-                              <a>
-                                <img class="h-11 w-11 rounded-full" height={400} width={400} src="/images/avatars/3.webp" alt="Visitor photo" />
-                              </a>
                               <div class="meta">
-                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Helena</h4>
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Adam</h4>
                                 <span class="text-base text-muted-400">3 days ago</span>
                               </div>
                             </div>
@@ -361,11 +338,8 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                           <!--Comment-->
                           <div class="relative">
                             <div class="gap-4 mb-6 flex items-center">
-                              <a>
-                                <img class="h-11 w-11 rounded-full" height={310} width={310} src="/images/avatars/6.webp" alt="Visitor photo" />
-                              </a>
                               <div class="meta">
-                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Mathilda</h4>
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Moshe</h4>
                                 <span class="text-base text-muted-400">5 days ago</span>
                               </div>
                             </div>
@@ -376,11 +350,9 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                           <!--Comment-->
                           <div class="relative">
                             <div class="gap-4 mb-6 flex items-center">
-                              <a>
-                                <img class="h-11 w-11 rounded-full" height={310} width={310} src="/images/avatars/5.webp" alt="Visitor photo" />
-                              </a>
+
                               <div class="meta">
-                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">John</h4>
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Sharon</h4>
                                 <span class="text-base text-muted-400">a week ago</span>
                               </div>
                             </div>
@@ -389,11 +361,8 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                           <!--Comment-->
                           <div class="relative">
                             <div class="gap-4 mb-6 flex items-center">
-                              <a>
-                                <img class="h-11 w-11 rounded-full" height={350} width={350} src="/images/avatars/7.webp" alt="Visitor photo" />
-                              </a>
                               <div class="meta">
-                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Sara</h4>
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Molly</h4>
                                 <span class="text-base text-muted-400">2 weeks ago</span>
                               </div>
                             </div>
@@ -405,11 +374,8 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                           <!--Comment-->
                           <div class="relative">
                             <div class="gap-4 mb-6 flex items-center">
-                              <a>
-                                <img class="h-11 w-11 rounded-full" height={205} width={205} src="/images/avatars/9.webp" alt="Visitor photo" />
-                              </a>
                               <div class="meta">
-                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Christina</h4>
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Rivka</h4>
                                 <span class="text-base text-muted-400">2 weeks ago</span>
                               </div>
                             </div>
@@ -420,11 +386,8 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                           <!--Comment-->
                           <div class="relative">
                             <div class="gap-4 mb-6 flex items-center">
-                              <a>
-                                <img class="h-11 w-11 rounded-full" height={350} width={350} src="/images/avatars/11.webp" alt="Visitor photo" />
-                              </a>
                               <div class="meta">
-                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Michael</h4>
+                                <h4 class="dark:text-white text-base font-semibold font-sans text-muted-900">Noah</h4>
                                 <span class="text-base text-muted-400">2 weeks ago</span>
                               </div>
                             </div>
@@ -435,7 +398,7 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                         </div>
                         <div class="relatives-action mt-8">
                           <button
-                            class="h-11 transition-all duration-300 text-sm rounded bg-white dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center text-muted-900 dark:text-muted-400"
+                            class="h-11 transition-all duration-300 text-sm rounded text-slate-100 bg-cyan-600 dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center dark:text-muted-400"
                             >See all comments</button
                           >
                         </div>
@@ -547,9 +510,9 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                   </div>
                 </div>
                 <button
-                  class="bg-primary-500 mb-6 font-medium text-sm text-white rounded h-11 transition-all duration-300 py-2 px-4 flex items-center justify-center cursor-pointer w-full hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
+                  class="bg-cyan-600 mb-6 font-medium text-sm text-white rounded h-11 transition-all duration-300 py-2 px-4 flex items-center justify-center cursor-pointer w-full hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
                 >
-                  Apply Now
+                  Reserve
                 </button>
                 <!-- map -->
                 <iframe
@@ -558,8 +521,8 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                   marginwidth="0"
                   title="map"
                   scrolling="no"
-                  src="https://maps.google.com/maps?width=100%&height=100%&hl=en&q=Los%20Angeles+(Css%20Ninja)&center=-117.1627728,32.7174202&ie=UTF8&t=&z=14&iwloc=B&output=embed&zoom=12"
-                  style="filter: grayscale(1) contrast(1.2) opacity(0.4)"
+                  src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Myrtle%20Beach,%20SC+(Line%20Properties%20Inc)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                  style="filter: grayscale(1) contrast(1.2) opacity(0.6)"
                   frameborder="0"></iframe>
               </div>
             </div>
