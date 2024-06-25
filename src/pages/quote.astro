@@ -15,7 +15,7 @@ import Container from '@components/Container.astro'
               <div class="has-text-centered">
                 <div id="form-section-0" class="relative min-h-[400px] flex flex-col justify-center" x-cloak x-show="activeWizardStep === 'wizard-step-0'">
                   <div class="relative">
-                    <h3 class="dark:text-white text-3xl mb-2 text-center font-sans text-muted-900">Let's get you a personalized quote</h3>
+                    <h3 class="dark:text-white text-3xl mb-2 text-center font-sans text-muted-900">Let's personalized your stay</h3>
                     <h4 class="text-center text-base text-muted-500 dark:text-muted-400">Follow the instructions to enter the info we need</h4>
                   </div>
                   <div class="mt-4">
@@ -30,8 +30,8 @@ import Container from '@components/Container.astro'
                 </div>
                 <div id="form-section-1" class="relative min-h-[400px] flex flex-col justify-between" x-cloak x-show="activeWizardStep === 'wizard-step-1'">
                   <div class="relative">
-                    <h3 class="dark:text-white text-3xl mb-2 text-center font-sans text-muted-900">1. What's the project type?</h3>
-                    <h4 class="text-center text-base text-muted-500 dark:text-muted-400">Please select a project type to proceed</h4>
+                    <h3 class="dark:text-white text-3xl mb-2 text-center font-sans text-muted-900">1. Amount of guests being hosted</h3>
+                    <h4 class="text-center text-base text-muted-500 dark:text-muted-400">Ages 2 and older</h4>
                   </div>
                   <div class="py-5 md:py-0">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -45,10 +45,9 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f1.svg" alt="" />
+                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/illustrations/404.svg" alt="" />
                           <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f1-dark.svg" alt="" />
-                          <h3 class="text-muted-900 dark:text-white text-lg mt-1.5 text-center">House project</h3>
-                          <p class="text-center text-muted-500 dark:text-muted-400 text-xs">I want my house to be reworked</p>
+                          <h3 class="text-muted-900 dark:text-white text-lg mt-1.5 text-center">Only me</h3>
                         </div>
                       </div>
                       <div class="relative">
@@ -61,10 +60,9 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f5.svg" alt="" />
+                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/illustrations/404.svg" alt="" />
                           <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f5-dark.svg" alt="" />
-                          <h3 class="text-muted-900 dark:text-white text-lg mt-1.5 text-center">Office project</h3>
-                          <p class="text-center text-muted-500 dark:text-muted-400 text-xs">I want my office to be reworked</p>
+                          <h3 class="text-muted-900 dark:text-white text-lg mt-1.5 text-center">2-5</h3>
                         </div>
                       </div>
                       <div class="relative">
@@ -77,10 +75,9 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f6.svg" alt="" />
+                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/illustrations/404.svg" alt="" />
                           <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f6-dark.svg" alt="" />
-                          <h3 class="text-muted-900 dark:text-white text-lg mt-1.5 text-center">Store project</h3>
-                          <p class="text-center text-muted-500 dark:text-muted-400 text-xs">I want my store to be reworked</p>
+                          <h3 class="text-muted-900 dark:text-white text-lg mt-1.5 text-center">6+</h3>
                         </div>
                       </div>
                     </div>
@@ -105,8 +102,7 @@ import Container from '@components/Container.astro'
                     <Icon class="size-4 pointer-events-none" name="lucide:arrow-left" />
                   </div>
                   <div class="relative">
-                    <h3 class="dark:text-white text-3xl mb-2 text-center font-sans text-muted-900">2. What do you need?</h3>
-                    <h4 class="text-center text-base text-muted-500 dark:text-muted-400">Please select some services you need</h4>
+                    <h3 class="dark:text-white text-3xl mb-2 text-center font-sans text-muted-900">2. What sort of amenities would you be interested in?</h3>
                   </div>
                   <div class="relative">
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 py-6">
@@ -120,11 +116,10 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f1.svg" alt="" />
+                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f3.svg" alt="" />
                           <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f1-dark.svg" alt="" />
                           <div class="meta leading-tight text-start">
-                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Furniture design</h3>
-                            <span class="text-xs text-muted-500 dark:text-muted-400">Handcrafted</span>
+                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Swimming Pool</h3>
                           </div>
                         </div>
                       </div>
@@ -138,11 +133,10 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f7.svg" alt="" />
+                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/illustrations/404.svg" alt="" />
                           <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f7-dark.svg" alt="" />
                           <div class="meta leading-tight text-start">
-                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Decoration</h3>
-                            <span class="text-xs text-muted-500 dark:text-muted-400">Homemade</span>
+                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Gym</h3>
                           </div>
                         </div>
                       </div>
@@ -156,83 +150,10 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f8.svg" alt="" />
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f8-dark.svg" alt="" />
+                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f2.svg" alt="" />
+                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f2-dark.svg" alt="" />
                           <div class="meta leading-tight text-start">
-                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Light Works</h3>
-                            <span class="text-xs text-muted-500 dark:text-muted-400">Illuminated</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="relative">
-                        <input class="absolute top-0 start-0 h-full w-full opacity-0 cursor-pointer z-[1] peer" x-on:change="selectServices()" type="checkbox" />
-                        <div
-                          class="gap-4 dark:bg-dark-purple-2 relative flex items-center p-5 transition-all duration-300 border-px border-muted-200 bg-white dark:bg-muted-950 peer-checked:[&>img]:grayscale-0 peer-checked:[&>img]:opacity-100 peer-checked:[&>.selection-dot]:flex peer-checked:shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20"
-                        >
-                          <div
-                            class="selection-dot end-2.5 text-white absolute top-2.5 h-[26px] w-[26px] rounded-full hidden justify-center items-center bg-primary-500 shadow-lg shadow-primary-500/20 animate-gelatine"
-                          >
-                            <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
-                          </div>
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f9.svg" alt="" />
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f9-dark.svg" alt="" />
-                          <div class="meta leading-tight text-start">
-                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Custom Windows</h3>
-                            <span class="text-xs text-muted-500 dark:text-muted-400">Carbon fiber</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="relative">
-                        <input class="absolute top-0 start-0 h-full w-full opacity-0 cursor-pointer z-[1] peer" x-on:change="selectServices()" type="checkbox" />
-                        <div
-                          class="gap-4 dark:bg-dark-purple-2 relative flex items-center p-5 transition-all duration-300 border-px border-muted-200 bg-white dark:bg-muted-950 peer-checked:[&>img]:grayscale-0 peer-checked:[&>img]:opacity-100 peer-checked:[&>.selection-dot]:flex peer-checked:shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20"
-                        >
-                          <div
-                            class="selection-dot end-2.5 text-white absolute top-2.5 h-[26px] w-[26px] rounded-full hidden justify-center items-center bg-primary-500 shadow-lg shadow-primary-500/20 animate-gelatine"
-                          >
-                            <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
-                          </div>
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f10.svg" alt="" />
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f10-dark.svg" alt="" />
-                          <div class="meta leading-tight text-start">
-                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Custom Seats</h3>
-                            <span class="text-xs text-muted-500 dark:text-muted-400">Alpaga</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="relative">
-                        <input class="absolute top-0 start-0 h-full w-full opacity-0 cursor-pointer z-[1] peer" x-on:change="selectServices()" type="checkbox" />
-                        <div
-                          class="gap-4 dark:bg-dark-purple-2 relative flex items-center p-5 transition-all duration-300 border-px border-muted-200 bg-white dark:bg-muted-950 peer-checked:[&>img]:grayscale-0 peer-checked:[&>img]:opacity-100 peer-checked:[&>.selection-dot]:flex peer-checked:shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20"
-                        >
-                          <div
-                            class="selection-dot end-2.5 text-white absolute top-2.5 h-[26px] w-[26px] rounded-full hidden justify-center items-center bg-primary-500 shadow-lg shadow-primary-500/20 animate-gelatine"
-                          >
-                            <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
-                          </div>
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f11.svg" alt="" />
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f11-dark.svg" alt="" />
-                          <div class="meta leading-tight text-start">
-                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Tables</h3>
-                            <span class="text-xs text-muted-500 dark:text-muted-400">Fine woods</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="relative">
-                        <input class="absolute top-0 start-0 h-full w-full opacity-0 cursor-pointer z-[1] peer" x-on:change="selectServices()" type="checkbox" />
-                        <div
-                          class="gap-4 dark:bg-dark-purple-2 relative flex items-center p-5 transition-all duration-300 border-px border-muted-200 bg-white dark:bg-muted-950 peer-checked:[&>img]:grayscale-0 peer-checked:[&>img]:opacity-100 peer-checked:[&>.selection-dot]:flex peer-checked:shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20"
-                        >
-                          <div
-                            class="selection-dot end-2.5 text-white absolute top-2.5 h-[26px] w-[26px] rounded-full hidden justify-center items-center bg-primary-500 shadow-lg shadow-primary-500/20 animate-gelatine"
-                          >
-                            <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
-                          </div>
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f12.svg" alt="" />
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f12-dark.svg" alt="" />
-                          <div class="meta leading-tight text-start">
-                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Closets & Shelves</h3>
-                            <span class="text-xs text-muted-500 dark:text-muted-400">Fine Woods</span>
+                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Large outdoor space</h3>
                           </div>
                         </div>
                       </div>
@@ -249,8 +170,8 @@ import Container from '@components/Container.astro'
                           <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f13.svg" alt="" />
                           <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f13-dark.svg" alt="" />
                           <div class="meta leading-tight text-start">
-                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Sound Design</h3>
-                            <span class="text-xs text-muted-500 dark:text-muted-400">Hi Fi & Stereo</span>
+                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Smart features</h3>
+                            <span class="text-xs text-muted-500 dark:text-muted-400">Smart Kitchen, washing machines, security, etc.</span>
                           </div>
                         </div>
                       </div>
@@ -264,11 +185,28 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f14.svg" alt="" />
-                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f14-dark.svg" alt="" />
+                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f2.svg" alt="" />
+                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f2-dark.svg" alt="" />
                           <div class="meta leading-tight text-start">
-                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Kitchen Design</h3>
-                            <span class="text-xs text-muted-500 dark:text-muted-400">Fully chromed</span>
+                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Patio</h3>
+                            <span class="text-xs text-muted-500 dark:text-muted-400">Outdoor couch, Patio chairs & table, Hammock...</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="relative">
+                        <input class="absolute top-0 start-0 h-full w-full opacity-0 cursor-pointer z-[1] peer" x-on:change="selectServices()" type="checkbox" />
+                        <div
+                          class="gap-4 dark:bg-dark-purple-2 relative flex items-center p-5 transition-all duration-300 border-px border-muted-200 bg-white dark:bg-muted-950 peer-checked:[&>img]:grayscale-0 peer-checked:[&>img]:opacity-100 peer-checked:[&>.selection-dot]:flex peer-checked:shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20"
+                        >
+                          <div
+                            class="selection-dot end-2.5 text-white absolute top-2.5 h-[26px] w-[26px] rounded-full hidden justify-center items-center bg-primary-500 shadow-lg shadow-primary-500/20 animate-gelatine"
+                          >
+                            <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
+                          </div>
+                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f11.svg" alt="" />
+                          <img class="max-w-12 grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f11-dark.svg" alt="" />
+                          <div class="meta leading-tight text-start">
+                            <h3 class="text-xs mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">Private Office</h3>
                           </div>
                         </div>
                       </div>
@@ -295,7 +233,6 @@ import Container from '@components/Container.astro'
                   </div>
                   <div class="relative">
                     <h3 class="dark:text-white text-3xl mb-2 text-center font-sans text-muted-900">3. What's your budget?</h3>
-                    <h4 class="text-center text-base text-muted-500 dark:text-muted-400">Please select a budget range</h4>
                   </div>
                   <div class="py-5 md:py-0">
                     <div class="budget-types grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -309,10 +246,9 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f15.svg" alt="" />
+                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/illustrations/404.svg" alt="" />
                           <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f15-dark.svg" alt="" />
-                          <h3 class="text-[1.1rem] text-center mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">$0 - $10K</h3>
-                          <p class="text-xs text-center text-muted-500 dark:text-muted-400">A small but nice budget</p>
+                          <h3 class="text-[1.1rem] text-center mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">$0 - $0K</h3>
                         </div>
                       </div>
                       <div class="relative">
@@ -325,10 +261,9 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f16.svg" alt="" />
+                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/illustrations/404.svg" alt="" />
                           <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f16-dark.svg" alt="" />
-                          <h3 class="text-[1.1rem] mt-1.5 text-center font-sans text-muted-900 dark:text-semi-white-3">$11K - $35K</h3>
-                          <p class="text-xs text-center text-muted-500 dark:text-muted-400">A considerable budget</p>
+                          <h3 class="text-[1.1rem] mt-1.5 text-center font-sans text-muted-900 dark:text-semi-white-3">$0K - $0K</h3>
                         </div>
                       </div>
                       <div class="relative">
@@ -341,10 +276,9 @@ import Container from '@components/Container.astro'
                           >
                             <Icon class="h-3 w-3 stroke-[3px] stroke-white" name="lucide:check" />
                           </div>
-                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/icons/f17.svg" alt="" />
+                          <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 dark:hidden" src="/images/illustrations/404.svg" alt="" />
                           <img class="max-w-16 mx-auto grayscale opacity-80 transition-all duration-300 hidden dark:block" src="/images/icons/f17-dark.svg" alt="" />
-                          <h3 class="text-[1.1rem] text-center mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">$36K +</h3>
-                          <p class="text-xs text-center text-muted-500 dark:text-muted-400">Wohoo! You rock!</p>
+                          <h3 class="text-[1.1rem] text-center mt-1.5 font-sans text-muted-900 dark:text-semi-white-3">$00.00 +</h3>
                         </div>
                       </div>
                     </div>
