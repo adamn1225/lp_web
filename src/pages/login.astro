@@ -4,6 +4,18 @@ import Layout from '@layouts/Minimal.astro'
 import Container from '@components/Container.astro'
 import Logo from '@components/ui/Logo.astro'
 import { Icon } from 'astro-icon/components'
+import { app } from "../firebase/server";
+import { getAuth } from "firebase-admin/auth";
+
+/* Check if the user is authenticated */
+const auth = getAuth(app);
+if (Astro.cookies.has("__session")) {
+  const sessionCookie = Astro.cookies.get("__session").value;
+  const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+  if (decodedCookie) {
+    return Astro.redirect("/dashboard");
+  }
+}
 ---
 
 <Layout title="Login">
@@ -44,6 +56,7 @@ import { Icon } from 'astro-icon/components'
     <section class="min-h-screen relative flex flex-col justify-between items-stretch">
       <div class="flex items-center py-12 px-6 md:px-12 flex-grow">
         <Container>
+          <form action="/api/auth/signin" method="post">
           <div class="flex flex-col lg:flex-row justify-center items-center">
             <div class="column p-3">
               <div class="max-w-md mb-6">
@@ -56,9 +69,11 @@ import { Icon } from 'astro-icon/components'
                   <label class="text-sm text-muted-500 dark:text-muted-400">Email Address</label>
                   <div class="relative">
                     <input
-                      type="text"
+                      type="email"
+                      name="email"
                       class="w-full peer outline-none focus:outline-none p-3 ps-12 dark:bg-muted-900 border border-muted-200 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded h-12 text-base"
                       placeholder="Enter your email"
+                      id="email"
                     />
                     <div class="peer-focus:[&>svg]:text-primary-500 absolute start-0 top-0 grid place-items-center h-12 w-12">
                       <Icon class="h-4 w-4 text-muted-300 dark:text-muted-600 stroke-[1.6px] transition-all duration-300" name="lucide:mail" />
@@ -70,8 +85,10 @@ import { Icon } from 'astro-icon/components'
                   <div class="relative">
                     <input
                       type="password"
+                      name="password"
                       class="w-full peer outline-none focus:outline-none p-3 ps-12 dark:bg-muted-900 border border-muted-200 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded h-12 text-base"
                       placeholder="Enter your password"
+                      id="password"
                     />
                     <div class="peer-focus:[&>svg]:text-primary-500 absolute start-0 top-0 grid place-items-center h-12 w-12">
                       <Icon class="h-4 w-4 text-muted-300 dark:text-muted-600 stroke-[1.6px] transition-all duration-300" name="lucide:lock" />
@@ -92,15 +109,17 @@ import { Icon } from 'astro-icon/components'
                 </div>
                 <div>
                   <div class="mt-4 mb-3">
-                    <button
+                    <button type="submit"
                       class="min-h-12 bg-primary-500 rounded font-medium text-sm w-full px-4 py-2 flex justify-center items-center text-white transition-all duration-300"
                       :class="{'is-loading': isLoading }"
-                      @click.prevent="login()"
                     >
                       Login
                     </button>
                   </div>
-
+                  <div class="mt-4 mb-3">
+                    <button class="min-h-12 bg-primary-500 rounded font-medium text-sm w-full px-4 py-2 flex justify-center items-center text-white transition-all duration-300" id="google">Sign in with Google</button>
+                  </div>
+                </form>
                   <div class="text-center">
                     <a href="/forgot" class="underline-offset-4 hover:underline hover:text-primary-500 transition-colors duration-300 text-sm text-muted-400">Forgot Password?</a>
                   </div>
@@ -119,20 +138,60 @@ import { Icon } from 'astro-icon/components'
     }
   </style>
 
-  <script>
-    document.addEventListener('alpine:init', () => {
-      //@ts-ignore
-      Alpine.data('login', () => ({
-        isLoading: false,
-        login() {
-          this.isLoading = true
-          setTimeout(() => {
-            //@ts-ignore
-            this.$store.app.login()
-            window.location.href = '/home'
-          }, 1500)
-        },
-      }))
-    })
-  </script>
+<script>
+  import {
+    getAuth,
+    inMemoryPersistence,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+  } from "firebase/auth";
+  import { app } from "../firebase/client";
+
+  const auth = getAuth(app);
+  auth.setPersistence(inMemoryPersistence);
+
+  const form = document.querySelector("form") as HTMLFormElement;
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
+
+    if (!email || !password) {
+      return;
+    }
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const idToken = await userCredential.user.getIdToken();
+    const response = await fetch("/api/auth/signin", {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    });
+
+    if (response.redirected) {
+      window.location.assign(response.url);
+    }
+  });
+
+  const googleSignin = document.querySelector("#google") as HTMLButtonElement;
+  googleSignin.addEventListener("click", async () => {
+    const provider = new GoogleAuthProvider();
+    const userCredential = await signInWithPopup(auth, provider);
+    const idToken = await userCredential.user.getIdToken();
+    const res = await fetch("/api/auth/signin", {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    });
+
+    if (res.redirected) {
+      window.location.assign(res.url);
+    }
+  });
+</script>
 </Layout>

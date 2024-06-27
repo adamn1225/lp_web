@@ -31,6 +31,8 @@
     "astro-google-fonts-optimizer": "^0.2.2",
     "astro-icon": "^1.1.0",
     "astro-seo": "^0.8.4",
+    "firebase": "^10.12.2",
+    "firebase-admin": "^12.2.0",
     "plyr": "^3.7.8",
     "sass": "^1.77.6",
     "sharp": "^0.33.4",
