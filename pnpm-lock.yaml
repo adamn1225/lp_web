@@ -95,6 +95,10 @@ importers:
       upgrade:
         specifier: ^1.1.0
         version: 1.1.0
+    devDependencies:
+      vite-plugin-lightningcss:
+        specifier: ^0.0.5
+        version: 0.0.5
 
 packages:
 
@@ -3131,6 +3135,9 @@ packages:
   vfile@6.0.1:
     resolution: {integrity: sha512-1bYqc7pt6NIADBJ98UiG0Bn/CHIVOoZ/IyEkqIruLg0mE1BKzkOXY2D6CSqQIcKqgadppE5lrxgWXJmXd7zZJw==}
 
+  vite-plugin-lightningcss@0.0.5:
+    resolution: {integrity: sha512-lhz5GkXeRT/k09A7qEqmoL3CwdJDHgODPeGVlWGU1UxuGPEKfvSpKnDXza8nawKvxvc0eawJEsKjBzQP4AeGHw==}
+
   vite@5.3.1:
     resolution: {integrity: sha512-XBmSKRLXLxiaPYamLv3/hnP/KXDai1NDexN0FpkTaZXTfycHvkRHoenpgl/fvuK/kPbB6xAgoyiryAhQNxYmAQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -5108,8 +5115,7 @@ snapshots:
 
   dequal@2.0.3: {}
 
-  detect-libc@1.0.3:
-    optional: true
+  detect-libc@1.0.3: {}
 
   detect-libc@2.0.3: {}
 
@@ -5857,7 +5863,6 @@ snapshots:
       lightningcss-linux-x64-gnu: 1.24.1
       lightningcss-linux-x64-musl: 1.24.1
       lightningcss-win32-x64-msvc: 1.24.1
-    optional: true
 
   lilconfig@2.1.0: {}
 
@@ -7126,6 +7131,11 @@ snapshots:
       '@types/unist': 3.0.2
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
+
+  vite-plugin-lightningcss@0.0.5:
+    dependencies:
+      browserslist: 4.23.1
+      lightningcss: 1.24.1
 
   vite@5.3.1(@types/node@20.14.8)(lightningcss@1.24.1)(sass@1.77.6)(terser@5.30.3):
     dependencies:
