@@ -10,37 +10,10 @@ import ProjectGrid from '@components/sections/ProjectGrid.astro'
 import Testimonials from '@components/sections/Testimonials.astro'
 import CustomerLogos from '@components/sections/CustomerLogos.astro'
 import BoxedCta from '@components/sections/BoxedCta.astro'
----
+import Autoplay from "swiper"
+import 'swiper/css'
 
-<Layout title="Home">
-  <main id="Home">
-    <!--Header -->
-    <HeroCarousel />
-
-    <!--Process section-->
-    <Process />
-
-    <!--Recent projects carousel-->
-    <RecentProjects />
-
-    <!--Side Feature-->
-    <SideFeatureOne />
-
-    <!--Side Feature-->
-    <SideFeatureTwo />
-
-    <!--Testimonials-->
-    <Testimonials />
-
-    <!-- ENGAGE/CTA-->
-    <BoxedCta />
-  </main>
-</Layout>
-
-<script>
   //@ts-ignore
-  import Swiper, { Autoplay } from 'swiper'
-  import 'swiper/css'
 
   document.addEventListener('alpine:init', () => {
     //@ts-ignore
@@ -119,4 +92,29 @@ import BoxedCta from '@components/sections/BoxedCta.astro'
       },
     }))
   })
-</script>
+---
+
+<Layout title="Home">
+  <main id="Home">
+    <!--Header -->
+    <HeroCarousel />
+
+    <!--Process section-->
+    <Process />
+
+    <!--Recent projects carousel-->
+    <RecentProjects />
+
+    <!--Side Feature-->
+    <SideFeatureOne />
+
+    <!--Side Feature-->
+    <SideFeatureTwo />
+
+    <!--Testimonials-->
+    <Testimonials />
+
+    <!-- ENGAGE/CTA-->
+    <BoxedCta />
+  </main>
+</Layout>

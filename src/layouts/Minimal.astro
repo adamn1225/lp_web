@@ -29,7 +29,7 @@ const { title = '', description = '', ...props } = Astro.props
 
     <slot name="head" />
   </head>
-  <body x-data :class="{'dark':$store.app.isDark}">
+  <body x-data>
     <div id="Top"></div>
 
     <slot />

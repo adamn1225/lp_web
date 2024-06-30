@@ -19,36 +19,16 @@ if (Astro.cookies.has("__session")) {
 ---
 
 <Layout title="Login">
-  <main id="Login" class="bg-muted-50 dark:bg-muted-900 relative">
+  <main id="Login" class="bg-muted-50 relative">
     <header class="absolute top-0 start-0 z-[5] w-full px-3">
       <Container>
         <div class="flex justify-between items-center gap-3 min-h-[4.5rem]">
           <a href="/" class="flex gap-4 items-center">
             <Logo class="size-8" />
-            <p class="font-medium text-2xl font-sans text-muted-900 dark:text-white">
+            <p class="font-medium text-2xl font-sans text-muted-900">
               {APP.name}
             </p>
           </a>
-          <button
-            class="cursor-pointer relative w-9 aspect-square rounded-full bg-white dark:bg-muted-950 border-muted-200 dark:border-muted-800 border [&>svg]:text-yellow-400"
-            @click="$store.app.toggleTheme()"
-          >
-            <!-- sun -->
-            <Icon
-              name="lucide:sun"
-              class="lightIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
-              x-cloak
-              :class="$store.app.isDark ? 'opacity-0 -translate-x-[45%] -translate-y-[150%]' : 'opacity-100  -translate-x-1/2 -translate-y-1/2' "
-            />
-
-            <!-- moon -->
-            <Icon
-              name="lucide:moon"
-              class="darkIcon start-1/2 aspect-auto absolute top-1/2 [&>*]:fill-current transition-all duration-300"
-              x-cloak
-              :class="$store.app.isDark ? 'opacity-100  -translate-x-[45%] -translate-y-1/2' : 'opacity-0 -translate-x-[45%] -translate-y-[150%]' "
-            />
-          </button>
         </div>
       </Container>
     </header>
@@ -60,38 +40,38 @@ if (Astro.cookies.has("__session")) {
           <div class="flex flex-col lg:flex-row justify-center items-center">
             <div class="column p-3">
               <div class="max-w-md mb-6">
-                <h1 class="text-center text-4xl mb-2 font-medium font-sans text-muted-900 dark:text-white">Sign In</h1>
-                <p class="text-muted-500 dark:text-muted-400 text-center text-base">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Verum hoc idem saepe faciamus.</p>
+                <h1 class="text-center text-4xl mb-2 font-medium font-sans text-muted-900">Sign In</h1>
+                <p class="text-muted-500 text-center text-base">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Verum hoc idem saepe faciamus.</p>
               </div>
 
-              <form class="max-w-md p-10 border border-muted-200 dark:border-muted-800 bg-white dark:bg-muted-950 flex flex-col gap-3" x-data="login">
+              <form class="max-w-md p-10 border border-muted-200 bg-white flex flex-col gap-3" x-data="login">
                 <div>
-                  <label class="text-sm text-muted-500 dark:text-muted-400">Email Address</label>
+                  <label class="text-sm text-muted-500">Email Address</label>
                   <div class="relative">
                     <input
                       type="email"
                       name="email"
-                      class="w-full peer outline-none focus:outline-none p-3 ps-12 dark:bg-muted-900 border border-muted-200 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded h-12 text-base"
+                      class="w-full peer outline-none focus:outline-none p-3 ps-12 border border-muted-200 hover:border-muted-300  text-muted-600 placeholder:text-muted-200 transition-all duration-300 rounded h-12 text-base"
                       placeholder="Enter your email"
                       id="email"
                     />
                     <div class="peer-focus:[&>svg]:text-primary-500 absolute start-0 top-0 grid place-items-center h-12 w-12">
-                      <Icon class="h-4 w-4 text-muted-300 dark:text-muted-600 stroke-[1.6px] transition-all duration-300" name="lucide:mail" />
+                      <Icon class="h-4 w-4 text-muted-300 stroke-[1.6px] transition-all duration-300" name="lucide:mail" />
                     </div>
                   </div>
                 </div>
                 <div>
-                  <label class="text-sm text-muted-500 dark:text-muted-400">Password</label>
+                  <label class="text-sm text-muted-500">Password</label>
                   <div class="relative">
                     <input
                       type="password"
                       name="password"
-                      class="w-full peer outline-none focus:outline-none p-3 ps-12 dark:bg-muted-900 border border-muted-200 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded h-12 text-base"
+                      class="w-full peer outline-none focus:outline-none p-3 ps-12 border border-muted-200 hover:border-muted-300  text-muted-600 placeholder:text-muted-200 transition-all duration-300 rounded h-12 text-base"
                       placeholder="Enter your password"
                       id="password"
                     />
                     <div class="peer-focus:[&>svg]:text-primary-500 absolute start-0 top-0 grid place-items-center h-12 w-12">
-                      <Icon class="h-4 w-4 text-muted-300 dark:text-muted-600 stroke-[1.6px] transition-all duration-300" name="lucide:lock" />
+                      <Icon class="h-4 w-4 text-muted-300 stroke-[1.6px] transition-all duration-300" name="lucide:lock" />
                     </div>
                   </div>
                 </div>
@@ -100,7 +80,7 @@ if (Astro.cookies.has("__session")) {
                     <label for="remember-me" class="inline-flex relative items-center cursor-pointer">
                       <input id="remember-me" type="checkbox" class="appearance-none peer" />
                       <div
-                        class="relative inline-block w-[48px] h-[28px] bg-muted-100 dark:bg-muted-900 border border-muted-200 dark:border-muted-800 peer-focus:outline-none after:border rounded-full peer-checked:bg-primary-500 transition-all duration-300 ease-linear before:content-[''] before:absolute before:w-[42px] before:h-[22px] before:dark:bg-muted-900 before:rounded-full before:bg-muted-100 before:[transform:translate3d(2px,2px,0)_scale3d(1,1,1)] before:transition-all before:duration-[0.25s] before:ease-linear after:content-[''] after:absolute after:w-[22px] after:h-[22px] after:bg-white after:rounded-full after:shadow-md after:[transform:translate3d(2px,2px,0)] peer-checked:before:[transform:translate3d(18px,2px,0)_scale3d(0,0,0)] peer-checked:after:[transform:translate3d(22px,2px,0)] after:transition-all after:duration-[0.2s] after:ease-in-out"
+                        class="relative inline-block w-[48px] h-[28px] bg-muted-100 border border-muted-200 peer-focus:outline-none after:border rounded-full peer-checked:bg-primary-500 transition-all duration-300 ease-linear before:content-[''] before:absolute before:w-[42px] before:h-[22px] before:before:rounded-full before:bg-muted-100 before:[transform:translate3d(2px,2px,0)_scale3d(1,1,1)] before:transition-all before:duration-[0.25s] before:ease-linear after:content-[''] after:absolute after:w-[22px] after:h-[22px] after:bg-white after:rounded-full after:shadow-md after:[transform:translate3d(2px,2px,0)] peer-checked:before:[transform:translate3d(18px,2px,0)_scale3d(0,0,0)] peer-checked:after:[transform:translate3d(22px,2px,0)] after:transition-all after:duration-[0.2s] after:ease-in-out"
                       >
                       </div>
                       <span class="ms-3 text-sm font-medium text-muted-400">Remember me</span>

@@ -30,7 +30,7 @@ const { title = '', description = '', ...props } = Astro.props
 
     <slot name="head" />
   </head>
-  <body x-data :class="{'dark':$store.app.isDark}">
+  <body>
     <div id="Top"></div>
     <NavbarSplit />
     <slot />

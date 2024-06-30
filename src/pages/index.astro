@@ -16,8 +16,8 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
      <div class="bg-opacity-25 bg-cover bg-center shadow-lg bg-homehero" style="background-image:linear-gradient(#f1f1f5c4, #f1f1f509), url(images/hero.jpg)">
         <div class="flex flex-col justify-center align-center items-center h-full max-w-3xl mx-auto pt-20 pb-40 ">
           <div class="pt-16 pb-6">
-            <h1 class="dark:text-white text-3xl font-sans text-slate-800 font-bold text-center mb-2" style="text-shadow: 0px 4px 12px rgba(0,0,0,0.4);">Explore Properties</h1>
-            <h2 class="text-xl text-slate-800 dark:text-muted-400 leading-5 text-center font-semibold" style="text-shadow: 0px 4px 12px rgba(0,0,0,0.4);">We help you find the perfect space for you and your family.</h2>
+            <h1 class="text-3xl font-sans text-slate-800 font-bold text-center mb-2" style="text-shadow: 0px 4px 12px rgba(0,0,0,0.4);">Explore Properties</h1>
+            <h2 class="text-xl text-slate-800 leading-5 text-center font-semibold" style="text-shadow: 0px 4px 12px rgba(0,0,0,0.4);">We help you find the perfect space for you and your family.</h2>
           </div>
           <!-- search -->
           <PropertySearch />
@@ -25,17 +25,17 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
       </div>
         <div class="flex flex-col items-center pt-8 border-t-2 px-8 ">
           <div class="relative">
-            <h2 class="dark:text-white text-3xl font-sans text-muted-900 text-center">Available properties</h2>
-            <h4 class="text-base text-muted-500 dark:text-muted-400 leading-5 text-center pb-4">We found 45 matching properties</h4>
+            <h2 class=" text-3xl font-sans text-muted-900 text-center">Available properties</h2>
+            <h4 class="text-base text-muted-500 leading-5 text-center pb-4">We found 45 matching properties</h4>
 
             <div class="relative">
               <input
                 type="text"
-                class="w-full sm:w-80 peer outline-none focus:outline-none p-3 ps-12 dark:bg-muted-900 border border-gray-400 hover:border-muted-300 dark:hover:border-muted-700 text-muted-600 placeholder:text-muted-200 dark:text-muted-100 dark:placeholder:text-muted-700 dark:border-muted-800 transition-all duration-300 rounded h-12 text-base"
+                class="w-full sm:w-80 peer outline-none focus:outline-none p-3 ps-12 border border-gray-400 hover:border-muted-300 text-muted-600 placeholder:text-muted-200 transition-all duration-300 rounded h-12 text-base"
                 placeholder="Filter..."
               />
               <div class="peer-focus:[&>svg]:text-primary-500 absolute start-0 top-0 grid place-items-center h-12 w-12">
-                <Icon class="size-5 text-muted-300 dark:text-muted-600 stroke-[1.6px] transition-all duration-300" name="lucide:search" />
+                <Icon class="size-5 text-muted-300 stroke-[1.6px] transition-all duration-300" name="lucide:search" />
               </div>
             </div>
           </div>
@@ -53,7 +53,7 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
             <ul class="flex-grow flex-shrink flex justify-center md:justify-start items-center gap-1 list-none w-full md:w-auto order-3 md:order-1">
               <li>
                 <a
-                  class="min-w-10 cursor-pointer rounded text-white border dark:border-primary-500 bg-primary-500 shrink-0 justify-center inline-flex p-2 text-base shadow-lg shadow-primary-500/20"
+                  class="min-w-10 cursor-pointer rounded text-white border bg-primary-500 shrink-0 justify-center inline-flex p-2 text-base shadow-lg shadow-primary-500/20"
                   aria-label="Page 46"
                   aria-current="page">1</a
                 >
@@ -63,19 +63,19 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
               </li>
               <li>
                 <a
-                  class="min-w-10 dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 cursor-pointer rounded text-muted-900 border border-muted-200 bg-white shrink-0 justify-center inline-flex p-2 text-base"
+                  class="min-w-10 bg-white shrink-0 justify-center inline-flex p-2 text-base"
                   aria-label="Goto page 45">4</a
                 >
               </li>
               <li>
                 <a
-                  class="min-w-10 dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 cursor-pointer rounded text-muted-900 border border-muted-200 bg-white shrink-0 justify-center inline-flex p-2 text-base"
+                  class="min-w-10 bg-white shrink-0 justify-center inline-flex p-2 text-base"
                   aria-label="Goto page 1">5</a
                 >
               </li>
               <li>
                 <a
-                  class="min-w-10 dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 cursor-pointer rounded text-muted-900 border border-muted-200 bg-white shrink-0 justify-center inline-flex p-2 text-base"
+                  class="min-w-10 bg-white shrink-0 justify-center inline-flex p-2 text-base"
                   aria-label="Goto page 47">6</a
                 >
 
@@ -85,12 +85,12 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
         </div>
         <div class="flex justify-center items-start pb-6">
           <a
-          class="flex-1 md:flex-initial dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 dark:hover:border-primary dark:hover:text-primary-500 order-1 md:order-2 min-w-[40px] min-h-[40px] transition-all duration-300 hover:border-primary hover:text-primary-500 border border-muted-200 bg-white items-center justify-center inline-flex p-2 rounded cursor-pointer"
+          class="flex-1 md:flex-initial order-1 md:order-2 min-w-[40px] min-h-[40px] transition-all duration-300 hover:border-primary hover:text-primary-500 border border-muted-200 bg-white items-center justify-center inline-flex p-2 rounded cursor-pointer"
         >
           <Icon class="h-4" name="lucide:arrow-left" />
         </a>
         <a
-          class="flex-1 md:flex-initial dark:bg-muted-950 dark:text-muted-100 dark:border-muted-800 dark:hover:border-primary dark:hover:text-primary-500 order-2 md:order-3 min-w-[40px] min-h-[40px] transition-all duration-300 hover:border-primary hover:text-primary-500 border border-muted-200 bg-white justify-center items-center inline-flex p-2 rounded cursor-pointer"
+          class="flex-1 md:flex-initial order-2 md:order-3 min-w-[40px] min-h-[40px] transition-all duration-300 hover:border-primary hover:text-primary-500 border border-muted-200 bg-white justify-center items-center inline-flex p-2 rounded cursor-pointer"
         >
           <Icon class="h-4" name="lucide:arrow-right" />
         </a>
