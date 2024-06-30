@@ -12,13 +12,10 @@ import AccountMenu from './ui/AccountMenu.astro'
     class="border-b transition-all duration-300"
     :class="scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20': 'lg:bg-transparent border-transparent' "
   >
-    <header id="MainHeader" class="min-h-[70px] w-full max-w-7xl mx-auto flex justify-start items-stretch gap-3 shadow lg:shadow-none px-3 lg:px-0">
+    <header id="MainHeader" class="min-h-[70px] sm:justify-center w-full max-w-7xl mx-auto flex justify-start items-stretch gap-3 shadow lg:shadow-none px-3 lg:px-0">
       <div class="brand flex justify-between lg:justify-start items-center w-full lg:w-auto min-h-[3.25rem]">
         <a href="/" class="flex gap-4 items-center py-2">
           <Logo class="size-8 aspect-square" />
-          <p class="font-medium text-2xl font-sans text-muted-900 dark:text-white">
-            {APP.name}
-          </p>
         </a>
         <div class="flex items-stretch gap-3">
           <button id="MenuToggle" class="lg:hidden" @click="mobileOpen = !mobileOpen">
