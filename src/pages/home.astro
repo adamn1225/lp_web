@@ -10,10 +10,8 @@ import ProjectGrid from '@components/sections/ProjectGrid.astro'
 import Testimonials from '@components/sections/Testimonials.astro'
 import CustomerLogos from '@components/sections/CustomerLogos.astro'
 import BoxedCta from '@components/sections/BoxedCta.astro'
-import Autoplay from "swiper"
+import Autoplay from 'swiper';
 import 'swiper/css'
-
-  //@ts-ignore
 
   document.addEventListener('alpine:init', () => {
     //@ts-ignore
@@ -105,14 +103,23 @@ import 'swiper/css'
     <!--Recent projects carousel-->
     <RecentProjects />
 
+    <!--Side Video-->
+    <SideVideoTwo />
+
     <!--Side Feature-->
     <SideFeatureOne />
 
     <!--Side Feature-->
     <SideFeatureTwo />
 
+    <!--Project grid-->
+    <ProjectGrid />
+
     <!--Testimonials-->
     <Testimonials />
+
+    <!--Customer Logos-->
+    <CustomerLogos />
 
     <!-- ENGAGE/CTA-->
     <BoxedCta />

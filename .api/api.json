@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "guesty-booking",
+      "source": "@guesty-booking/v1.0#avmodflugw8aig",
+      "integrity": "sha512-eBYFSPQd758/jGqhuslxqt65VrfSIyw6AS7se9UOC1WsoFR0SNyCuFFPJ4wOAu9yaH5lP80cKNzzAk6Yyzl6tw==",
+      "installerVersion": "6.1.2"
+    }
+  ]
+}

@@ -8,3 +8,12 @@ interface Property {
   livingArea: number;
 
 }
+
+interface Guesty {
+  picture: string;
+  thumbnail: string;
+  pictures: string;
+  original: string;
+}
+
+

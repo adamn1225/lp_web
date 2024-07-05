@@ -1,1 +1,0 @@
-[...document.querySelectorAll(".option")].forEach(e=>{e.addEventListener("click",()=>{e.parentElement.nextElementSibling.querySelector("input").value=e.dataset.option})});[...document.querySelectorAll(".select")].forEach(e=>{e.addEventListener("click",()=>{e.dataset.open==="true"?e.dataset.open="false":e.dataset.open="true"})});
