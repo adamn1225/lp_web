@@ -3,9 +3,11 @@ import { properties } from '@data/properties'
 import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
-import Container from '@components/Container.astro'
+import guestyBooking from '@api/guesty-booking';
 import PropertySearch from '@components/ui/PropertySearch.astro'
 import PropertyCard from '@components/ui/PropertyCard.astro'
+import allListings from './api/guesty.ts'
+
 ---
 
 <Layout title="Properties">
@@ -22,6 +24,7 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
           <!-- search -->
           <PropertySearch />
         </div>
+
       </div>
         <div class="flex flex-col items-center pt-8 border-t-2 px-8 ">
           <div class="relative">
@@ -43,7 +46,7 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
 
         <!-- property cards -->
         <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
-          {properties.map((property) => <PropertyCard {...property} />)}
+          {properties.map((guesty) => <PropertyCard {...guesty} />)}
         </div>
 
         <!-- pagination -->
@@ -82,6 +85,19 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
             </ul>
 
           </nav>
+          <div>
+            <ul>
+              <!-- {
+                allListings.pictures.map(({original, caption}) => (
+                  <li>
+                    <img src={original} />
+                  </li>
+                )
+              )
+              } -->
+          
+            </ul>
+            </div>
         </div>
         <div class="flex justify-center items-start pb-6">
           <a
