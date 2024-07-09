@@ -1,3 +1,5 @@
+import guestyBooking from '@api/guesty-booking';
+
 interface Property {
   name?: string;
   photo: string;
@@ -7,13 +9,6 @@ interface Property {
   bathroom: number;
   livingArea: number;
 
-}
-
-interface Guesty {
-  picture: string;
-  thumbnail: string;
-  pictures: string;
-  original: string;
 }
 
 

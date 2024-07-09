@@ -1,5 +1,4 @@
 ---
-import { properties } from '@data/properties'
 import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
 import Container from '@components/Container.astro'
@@ -78,7 +77,7 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
                       </p>
                     </div>
                     <div class="py-8 grid grid-cols-1 md:grid-cols-2 ltablet:grid-cols-3 lg:grid-cols-3 gap-6">
-                      {properties.slice(0, 5).map((property) => <PropertyCard {...property} />)}
+                      <!-- {properties.slice(0, 5).map((property) => <PropertyCard {...property} />)} -->
                     </div>
                   </div>
                 </div>

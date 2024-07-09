@@ -1,5 +1,1 @@
-export { renderers } from '../renderers.mjs';
-
-const page = () => import('../chunks/dashboard_C-H_wio4.mjs');
-
-export { page };
+// Contents removed by Astro as it's used for prerendering only

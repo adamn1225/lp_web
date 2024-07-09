@@ -3,10 +3,12 @@ import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
 import Container from '@components/Container.astro'
+import PropertyCard from '@components/ui/PropertyCard.astro'
 import allListings from '../pages/api/guesty'
 
----
+const { title, _id, state, city, description, bedrooms, bathrooms, pictures } = Astro.props;
 
+---
 <Layout title="Property Details">
   <main id="PropertyDetails">
     <Section>
@@ -33,9 +35,9 @@ import allListings from '../pages/api/guesty'
             <div class="flex flex-col md:flex-row items-end justify-between mb-6">
               <!-- left -->
               <div class="left mb-8 md:m-0">
-                <h2 class="leading-9 text-3xl font-light font-sans text-muted-900 mb-2">{allListings[0].title}</h2>
+                <h2 class="leading-9 text-3xl font-light font-sans text-muted-900 mb-2">{title}</h2>
                 <div class="flex gap-4 text-base text-muted-900">
-                  <a href="#" class="flex items-center font-medium relative underline-offset-4 hover:underline">{allListings[0].address.city}, {allListings[0].address.state}</a>
+                  <a href="#" class="flex items-center font-medium relative underline-offset-4 hover:underline">{city}, {state}</a>
                 </div>
               </div>
               <!-- right -->
@@ -57,12 +59,12 @@ import allListings from '../pages/api/guesty'
                 <!-- property images -->
                 <div class="flex flex-col md:flex-row items-stretch gap-4 mb-4">
                   <div class="main-image md:flex-grow-[2]">
-                    <img class="block object-cover min-h-[450px]" src={allListings[0].pictures[0].original} alt="Main image" width={2000} height={1333} data-zoom />
+                    <img class="block object-cover min-h-[450px]" src={pictures[0].original} alt="Main image" width={2000} height={1333} data-zoom />
                   </div>
                   <div class="flex flex-row md:flex-col gap-4 max-w-full md:max-w-[180px] md:w-full">
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={allListings[1].pictures[1].original} alt="Sub image" width={2000} height={1333} data-zoom />
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={allListings[2].pictures[2].original} alt="Sub image" width={2000} height={1333} data-zoom />
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={allListings[3].pictures[0].original} alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[1].original} alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[2].original} alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[3].original} alt="Sub image" width={2000} height={1333} data-zoom />
                   </div>
                 </div>
                 <!-- property content -->
@@ -88,7 +90,7 @@ import allListings from '../pages/api/guesty'
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
                     <p class="text-muted-500 text-base">
-                      {allListings[0].publicDescription.summary}
+                      {description}
                     </p>
                     <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
                     </p>
@@ -111,35 +113,13 @@ import allListings from '../pages/api/guesty'
                             data-darkreader-inline-stroke=""
                             ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
                           </svg>
-                          <span>3</span>
+                          <span>{bedrooms}</span>
                         </div>
                         <div class="amenity-content text-center">
                           <p class="text-sm text-muted-400">Bedrooms</p>
                         </div>
                       </div>
-                      <!-- Amenity -->
-                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-                        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
-                          <svg
-                            class="h-6"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style="--darkreader-inline-stroke: currentColor;"
-                            data-darkreader-inline-stroke=""
-                            ><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"></path><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z"></path><path d="M4 18v2"
-                            ></path><path d="M20 18v2"></path><path d="M12 4v9"></path></svg
-                          >
-                          <span>2</span>
-                        </div>
-                        <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">Living rooms</p>
-                        </div>
-                      </div>
+                    
                       <!-- Amenity -->
                       <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
                         <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
@@ -160,7 +140,7 @@ import allListings from '../pages/api/guesty'
                               x2="22"
                               y2="12"></line><line x1="7" y1="19" x2="7" y2="21"></line><line x1="17" y1="19" x2="17" y2="21"></line>
                           </svg>
-                          <span>3</span>
+                          <span>{bathrooms}</span>
                         </div>
                         <div class="amenity-content text-center">
                           <p class="text-sm text-muted-400">Bathrooms</p>
@@ -173,39 +153,10 @@ import allListings from '../pages/api/guesty'
                           <span>2</span>
                         </div>
                         <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">Garage spots</p>
+                          <p class="text-sm text-muted-400">Parking spots</p>
                         </div>
                       </div>
-                      <!-- Amenity -->
-                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-                        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
-                          <Icon class="text-2xl h-6" name="lucide:droplets" />
-                          <span></span>
-                        </div>
-                        <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">Swimming pool</p>
-                        </div>
-                      </div>
-                      <!-- Amenity -->
-                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-                        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
-                          <Icon class="text-2xl h-6" name="lucide:sprout" />
-                          <span></span>
-                        </div>
-                        <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">Private garden</p>
-                        </div>
-                      </div>
-                      <!-- Amenity -->
-                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-                        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
-                          <Icon class="text-2xl h-6" name="lucide:thermometer-snowflake" />
-                          <span></span>
-                        </div>
-                        <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">Air conditionning</p>
-                        </div>
-                      </div>
+
                       <!-- Amenity -->
                       <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
                         <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
@@ -213,7 +164,7 @@ import allListings from '../pages/api/guesty'
                           <span></span>
                         </div>
                         <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">Connnected house</p>
+                          <p class="text-sm text-muted-400">WiFi</p>
                         </div>
                       </div>
                     </div>
@@ -527,6 +478,7 @@ import allListings from '../pages/api/guesty'
               <p class="text-muted-500 dark:text-muted-400 text-base leading-6">Based on your previous matches</p>
             </div>
             <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- {properties.slice(0, 3).map((property) => <PropertyCard {...property} />)} -->
             </div>
           </div>
         </div>

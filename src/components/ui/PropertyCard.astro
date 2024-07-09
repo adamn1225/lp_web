@@ -1,26 +1,25 @@
 ---
 import { currency } from '@utils/utils'
-import allListings from '../../pages/api/guesty.ts'
+import allListings from '../../pages/api/guesty'
 
 
 // const jsonArray = Array.from(Object.values(allListings));
 // console.log(jsonArray);
-const result = []
-for (var i in allListings)
-    result.push([i, allListings[i]]);
-// console.log(JSON.parse(JSON.stringify(result)))
+// const result = []
+// for (var i in allListings)
+//     result.push([i, allListings[i]]);
+//   console.log(result)
+// const myJSON = JSON.stringify(result)
+interface Props {
+  pictures: string;
+}
+const { pictures = allListings.pictures } = Astro.props;
 
-const result2 = []
-for (var z in result)
-    result2.push([z, result[z]])
-    console.log(JSON.parse(JSON.stringify(result2)))
 ---
-{
-            result.map(({picture}) => (
       <a href="/property-details">
   <article class="bg-white dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20"></article>
           <div class="bg-muted-100 dark:bg-muted-800 h-72">
-          <img class="h-56 md:h-full w-full object-cover" src={picture} />
+          <img class="h-56 md:h-full w-full object-cover" id="string" src={pictures} />
 
 
         </div>
@@ -117,8 +116,6 @@ for (var z in result)
     </div>
   </article>
 </a>
-)
-          )
-          }   
+
 
    
