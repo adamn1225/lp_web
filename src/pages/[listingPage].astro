@@ -1,0 +1,40 @@
+---
+import { processListing } from "../utils/utils.ts"
+import allListings from '../pages/api/guesty'
+import ListingPageDetail from '@components/ListingPageDetail.astro'
+
+export function getStaticPaths() {
+
+const paths = allListings.map((allListings) => ({
+params: {
+  listingPage: processListing(allListings.title, allListings._id)    
+},
+props: {
+  lineListing: allListings,
+  id: allListings._id,
+  title: allListings.title,
+  city: allListings.address.city,
+  state: allListings.address.state,
+  description: allListings.publicDescription.summary,
+  bedrooms: allListings.bedrooms,
+  bathrooms: allListings.bathrooms,
+  pictures: allListings.pictures
+}
+}));
+
+return paths;
+}
+const {description, title, city, state, bedrooms, bathrooms, pictures} = Astro.props;
+
+---
+
+<ListingPageDetail
+          title={title}
+          _id={allListings[0]._id}
+          city={city}
+          state={state}
+          description={description}
+          bedrooms={bedrooms}
+          bathrooms={bathrooms}
+          pictures={pictures}
+        />

@@ -1,5 +1,5 @@
-import { APP } from "@data/config";
-
+import { APP } from "../data/config";
+import allListings from "../pages/api/guesty.ts"
 // set page title
 export function setTitle(title: string) {
   return title === "" ? APP.name : APP.name + " - " + title;
@@ -18,4 +18,11 @@ export function currency(amount: number) {
       maximumFractionDigits: 0,
     }).format(amount) + " USD"
   );
+}
+
+export function processListing(title: string, _id: string) {
+  return (
+    title === "" ? allListings.title : title,
+    _id === "" ? allListings._id : _id
+  )
 }

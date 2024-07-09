@@ -1,5 +1,4 @@
 ---
-import { projects } from '@data/properties'
 import { Icon } from 'astro-icon/components'
 import PolkaDots from '../PolkaDots.astro'
 ---
@@ -28,27 +27,7 @@ import PolkaDots from '../PolkaDots.astro'
     <div class="overflow-hidden" x-ref="container">
       <div class="swiper-wrapper">
         <!-- Slides -->
-        {
-          [...projects, ...projects].map((project) => (
-            <div class="swiper-slide">
-              <a>
-                <div class="relative">
-                  <img class="h-[352px] lg:h-[390px] w-full object-cover" src={project.image} alt={project.title} />
-                  <div class="hover:opacity-100 absolute top-0 h-full w-full opacity-0 transition-opacity duration-300 start-0">
-                    <div class="absolute top-0 h-full w-full bg-gradient-to-t from-muted-900 z-0 start-0">
-                      <div class="relative h-full w-full flex flex-col justify-end">
-                        <div class="p-6">
-                          <h3 class="font-sans text-white font-medium text-xl">{project.title}</h3>
-                          <p class="opacity-70 text-muted-200 text-sm">{project.location}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </div>
-          ))
-        }
+
       </div>
     </div>
   </div>

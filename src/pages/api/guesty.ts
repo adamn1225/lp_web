@@ -2,15 +2,14 @@ const options: RequestInit = {
     method: 'GET',
     headers: {
       accept: 'application/json; charset=utf-8',
-      authorization: 'Bearer '
+      authorization: 'Bearer eyJraWQiOiJaTmwwNHN2dk5CSEdXT2NCbUMyUW5WMERZUG9XRjlDMS1QUVlpa3dGYXRRIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkJHTDM1NmdiMVdwUmsxcVBGS0JfV0NsdGllZTBzclVMNFh0cEZmenVFWFUiLCJpc3MiOiJodHRwczovL2xvZ2luLmd1ZXN0eS5jb20vb2F1dGgyL2F1c2Y2Y2ZjMmxTN3hCTGpKNWQ2IiwiYXVkIjoiaHR0cHM6Ly9ib29raW5nLmd1ZXN0eS5jb20iLCJpYXQiOjE3MjA1Mzg5ODYsImV4cCI6MTcyMDYyNTM4NiwiY2lkIjoiMG9haTJ6aXd3c1l5UTR5STQ1ZDciLCJzY3AiOlsiYm9va2luZ19lbmdpbmU6YXBpIl0sInJlcXVlc3RlciI6IkJPT0tJTkciLCJzdWIiOiIwb2FpMnppd3dzWXlRNHlJNDVkNyIsImFjY291bnRJZCI6IjY1M2IwZjhkN2U4OTgyZGVmYWZhYWY1YiIsInVzZXJSb2xlcyI6W3sicm9sZUlkIjp7InBlcm1pc3Npb25zIjpbImxpc3Rpbmcudmlld2VyIl19fV0sImNsaWVudFR5cGUiOiJib29raW5nIiwiaWFtIjoidjMiLCJhcHBsaWNhdGlvbklkIjoiMG9haTJ6aXd3c1l5UTR5STQ1ZDcifQ.irpWTl9jGOSl8aM7gQCu01fDNsUY5Iq_LXGNY-AAnv1Sy1da5aJF3dZA8zy4F1Zs0eF_3OcWmQZjLCQqssVatwZ7NigqXeOrIvICJmu1T3bEJdx6kp03XACcrpYbxp_HuGPA7DPU-160KhwLOxboSgCOUEtx0jH88z96inqh_sEOYeqU2WfkhtWWhpKpdwMzbdFR-K15rlhXq_7HspTO06rXRRr_92Vz2s1lq2MemoDEXN8Ov-LTKMvNpxY3SjPfhIUgknbIqdfEtKVSVHc8kuqjyK3Gcz2Ptg-meyMGRZVn-hVXxP_NkyQHHvSqwCTSZ00YyovcTxoWStenqDf7OA'
     }
   };
   
 
-
-  const listings = await fetch('https://open-api.guesty.com/v1/listings', options)
-  const data = await listings.json();
-  const allListings = data.results[0]
+const listings = await fetch('https://booking.guesty.com/api/listings', options)
+const data = await listings.json();
+const allListings = data.results
 
 export default allListings
 

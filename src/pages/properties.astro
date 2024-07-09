@@ -1,11 +1,9 @@
 ---
-import { properties } from '@data/properties'
 import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
 import Container from '@components/Container.astro'
 import PropertySearch from '@components/ui/PropertySearch.astro'
-import PropertyCard from '@components/ui/PropertyCard.astro'
 ---
 
 <Layout title="Properties">
@@ -44,7 +42,7 @@ import PropertyCard from '@components/ui/PropertyCard.astro'
 
         <!-- property cards -->
         <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {properties.map((property) => <PropertyCard {...property} />)}
+          <!-- {properties.map((property) => <PropertyCard {...property} />)} -->
         </div>
 
         <!-- pagination -->

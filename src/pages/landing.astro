@@ -1,5 +1,4 @@
 ---
-import { properties } from '@data/properties'
 import Layout from '@layouts/Split.astro'
 import HeroSplit from '@components/sections/HeroSplit.astro'
 import PopularProperties from '@components/sections/PopularProperties.astro'
@@ -19,7 +18,7 @@ import BoxedCta from '@components/sections/BoxedCta.astro'
     <HeroSplit />
 
     <!--Popular properties (x3)-->
-    <PopularProperties properties={properties.slice(0, 3)} />
+    <!-- <PopularProperties properties={properties.slice(0, 3)} /> -->
 
     <!--Private Loft-->
     <PrivateLoft />
@@ -28,7 +27,7 @@ import BoxedCta from '@components/sections/BoxedCta.astro'
     <FadeBoxes />
 
     <!--Popular properties (x6)-->
-    <PopularProperties properties={properties.slice(3)} />
+    <!-- <PopularProperties properties={properties.slice(3)} /> -->
 
     <!-- TALENTED -->
     <SideVideoOne />

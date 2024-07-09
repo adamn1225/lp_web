@@ -1,7 +1,7 @@
 import { renderers } from './renderers.mjs';
-import { l as levels, g as getEventPrefix, L as Logger, A as AstroIntegrationLogger, m as manifest } from './chunks/_@astrojs-manifest_ZBihrXO_.mjs';
+import { l as levels, g as getEventPrefix, L as Logger, A as AstroIntegrationLogger, m as manifest } from './chunks/_@astrojs-manifest_CliMkWfZ.mjs';
 import { A as AstroError, i as i18nNoLocaleFoundInPath, f as appendForwardSlash, j as joinPaths, R as ResponseSentError, g as MiddlewareNoDataOrNextCalled, h as MiddlewareNotAResponse, G as GetStaticPathsRequired, k as InvalidGetStaticPathsReturn, l as InvalidGetStaticPathsEntry, m as GetStaticPathsExpectedParams, n as GetStaticPathsInvalidRouteParam, t as trimSlashes, P as PageNumberParamNotFound, o as NoMatchingStaticPathFound, p as PrerenderDynamicEndpointPathCollide, q as ReservedSlotName, L as LocalsNotAnObject, r as PrerenderClientAddressNotAvailable, C as ClientAddressNotAvailable, S as StaticClientAddressNotAvailable, s as RewriteWithBodyUsed, u as AstroResponseHeadersReassigned, v as fileExtension, w as slash, x as prependForwardSlash, y as removeTrailingForwardSlash } from './chunks/astro/assets-service_ChUv9DFU.mjs';
-import { R as ROUTE_TYPE_HEADER, a as REROUTE_DIRECTIVE_HEADER, D as DEFAULT_404_COMPONENT, r as renderSlotToString, b as renderJSX, c as chunkToString, i as isRenderInstruction, d as clientLocalsSymbol, e as clientAddressSymbol$1, f as renderPage, g as renderEndpoint, A as ASTRO_VERSION, h as responseSentSymbol$1, j as REROUTABLE_STATUS_CODES } from './chunks/astro/server_CYlBBrQa.mjs';
+import { R as ROUTE_TYPE_HEADER, a as REROUTE_DIRECTIVE_HEADER, D as DEFAULT_404_COMPONENT, r as renderSlotToString, b as renderJSX, c as chunkToString, i as isRenderInstruction, d as clientLocalsSymbol, e as clientAddressSymbol$1, f as renderPage, g as renderEndpoint, A as ASTRO_VERSION, h as responseSentSymbol$1, j as REROUTABLE_STATUS_CODES } from './chunks/astro/server_BmPfRTV4.mjs';
 import { serialize, parse } from 'cookie';
 import 'clsx';
 import 'kleur/colors';
@@ -1255,8 +1255,9 @@ class RenderContext {
           this.routeData = routeData;
           componentInstance = component;
           this.isRewriting = true;
+          this.status = 200;
         } else {
-          this.pipeline.logger.warn(
+          this.pipeline.logger.error(
             "router",
             "The rewrite API is experimental. To use this feature, add the `rewriting` flag to the `experimental` object in your Astro config."
           );
@@ -1321,30 +1322,47 @@ class RenderContext {
       getActionResult: createGetActionResult(context.locals)
     });
   }
+  async #executeRewrite(reroutePayload) {
+    this.pipeline.logger.debug("router", "Calling rewrite: ", reroutePayload);
+    if (!this.pipeline.manifest.rewritingEnabled) {
+      this.pipeline.logger.error(
+        "router",
+        "The rewrite API is experimental. To use this feature, add the `rewriting` flag to the `experimental` object in your Astro config."
+      );
+      return new Response(
+        "The rewrite API is experimental. To use this feature, add the `rewriting` flag to the `experimental` object in your Astro config.",
+        {
+          status: 500,
+          statusText: "The rewrite API is experimental. To use this feature, add the `rewriting` flag to the `experimental` object in your Astro config."
+        }
+      );
+    }
+    const [routeData, component, newURL] = await this.pipeline.tryRewrite(
+      reroutePayload,
+      this.request,
+      this.originalRoute
+    );
+    this.routeData = routeData;
+    if (reroutePayload instanceof Request) {
+      this.request = reroutePayload;
+    } else {
+      this.request = this.#copyRequest(newURL, this.request);
+    }
+    this.url = new URL(this.request.url);
+    this.cookies = new AstroCookies(this.request);
+    this.params = getParams(routeData, this.url.pathname);
+    this.pathname = this.url.pathname;
+    this.isRewriting = true;
+    this.status = 200;
+    return await this.render(component);
+  }
   createActionAPIContext() {
     const renderContext = this;
     const { cookies, params, pipeline, url } = this;
     const generator = `Astro v${ASTRO_VERSION}`;
     const redirect = (path, status = 302) => new Response(null, { status, headers: { Location: path } });
     const rewrite = async (reroutePayload) => {
-      pipeline.logger.debug("router", "Called rewriting to:", reroutePayload);
-      const [routeData, component, newURL] = await pipeline.tryRewrite(
-        reroutePayload,
-        this.request,
-        this.originalRoute
-      );
-      this.routeData = routeData;
-      if (reroutePayload instanceof Request) {
-        this.request = reroutePayload;
-      } else {
-        this.request = this.#copyRequest(newURL, this.request);
-      }
-      this.url = newURL;
-      this.cookies = new AstroCookies(this.request);
-      this.params = getParams(routeData, this.url.pathname);
-      this.isRewriting = true;
-      this.pathname = this.url.pathname;
-      return await this.render(component);
+      return await this.#executeRewrite(reroutePayload);
     };
     return {
       cookies,
@@ -1487,24 +1505,7 @@ class RenderContext {
       return new Response(null, { status, headers: { Location: path } });
     };
     const rewrite = async (reroutePayload) => {
-      pipeline.logger.debug("router", "Calling rewrite: ", reroutePayload);
-      const [routeData, component, newURL] = await pipeline.tryRewrite(
-        reroutePayload,
-        this.request,
-        this.originalRoute
-      );
-      this.routeData = routeData;
-      if (reroutePayload instanceof Request) {
-        this.request = reroutePayload;
-      } else {
-        this.request = this.#copyRequest(newURL, this.request);
-      }
-      this.url = new URL(this.request.url);
-      this.cookies = new AstroCookies(this.request);
-      this.params = getParams(routeData, this.url.pathname);
-      this.pathname = this.url.pathname;
-      this.isRewriting = true;
-      return await this.render(component);
+      return await this.#executeRewrite(reroutePayload);
     };
     return {
       generator: astroStaticPartial.generator,
@@ -2423,40 +2424,42 @@ const _page3 = () => import('./pages/account.astro.mjs');
 const _page4 = () => import('./pages/api/auth/register.astro.mjs');
 const _page5 = () => import('./pages/api/auth/signin.astro.mjs');
 const _page6 = () => import('./pages/api/auth/signout.astro.mjs');
-const _page7 = () => import('./pages/contact.astro.mjs');
-const _page8 = () => import('./pages/dashboard.astro.mjs');
-const _page9 = () => import('./pages/home.astro.mjs');
+const _page7 = () => import('./pages/api/guesty.astro.mjs');
+const _page8 = () => import('./pages/contact.astro.mjs');
+const _page9 = () => import('./pages/dashboard.astro.mjs');
 const _page10 = () => import('./pages/landing.astro.mjs');
-const _page11 = () => import('./pages/login.astro.mjs');
-const _page12 = () => import('./pages/properties.astro.mjs');
-const _page13 = () => import('./pages/properties-alt.astro.mjs');
+const _page11 = () => import('./pages/listing-page.astro.mjs');
+const _page12 = () => import('./pages/login.astro.mjs');
+const _page13 = () => import('./pages/properties.astro.mjs');
 const _page14 = () => import('./pages/property-details.astro.mjs');
 const _page15 = () => import('./pages/quote.astro.mjs');
 const _page16 = () => import('./pages/settings.astro.mjs');
 const _page17 = () => import('./pages/signup.astro.mjs');
 const _page18 = () => import('./pages/wishlist.astro.mjs');
-const _page19 = () => import('./pages/index.astro.mjs');
+const _page19 = () => import('./pages/_listingpage_.astro.mjs');
+const _page20 = () => import('./pages/index.astro.mjs');
 const pageMap = new Map([
-    ["node_modules/astro/dist/assets/endpoint/generic.js", _page0],
+    ["node_modules/.pnpm/astro@4.11.5_@types+node@20.14.10_lightningcss@1.24.1_sass@1.77.6_terser@5.30.3_typescript@5.5.3/node_modules/astro/dist/assets/endpoint/generic.js", _page0],
     ["src/pages/404.astro", _page1],
     ["src/pages/about.astro", _page2],
     ["src/pages/account.astro", _page3],
     ["src/pages/api/auth/register.ts", _page4],
     ["src/pages/api/auth/signin.ts", _page5],
     ["src/pages/api/auth/signout.ts", _page6],
-    ["src/pages/contact.astro", _page7],
-    ["src/pages/dashboard.astro", _page8],
-    ["src/pages/home.astro", _page9],
+    ["src/pages/api/guesty.ts", _page7],
+    ["src/pages/contact.astro", _page8],
+    ["src/pages/dashboard.astro", _page9],
     ["src/pages/landing.astro", _page10],
-    ["src/pages/login.astro", _page11],
-    ["src/pages/properties.astro", _page12],
-    ["src/pages/properties-alt.astro", _page13],
+    ["src/pages/listing-page.astro", _page11],
+    ["src/pages/login.astro", _page12],
+    ["src/pages/properties.astro", _page13],
     ["src/pages/property-details.astro", _page14],
     ["src/pages/quote.astro", _page15],
     ["src/pages/settings.astro", _page16],
     ["src/pages/signup.astro", _page17],
     ["src/pages/wishlist.astro", _page18],
-    ["src/pages/index.astro", _page19]
+    ["src/pages/[listingPage].astro", _page19],
+    ["src/pages/index.astro", _page20]
 ]);
 
 const _manifest = Object.assign(manifest, {
@@ -2465,7 +2468,7 @@ const _manifest = Object.assign(manifest, {
     middleware: onRequest
 });
 const _args = {
-    "middlewareSecret": "aa040470-09cf-4d78-b7b8-0e66e95fc244",
+    "middlewareSecret": "c7927914-f271-4bcb-8633-c604c216f821",
     "skewProtection": false
 };
 const _exports = createExports(_manifest, _args);

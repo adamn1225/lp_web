@@ -1,12 +1,12 @@
 ---
-import { properties } from '@data/properties'
 import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
-import guestyBooking from '@api/guesty-booking';
 import PropertySearch from '@components/ui/PropertySearch.astro'
 import PropertyCard from '@components/ui/PropertyCard.astro'
-import allListings from './api/guesty.ts'
+// import allListings from './api/guesty.ts'
+import GuestyListings from '@components/GuestyListings.astro'
+
 
 ---
 
@@ -14,7 +14,7 @@ import allListings from './api/guesty.ts'
   <main id="Properties">
     <!--Properties-->
     <Section>
-      <div></div>
+     
      <div class="bg-opacity-25 bg-cover bg-center shadow-lg bg-homehero" style="background-image:linear-gradient(#f1f1f5c4, #f1f1f509), url(images/hero.jpg)">
         <div class="flex flex-col justify-center align-center items-center h-full max-w-3xl mx-auto pt-20 pb-40 ">
           <div class="pt-16 pb-6">
@@ -23,8 +23,8 @@ import allListings from './api/guesty.ts'
           </div>
           <!-- search -->
           <PropertySearch />
+          
         </div>
-
       </div>
         <div class="flex flex-col items-center pt-8 border-t-2 px-8 ">
           <div class="relative">
@@ -46,7 +46,9 @@ import allListings from './api/guesty.ts'
 
         <!-- property cards -->
         <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6">
-          {properties.map((guesty) => <PropertyCard {...guesty} />)}
+
+          <GuestyListings />
+          <!-- {allListings.map(({pictures}) => <PropertyCard {...pictures} />)} -->
         </div>
 
         <!-- pagination -->
@@ -111,8 +113,10 @@ import allListings from './api/guesty.ts'
           <Icon class="h-4" name="lucide:arrow-right" />
         </a>
         </div>
+
       </div>
       </Container>
+      
     </Section>
   </main>
 </Layout>
