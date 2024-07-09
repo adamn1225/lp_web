@@ -15,26 +15,28 @@ props: {
   title: allListings.title,
   city: allListings.address.city,
   state: allListings.address.state,
-  description: allListings.publicDescription.summary,
-  bedrooms: allListings.bedrooms,
+  description: allListings.publicDescription,
+  bedrooms: allListings.beds,
   bathrooms: allListings.bathrooms,
-  pictures: allListings.pictures
+  pictures: allListings.pictures,
+  amenities: allListings.amenities
 }
 }));
 
 return paths;
 }
-const {description, title, city, state, bedrooms, bathrooms, pictures} = Astro.props;
+const {description, title, city, state, bedrooms, bathrooms, pictures, amenities} = Astro.props;
 
 ---
 
 <ListingPageDetail
           title={title}
-          _id={allListings[0]._id}
+          _id={allListings._id}
           city={city}
           state={state}
           description={description}
           bedrooms={bedrooms}
           bathrooms={bathrooms}
           pictures={pictures}
+          amenities={amenities}
         />
