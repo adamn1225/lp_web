@@ -6,7 +6,7 @@ import Container from '@components/Container.astro'
 import PropertyCard from '@components/ui/PropertyCard.astro'
 import allListings from '../pages/api/guesty'
 
-const { title, _id, state, city, description, bedrooms, bathrooms, pictures } = Astro.props;
+const { title, _id, state, city, description, bedrooms, bathrooms, pictures, amenities } = Astro.props;
 
 ---
 <Layout title="Property Details">
@@ -90,9 +90,22 @@ const { title, _id, state, city, description, bedrooms, bathrooms, pictures } = 
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
                     <p class="text-muted-500 text-base">
-                      {description}
+                      {description.summary}
                     </p>
                     <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
+                      {description.space}
+                    </p>
+                    <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
+                      {description.access}
+                    </p>
+                    <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
+                      {description.neighborhood}
+                    </p>
+                    <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
+                      {description.transit}
+                    </p>
+                    <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
+                      {description.notes}
                     </p>
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
@@ -373,7 +386,7 @@ const { title, _id, state, city, description, bedrooms, bathrooms, pictures } = 
                         data-darkreader-inline-stroke=""
                         ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
                       </svg>
-                      <p class="text-lg font-bold">3</p>
+                      <p class="text-lg font-bold">{bedrooms}</p>
                     </div>
                     <p class="text-sm text-muted-400">Bedrooms</p>
                   </div>
@@ -399,12 +412,12 @@ const { title, _id, state, city, description, bedrooms, bathrooms, pictures } = 
                           x2="22"
                           y2="12"></line><line x1="7" y1="19" x2="7" y2="21"></line><line x1="17" y1="19" x2="17" y2="21"></line>
                       </svg>
-                      <p class="text-lg font-bold">3</p>
+                      <p class="text-lg font-bold">{bathrooms}</p>
                     </div>
                     <p class="text-sm text-muted-400">Bathrooms</p>
                   </div>
                   <!-- living area -->
-                  <div class="flex flex-col">
+                  <!-- <div class="flex flex-col">
                     <div class="flex items-center gap-2 text-muted-900 dark:text-white">
                       <svg
                         class="size-4"
@@ -426,14 +439,27 @@ const { title, _id, state, city, description, bedrooms, bathrooms, pictures } = 
                       <p class="text-lg font-bold">460m²</p>
                     </div>
                     <p class="text-sm text-muted-400">Living Area</p>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex gap-2 flex-wrap">
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Guest toilet</span>
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Open kitchen</span>
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Swimming Pool</span>
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Garden sharing</span>
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Kids playground</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[0]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[1]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[2]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[3]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[4]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[5]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[6]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[7]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[8]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[9]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[10]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[11]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[12]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[13]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[14]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[15]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[16]}</span>
+                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">{amenities[17]}</span>
                 </div>
                 <div class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800">
                   <div class="flex items-center justify-between text-sm">
