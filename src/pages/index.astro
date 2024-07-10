@@ -4,6 +4,7 @@ import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
 import PropertySearch from '@components/ui/PropertySearch.astro'
 import PropertyCard from '@components/ui/PropertyCard.astro'
+// import allListings from './api/guesty.ts'
 import GuestyListings from '@components/GuestyListings.astro'
 
 
@@ -31,8 +32,11 @@ import GuestyListings from '@components/GuestyListings.astro'
             <h4 class="text-base text-muted-500 leading-5 text-center pb-4">We found 45 matching properties</h4>
 
             <div class="relative">
-             
-            
+              <input
+                type="text"
+                class="w-full sm:w-80 peer outline-none focus:outline-none p-3 ps-12 border border-gray-400 hover:border-muted-300 text-muted-600 placeholder:text-muted-200 transition-all duration-300 rounded h-12 text-base"
+                placeholder="Filter..."
+              />
               <div class="peer-focus:[&>svg]:text-primary-500 absolute start-0 top-0 grid place-items-center h-12 w-12">
                 <Icon class="size-5 text-muted-300 stroke-[1.6px] transition-all duration-300" name="lucide:search" />
               </div>
@@ -114,6 +118,5 @@ import GuestyListings from '@components/GuestyListings.astro'
       </Container>
       
     </Section>
-
   </main>
 </Layout>

@@ -5,7 +5,7 @@ import alpinejs from "@astrojs/alpinejs";
 import icon from "astro-icon";
 import vercelServerless from "@astrojs/vercel/serverless";
 import node from "@astrojs/node";
-import pagefind from "astro-pagefind";
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,7 +15,6 @@ export default defineConfig({
   adapter: vercelServerless({
     mode: "hybrid"
   }),
-
   integrations: [
     tailwind(),
   // image({
