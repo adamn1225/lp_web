@@ -19,14 +19,14 @@ const { id } = page;
 
 {
     allListings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results, beds}) => (
-<a data-pagefind-meta="title" href={_id}>
+<a href={_id}>
     <article class="bg-white shadow-lg shadow-muted-300/30">
             <div class="bg-muted-100 dark:bg-muted-800 h-72">
             <img class="h-56 md:h-full w-full object-cover" id="string" src={pictures[0].original} />
           </div>
           <div class="p-5 bg-white dark:bg-muted-950 border border-muted-200 dark:border-muted-800">
         <div class="flex flex-col">
-          <h4 data-pagefind-meta="title" class="lead-9 font-sans font-bold text-xl text-muted-900 dark:text-white">
+          <h4 class="lead-9 font-sans font-bold text-xl text-muted-900 dark:text-white">
             {title} 
           </h4>
           <h3 class="font-sans font-bold text-xl text-muted-900 dark:text-white">
