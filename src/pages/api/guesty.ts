@@ -7,7 +7,7 @@ const options: RequestInit = {
   };
   
 
-const listings = await fetch('https://open-api.guesty.com/v1/listings?listed=true&limit=281&skip=0', options)
+const listings = await fetch('https://open-api.guesty.com/v1/listings', options)
 const data = await listings.json();
 const allListings = data.results
 
