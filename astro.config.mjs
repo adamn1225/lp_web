@@ -15,9 +15,7 @@ export default defineConfig({
   adapter: vercelServerless({
     mode: "hybrid"
   }),
-  build: {
-    format: "file",
-  },
+
   integrations: [
     tailwind(),
   // image({
@@ -25,6 +23,5 @@ export default defineConfig({
   // }),
   icon(), 
   alpinejs(),
-  pagefind(),
 ]
 });
