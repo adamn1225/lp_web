@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build && pagefind --site dist",
+    "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -42,7 +42,6 @@
     "astro": "^4.11.5",
     "astro-google-fonts-optimizer": "^0.2.2",
     "astro-icon": "^1.1.0",
-    "astro-pagefind": "^1.5.0",
     "astro-seo": "^0.8.4",
     "corepack": "^0.28.2",
     "firebase": "^10.12.3",
@@ -68,7 +67,6 @@
   },
   "devDependencies": {
     "@rollup/plugin-yaml": "^4.1.2",
-    "pagefind": "^1.1.0",
     "rollup-plugin-node-resolve": "^5.2.0"
   }
 }
