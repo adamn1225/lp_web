@@ -2,6 +2,7 @@
 import { Icon } from 'astro-icon/components'
 import SelectBox from './SelectBox.astro'
 import BoxedTab from './BoxedTab.astro'
+import allListings from '../../pages/api/guesty'
 ---
 
 <form action="">
@@ -15,23 +16,23 @@ import BoxedTab from './BoxedTab.astro'
     </li>
   </ul> -->
 
-  <div class="p-3 bg-white dark:bg-muted-900 relative -mt-px z-[5] flex justify-between flex-col md:flex-row gap-2 items-center lg:w-max border border-muted-200 dark:border-muted-800">
+  <div class="bg-white relative -mt-px z-[5] flex justify-between flex-col md:flex-row gap-2 items-center lg:w-max ">
     <!-- select -->
     <SelectBox placeholder="Property Type" options={['Private residence', 'Private house', 'Apartment', 'Mansion']} id="PropertyType" />
 
     <!-- search input -->
-    <div class="flex items-center h-full md:border-s w-full md:w-max border-muted-200 dark:border-muted-800 flex-row-reverse">
-      <input type="text" placeholder="Search by location" class="peer focus:outline-none h-16 w-full bg-white dark:bg-muted-900 text-muted-700 dark:text-muted-300 placeholder:text-muted-300 dark:placeholder:text-muted-600" />
+    <div class="flex justify-between items-center gap-2 bg-white dark:bg-muted-900 px-4 rounded-3xl border border-cyan-200">
+      <input type="text" placeholder="Search by location" class="peer focus:outline-none w-full bg-white font-semibold text-muted-900" />
 
       <!-- icon -->
-      <div class="size-16 text-muted-400 peer-focus:text-primary-500 flex justify-center items-center">
+      <div class="size-16 text-muted-600 peer-focus:text-cyan-500 flex justify-center items-center">
         <Icon name="lucide:search" class="size-4" />
       </div>
     </div>
 
     <button
       type="submit"
-      class="h-16 min-w-40 w-full md:w-max font-medium text-lg px-4 py-2 rounded flex justify-center items-center transition-all duration-300 bg-cyan-600 text-white hover:shadow-lg hover:shadow-primary-500/30"
+      class="h-12 min-w-40 w-full md:w-max font-medium text-lg rounded-3xl flex justify-center items-center transition-all duration-300 bg-cyan-600 text-white shadow-md shadow-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/30" :class="{'shadow-lg shadow-cyan-500/30': scrolled}"
       >Search</button
     >
   </div>

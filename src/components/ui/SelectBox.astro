@@ -14,10 +14,10 @@ const { id = '', options, placeholder = '' } = Astro.props
     options.length > 0 && (
       <div
         aria-label="Select Option"
-        class="options bg-white dark:bg-muted-900 shadow-sm border transition-all duration-200 z-20 border-muted-300 dark:border-muted-800 text-muted-600 rounded-lg mt-2 p-2 absolute top-full start-0 w-full overflow-hidden"
+        class="options bg-white shadow-sm border transition-all duration-200 z-20 border-muted-300 dark:border-muted-800 text-muted-600 rounded-lg mt-2 p-2 absolute top-full start-0 w-full overflow-hidden"
       >
         {options.map((option) => (
-          <div class="option py-2 px-3 rounded-md hover:bg-muted-100 dark:hover:bg-muted-800 text-muted-400 hover:text-muted-700 dark:hover:text-muted-100 cursor-pointer" data-option={option}>
+          <div class="option py-2 px-3 rounded-md hover:bg-muted-100 text-muted-500 hover:text-muted-900 cursor-pointer" data-option={option}>
             {option}
           </div>
         ))}
@@ -25,7 +25,7 @@ const { id = '', options, placeholder = '' } = Astro.props
     )
   }
 
-  <div class="flex justify-between items-center gap-2 bg-white dark:bg-muted-900 px-4 py-4 rounded-lg cursor-pointer w-full h-full relative z-20">
+  <div class="flex justify-between items-center gap-2 bg-white dark:bg-muted-900 px-4 py-5 rounded-3xl cursor-pointer w-full h-full relative z-20 border border-cyan-200">
     <Icon name="lucide:home" class="size-4 text-muted-400" />
     <!-- input -->
     <input
@@ -33,7 +33,7 @@ const { id = '', options, placeholder = '' } = Astro.props
       id={id}
       name={id}
       type="text"
-      class="peer focus:outline-none cursor-pointer dark:bg-muted-900 text-muted-700 dark:text-muted-300 placeholder:text-muted-300 dark:placeholder:text-muted-600 flex-1"
+      class="peer focus:outline-none cursor-pointer font-semibold text-muted-800 flex-1"
       placeholder={placeholder}
       readonly
     />

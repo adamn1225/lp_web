@@ -4,21 +4,20 @@ import { Icon } from 'astro-icon/components'
 import Logo from './ui/Logo.astro'
 import MegaMenu from './ui/MegaMenu.astro'
 import AccountMenu from './ui/AccountMenu.astro'
+import PropertySearch from '@components/ui/PropertySearch.astro'
 ---
 
-<div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full z-50 bg-slate-50 shadow-lg border-slate-100">
+<div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full z-50 bg-slate-50 border-slate-100">
   <div
     id="header"
-    :class="flex flex-row justify-center scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20': 'lg:bg-transparent' "
+    :class="flex flex-row justify-center scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b border-muted-200 shadow-muted-300/30 : 'lg:bg-transparent' "
   >
-  <header id="MainHeader" class=" min-h-[70px] w-full max-w-full px-3 mx-auto flex justify-start items-stretch gap-3 shadow lg:shadow-none lg:px-8">
+  <header id="MainHeader" class=" min-h-[70px] w-full max-w-full px-3 mx-auto flex justify-between items-stretch gap-3 shadow lg:shadow-md lg:px-8">
     <div class="flex justify-between lg:justify-start items-center w-full lg:w-auto min-h-[3.25rem]">
       <a href="/" class="flex gap-4 items-center py-2">
         <Logo class="size-8 aspect-square" />
-        <p style="width:max-content" class="font-medium text-2xl font-sans text-muted-900 dark:text-white">
-       
-        </p>
       </a>
+
         <div class="flex items-stretch gap-3">
           <button id="MenuToggle" class="lg:hidden" @click="mobileOpen = !mobileOpen">
             <Icon id="OpenIcon" x-show="!mobileOpen" name="lucide:menu" class="pointer-events-none text-muted-500 dark:text-white size-6 aspect-auto" />
@@ -31,11 +30,13 @@ import AccountMenu from './ui/AccountMenu.astro'
           </template>
         </div>
       </div>
-
+      <div class="xs:hidden sm:hidden md:hidden lg:flex items-center">
+        <PropertySearch />
+      </div>
       <nav
         aria-label="Main Navigation"
         x-cloak
-        class="absolute top-full bg-white lg:bg-transparent start-0 w-full lg:static px-3 lg:px-0 lg:flex-grow items-stretch justify-between"
+        class="absolute top-full bg-white lg:bg-transparent start-0 lg:static px-3 lg:px-0 items-stretch justify-between"
         :class="mobileOpen ? 'block pt-5 pb-8 lg:p-0 -translate-y-px border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20': 'hidden lg:flex'"
       >
         <ul id="LeftLinks" class="flex flex-col lg:flex-row items-stretch [&>li>a]:h-full">
@@ -64,17 +65,12 @@ import AccountMenu from './ui/AccountMenu.astro'
         </ul>
 
         <ul id="RightLinks" class="flex flex-col lg:flex-row items-stretch gap-6 [&>li>a]:h-full [&>li>a]:grid [&>li>a]:place-items-center">
-          <li>
-            <a href="/#" class="hover:text-cyan-600 py-2 px-3 leading-6 grid place-items-center text-base text-muted-500 dark:text-muted-400  dark:hover:text-white transition-all duration-300">
-              <span>Properties</span>
+          <!-- <li>
+            <a href="/about" class="hover:text-cyan-600 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400  dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1">
+              <span>About</span>
             </a>
-          </li>
-          <li>
-            <a href="/about" class="hover:text-cyan-600 py-2 px-3 leading-6 grid place-items-center text-base text-muted-500 dark:text-muted-400  dark:hover:text-white transition-all duration-300">
-              <span>How We Work</span>
-            </a>
-          </li>
-          <li>
+            </li>
+          <li> -->
             <a href="/contact" class="hover:text-cyan-600 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400  dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1">
               <span>Contact Us</span>
             </a>
@@ -94,19 +90,19 @@ import AccountMenu from './ui/AccountMenu.astro'
           </li> -->
 
           <!-- whishlist -->
-          <li class="hidden lg:block">
+          <!-- <li class="hidden lg:block">
             <a href="/wishlist" class="inline-block text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300">
               <Icon name="lucide:heart" class="hover:text-cyan-600 size-4 aspect-auto" />
             </a>
-          </li>
+          </li> -->
 
           <template x-if="$store.app.isLoggedIn === false">
             <!-- register -->
             <li class="w-full md:w-3/5 mx-auto lg:mx-0 lg:w-auto flex items-center justify-center">
               <a
                 href="/signup"
-                class="!h-[46px] bg-cyan-600 w-full lg:w-auto min-w-[120px] font-medium text-sm leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 rounded text-white"
-                :class="{'shadow-lg shadow-primary-500/30': scrolled}">Register</a
+                class="!h-[46px] bg-cyan-600 w-full lg:w-auto min-w-[120px] font-medium text-sm leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 shadow-md shadow-cyan-500/30 rounded-3xl text-white"
+                :class="{'shadow-lg shadow-cyan-500/30': scrolled}">Register</a
               >
             </li>
           </template>
@@ -121,6 +117,17 @@ import AccountMenu from './ui/AccountMenu.astro'
     </header>
   </div>
   <MegaMenu />
+  <div class="py-6 border-b shadow border-muted-100 flex gap-6 flex justify-center">
+    <span class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full text-md bg-muted-200 text-muted-900">House</span>
+    <span class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full text-md bg-muted-200 text-muted-900">Mansion</span>
+    <span class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full text-md bg-muted-200 text-muted-900">Condo</span>
+    <span class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full text-md bg-muted-200 text-muted-900">Studio</span>
+    <span class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full text-md bg-muted-200 text-muted-900">Swimming Pool</span>
+    <span class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full text-md bg-muted-200 text-muted-900">Garden sharing</span>
+    <span class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full text-md bg-muted-200 text-muted-900">Beachfront</span>
+    <span class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full text-md bg-muted-200 text-muted-900">Popular</span>
+
+  </div>
 </div>
 
 <script>
