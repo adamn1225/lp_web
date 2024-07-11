@@ -20,10 +20,10 @@ const { id } = page;
     allListings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
 <a href={_id}>
     <article class="bg-white shadow-lg shadow-muted-300/30">
-            <div class="bg-muted-100 dark:bg-muted-800 h-72">
+            <div class="bg-muted-100 dark:bg-muted-800 h-full">
             <img class="h-56 md:h-full w-full object-cover" id="string" src={pictures[0].original} />
           </div>
-          <div class="p-5 bg-white dark:bg-muted-950 border border-muted-200 dark:border-muted-800">
+          <div class="p-5 bg-white border border-muted-200">
         <div class="flex flex-col">
           <h4 class="font-sans font-bold text-xl text-muted-900 dark:text-white">
             {title} 
@@ -91,13 +91,14 @@ const { id } = page;
             <p class="text-sm text-muted-400">Bathroom</p>
           </div>
           <!-- living area -->
-          <div class="flex items-center">
-           
-            <p class="text-sm text-muted-400">Accomodates &nbsp;</p>
-            <p class="text-lg font-bold">
-                {accommodates}
-              </p>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 text-muted-900 dark:text-white justify-center">
+              <p class="text-lg font-bold">{accommodates}</p>
+            </div>
+  
+            <p class="text-sm text-muted-400">Accomodates</p>
           </div>
+
         </div>
       </div>
     </article>
