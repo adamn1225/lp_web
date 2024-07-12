@@ -2438,7 +2438,7 @@ const _page17 = () => import('./pages/wishlist.astro.mjs');
 const _page18 = () => import('./pages/_listingpage_.astro.mjs');
 const _page19 = () => import('./pages/index.astro.mjs');
 const pageMap = new Map([
-    ["node_modules/astro/dist/assets/endpoint/generic.js", _page0],
+    ["node_modules/.pnpm/astro@4.11.5_@types+node@20.14.10_lightningcss@1.24.1_sass@1.77.6_terser@5.30.3_typescript@5.5.3/node_modules/astro/dist/assets/endpoint/generic.js", _page0],
     ["src/pages/404.astro", _page1],
     ["src/pages/about.astro", _page2],
     ["src/pages/account.astro", _page3],
@@ -2466,7 +2466,7 @@ const _manifest = Object.assign(manifest, {
     middleware: onRequest
 });
 const _args = {
-    "middlewareSecret": "75d91b6f-ce14-4b04-bb17-04310defea79",
+    "middlewareSecret": "ba69de97-1743-41b2-bf72-65398b2ef0e6",
     "skewProtection": false
 };
 const _exports = createExports(_manifest, _args);
