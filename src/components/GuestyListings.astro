@@ -1,13 +1,14 @@
 ---
 import { currency } from '@utils/utils'
 import listings1 from '../pages/api/guestyPage1'
+import allListings from '@/pages/api/guesty';
 
 
 
 const pages = [
   {
-    slug: listings1._id,
-    id: listings1._id,
+    slug: allListings._id,
+    id: allListings._id,
   }
   
 ]
@@ -17,7 +18,7 @@ if (!page) return Astro.redirect("/404");
 const { id } = page;
 ---
 {
-    listings1.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
+    allListings.slice(0, 16).map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
 <a href={_id}>
     <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
             <div class="bg-muted-100">
