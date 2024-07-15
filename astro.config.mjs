@@ -5,6 +5,7 @@ import alpinejs from "@astrojs/alpinejs";
 import icon from "astro-icon";
 import vercelServerless from "@astrojs/vercel/serverless";
 import node from "@astrojs/node";
+import react from '@astrojs/react';
 
 
 // https://astro.build/config
@@ -22,5 +23,7 @@ export default defineConfig({
   // }),
   icon(), 
   alpinejs(),
+  react(),
+  
 ]
 });

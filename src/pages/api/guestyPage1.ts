@@ -1,0 +1,14 @@
+const options: RequestInit = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json; charset=utf-8',
+      authorization: 'Bearer eyJraWQiOiI1OVBtSUFVdG91YjNQS1RWaE1VRF9JZ0E1WUd6QUN4djhPMlkteTdnS1JjIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmpXSFhlV25zWFpLandHa0I3UlQzM2VVczliNjlXWXRuTWlEeC1iZUhlRUkiLCJpc3MiOiJodHRwczovL2xvZ2luLmd1ZXN0eS5jb20vb2F1dGgyL2F1czFwOHFyaDUzQ2NRVEk5NWQ3IiwiYXVkIjoiaHR0cHM6Ly9vcGVuLWFwaS5ndWVzdHkuY29tIiwiaWF0IjoxNzIxMDU5MDgwLCJleHAiOjE3MjExNDU0ODAsImNpZCI6IjBvYWljMGg5MmZJT2NQYmliNWQ3Iiwic2NwIjpbIm9wZW4tYXBpIl0sInJlcXVlc3RlciI6IkVYVEVSTkFMIiwiYWNjb3VudElkIjoiNjUzYjBmOGQ3ZTg5ODJkZWZhZmFhZjViIiwic3ViIjoiMG9haWMwaDkyZklPY1BiaWI1ZDciLCJ1c2VyUm9sZXMiOlt7InJvbGVJZCI6eyJwZXJtaXNzaW9ucyI6WyJhZG1pbiJdfX1dLCJyb2xlIjoidXNlciIsImNsaWVudFR5cGUiOiJvcGVuYXBpIiwiaWFtIjoidjMiLCJhY2NvdW50TmFtZSI6IkxpbmUgcHJvcGVydGllcyBJbmMiLCJuYW1lIjoiTFBfU2l0ZSJ9.Vpa4eJM-IiG8PBRcpU0IHawUS5t0Vu7M5vAjRaWMSq_NgmJQz7kTLDhjS-MQ7Omzt8V6O_r331MjRXM1xEKYxMYLxh5G5Bi1Ydux868VZQLuQNJiCYwmzm6-_E3gNiNKrARY7JYg2swGSAOR7Wvka8Y_YIbXkJHySIbiJH9kfWSoLZ_ZUS7cMY1y9kXDl2Qx5Ckf5k2zN5w6f4ZJ_5ivgyk3o3UI_UMEqlv6JMAbk-Oiduh2YeB_t2vAvsYgmd6JU7F0x5SMTcejsdtsam7n9wWW0Pxj2-DmLK10VZqHpvGRR771bPDNfDfP1Mmy-N_OWglXxVy9J_gUPtNL2xI2Ng'
+    }
+  };
+  
+  
+  const listings = await fetch('https://open-api.guesty.com/v1/listings?limit=16', options)
+  const data = await listings.json();
+  const listings1 = data.results
+  
+  export default listings1

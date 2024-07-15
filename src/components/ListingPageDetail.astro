@@ -1,16 +1,15 @@
 ---
 import { Icon } from 'astro-icon/components'
-import Layout from '@layouts/Split.astro'
+import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
 import Container from '@components/Container.astro'
-import PropertyCard from '@components/ui/PropertyCard.astro'
-import allListings from '../pages/api/guesty'
 
-const { title, _id, state, city, description, beds, bathrooms, pictures, PropertyType } = Astro.props;
+const { title, state, city, description, beds, bathrooms, pictures, PropertyType } = Astro.props;
 
 ---
-<Layout title="Property Details">
-  <main id="PropertyDetails">
+
+<Layout title="Property Details"> 
+  <main id="PropertyDetails"> 
     <Section>
       <Container>
         <div class="pb-12 mb-12">
@@ -90,7 +89,7 @@ const { title, _id, state, city, description, beds, bathrooms, pictures, Propert
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
                     <p class="text-muted-500 text-base">
-                      {description}
+                      {description.summary}
                     </p>
                     <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
                     </p>

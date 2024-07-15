@@ -3,11 +3,12 @@ import { processListing } from "../utils/utils.ts"
 import allListings from '../pages/api/guesty'
 import ListingPageDetail from '@components/ListingPageDetail.astro'
 
+
 export function getStaticPaths() {
 
 const paths = allListings.map((allListings) => ({
 params: {
-  listingPage: processListing(allListings.title, allListings._id)    
+  listingPage: processListing(allListings.title, allListings._id) 
 },
 props: {
   lineListing: allListings,
@@ -15,7 +16,7 @@ props: {
   title: allListings.title,
   city: allListings.address.city,
   state: allListings.address.state,
-  description: allListings.publicDescription.summary,
+  description: allListings.publicDescription,
   PropertyType: allListings.propertyType,
   bathrooms: allListings.bathrooms,
   pictures: allListings.pictures,
@@ -25,13 +26,13 @@ props: {
 
 return paths;
 }
-const {description, title, city, state, beds, PropertyType, bathrooms, pictures} = Astro.props;
+const {description, title, city, state, beds, PropertyType, bathrooms, pictures, _id} = Astro.props;
 
 ---
 
 <ListingPageDetail
           title={title}
-          _id={allListings[0]._id}
+          _id={allListings._id}
           city={city}
           state={state}
           description={description}
