@@ -117,6 +117,18 @@ const { title = '', description = '', ...props } = Astro.props
         })
       })
     </script>
+      <script is:inline>
+document.getElementById("showHide").onclick = function() {
+    var theDiv = document.getElementById("listing2");
+    if (theDiv.style.display == 'none') {
+        theDiv.style.display = 'grid';
+        this.innerHTML = 'Show Less';
+    } else {
+        theDiv.style.display = 'none';
+        this.innerHTML = 'Show More';
+    }
+}
+</script>
     <script is:inline src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
   </body>
 </html>

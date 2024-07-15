@@ -1,29 +1,29 @@
 ---
-import { currency } from '@utils/utils'
-import listings1 from '../pages/api/guestyPage1'
-
-
+import allListings2 from '../pages/api/guestyPage2'
 
 const pages = [
   {
-    slug: listings1._id,
-    id: listings1._id,
+    slug: allListings2.title,
+    id: allListings2.title,
   }
+
   
 ]
 const {slug} = Astro.params;
 const page = pages.find((page) => page.slug === slug);
 if (!page) return Astro.redirect("/404");
 const { id } = page;
+
+
 ---
 {
-    listings1.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
+    allListings2.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
 <a href={_id}>
     <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
-            <div class="bg-muted-100">
-            <img class="w-full h-48 object-cover" id="string" src={pictures[0].original} height="300px" width="300px"/>
+            <div class="bg-muted-100 dark:bg-muted-800 ">
+            <img class="w-full h-48 object-cover" id="string" src={pictures[0].original} />
           </div>
-          <div class="p-5 bg-white flex flex-col justify-start h-2/6">
+          <div class="p-5 bg-white flex flex-col justify-evenly h-full">
         <div class="">
           <h4 class="font-sans font-bold text-xl text-muted-900">
             {title} 
@@ -97,4 +97,4 @@ const { id } = page;
   </a>
   )
   )
-  } 
+  }
