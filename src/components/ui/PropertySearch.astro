@@ -2,8 +2,9 @@
 import { Icon } from 'astro-icon/components'
 import SelectBox from './SelectBox.astro'
 import BoxedTab from './BoxedTab.astro'
-import { CalendarArrowDown, CalendarArrowUp } from 'lucide-astro'
+import { CalendarArrowDown, Search } from 'lucide-astro'
 ---
+<form autocomplete="off" method="get" action=""> 
 <div id="date-range-picker" date-rangepicker class="flex items-center">
   <div class="relative">
     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -21,5 +22,7 @@ import { CalendarArrowDown, CalendarArrowUp } from 'lucide-astro'
         </svg>
     </div>
     <input id="datepicker-range-end" name="end" type="text" class="bg-gray-50 border-2 border-cyan-400 text-slate-900 placeholder-slate-600 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full ps-10 py-3 px-1 dark:bg-cyan-700 dark:border-cyan-600 dark:placeholder-cyan-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500" placeholder="Check out date">
+  </div>
+  <div class="ml-2"><button name="lucid:Search" class="bg-cyan-600 py-2.5 px-2.5 border rounded-lg shadow-md shadow-cyan-500/30 text-muted-100" > <Search /></button></div>
 </div>
-</div>
+</form>
