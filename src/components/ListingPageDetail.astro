@@ -11,12 +11,12 @@ const { title, state, city, description, beds, bathrooms, pictures, PropertyType
 <Layout title="Property Details"> 
   <main id="PropertyDetails"> 
     <Section>
-      <Container>
+      <div class="w-full mx-auto max-w-full px-2">
         <div class="pb-12 mb-12">
           <section class="relative border-b border-muted-200 pb-12">
             <!-- breadcrumb -->
             <nav class="mt-12 mb-6" aria-label="breadcrumbs">
-              <ul class="flex items-center">
+              <ul class="flex items-center xs:justify-center">
                 <li class="flex items-center">
                   <a href="/" class="hover:text-primary-500 pe-3 text-muted-400">
                     <Icon class="h-4 aspect-square" name="lucide:home" />
@@ -34,13 +34,13 @@ const { title, state, city, description, beds, bathrooms, pictures, PropertyType
             <div class="flex flex-col md:flex-row items-end justify-between mb-6">
               <!-- left -->
               <div class="left mb-8 md:m-0">
-                <h2 class="leading-9 text-3xl font-light font-sans text-muted-900 mb-2">{title}</h2>
-                <div class="flex gap-4 text-base text-muted-900">
+                <h2 class="leading-9 text-3xl font-light font-sans text-muted-900 mb-2 xs:text-center">{title}</h2>
+                <div class="flex xs:justify-center gap-4 text-base text-muted-900">
                   <a href="#" class="flex items-center font-medium relative underline-offset-4 hover:underline">{city}, {state}</a>
                 </div>
               </div>
               <!-- right -->
-              <div class="right flex gap-4">
+              <div class="right flex xs:justify-center xs:items-center xs:w-full gap-4">
                 <a href="#" class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline">
                   <Icon class="h-4 aspect-square" name="lucide:share-2" />
                   <span class="relative">Share</span>
@@ -60,7 +60,7 @@ const { title, state, city, description, beds, bathrooms, pictures, PropertyType
                   <div class="main-image md:flex-grow-[2]">
                     <img class="block object-cover min-h-[450px]" src={pictures[0].original} alt="Main image" width={2000} height={1333} data-zoom />
                   </div>
-                  <div class="flex flex-row md:flex-col gap-4 max-w-full md:max-w-[180px] md:w-full">
+                  <div class="flex flex-row md:flex-col xs:flex-wrap gap-4 max-w-full md:max-w-[180px] md:w-full">
                     <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[1].original} alt="Sub image" width={2000} height={1333} data-zoom />
                     <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[2].original} alt="Sub image" width={2000} height={1333} data-zoom />
                     <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[3].original} alt="Sub image" width={2000} height={1333} data-zoom />
@@ -88,14 +88,14 @@ const { title, state, city, description, beds, bathrooms, pictures, PropertyType
                     </ul>
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
-                    <p class="text-muted-500 text-base">
-                      {description}
+                    <p class="text-muted-500 text-base xs:text-center">
+                      {description.summary}
                     </p>
                     <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
                     </p>
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
-                    <div class="boxed-amenities grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="boxed-amenities flex justify-center gap-3">
                       <!-- Amenity -->
                       <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
                         <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
@@ -353,7 +353,7 @@ const { title, state, city, description, beds, bathrooms, pictures, PropertyType
               <!-- right -->
               <div class="min-w-[300px]">
                 <h4 class="text-xl mb-6 font-light font-sans text-muted-900">Amenities</h4>
-                <div class="mb-6 grid grid-cols-3">
+                <div class="mb-6 grid grid-cols-2 justify-items-center">
                   <!-- bedroom -->
                   <div class="flex flex-col">
                     <div class="flex items-center gap-2 text-muted-900 dark:text-white">
@@ -404,7 +404,7 @@ const { title, state, city, description, beds, bathrooms, pictures, PropertyType
                   </div>
                 
                 </div>
-                <div class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex gap-2 flex-wrap">
+                <div class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap">
                   <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Guest toilet</span>
                   <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Open kitchen</span>
                   <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Swimming Pool</span>
@@ -442,15 +442,15 @@ const { title, state, city, description, beds, bathrooms, pictures, PropertyType
           <!-- cards -->
           <div class="mt-12">
             <div class="flex flex-col">
-              <h2 class="font-sans text-2xl text-muted-900 dark:text-white">You might also like</h2>
-              <p class="text-muted-500 dark:text-muted-400 text-base leading-6">Based on your previous matches</p>
+              <h2 class="font-sans text-2xl text-muted-900 dark:text-white xs:text-center">You might also like</h2>
+              <p class="text-muted-500 dark:text-muted-400 text-base leading-6 xs:text-center">Based on your previous matches</p>
             </div>
             <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <!-- {properties.slice(0, 3).map((property) => <PropertyCard {...property} />)} -->
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </Section>
   </main>
 </Layout>
