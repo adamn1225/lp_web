@@ -1,18 +1,21 @@
 ---
 import { processListing } from "../utils/utils.ts"
 import allListings from '../pages/api/guesty'
+import listings1 from "./api/guestyPage1"
+import listings2 from "./api/guestyPage2"
 import ListingPageDetail from '@components/ListingPageDetail.astro'
 
 
 export function getStaticPaths() {
-
-const paths = allListings.map((allListings) => ({
+// let query = parseInt(allListings.publicDescription);
+// let desc = allListings.find((publicDescription: any) => publicDescription === query);
+const paths = allListings.map((allListings : any) => ({
 params: {
   listingPage: processListing(allListings.title, allListings._id) 
 },
 props: {
   lineListing: allListings,
-  id: allListings._id,
+  _id: allListings._id,
   title: allListings.title,
   city: allListings.address.city,
   state: allListings.address.state,
@@ -32,7 +35,7 @@ const {description, title, city, state, beds, PropertyType, bathrooms, pictures,
 
 <ListingPageDetail
           title={title}
-          _id={allListings._id}
+          _id={_id}
           city={city}
           state={state}
           description={description}

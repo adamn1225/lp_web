@@ -8,14 +8,14 @@ import { app } from "../firebase/server";
 import { getAuth } from "firebase-admin/auth";
 
 /* Check if the user is authenticated */
-const auth = getAuth(app);
-if (Astro.cookies.has("__session")) {
-  const sessionCookie = Astro.cookies.get("__session").value;
-  const decodedCookie = await auth.verifySessionCookie(sessionCookie);
-  if (decodedCookie) {
-    return Astro.redirect("/dashboard");
-  }
-}
+// const auth = getAuth(app);
+// if (Astro.cookies.has("__session")) {
+//   const sessionCookie = Astro.cookies.get("__session").value;
+//   const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+//   if (decodedCookie) {
+//     return Astro.redirect("/dashboard");
+//   }
+// }
 ---
 
 <Layout title="Login">
