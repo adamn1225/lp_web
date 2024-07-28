@@ -1,0 +1,19 @@
+name: Trigger Vercel Functions
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Every 6 hours
+    - cron: '0 0 * * *'  # Every day at midnight
+
+jobs:
+  trigger-vercel:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call refresh-token API
+        run: |
+          curl -X POST "https://lp-819q7vaxp-adamn1225s-projects.vercel.app/api/refresh-token"
+      
+      - name: Call generate-token API
+        run: |
+          curl -X POST "https://lp-819q7vaxp-adamn1225s-projects.vercel.app/api/generate-token"
