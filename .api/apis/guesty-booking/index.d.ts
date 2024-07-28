@@ -26,7 +26,7 @@ declare class SDK {
      * sdk.auth('username', 'password');
      *
      * @example <caption>Bearer tokens (HTTP or OAuth 2)</caption>
-     * sdk.auth('myBearerToken');
+     * sdk.auth('eyJraWQiOiJaTmwwNHN2dk5CSEdXT2NCbUMyUW5WMERZUG9XRjlDMS1QUVlpa3dGYXRRIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkZwTC1oM1VnRTZzMGNzRE5VSmNHeE1WQnpwMDl3Y212TEtUUVFzR0Z4RlkiLCJpc3MiOiJodHRwczovL2xvZ2luLmd1ZXN0eS5jb20vb2F1dGgyL2F1c2Y2Y2ZjMmxTN3hCTGpKNWQ2IiwiYXVkIjoiaHR0cHM6Ly9ib29raW5nLmd1ZXN0eS5jb20iLCJpYXQiOjE3MjEzMjA2MjUsImV4cCI6MTcyMTQwNzAyNSwiY2lkIjoiMG9haTJ6aXd3c1l5UTR5STQ1ZDciLCJzY3AiOlsiYm9va2luZ19lbmdpbmU6YXBpIl0sInJlcXVlc3RlciI6IkJPT0tJTkciLCJzdWIiOiIwb2FpMnppd3dzWXlRNHlJNDVkNyIsImFjY291bnRJZCI6IjY1M2IwZjhkN2U4OTgyZGVmYWZhYWY1YiIsInVzZXJSb2xlcyI6W3sicm9sZUlkIjp7InBlcm1pc3Npb25zIjpbImxpc3Rpbmcudmlld2VyIl19fV0sImNsaWVudFR5cGUiOiJib29raW5nIiwiaWFtIjoidjMiLCJhcHBsaWNhdGlvbklkIjoiMG9haTJ6aXd3c1l5UTR5STQ1ZDcifQ.Wf4YvdqjpyqGSvz84c7UrlakKQJscmQwco79c0HEvmzPGJDwPewwyQmUpVET9eANdNjWejPv4bOGvhjYyfU_J1KQXBdTfd84Vv3bnIUWM722Mpa1lYPDMqZ4aMdOdpvTLBj8aAVjZiIsYgMaFq4tyXB6cCu-XxB2N6yULU03J0kk2bFGrUsazzChmJNekK1esZ3H4bTvDuUEm3E-PE7cLMfsXwTatwD5GdXpyIQGlBDAbNyI115HCnaco2oGc06mYUJYub0GhHcNxyan4U6QUMnuUdzQ461OEK9Jl-4WFmARf9dS5CeIdOFn1hmexR6MAfUsegswpq1jtmJhoo-R1A');
      *
      * @example <caption>API Keys</caption>
      * sdk.auth('myApiKey');
@@ -261,4 +261,4 @@ declare class SDK {
     getMetasearchConfig(metadata: types.GetMetasearchConfigMetadataParam): Promise<FetchResponse<200, types.GetMetasearchConfigResponse200>>;
 }
 declare const createSDK: SDK;
-export = createSDK;
+export default createSDK;

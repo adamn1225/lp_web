@@ -1,5 +1,5 @@
 {
-  "name": "masonry",
+  "name": "LP-Web",
   "type": "module",
   "packageManager": "pnpm@9.1.4",
   "version": "1.0.0",
@@ -12,7 +12,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@api/guesty-booking": "file:.api/apis/guesty-booking",
     "@apollo/client": "^3.10.8",
     "@astrojs/alpinejs": "^0.4.0",
     "@astrojs/check": "^0.7.0",
@@ -22,7 +21,6 @@
     "@astrojs/tailwind": "^5.1.0",
     "@astrojs/ts-plugin": "^1.8.0",
     "@astrojs/vercel": "^7.7.2",
-    "@fern-api/guesty": "^0.0.4",
     "@iconify-json/brandico": "^1.1.8",
     "@iconify-json/circum": "^1.1.11",
     "@iconify-json/fa": "^1.1.8",
@@ -46,12 +44,15 @@
     "astro-icon": "^1.1.0",
     "astro-seo": "^0.8.4",
     "corepack": "^0.28.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.17.1",
     "firebase": "^10.12.3",
     "firebase-admin": "^12.2.0",
     "flowbite": "^2.4.1",
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
     "graphql-yoga": "^5.6.0",
+    "http-proxy-middleware": "^3.0.0",
     "lucide-astro": "^0.408.0",
     "node-fetch": "^2.7.0",
     "plyr": "^3.7.8",
@@ -71,6 +72,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-yaml": "^4.1.2",
+    "@types/jquery": "^3.5.30",
     "rollup-plugin-node-resolve": "^5.2.0"
   }
 }

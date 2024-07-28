@@ -1,6 +1,6 @@
 {
-  "name": "@api/guesty-booking",
-  "version": "1.0.1",
+  "name": "@api/open-api-docs",
+  "version": "1.0.0",
   "main": "./index.ts",
   "types": "./index.d.ts",
   "dependencies": {

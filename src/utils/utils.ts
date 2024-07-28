@@ -20,7 +20,7 @@ export function currency(amount: number) {
   );
 }
 
-export function processListing(title: any, _id: any) {
+export function processListing(title: string, _id: string) {
   return (
     allListings.title = title,
     allListings._id = _id
