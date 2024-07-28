@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 async function refreshAccessToken(): Promise<string> {
-  const response = await fetch('https://lp-botks47iq-adamn1225s-projects.vercel.app/api/refresh-token', {
+  const response = await fetch('https://lp-web-xi.vercel.app/api/refresh-token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

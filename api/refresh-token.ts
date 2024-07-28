@@ -3,7 +3,7 @@
 export default async function handler(req: Request): Promise<Response> {
     try {
       // Your logic to refresh the bearer token
-      const response = await fetch('https://lp-botks47iq-adamn1225s-projects.vercel.app/api/refresh-token', {
+      const response = await fetch('https://lp-web-xi.vercel.app/api/refresh-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
