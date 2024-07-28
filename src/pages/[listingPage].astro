@@ -1,9 +1,9 @@
 ---
 import { processListing } from "../utils/utils.ts"
-import allListings from '../pages/api/guesty'
-import listings1 from "./api/guestyPage1"
-import listings2 from "./api/guestyPage2"
 import ListingPageDetail from '@components/ListingPageDetail.astro'
+import fetchListings from '@/pages/api/guesty';
+
+const allListings = await fetchListings();
 
 
 export function getStaticPaths() {
