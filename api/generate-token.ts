@@ -5,7 +5,7 @@ export default async function handler(req: Request): Promise<Response> {
       // Your credentials and token endpoint
       const clientId = process.env.CLIENT_ID;
       const clientSecret = process.env.CLIENT_SECRET;
-      const tokenUrl = 'https://your-auth-server/token'; // Replace with your token endpoint
+      const tokenUrl = 'https://lp-botks47iq-adamn1225s-projects.vercel.app/api/generate-token'; // Replace with your token endpoint
   
       const response = await fetch(tokenUrl, {
         method: 'POST',
@@ -13,7 +13,8 @@ export default async function handler(req: Request): Promise<Response> {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-          grant_type: 'client_credentials', // Adjust as necessary
+          grant_type: 'client_credentials',
+          scope: 'open-api',
           client_id: clientId!,
           client_secret: clientSecret!,
         }),
