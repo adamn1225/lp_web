@@ -5,7 +5,7 @@ export default async function handler(req: Request): Promise<Response> {
       // Your credentials and token endpoint
       const clientId = process.env.CLIENT_ID;
       const clientSecret = process.env.CLIENT_SECRET;
-      const tokenUrl = 'https://lp-botks47iq-adamn1225s-projects.vercel.app/api/generate-token'; // Replace with your token endpoint
+      const tokenUrl = 'https://lp-web-xi.vercel.app/api/generate-token'; // Replace with your token endpoint
   
       const response = await fetch(tokenUrl, {
         method: 'POST',
