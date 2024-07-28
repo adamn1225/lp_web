@@ -1,11 +1,9 @@
 const options: RequestInit = {
   method: 'GET',
-  headers: {
-    accept: 'application/json; charset=utf-8',
-    authorization: import.meta.env.SECRET_OPEN_PASSWORD
-
-
-  }
+ headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization': `Bearer ${process.env.REFRESH_TOKEN}`,
+        },
 };
   
   
