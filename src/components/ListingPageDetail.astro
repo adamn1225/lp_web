@@ -2,16 +2,17 @@
 import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
-import Container from '@components/Container.astro'
+import PropertySearch from '@components/ui/PropertySearch.astro'
+import { MessageSquare } from 'lucide-astro'
 
-const { title, state, city, description, beds, bathrooms, pictures, PropertyType } = Astro.props;
+const { title, state, city, description, beds, bathrooms, pictures = [], propertyType } = Astro.props;
 
 ---
 
 <Layout title="Property Details"> 
   <main id="PropertyDetails"> 
     <Section>
-      <div class="w-full mx-auto max-w-full px-2">
+      <div class="w-full mx-auto max-w-full px-8 xs:px-4">
         <div class="pb-12 mb-12">
           <section class="relative border-b border-muted-200 pb-12">
             <!-- breadcrumb -->
@@ -112,7 +113,7 @@ const { title, state, city, description, beds, bathrooms, pictures, PropertyType
                             data-darkreader-inline-stroke=""
                             ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
                           </svg>
-                          <span>{PropertyType}</span>
+                          <span>{propertyType}</span>
                         </div>
                         <div class="amenity-content text-center">
                           <p class="text-sm text-muted-400">Property Type</p>
@@ -414,18 +415,29 @@ const { title, state, city, description, beds, bathrooms, pictures, PropertyType
                 <div class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800">
                   <div class="flex items-center justify-between text-sm">
                     <p class="text-muted-400">Type</p>
-                    <p class="text-muted-900">{PropertyType}</p>
+                    <p class="text-muted-900">{propertyType}</p>
                   </div>
                   <div class="flex items-center justify-between text-sm">
                     <p class="text-muted-400">Status</p>
                     <p class="text-muted-900">Available</p>
                   </div>
                 </div>
+                <div class="mb-2">
+                  <PropertySearch />
+                </div>
+                
                 <button
-                  class="bg-cyan-600 mb-6 font-medium text-sm text-white rounded h-11 transition-all duration-300 py-2 px-4 flex items-center justify-center cursor-pointer w-full hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
+                  class="bg-cyan-600 mb-2 font-bold text-sm text-white rounded h-11 transition-all duration-300 py-2 px-4 flex items-center justify-center cursor-pointer w-full hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
                 >
                   Reserve
                 </button>
+
+                <button
+                class="bg-cyan-600 mb-6 font-bold text-sm text-white rounded h-11 transition-all duration-300 py-2 px-4 flex items-center justify-center cursor-pointer w-full hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
+              <span class="pl-2">Inquire about this listing</span> 
+              </button>
                 <!-- map -->
                 <iframe
                   class="min-h-[220px] w-full"

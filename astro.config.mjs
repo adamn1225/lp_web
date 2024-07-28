@@ -1,29 +1,28 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
-//import image from "@astrojs/image";
 import alpinejs from "@astrojs/alpinejs";
 import icon from "astro-icon";
-import vercelServerless from "@astrojs/vercel/serverless";
-import node from "@astrojs/node";
+import vercelServerless from '@astrojs/vercel/serverless';
 import react from '@astrojs/react';
-
 
 // https://astro.build/config
 export default defineConfig({
   vite: {
+    // Add any Vite-specific configuration here if needed
   },
   output: 'hybrid',
   adapter: vercelServerless({
-    mode: "hybrid"
+    isr: true,
   }),
   integrations: [
     tailwind(),
-  // image({
-  // serviceEntryPoint: "@astrojs/image/sharp",
-  // }),
-  icon(), 
-  alpinejs(),
-  react(),
-  
-]
+    icon(),
+    alpinejs(),
+    react(),
+    // Uncomment and configure if you need image support
+    // image({
+    //   serviceEntryPoint: "@astrojs/image/sharp",
+    // }),
+  ],
+
 });

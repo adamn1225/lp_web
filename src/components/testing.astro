@@ -1,0 +1,80 @@
+---
+import { currency } from '@utils/utils'
+import allListings from '@/pages/api/guesty';
+import listings1 from '@/pages/api/guestyPage1';
+
+
+---
+
+
+
+<form>
+    <label>
+      Name
+      <input type="text" id="name" name="name" required />
+    </label>
+    <label>
+      Email
+      <input type="email" id="email" name="email" required />
+    </label>
+    <label>
+      Message
+      <textarea id="message" name="message" required />
+    </label>
+    <button>Send</button>
+  </form>
+
+
+
+<script>
+    const results_data: any[] = [];
+    
+      await fetch(`https://booking.guesty.com/api/listings`)
+       .then((response: Response) => response.json())
+       .then((data) => {
+         const fetches = []
+         var data = data.results
+         data.forEach(function(results: any) {
+           fetches.push(
+             fetch(`https://booking.guesty.com/api/listings?${results.checkIn}&${results.checkOut}`,)
+             .then((response: Response) => response.json())
+             .then((listing: any) => {
+               results["checkIn"] = listing.checkIn;
+               results["checkOut"] = listing.checkOut;
+               
+               results_data.push(results);
+             })
+           );
+         });
+       
+         Promise.all(fetches).then(function() {
+           const html: string = data.map((results: any) => {
+             return `
+             <div class="results" id="results_${results.id}">
+               <img src="results_${results.pictures[0].original}" width="300" height="300" />
+               <h4 id="title">${results.title}</h4>
+             </div>
+             `;
+           }).join(' ');
+           const contentElement = document.querySelector<HTMLElement>('#content');
+           contentElement!.insertAdjacentHTML('beforeend', html);
+         });
+       });
+     
+       document.querySelector("button")?.addEventListener('click', handleClick);
+       
+       function handleClick(): void {
+         const filterStart: string = (document.getElementById("checkIn") as HTMLInputElement).value;
+         const filterEnd: string = (document.getElementById("checkOut") as HTMLInputElement).value;
+       }
+       
+       
+       const filtered_result_data: Array<{ id: number }> = [];
+       
+       filtered_result_data.forEach((results: { id: number }) => {
+         let post_html: HTMLElement | null = document.getElementById(`results_${results.id}`);
+         if (post_html) {
+           post_html.style.display = 'inline';
+         }
+       });
+     </script>

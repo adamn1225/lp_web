@@ -2,9 +2,12 @@
 import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
-
 import GuestyListings from '@components/GuestyListings.astro'
 import Page2 from '@components/Page2.astro'
+import DateForm from '@components/filterForm'
+import MyForm from '@components/filterForm'
+
+
 
 ---
 
@@ -13,52 +16,25 @@ import Page2 from '@components/Page2.astro'
   <main id="Properties">
     <!--Properties-->
     <Section>
-     
-    
-        <div class="pt-28 pb-4 border-t-2 px-8">
-<!-- 
-            <h2 class=" text-5xl pb-2 font-sans text-muted-900 text-center">Available properties</h2>
-            <h4 class="text-xl text-muted-500 leading-5 text-center">We found 25 matching properties</h4> -->
 
-            <!-- <div class="relative">
-              <input
-                type="text"
-                class="w-full sm:w-80 peer outline-none focus:outline-none p-3 ps-12 border border-gray-400 hover:border-muted-300 text-muted-600 placeholder:text-muted-200 transition-all duration-300 rounded h-12 text-base"
-                placeholder="Filter..."
-              />
-              <div class="peer-focus:[&>svg]:text-primary-500 absolute start-0 top-0 grid place-items-center h-12 w-12">
-                <Icon class="size-5 text-muted-300 stroke-[1.6px] transition-all duration-300" name="lucide:search" />
-              </div>
-            </div> -->
-         
+ <div class="px-36 mt-36">
+          <div class="py-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            
+            <GuestyListings />
+            
+          </div>
+  
+          <span id="listing2" class="hidden py-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <Page2 />
+          </span>
+  
+          <span class="flex justify-center align-center mb-4">
+            <button id="showHide" class="bg-cyan-600 px-6 py-2 shadow-md shadow-cyan-500/30 rounded-3xl text-white"> Show More </button>
+          </span>
         </div>
-        
-        <!-- property cards -->
-        <div class="py-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
-          <GuestyListings />
-
-        </div>
-
-        
-        <span id="listing2" class="hidden py-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4">
-          <Page2 />
-        </span>
-        <span class="flex justify-center align-center mb-4">
-          <button id="showHide" class="bg-cyan-600 px-6 py-2 shadow-md shadow-cyan-500/30 rounded-3xl text-white"> Show More </button>
-        </span>
-        
-       
-       
-         
-          
-         
+ </div>
       
-
-      </div>
-      </Container>
-      
-    </Section>
-    
+      </Container>     
+    </Section>   
   </main>
-
 </Layout>
