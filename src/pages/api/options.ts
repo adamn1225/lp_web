@@ -1,10 +1,83 @@
-const headers = {'Content-Type':'application/json',
-    'Access-Control-Allow-Origin':'*',
-    'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS', authorization: "Bearer eyJraWQiOiI1OVBtSUFVdG91YjNQS1RWaE1VRF9JZ0E1WUd6QUN4djhPMlkteTdnS1JjIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULlBNcDhaanRhZUdPNGZ2b3VHRTRWelZoYXc0VF8ySHBWR09uRVoweUtSS0UiLCJpc3MiOiJodHRwczovL2xvZ2luLmd1ZXN0eS5jb20vb2F1dGgyL2F1czFwOHFyaDUzQ2NRVEk5NWQ3IiwiYXVkIjoiaHR0cHM6Ly9vcGVuLWFwaS5ndWVzdHkuY29tIiwiaWF0IjoxNzIxOTQ2ODcwLCJleHAiOjE3MjIwMzMyNzAsImNpZCI6IjBvYWlkZ2R0eTZORG9kMGpxNWQ3Iiwic2NwIjpbIm9wZW4tYXBpIl0sInJlcXVlc3RlciI6IkVYVEVSTkFMIiwiYWNjb3VudElkIjoiNjUzYjBmOGQ3ZTg5ODJkZWZhZmFhZjViIiwic3ViIjoiMG9haWRnZHR5Nk5Eb2QwanE1ZDciLCJ1c2VyUm9sZXMiOlt7InJvbGVJZCI6eyJwZXJtaXNzaW9ucyI6WyJhZG1pbiJdfX1dLCJyb2xlIjoidXNlciIsImNsaWVudFR5cGUiOiJvcGVuYXBpIiwiaWFtIjoidjMiLCJhY2NvdW50TmFtZSI6IkxpbmUgcHJvcGVydGllcyBJbmMiLCJuYW1lIjoibHBfd2ViIn0.hvpHIQoV1CcM8xI6y77uuqQ94FLkw1Ye-yU-kKN_M3EYfFQYFFHbWLswLsyAiUC1HFwJWk58hsbe6eiuyt89vj9jQ1BJhGlQkBx_gSmD1sk73Tq6ozSSgkbKUzFl08NnTNX3UmChcp9-H2uId6Z_p4cm7HlxGuc9fvFdE9Hxax72ncG2W8TiK-Xsa-hLlDs10d5WVI_l-fHNWAFVJA6EeVQi7fpGtwL8nz4Iogmph_cHYGgTRu4q1-1z1IUvgjeK9am8Xk-sLbErkluW_psAZFIiKW1pgF8KOgBWgrJTJi16e0_xNQRv55a9q_tVs3V3D3yIQiMgt0JjwQ5LiQJEwQ"
-}
+// tokenUtils.ts
 
-    const response = {
-        statusCode: 200,
-        headers:headers,
+// TypeScript interface for the response from your refresh token endpoint
+interface RefreshTokenResponse {
+    token: string;
+  }
+  
+  // Function to refresh the token
+  export async function refreshToken(): Promise<string | null> {
+    try {
+      const response = await fetch("https://lp-botks47iq-adamn1225s-projects.vercel.app/api/refresh-token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.REFRESH_TOKEN}` // Replace with the token used for refreshing
+        },
+        body: JSON.stringify({ /* your data here */ })
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const data: RefreshTokenResponse = await response.json();
+      console.log("Token refreshed successfully:", data.token);
+  
+      // Store the new token securely (e.g., in localStorage)
+      if (data.token) {
+        localStorage.setItem('authToken', data.token);
+        return data.token;
+      } else {
+        throw new Error("No token received.");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      return null;
+    }
+  }
+  
+  // Function to get the stored token
+  export function getStoredToken(): string | null {
+    return localStorage.getItem('authToken');
+  }
+  
+  // Function to make an authenticated API request
+  export async function makeAuthenticatedRequest(url: string, options: RequestInit = {}): Promise<any> {
+    // Retrieve the token from local storage
+    const token = getStoredToken();
+  
+    // Add Authorization header if the token is available
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+      ...(token && { "Authorization": `Bearer ${token}` })
     };
-export default response;
+  
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          ...headers,
+          ...options.headers
+        }
+      });
+  
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Token might be expired, refresh it
+          const newToken = await refreshToken();
+          if (newToken) {
+            // Retry the request with the new token
+            return makeAuthenticatedRequest(url, options);
+          }
+        }
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      return await response.json();
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+  
