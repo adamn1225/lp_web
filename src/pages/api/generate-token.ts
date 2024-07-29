@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 interface TokenResponse {
   access_token: string;
 }
