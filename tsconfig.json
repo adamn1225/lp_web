@@ -25,7 +25,8 @@
       }
     ],
     "types": [
-      "astro/client"
-    ]
+      "astro/client",
+      "node"
+    ],
   }
 }

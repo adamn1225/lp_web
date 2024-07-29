@@ -73,6 +73,7 @@
   "devDependencies": {
     "@rollup/plugin-yaml": "^4.1.2",
     "@types/jquery": "^3.5.30",
+    "@types/node": "^22.0.0",
     "@types/node-fetch": "^2.6.11",
     "rollup-plugin-node-resolve": "^5.2.0"
   }
