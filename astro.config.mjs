@@ -10,7 +10,7 @@ export default defineConfig({
   vite: {
     // Add any Vite-specific configuration here if needed
   },
-  output: 'hybrid',
+  output: 'static',
   adapter: vercel(),
   integrations: [
     tailwind(),
