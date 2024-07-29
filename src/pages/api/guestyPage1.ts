@@ -48,7 +48,7 @@ async function fetchListings() {
     },
   };
   
-  const listings = await fetch('https://open-api.guesty.com/v1/listings?limit=100', options);
+  const listings = await fetch('https://open-api.guesty.com/v1/listings?limit=25', options);
   
   if (!listings.ok) {
     const errorText = await listings.text();
