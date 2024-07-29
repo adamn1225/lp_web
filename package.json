@@ -54,6 +54,7 @@
     "graphql-yoga": "^5.6.0",
     "http-proxy-middleware": "^3.0.0",
     "lucide-astro": "^0.408.0",
+    "node-fetch": "^3.3.2",
     "plyr": "^3.7.8",
     "qs": "^6.12.2",
     "react": "^18.3.1",
@@ -72,6 +73,7 @@
   "devDependencies": {
     "@rollup/plugin-yaml": "^4.1.2",
     "@types/jquery": "^3.5.30",
+    "@types/node-fetch": "^2.6.11",
     "rollup-plugin-node-resolve": "^5.2.0"
   }
 }

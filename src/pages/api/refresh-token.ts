@@ -1,5 +1,4 @@
-// src/api/refresh-token.ts
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(req: any, res: any): Promise<void> {
   try {
     const response = await fetch('https://lp-web-xi.vercel.app/api/refresh-token', {
       method: 'POST',
@@ -14,14 +13,9 @@ export default async function handler(req: Request): Promise<Response> {
     }
 
     const data = await response.json();
-    return new Response(JSON.stringify({ success: true, data }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    res.status(200).json({ success: true, data });
   } catch (error) {
-    return new Response(JSON.stringify({ success: false, message: error.message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    console.error('Error refreshing token:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
 }
