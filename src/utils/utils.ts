@@ -1,5 +1,7 @@
 import { APP } from "../data/config";
-import allListings from "../pages/api/guesty.ts"
+import fetchListings from '../pages/api/guesty';
+
+const allListings = await fetchListings();
 // set page title
 export function setTitle(title: string) {
   return title === "" ? APP.name : APP.name + " - " + title;
