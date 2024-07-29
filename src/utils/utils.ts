@@ -1,5 +1,5 @@
 import { APP } from "../data/config";
-import fetchListings from '../pages/api/guesty';
+import fetchListings from '../pages/api/fetch-listings';
 
 const allListings = await fetchListings();
 // set page title
