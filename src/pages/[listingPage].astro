@@ -3,12 +3,13 @@ import { processListing } from "../utils/utils.ts"
 import ListingPageDetail from '@components/ListingPageDetail.astro'
 import fetchListings from '@/pages/api/fetch-listings.ts';
 
-const allListings = await fetchListings();
 
 
-export function getStaticPaths() {
+
+export async function getStaticPaths() {
 // let query = parseInt(allListings.publicDescription);
 // let desc = allListings.find((publicDescription: any) => publicDescription === query);
+const allListings = await fetchListings();
 const paths = allListings.map(() => ({
 params: {
   listingPage: processListing(allListings.title, allListings._id) 
@@ -20,7 +21,7 @@ props: {
   city: allListings.address.city,
   state: allListings.address.state,
   description: allListings.picture.title,
-  PropertyType: allListings.propertyType,
+  propertyType: allListings.propertyType,
   bathrooms: allListings.bathrooms,
   pictures: allListings.pictures,
   beds: allListings.beds
@@ -29,7 +30,7 @@ props: {
 
 return paths;
 }
-const {description, title, city, state, beds, PropertyType, bathrooms, pictures, _id} = Astro.props;
+const {description, title, city, state, beds, propertyType, bathrooms, pictures, _id} = Astro.props;
 
 ---
 
@@ -39,7 +40,7 @@ const {description, title, city, state, beds, PropertyType, bathrooms, pictures,
           city={city}
           state={state}
           description={description}
-          PropertyType={PropertyType}
+          PropertyType={propertyType}
           bathrooms={bathrooms}
           pictures={pictures}
           beds={beds}
