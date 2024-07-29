@@ -10,7 +10,7 @@ export async function getStaticPaths() {
 // let query = parseInt(allListings.publicDescription);
 // let desc = allListings.find((publicDescription: any) => publicDescription === query);
 const allListings = await fetchListings();
-const paths = allListings.map(() => ({
+const paths = allListings.map((listing: any) => ({
 params: {
   listingPage: processListing(allListings.title, allListings._id) 
 },
