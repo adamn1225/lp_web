@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 export default async function handler(req: any, res: any): Promise<void> {
   try {
     const response = await fetch('https://lp-web-xi.vercel.app/api/refresh-token', {

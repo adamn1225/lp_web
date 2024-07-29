@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 // Function to refresh the access token
 async function refreshAccessToken(): Promise<string> {
   try {
