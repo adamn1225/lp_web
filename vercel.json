@@ -2,8 +2,7 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@astrojs/vercel",
-      "config": { "distDir": "dist" }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
