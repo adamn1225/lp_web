@@ -1,8 +1,6 @@
 // src/api/refresh-token.ts
-
 export default async function handler(req: Request): Promise<Response> {
   try {
-    // Your logic to refresh the bearer token
     const response = await fetch('https://lp-web-xi.vercel.app/api/refresh-token', {
       method: 'POST',
       headers: {
@@ -16,8 +14,6 @@ export default async function handler(req: Request): Promise<Response> {
     }
 
     const data = await response.json();
-    // Process the response or save the new token
-    
     return new Response(JSON.stringify({ success: true, data }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

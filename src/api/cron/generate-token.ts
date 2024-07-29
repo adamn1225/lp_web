@@ -10,7 +10,7 @@ export default async function handler(req: Request): Promise<Response> {
     const response = await fetch(tokenUrl, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
       body: new URLSearchParams({
         grant_type: 'client_credentials',

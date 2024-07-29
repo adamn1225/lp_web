@@ -1,45 +1,65 @@
-import fetch from 'node-fetch';
 
+// Function to refresh the access token
 async function refreshAccessToken(): Promise<string> {
-  const response = await fetch('https://lp-web-xi.vercel.app/api/refresh-token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.REFRESH_TOKEN}`
-    },
-  });
-  
-  const data = await response.json();
-  if (!data.accessToken) {
-    throw new Error('Failed to refresh access token');
+  try {
+    const response = await fetch('https://lp-web-xi.vercel.app/api/refresh-token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.REFRESH_TOKEN}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to refresh token: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    if (!data.accessToken) {
+      throw new Error('Failed to refresh access token');
+    }
+
+    return data.accessToken;
+  } catch (error) {
+    console.error('Error refreshing token:', error);
+    throw error; // Re-throw error to be handled by the caller
   }
-  
-  return data.accessToken;
 }
 
+// Function to fetch listings
 async function fetchListings() {
-  let accessToken = process.env.ACCESS_TOKEN;  // Assume you have an initial access token
-  
-  // Refresh token if needed (e.g., access token expired)
-  if (!accessToken) {
-    accessToken = await refreshAccessToken();
-    process.env.ACCESS_TOKEN = accessToken;  // Update the environment variable or use another secure storage
+  try {
+    let accessToken = process.env.ACCESS_TOKEN; // Assume you have an initial access token
+
+    // Refresh token if needed (e.g., access token expired)
+    if (!accessToken) {
+      accessToken = await refreshAccessToken();
+      // Use a more secure storage for tokens in production
+      process.env.ACCESS_TOKEN = accessToken;
+    }
+
+    const options: RequestInit = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    };
+
+    const response = await fetch('https://open-api.guesty.com/v1/listings?limit=100', options);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch listings: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const listings1 = data.results;
+
+    return listings1;
+  } catch (error) {
+    console.error('Error fetching listings:', error);
+    throw error; // Re-throw error to be handled by the caller
   }
-  
-  const options: RequestInit = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-    // No body required for GET request, so omit it
-  };
-  
-  const listings = await fetch('https://open-api.guesty.com/v1/listings?limit=100');
-  const data = await listings.json();
-  const allListings = data.results;
-  
-  return allListings;
 }
 
 export default fetchListings;
