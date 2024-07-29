@@ -3,30 +3,22 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@layouts/*": [
-        "src/layouts/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@data/*": [
-        "src/data/*"
-      ],
-      "@/*": [
-        "src/*"
-      ]
+      "@layouts/*": ["src/layouts/*"],
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"],
+      "@data/*": ["src/data/*"],
+      "@/*": ["src/*"]
     },
+    "outDir": "./dist", // Ensure the output directory is set correctly
     "plugins": [
       {
         "name": "@astrojs/ts-plugin"
       }
     ],
-    "types": [
-      "astro/client",
-      "node"
-    ],
+    "types": ["astro/client", "node"],
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": false
   }
 }

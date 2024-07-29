@@ -1,6 +1,17 @@
 {
+    "builds": [
+      {
+        "src": "package.json",
+        "use": "@vercel/static-build",
+        "config": { "distDir": "dist" }
+      }
+    ],
+    "routes": [
+      { "src": "/(.*)", "dest": "/" }
+    ],
     "crons": [{
-      "path": "/api/cron",
-      "schedule": "0 10 * * *"
-    }]
+        "path": "/api/cron",
+        "schedule": "0 10 * * *"
+      }]
   }
+  
