@@ -1,4 +1,3 @@
-
 // Function to refresh the access token
 async function refreshAccessToken(): Promise<string> {
   try {
@@ -15,14 +14,16 @@ async function refreshAccessToken(): Promise<string> {
     }
 
     const data = await response.json();
+    console.log('Refresh token response data:', data); // Log response data for debugging
+
     if (!data.accessToken) {
-      throw new Error('Failed to refresh access token');
+      throw new Error('Access token not found in refresh token response');
     }
 
     return data.accessToken;
   } catch (error) {
     console.error('Error refreshing token:', error);
-    throw error; // Re-throw error to be handled by the caller
+    throw error;
   }
 }
 
@@ -35,7 +36,7 @@ async function fetchListings() {
     if (!accessToken) {
       accessToken = await refreshAccessToken();
       // Use a more secure storage for tokens in production
-      process.env.ACCESS_TOKEN = accessToken;
+      // process.env.ACCESS_TOKEN = accessToken; // Not recommended for production
     }
 
     const options: RequestInit = {
@@ -53,13 +54,18 @@ async function fetchListings() {
     }
 
     const data = await response.json();
+    console.log('Listings data:', data); // Log listings data for debugging
     const listings1 = data.results;
 
     return listings1;
   } catch (error) {
     console.error('Error fetching listings:', error);
-    throw error; // Re-throw error to be handled by the caller
+    throw error;
   }
 }
+
+console.log('ACCESS_TOKEN:', process.env.ACCESS_TOKEN);
+console.log('REFRESH_TOKEN:', process.env.REFRESH_TOKEN);
+
 
 export default fetchListings;
