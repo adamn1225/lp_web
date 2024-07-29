@@ -7,11 +7,10 @@
       }
     ],
     "routes": [
-      { "src": "/(.*)", "dest": "/" }
+      { "src": "/(.*)", "dest": "/$1" }
     ],
     "crons": [{
         "path": "/api/cron",
         "schedule": "0 10 * * *"
       }]
   }
-  
