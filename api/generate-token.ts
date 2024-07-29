@@ -1,5 +1,7 @@
+// src/api/generate-token.ts
 interface TokenResponse {
   access_token: string;
+  refresh_token: string;
 }
 
 export default async function handler(req: Request): Promise<Response> {
@@ -8,7 +10,6 @@ export default async function handler(req: Request): Promise<Response> {
     const clientSecret = process.env.CLIENT_SECRET;
     const tokenUrl = 'https://open-api.guesty.com/oauth2/token';
 
-    // Ensure clientId and clientSecret are defined
     if (!clientId || !clientSecret) {
       throw new Error('Client ID or Client Secret is missing');
     }
@@ -27,17 +28,17 @@ export default async function handler(req: Request): Promise<Response> {
     });
 
     if (!response.ok) {
-      const errorText = await response.text(); // Get error message if available
+      const errorText = await response.text();
       throw new Error(`Failed to fetch token: ${errorText}`);
     }
 
     const data: TokenResponse = await response.json();
-    return new Response(JSON.stringify({ success: true, token: data.access_token }), {
+    return new Response(JSON.stringify({ success: true, token: data.access_token, refreshToken: data.refresh_token }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.error('Error generating token:', error); // Log error for debugging
+    console.error('Error generating token:', error);
     return new Response(JSON.stringify({ success: false, message: error.message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },

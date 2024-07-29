@@ -1,24 +1,38 @@
 ---
-import allListings from '../pages/api/guesty'
-import listings2 from '@/pages/api/guestyPage2';
+const fetchListings = async () => {
+  let accessToken = process.env.ACCESS_TOKEN;  // Assume you have an initial access token
 
-// const pages = [
-//   {
-//     slug: allListings.title,
-//     id: allListings.title,
-//   }
+  // Refresh token if needed (e.g., access token expired)
+  if (!accessToken) {
+    const response = await fetch('/api/refresh-token', { method: 'POST' });
+    if (response.ok) {
+      const data = await response.json();
+      accessToken = data.accessToken;
+      // Optionally store the new access token
+    } else {
+      throw new Error('Failed to refresh access token');
+    }
+  }
 
-  
-// ]
-// const {slug} = Astro.params;
-// const page = pages.find((page) => page.slug === slug);
-// if (!page) return Astro.redirect("/404");
-// const { id } = page;
+  const options: RequestInit = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  };
+
+  const listingsResponse = await fetch('https://external-api.com/v1/listings?limit=10');
+  const data = await listingsResponse.json();
+  return data.results;
+};
+
+const listings = await fetchListings();
 
 
 ---
 {
-    listings2.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
+    listings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
 <a href={_id}>
     <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
             <div class="bg-muted-100 dark:bg-muted-800 ">
