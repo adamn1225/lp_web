@@ -2,7 +2,7 @@ const options: RequestInit = {
   method: 'GET',
  headers: {
           'Content-Type': 'application/json; charset=utf-8',
-          'Authorization': `Bearer ${process.env.REFRESH_TOKEN}`,
+          'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`,
         },
 };
   
