@@ -3,7 +3,6 @@ import fetchListings from '@/pages/api/fetch-listings.ts';
 
 const listings = await fetchListings();
 
-
 ---
 {
     listings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (

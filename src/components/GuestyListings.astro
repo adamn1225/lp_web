@@ -2,6 +2,20 @@
 import fetchListings from '@/pages/api/fetch-listings.ts';
 
 const listings = await fetchListings();
+
+const pages = [
+  {
+    slug: listings._id,
+    id: listings.title,
+  }
+  
+]
+
+const {slug} = Astro.params;
+const page = pages.find((page) => page.slug === slug);
+if (!page) return Astro.redirect("/404");
+const { id } = page;
+
 ---
 
   {
