@@ -9,7 +9,7 @@ export default defineConfig({
   vite: {
     // Add any Vite-specific configuration here if needed
   },
-  output: 'serverless',
+  output: 'hybrid',
   adapter: vercel(),
   integrations: [
     tailwind(),
