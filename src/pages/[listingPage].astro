@@ -1,40 +1,40 @@
 ---
-export const prerender = true
+export const prerender = true;
 import { processListing } from "../utils/utils.ts"
 import ListingPageDetail from '@components/ListingPageDetail.astro'
 import fetchListings from '@/pages/api/fetch-listings.ts';
 
+const listings = await fetchListings();
 
 
 
 export async function getStaticPaths() {
-// let query = parseInt(allListings.publicDescription);
-// let desc = allListings.find((publicDescription: any) => publicDescription === query);
-const allListings = await fetchListings();
-const paths = allListings.map((listing: any) => ({
+
+const paths = listings.map((testListings: any) => ({
 params: {
-  listingPage: processListing(allListings.title, allListings._id) 
+  listingPage: processListing(listings.title, listings._id) 
 },
 props: {
-  lineListing: allListings,
-  _id: allListings._id,
-  title: allListings.title,
-  address: allListings.address,
-  description: allListings.Description,
-  propertyType: allListings.PropertyType,
-  bathrooms: allListings.bathrooms,
-  pictures: allListings.pictures,
-  beds: allListings.beds
+  listings: listings,
+  _id: listings._id,
+  title: listings.title,
+  address: listings.address,
+  description: listings.Description,
+  propertyType: listings.PropertyType,
+  bathrooms: listings.bathrooms,
+  pictures: listings.pictures,
+  beds: listings.beds
 }
 }));
 
 return paths;
 }
-const {description, title, address, beds, propertyType, bathrooms, pictures, _id} = Astro.props;
+const {description, title, address, beds, propertyType, bathrooms, pictures, lineListing = [], _id} = Astro.props;
 
 ---
 
 <ListingPageDetail
+          lineListing={lineListing}
           title={title}
           _id={_id}
           address={address}

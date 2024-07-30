@@ -1,7 +1,9 @@
 import { APP } from "../data/config";
-import fetchListings from '../pages/api/fetch-listings';
+import testListings from "../pages/api/localdev";
+import fetchListings from '@/pages/api/fetch-listings.ts';
 
-const allListings = await fetchListings();
+const listings = await fetchListings();
+
 // set page title
 export function setTitle(title: string) {
   return title === "" ? APP.name : APP.name + " - " + title;
@@ -23,5 +25,9 @@ export function currency(amount: number) {
 }
 
 export function processListing(title: string, _id: string) {
-  return `${title}-${_id}`; // Example: "example-title-123"
+  return (
+    title === "" ? listings.title : title,
+    _id === "" ?  listings._id :  _id
+  )
+
 }

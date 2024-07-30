@@ -2,7 +2,7 @@
 ///<reference types="astro/client" />
 
 interface ImportMetaEnv {
-  readonly SECRET_OPEN_PASSWORD: string;
+  readonly SECRET_ACCESS_TOKEN: string;
   // readonly SECRET_OPEN_PASSWORD: string;
   // readonly FIREBASE_PRIVATE_KEY_ID: string;
   // readonly FIREBASE_PRIVATE_KEY: string;
