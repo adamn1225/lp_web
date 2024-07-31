@@ -1,16 +1,16 @@
 ---
-export const prerender = false;
+export const prerender = true;
 import { processListing } from "../utils/utils.ts"
 import ListingPageDetail from '@components/ListingPageDetail.astro'
 import fetchListings from '@/pages/api/fetch-listings.ts';
 
-const listings = await fetchListings();
+
 
 
 
 export async function getStaticPaths() {
-
-const paths = listings.map((testListings: any) => ({
+  const listings = await fetchListings();
+const paths = listings.map((listing) => ({
 params: {
   listingPage: processListing(listings.title, listings._id) 
 },
