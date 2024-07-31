@@ -66,5 +66,7 @@ jobs:
       run: git add .
     - name: Commit change to repo
       run: git commit -m "refresh"
+       git config user.email "anoah1225@gmail.com"
+       git config user.name "adamn1225"
     - name: Push change to repo
       run: git push origin m
