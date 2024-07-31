@@ -18,16 +18,21 @@ jobs:
         npm install -g pnpm
         pnpm setup
       shell: bash
+      env:
+        SHELL: /bin/bash
 
     - name: Verify pnpm Installation
       run: pnpm --version
       shell: bash
+      env:
+        SHELL: /bin/bash
 
     - name: Generate Bearer Token
       id: generate-token
       env:
         CLIENT_ID: ${{ secrets.GUESTY_CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.GUESTY_CLIENT_SECRET }}
+        SHELL: /bin/bash
       run: |
         RESPONSE=$(curl --location --request POST 'https://open-api.guesty.com/oauth2/token' \
           --header 'accept: application/json' \
@@ -44,7 +49,6 @@ jobs:
 
         # Set the bearer token as an environment variable
         echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
-      shell: bash
 
     - name: Use Bearer Token in Astro Project
       run: |
@@ -55,6 +59,8 @@ jobs:
         # Log the .env file content for debugging purposes
         cat .env
       shell: bash
+      env:
+        SHELL: /bin/bash
 
     - name: Install Dependencies and Build Project
       run: |
@@ -68,3 +74,4 @@ jobs:
       env:
         BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
         VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
+        SHELL: /bin/bash
