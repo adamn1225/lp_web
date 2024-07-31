@@ -1,10 +1,10 @@
-
+import { APP } from "../data/config";
 import testListings from "../pages/api/localdev";
 import fetchListings from '@/pages/api/fetch-listings.ts';
 
 const listings = await fetchListings();
 
-// set page title
+
 
 export function currency(amount: number) {
   return (
