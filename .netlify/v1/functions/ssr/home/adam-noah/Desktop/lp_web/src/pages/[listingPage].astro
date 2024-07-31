@@ -1,0 +1,52 @@
+---
+import { processListing } from "../utils/utils.ts"
+import ListingPageDetail from '@components/ListingPageDetail.astro'
+
+
+
+
+
+
+export async function getStaticPaths() {
+  const apiToken = import.meta.env.VITE_API_TOKEN;
+const response = await fetch('https://open-api.guesty.com/v1/listings?limit=100', {
+  headers: {
+    'Authorization': `Bearer ${apiToken}`
+  }
+});
+const data = await response.json();
+const listings = data.results
+const paths = listings.map((listings: any) => ({
+params: {
+  listingPage: processListing(listings.title, listings._id) 
+},
+props: {
+  listings: listings,
+  _id: listings._id,
+  title: listings.title,
+  address: listings.address,
+  description: listings.Description,
+  propertyType: listings.PropertyType,
+  bathrooms: listings.bathrooms,
+  pictures: listings.pictures,
+  beds: listings.beds
+}
+}));
+
+return paths;
+}
+const {description, title, address, beds, propertyType, bathrooms, pictures, lineListing = [], _id} = Astro.props;
+
+---
+
+<ListingPageDetail
+          lineListing={lineListing}
+          title={title}
+          _id={_id}
+          address={address}
+          description={description}
+          PropertyType={propertyType}
+          bathrooms={bathrooms}
+          pictures={pictures}
+          beds={beds}
+        />
