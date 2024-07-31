@@ -1,24 +1,33 @@
 {
+  "extends": "astro/tsconfigs/base",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@layouts/*": ["src/layouts/*"],
-      "@components/*": ["src/components/*"],
-      "@utils/*": ["src/utils/*"],
-      "@data/*": ["src/data/*"],
-      "@/*": ["src/*"]
+      "@layouts/*": [
+        "src/layouts/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@data/*": [
+        "src/data/*"
+      ],
+      "@/*": [
+        "src/*"
+      ]
     },
-    "types": ["node", "dotenv"],
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "module": "es2022",    // Update module to support top-level await
-    "target": "es2017",    // Update target to support top-level await
-    "strict": true,
+    "types": [
+      "node",
+      "dotenv",
+      "astro/client"
+    ],
+    "module": "ESNext",
+    "target": "ES2020",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true
-  },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "dist"]
+    "outDir": "./dist"
+  }
 }
