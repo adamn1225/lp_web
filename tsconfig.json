@@ -17,7 +17,7 @@
     "outDir": "./dist",
     "isolatedModules": true,
     "typeRoots": ["./node_modules/@types"],
-    "types": ["node", "astro/client"],
+    "types": "astro/client",
     "plugins": [
       {
         "name": "@astrojs/ts-plugin"
