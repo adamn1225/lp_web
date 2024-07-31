@@ -29,9 +29,6 @@ importers:
       '@astrojs/tailwind':
         specifier: ^5.1.0
         version: 5.1.0(astro@4.12.3(@types/node@22.0.2)(sass@1.77.8)(typescript@5.5.4))(tailwindcss@3.4.7(ts-node@10.9.2(@types/node@22.0.2)(typescript@5.5.4)))(ts-node@10.9.2(@types/node@22.0.2)(typescript@5.5.4))
-      '@astrojs/ts-plugin':
-        specifier: ^1.9.1
-        version: 1.9.1
       '@astrojs/vercel':
         specifier: ^7.7.2
         version: 7.7.2(astro@4.12.3(@types/node@22.0.2)(sass@1.77.8)(typescript@5.5.4))(react@18.3.1)
@@ -156,6 +153,9 @@ importers:
       '@astrojs/check':
         specifier: ^0.7.0
         version: 0.7.0(typescript@5.5.4)
+      '@astrojs/ts-plugin':
+        specifier: ^1.9.1
+        version: 1.9.1
       '@rollup/plugin-yaml':
         specifier: ^4.1.2
         version: 4.1.2(rollup@4.19.1)

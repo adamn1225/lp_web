@@ -1,26 +1,13 @@
 {
-  "extends": "astro/tsconfigs/base",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@layouts/*": [
-        "src/layouts/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@data/*": [
-        "src/data/*"
-      ],
-      "@/*": [
-        "src/*"
-      ]
+      "@layouts/*": ["src/layouts/*"],
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"],
+      "@data/*": ["src/data/*"],
+      "@/*": ["src/*"]
     },
-    "types": ["node"], // Ensure these types are included
-    "typeRoots": ["node_modules/@types"],
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -29,13 +16,9 @@
     "resolveJsonModule": true,
     "outDir": "./dist",
     "isolatedModules": true,
-    "plugins": [
-      {
-        "name": "@astrojs/ts-plugin"
-      }
-    ],
-    "types": [
-      "astro/client"
-    ],
-  }
+    "typeRoots": ["node_modules/@types"],
+    "types": ["node", "astro/client"] // Include types here
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
