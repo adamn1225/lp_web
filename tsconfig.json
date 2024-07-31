@@ -16,8 +16,13 @@
     "resolveJsonModule": true,
     "outDir": "./dist",
     "isolatedModules": true,
-    "typeRoots": ["node_modules/@types"],
-    "types": ["node", "astro/client"] // Include types here
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["node", "astro/client"],
+    "plugins": [
+      {
+        "name": "@astrojs/ts-plugin"
+      },
+   ],
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
