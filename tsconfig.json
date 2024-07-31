@@ -17,6 +17,14 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
+  "plugins": [
+    {
+      "name": "@astrojs/ts-plugin"
+    }
+  ],
+  "types": [
+    "astro/client"
+  ],
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]
 }
