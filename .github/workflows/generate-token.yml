@@ -13,22 +13,20 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install pnpm
-      run: |
-        npm install -g pnpm
-
     - name: Generate Bearer Token
       id: generate-token
       env:
-        CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        CLIENT_ID: ${{ secrets.GUESTY_CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.GUESTY_CLIENT_SECRET }}
       run: |
-        # Replace the following URL and request with the specifics of your API
-        RESPONSE=$(curl --location --request POST "https://open-api.guesty.com/oauth2/token" \
-          -H "accept: application/json" \
-          -d "scope=open-api&grant_type=client_credentials&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}")
+        RESPONSE=$(curl --location --request POST 'https://open-api.guesty.com/oauth2/token' \
+          --header 'accept: application/json' \
+          --data-urlencode 'grant_type=client_credentials' \
+          --data-urlencode 'scope=open-api' \
+          --data-urlencode "client_secret=${CLIENT_SECRET}" \
+          --data-urlencode "client_id=${CLIENT_ID}")
 
-        # Extract the bearer token from the response (update jq filter as needed)
+        # Extract the bearer token from the response
         BEARER_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
 
         # Log the bearer token for debugging purposes (remove this in production)
@@ -40,13 +38,11 @@ jobs:
     - name: Use Bearer Token in Astro Project
       run: |
         # Ensure the .env file exists
-        touch .env.production
+        touch .env
         # Append the bearer token to the .env file
-        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env.production
+        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
         # Log the .env file content for debugging purposes
-        cat .env.production
-
-      
+        cat .env
 
     - name: Install Dependencies and Build Project
       run: |
