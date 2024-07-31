@@ -13,6 +13,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Install pnpm
+      run: |
+        npm install -g pnpm
+
     - name: Generate Bearer Token
       id: generate-token
       env:
@@ -31,17 +35,13 @@ jobs:
         echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
 
     - name: Use Bearer Token in Astro Project
-      env:
-        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
       run: |
-        # Example: Use the bearer token in a script
-        echo "Using Bearer Token: $BEARER_TOKEN"
-        # Example usage: update a .env file or call a script
-        echo "VITE_API_TOKEN=$BEARER_TOKEN" >> .env
+        # Ensure the .env file exists
+        touch .env
+        # Append the bearer token to the .env file
+        echo "VITE_API_TOKEN=${{ env.BEARER_TOKEN }}" >> .env
 
-    - name: Build and Deploy Astro Project
-      env:
-        VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
+    - name: Install Dependencies and Build Project
       run: |
         # Install dependencies
         pnpm install
@@ -49,3 +49,7 @@ jobs:
         pnpm build
         # Deploy or perform any other necessary tasks
         # e.g., pnpm deploy
+      shell: /usr/bin/bash -e {0}
+      env:
+        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
+        VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
