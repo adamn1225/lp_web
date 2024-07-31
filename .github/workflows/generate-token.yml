@@ -17,7 +17,11 @@ jobs:
       run: |
         npm install -g pnpm
         pnpm setup
-      shell: /bin/bash
+      shell: bash
+
+    - name: Verify pnpm Installation
+      run: pnpm --version
+      shell: bash
 
     - name: Generate Bearer Token
       id: generate-token
@@ -40,6 +44,7 @@ jobs:
 
         # Set the bearer token as an environment variable
         echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
+      shell: bash
 
     - name: Use Bearer Token in Astro Project
       run: |
@@ -49,6 +54,7 @@ jobs:
         echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
         # Log the .env file content for debugging purposes
         cat .env
+      shell: bash
 
     - name: Install Dependencies and Build Project
       run: |
@@ -58,7 +64,7 @@ jobs:
         pnpm build
         # Deploy or perform any other necessary tasks
         # e.g., pnpm deploy
-      shell: /bin/bash
+      shell: bash
       env:
         BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
         VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
