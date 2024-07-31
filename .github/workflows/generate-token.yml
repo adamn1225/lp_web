@@ -13,6 +13,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Install pnpm
+      run: |
+        npm install -g pnpm
+        pnpm setup
+      shell: /bin/bash
+
     - name: Generate Bearer Token
       id: generate-token
       env:
@@ -52,7 +58,7 @@ jobs:
         pnpm build
         # Deploy or perform any other necessary tasks
         # e.g., pnpm deploy
-      shell: /usr/bin/bash -e {0}
+      shell: /bin/bash
       env:
         BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
         VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
