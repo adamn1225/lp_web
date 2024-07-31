@@ -1,9 +1,13 @@
 ---
 import { currency } from '@utils/utils'
-import fetchListings from '@/pages/api/fetch-listings';
-
-const allListings = await fetchListings();
-
+const apiToken = import.meta.env.VITE_API_TOKEN;
+const response = await fetch('https://open-api.guesty.com/v1/listings?limit=20&skip=21', {
+  headers: {
+    'Authorization': `Bearer ${apiToken}`
+  }
+});
+const data = await response.json();
+const allListings = data.results
 
 // const jsonArray = Array.from(Object.values(allListings));
 // console.log(jsonArray);
