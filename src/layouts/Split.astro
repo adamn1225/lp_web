@@ -1,14 +1,12 @@
 ---
 import { SEO } from 'astro-seo'
 import type { Props as IAstroSEO } from 'astro-seo'
-import { setDescription, setTitle } from '@utils/utils'
 import { GoogleFontsOptimizer } from 'astro-google-fonts-optimizer'
 import NavbarSplit from '@components/NavbarSplit.astro'
 import Footer from '@components/Footer.astro'
 import ScrollTop from '@components/ui/ScrollTop.astro'
 import '@/styles/global.scss'
-interface Props extends IAstroSEO {}
-const { title = '', description = '', ...props } = Astro.props
+
 ---
 
 <!doctype html>
@@ -19,7 +17,7 @@ const { title = '', description = '', ...props } = Astro.props
     <link rel="icon" type="image/svg+xml" href="/images/logo/logo.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <SEO title={setTitle(title)} description={setDescription(description)} {...props} />
+
 
     <GoogleFontsOptimizer
       url={[

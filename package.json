@@ -67,12 +67,12 @@
     "swiper": "^11.1.8",
     "tailwindcss": "^3.4.7",
     "ts-jest": "^29.2.3",
-    "typescript": "^5.5.4",
     "upgrade": "^1.1.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.7.0",
     "@rollup/plugin-yaml": "^4.1.2",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "typescript": "^5.5.4"
   }
 }
