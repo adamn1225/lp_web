@@ -23,14 +23,12 @@ jobs:
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       run: |
-        curl --location --request POST "https://open-api.guesty.com/oauth2/token" \
-          --header 'accept: application/json' \
-          --data-urlencode 'grant_type=client_credentials' \
-          --data-urlencode 'scope=open-api' \
-          --data-urlencode 'client_id=${CLIENT_ID}' \
-          --data-urlencode 'client_id=${CLIENT_SECRET}'
+        # Replace the following URL and request with the specifics of your API
+        RESPONSE=$(curl -X POST "https://open-api.guesty.com/oauth2/token" \
+          -H "accept: application/json" \
+          -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials&scope=open-api")
 
-        
+        # Extract the bearer token from the response (update jq filter as needed)
         BEARER_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
 
         # Log the bearer token for debugging purposes (remove this in production)
@@ -42,20 +40,13 @@ jobs:
     - name: Use Bearer Token in Astro Project
       run: |
         # Ensure the .env file exists
-        touch .env
+        touch .env.production
         # Append the bearer token to the .env file
-        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
+        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env.production
         # Log the .env file content for debugging purposes
-        cat .env
+        cat .env.production
 
-    - name: Use Bearer Token in Astro Development
-      run: |
-        # Ensure the .env.development file exists
-        touch .env.development
-        # Append the bearer token to the .env.development file
-        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env.development
-        # Log the .env file content for debugging purposes
-        cat .env.development
+      
 
     - name: Install Dependencies and Build Project
       run: |
@@ -65,10 +56,15 @@ jobs:
         pnpm build
         # Deploy or perform any other necessary tasks
         # e.g., pnpm deploy
-
       shell: /usr/bin/bash -e {0}
       env:
         BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
         VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
-        
 
+      # Add, commit, then push the new file to the repo
+    - name: Adds the new log file to the repo
+      run: git add .
+    - name: Commit change to repo
+      run: git -c commit -m "refresh"
+    - name: Push change to repo
+      run: git push origin m
