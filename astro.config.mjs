@@ -10,9 +10,7 @@ export default defineConfig({
     // Add any Vite-specific configuration here if needed
   },
   output: 'static',
-  adapter: vercel({
-    isr: true,
-  }),
+  adapter: vercel(),
   integrations: [
     tailwind(),
     icon(),
