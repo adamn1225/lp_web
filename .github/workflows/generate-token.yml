@@ -65,6 +65,6 @@ jobs:
     - name: Adds the new log file to the repo
       run: git add .
     - name: Commit change to repo
-      run: git -c commit -m "refresh"
+      run: git commit -m "refresh"
     - name: Push change to repo
       run: git push origin m
