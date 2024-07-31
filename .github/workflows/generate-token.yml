@@ -1,8 +1,5 @@
 name: Generate Bearer Token
 
-permissions:
-  contents: write
-
 on:
   schedule:
     - cron: '0 */12 * * *' # Every 12 hours
@@ -66,7 +63,7 @@ jobs:
         pnpm build
         # Deploy or perform any other necessary tasks
         # e.g., pnpm deploy
-        
+
       shell: /usr/bin/bash -e {0}
       env:
         BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
