@@ -40,11 +40,20 @@ jobs:
     - name: Use Bearer Token in Astro Project
       run: |
         # Ensure the .env file exists
-        touch .env
+        touch .env.production
         # Append the bearer token to the .env file
-        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
+        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env.production
         # Log the .env file content for debugging purposes
-        cat .env
+        cat .env.production
+
+    - name: Use Bearer Token in Astro Development
+      run: |
+        # Ensure the .env.development file exists
+        touch .env.development
+        # Append the bearer token to the .env.development file
+        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env.development
+        # Log the .env file content for debugging purposes
+        cat .env.development
 
     - name: Install Dependencies and Build Project
       run: |
