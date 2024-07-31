@@ -16,7 +16,7 @@ const response = await fetch('https://open-api.guesty.com/v1/listings?limit=100'
 });
 const data = await response.json();
 const listings = data.results
-const paths = listings.map((listing: any) => ({
+const paths = listings.map((listings: any) => ({
 params: {
   listingPage: processListing(listings.title, listings._id) 
 },
