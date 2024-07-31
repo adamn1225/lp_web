@@ -30,8 +30,8 @@ jobs:
     - name: Generate Bearer Token
       id: generate-token
       env:
-        CLIENT_ID: ${{ secrets.GUESTY_CLIENT_ID }}
-        CLIENT_SECRET: ${{ secrets.GUESTY_CLIENT_SECRET }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         SHELL: /bin/bash
       run: |
         RESPONSE=$(curl --location --request POST 'https://open-api.guesty.com/oauth2/token' \
