@@ -15,6 +15,7 @@
     "@api/guesty-booking": "file:.api/apis/guesty-booking",
     "@apollo/client": "^3.11.1",
     "@astrojs/alpinejs": "^0.4.0",
+    "@astrojs/netlify": "^5.4.0",
     "@astrojs/node": "^8.3.2",
     "@astrojs/react": "^3.6.0",
     "@astrojs/rss": "^4.0.7",
