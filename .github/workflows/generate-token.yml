@@ -1,0 +1,51 @@
+name: Generate Bearer Token
+
+on:
+  schedule:
+    - cron: '0 */12 * * *' # Every 12 hours
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  generate-token:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Generate Bearer Token
+      id: generate-token
+      env:
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      run: |
+        # Replace the following URL and request with the specifics of your API
+        RESPONSE=$(curl -X POST "https://open-api.guesty.com/oauth2/token" \
+          -H "Content-Type: application/x-www-form-urlencoded" \
+          -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials")
+
+        # Extract the bearer token from the response (update jq filter as needed)
+        BEARER_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
+
+        # Set the bearer token as an environment variable
+        echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
+
+    - name: Use Bearer Token in Astro Project
+      env:
+        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
+      run: |
+        # Example: Use the bearer token in a script
+        echo "Using Bearer Token: $BEARER_TOKEN"
+        # Example usage: update a .env file or call a script
+        echo "VITE_API_TOKEN=$BEARER_TOKEN" >> .env
+
+    - name: Build and Deploy Astro Project
+      env:
+        VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
+      run: |
+        # Install dependencies
+        pnpm install
+        # Build the Astro project
+        pnpm build
+        # Deploy or perform any other necessary tasks
+        # e.g., pnpm deploy
