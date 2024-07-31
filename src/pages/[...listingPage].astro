@@ -10,7 +10,7 @@ const listings = await fetchListings();
 
 export async function getStaticPaths() {
 
-const paths = listings.map((listings) => ({
+const paths = listings.map((testListings: any) => ({
 params: {
   listingPage: processListing(listings.title, listings._id) 
 },
