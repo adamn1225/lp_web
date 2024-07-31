@@ -2,14 +2,20 @@
 export const prerender = true;
 import { processListing } from "../utils/utils.ts"
 import ListingPageDetail from '@components/ListingPageDetail.astro'
-import fetchListings from '@/pages/api/fetch-listings.ts';
+
 
 
 
 
 
 export async function getStaticPaths() {
-  const listings = await fetchListings();
+  const apiToken = import.meta.env.VITE_API_TOKEN;
+const response = await fetch('https://open-api.guesty.com/v1/listings?limit=100', {
+  headers: {
+    'Authorization': `Bearer ${apiToken}`
+  }
+});
+const listings = await response.json();
 const paths = listings.map((listing: any) => ({
 params: {
   listingPage: processListing(listings.title, listings._id) 
