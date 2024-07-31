@@ -1,8 +1,12 @@
 import { APP } from "../data/config";
-import testListings from "../pages/api/localdev";
-import fetchListings from '@/pages/api/fetch-listings.ts';
-
-const listings = await fetchListings();
+const apiToken = import.meta.env.VITE_API_TOKEN;
+const response = await fetch('https://open-api.guesty.com/v1/listings?limit=20&skip=21', {
+  headers: {
+    'Authorization': `Bearer ${apiToken}`
+  }
+});
+const data = await response.json();
+const listings = data.results
 
 
 
