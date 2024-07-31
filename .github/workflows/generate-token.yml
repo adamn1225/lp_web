@@ -25,8 +25,8 @@ jobs:
       run: |
         # Replace the following URL and request with the specifics of your API
         RESPONSE=$(curl -X POST "https://open-api.guesty.com/oauth2/token" \
-          -H "Content-Type: application/x-www-form-urlencoded" \
-          -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials")
+          -H "accept: application/json" \
+          -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials&scope=open-api")
 
         # Extract the bearer token from the response (update jq filter as needed)
         BEARER_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
