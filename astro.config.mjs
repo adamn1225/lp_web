@@ -9,8 +9,10 @@ export default defineConfig({
   vite: {
     // Add any Vite-specific configuration here if needed
   },
-  output: 'hybrid',
-  adapter: vercel(),
+  output: 'server',
+  adapter: vercel({
+    isr: true,
+  }),
   integrations: [
     tailwind(),
     icon(),

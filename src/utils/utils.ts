@@ -1,18 +1,10 @@
-import { APP } from "../data/config";
+
 import testListings from "../pages/api/localdev";
 import fetchListings from '@/pages/api/fetch-listings.ts';
 
 const listings = await fetchListings();
 
 // set page title
-export function setTitle(title: string) {
-  return title === "" ? APP.name : APP.name + " - " + title;
-}
-
-//set page sescription
-export function setDescription(desc: string) {
-  return desc === "" ? APP.description : desc;
-}
 
 export function currency(amount: number) {
   return (

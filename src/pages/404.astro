@@ -1,21 +1,19 @@
 ---
-import { Icon } from 'astro-icon/components'
-import { APP } from '@data/config'
+
+
 import Layout from '@layouts/Minimal.astro'
 import Container from '@components/Container.astro'
 import Logo from '@components/ui/Logo.astro'
 ---
 
-<Layout title="Error 404">
+<Layout>
   <main id="Error" class="min-h-screen flex flex-col items-stretch justify-between bg-muted-50 relative">
     <header class="absolute top-0 start-0 z-[5] w-full px-3">
       <Container>
         <div class="flex justify-between items-center gap-3 min-h-[4.5rem]">
           <a href="/" class="flex gap-4 items-center">
             <Logo class="h-8 aspect-square" />
-            <p class="font-medium text-2xl font-sans text-muted-900">
-              {APP.name}
-            </p>
+
           </a>
         </div>
       </Container>

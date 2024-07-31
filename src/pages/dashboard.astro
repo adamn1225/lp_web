@@ -3,10 +3,8 @@ import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
 import Container from '@components/Container.astro'
-import { app } from "../firebase/server";
-import { getAuth } from "firebase-admin/auth";
 
-const auth = getAuth(app);
+
 
 /* Check current session */
 // if (!Astro.cookies.has("__session")) {
