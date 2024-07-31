@@ -1,4 +1,3 @@
-import { APP } from "../data/config";
 const apiToken = import.meta.env.VITE_API_TOKEN;
 const response = await fetch('https://open-api.guesty.com/v1/listings?limit=20&skip=21', {
   headers: {
@@ -20,7 +19,7 @@ export function currency(amount: number) {
   );
 }
 
-export function processListing(title: string, _id: string) {
+export function processListing(title: any, _id: any) {
   return (
     title === "" ? listings.title : title,
     _id === "" ?  listings._id :  _id
