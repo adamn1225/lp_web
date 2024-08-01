@@ -17,29 +17,20 @@ jobs:
       run: |
         npm install -g pnpm
         pnpm setup
-      shell: bash
+      env:
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
     - name: Verify pnpm Installation
       run: pnpm --version
-      shell: bash
-
-    - name: Install Dependencies
-      run: pnpm install
-      shell: bash
-
-    - name: Build Project
-      run: pnpm build
-      shell: bash
-
-    - name: List files in dist directory
-      run: ls -al dist
-      shell: bash
+      env:
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
     - name: Generate Bearer Token
       id: generate-token
       env:
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        SHELL: /bin/bash
       run: |
         RESPONSE=$(curl --location --request POST 'https://open-api.guesty.com/oauth2/token' \
           --header 'accept: application/json' \
@@ -48,28 +39,42 @@ jobs:
           --data-urlencode "client_secret=${CLIENT_SECRET}" \
           --data-urlencode "client_id=${CLIENT_ID}")
 
+        # Extract the bearer token from the response
         BEARER_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
 
+        # Log the bearer token for debugging purposes (remove this in production)
         echo "Generated Bearer Token: $BEARER_TOKEN"
 
+        # Set the bearer token as an environment variable
         echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
+      shell: bash
 
     - name: Run Token Update Script
       run: node dist/updateToken.mjs
       env:
         BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
     - name: Use Bearer Token in Astro Project
       run: |
+        # Ensure the .env file exists
         touch .env
+        # Append the bearer token to the .env file
         echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
+        # Log the .env file content for debugging purposes
         cat .env
       env:
-        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
-    - name: Deploy Project
+    - name: Install Dependencies and Build Project
       run: |
-        pnpm deploy
+        # Install dependencies
+        pnpm install
+        # Build the Astro project
+        pnpm build
+        # Deploy or perform any other necessary tasks
+        # e.g., pnpm deploy
       env:
         BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
         VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
