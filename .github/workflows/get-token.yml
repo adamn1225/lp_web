@@ -18,11 +18,17 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Retrieve Bearer Token
-        run: echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" > .env
+      - name: Set environment variables
+        run: |
+          echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" > .env
+          echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> .env
+          echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> .env
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Run your script
         run: node refreshToken.js
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
