@@ -1,17 +1,10 @@
 ---
-const apiToken = import.meta.env.VITE_API_TOKEN;
-const response = await fetch('https://open-api.guesty.com/v1/listings?limit=50', {
-  headers: {
-    'Authorization': `Bearer ${apiToken}`
-  }
-});
-const data = await response.json();
-const listings = data.results
+import listings2 from '../pages/api/gapi2'
 
 
 ---
 {
-    listings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
+    listings2.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
 <a href={_id}>
     <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
             <div class="bg-muted-100 dark:bg-muted-800 ">
