@@ -46,6 +46,7 @@
     "astro-seo": "^0.8.4",
     "corepack": "^0.28.2",
     "dotenv": "^16.4.5",
+    "dotenv-extended": "^2.9.0",
     "flowbite": "^2.4.1",
     "lucide-astro": "^0.408.0",
     "node-fetch": "^3.3.2",
