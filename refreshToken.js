@@ -1,7 +1,7 @@
-const fetch = require('node-fetch');
+import fetch, { Headers } from 'node-fetch';
 
 async function refreshToken() {
-  const myHeaders = new fetch.Headers();
+  const myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
