@@ -1,20 +1,22 @@
-import fetch, { Headers } from 'node-fetch';
-import fs from 'fs';
-import dotenv from 'dotenv';
-
-// Load environment variables from .env file
-dotenv.config();
+const fs = require('fs');
+const fetch = require('node-fetch');
+require('dotenv').config();
 
 async function refreshToken() {
+  const clientId = process.env.CLIENT_ID;
+  const clientSecret = process.env.CLIENT_SECRET;
+
+  // Log the clientId and clientSecret to verify they are being read correctly
+  console.log('CLIENT_ID:', clientId);
+  console.log('CLIENT_SECRET:', clientSecret);
+
   const myHeaders = new Headers();
-  myHeaders.append("Accept", "application/json");
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
   const urlencoded = new URLSearchParams();
   urlencoded.append("grant_type", "client_credentials");
-  urlencoded.append("scope", "open-api");
-  urlencoded.append("client_secret", process.env.CLIENT_SECRET);
-  urlencoded.append("client_id", process.env.CLIENT_ID);
+  urlencoded.append("client_id", clientId);
+  urlencoded.append("client_secret", clientSecret);
 
   const requestOptions = {
     method: "POST",
