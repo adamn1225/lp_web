@@ -7,18 +7,18 @@ export async function getStaticPaths() {
 
   const paths = listings.map(listing => ({
     params: {
-      listingPage: processListing(listing.title, listing._id)
+      listingPage: processListing(listings.title, listings._id)
     },
     props: {
-      listing: listing,
-      _id: listing._id,
-      title: listing.title,
-      address: listing.address,
-      description: listing.description,
-      propertyType: listing.propertyType,
-      bathrooms: listing.bathrooms,
-      pictures: listing.pictures,
-      beds: listing.beds
+      listings: listing,
+      _id: listings._id,
+      title: listings.title,
+      address: listings.address,
+      description: listings.description,
+      propertyType: listings.propertyType,
+      bathrooms: listings.bathrooms,
+      pictures: listings.pictures,
+      beds: listings.beds
     }
   }));
 
