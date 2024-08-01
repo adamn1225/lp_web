@@ -1,16 +1,17 @@
 ---
 import { processListing } from "../utils/utils.ts";
 import ListingPageDetail from '@components/ListingPageDetail.astro';
-import listings from '../pages/api/gapi'
+import listings from '../pages/api/gapi1'
 
 export async function getStaticPaths() {
 
-  const paths = listings.map(listing => ({
+  // Create paths for each listing
+  const paths = listings.map((listings: any) => ({
     params: {
-      listingPage: processListing(listings.title, listings._id)
+      listingPage: processListing(listings.title, listings._id) // Adjust as necessary
     },
     props: {
-      listings: listing,
+      listings: listings, // Pass the individual listing as props
       _id: listings._id,
       title: listings.title,
       address: listings.address,
@@ -22,10 +23,11 @@ export async function getStaticPaths() {
     }
   }));
 
-  return paths;
+  return {
+    paths,
+    fallback: false // Adjust fallback strategy if needed
+  };
 }
-
-
 const {description, title, address, beds, propertyType, bathrooms, pictures, lineListing = [], _id} = Astro.props;
 
 ---
