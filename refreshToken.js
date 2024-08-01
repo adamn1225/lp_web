@@ -1,6 +1,8 @@
-const fs = require('fs');
-const fetch = require('node-fetch');
-require('dotenv').config();
+import fs from 'fs';
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 async function refreshToken() {
   const clientId = process.env.CLIENT_ID;
