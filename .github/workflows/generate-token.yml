@@ -25,6 +25,16 @@ jobs:
       env:
         SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
+    - name: Install Dependencies
+      run: pnpm install
+      env:
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+
+    - name: Compile TypeScript
+      run: pnpm build
+      env:
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+
     - name: Generate Bearer Token
       id: generate-token
       env:
