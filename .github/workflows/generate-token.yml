@@ -35,56 +35,64 @@ jobs:
       env:
         SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
+    - name: Print Secrets (Debugging)
+      run: |
+        echo "CLIENT_ID=${{ secrets.CLIENT_ID }}"
+        echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}"
+      env:
+        SHELL: /bin/bash
+
     - name: Generate Bearer Token
       id: generate-token
       env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          SHELL: /bin/bash
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        SHELL: /bin/bash
       run: |
-          RESPONSE=$(curl --location --request POST 'https://open-api.guesty.com/oauth2/token' \
-            --header 'accept: application/json' \
-            --data-urlencode 'grant_type=client_credentials' \
-            --data-urlencode 'scope=open-api' \
-            --data-urlencode "client_secret=${CLIENT_SECRET}" \
-            --data-urlencode "client_id=${CLIENT_ID}")
-      
-          # Extract the bearer token from the response
-          BEARER_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
-      
-          # Log the bearer token for debugging purposes (remove this in production)
-          echo "Generated Bearer Token: $BEARER_TOKEN"
-      
-          # Set the bearer token as an environment variable
-          echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
+        RESPONSE=$(curl --location --request POST 'https://open-api.guesty.com/oauth2/token' \
+          --header 'accept: application/json' \
+          --data-urlencode 'grant_type=client_credentials' \
+          --data-urlencode 'scope=open-api' \
+          --data-urlencode "client_secret=${CLIENT_SECRET}" \
+          --data-urlencode "client_id=${CLIENT_ID}")
+
+        echo "Response: $RESPONSE"
+
+        # Extract the bearer token from the response
+        BEARER_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
+
+        echo "Generated Bearer Token: $BEARER_TOKEN"
+
+        # Set the bearer token as an environment variable
+        echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
       shell: bash
 
     - name: Run Token Update Script
       run: node dist/updateToken.mjs
       env:
         BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
-        SHELL: /bin/bashe
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
     - name: Use Bearer Token in Astro Project
       run: |
-          # Ensure the .env file exists
-          touch .env
-          # Append the bearer token to the .env file
-          echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
-          # Log the .env file content for debugging purposes
-          cat .env
+        # Ensure the .env file exists
+        touch .env
+        # Append the bearer token to the .env file
+        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
+        # Log the .env file content for debugging purposes
+        cat .env
       env:
-          SHELL: /bin/bash
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
     - name: Install Dependencies and Build Project
       run: |
-            # Install dependencies
-            pnpm install
-            # Build the Astro project
-            pnpm build
-            # Deploy or perform any other necessary tasks
-            # e.g., pnpm deploy
+        # Install dependencies
+        pnpm install
+        # Build the Astro project
+        pnpm build
+        # Deploy or perform any other necessary tasks
+        # e.g., pnpm deploy
       env:
-       BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
-       VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
-       SHELL: /bin/bash
+        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
+        VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
