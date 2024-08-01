@@ -30,8 +30,8 @@ jobs:
       env:
         SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
-    - name: Compile TypeScript
-      run: pnpm build
+    - name: Install jq
+      run: sudo apt-get install -y jq
       env:
         SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
@@ -66,12 +66,6 @@ jobs:
         # Set the bearer token as an environment variable
         echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
       shell: bash
-
-    - name: Run Token Update Script
-      run: node dist/updateToken.mjs
-      env:
-        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
-        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
     - name: Use Bearer Token in Astro Project
       run: |
