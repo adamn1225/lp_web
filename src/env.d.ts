@@ -3,6 +3,8 @@
 
 interface ImportMetaEnv {
   readonly SECRET_ACCESS_TOKEN: string;
+  readonly CLIENT_ID: string;
+  readonly CLIENT_SECRET: string;
   // readonly SECRET_OPEN_PASSWORD: string;
   // readonly FIREBASE_PRIVATE_KEY_ID: string;
   // readonly FIREBASE_PRIVATE_KEY: string;
@@ -17,4 +19,8 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+interface ImportMetaEnv {
+  VITE_API_TOKEN: string;
 }
