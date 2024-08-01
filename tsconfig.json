@@ -16,7 +16,6 @@
     "resolveJsonModule": true,
     "outDir": "./dist",
     "isolatedModules": true,
-    "types": ["node"],
     "plugins": [
       {
         "name": "@astrojs/ts-plugin"
