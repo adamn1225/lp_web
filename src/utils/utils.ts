@@ -1,4 +1,3 @@
-const apiToken = import.meta.env.VITE_API_TOKEN;
 import listings from '../pages/api/gapi'
 
 
@@ -13,7 +12,7 @@ export function currency(amount: number) {
   );
 }
 
-export function processListing(title: any, _id: any) {
+export function processListing(title: string, _id: string) {
   return (
     title === "" ? listings.title : title,
     _id === "" ?  listings._id :  _id

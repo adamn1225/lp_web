@@ -5,13 +5,12 @@ import listings from '../pages/api/gapi'
 
 export async function getStaticPaths() {
 
-  // Create paths for each listing
-  const paths = listings.map((listing) => ({
+  const paths = listings.map(listing => ({
     params: {
-      listingPage: processListing(listings.title, listings._id) // Adjust as necessary
+      listingPage: processListing(listing.title, listing._id)
     },
     props: {
-      listings: listing, // Pass the individual listing as props
+      listing: listing,
       _id: listing._id,
       title: listing.title,
       address: listing.address,
@@ -23,11 +22,10 @@ export async function getStaticPaths() {
     }
   }));
 
-  return {
-    paths,
-    fallback: false // Adjust fallback strategy if needed
-  };
+  return paths;
 }
+
+
 const {description, title, address, beds, propertyType, bathrooms, pictures, lineListing = [], _id} = Astro.props;
 
 ---
