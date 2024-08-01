@@ -1,13 +1,11 @@
 name: Generate Bearer Token
 
 on:
-  schedule:
-    - cron: '0 */12 * * *' # Every 12 hours
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
   generate-token:
-    runs-on: ['Linux', 'X64', ubuntu-latest]
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
