@@ -9,6 +9,7 @@ export default defineConfig({
   vite: {
     // Add any Vite-specific configuration here if needed
   },
+  output: 'static',
   adapter: netlify(),
   integrations: [
     tailwind(),
