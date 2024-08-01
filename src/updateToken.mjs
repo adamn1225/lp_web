@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
-const dotenv = require('dotenv');
-const fs = require('fs');
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+import fs from 'fs';
 
 dotenv.config();
 
