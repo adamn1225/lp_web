@@ -7,7 +7,7 @@ permissions: write-all
 
 jobs:
   get-token:
-    runs-on: self-hosted
+    runs-on: [self-hosted, 'Linux', 'X64', ubuntu-latest]
 
     steps:
       - name: Checkout repository
