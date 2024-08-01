@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 
 const data = await response.json();
 const listings = data.results
-const paths = listings.map((listing: any) => ({
+const paths = listings.map(() => ({
 params: {
   listingPage: processListing(listings.title, listings._id) 
 },
