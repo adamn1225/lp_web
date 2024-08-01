@@ -1,0 +1,24 @@
+name: Get Token
+
+on:
+    workflow_dispatch:
+
+jobs:
+  generate-token:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: pnpm install
+
+    - name: Use Bearer Token in Astro Project
+      run: |
+        # Ensure the .env file exists
+        touch .env
+        # Append the bearer token to the .env file
+        echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" >> .env
+        # Log the .env file content for debugging purposes
+        cat .env
