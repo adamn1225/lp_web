@@ -8,7 +8,7 @@ export async function getStaticPaths() {
   // Create paths for each listing
   const paths = listings.map(listing => ({
     params: {
-      listingPage: String(processListing(listing.title, listing._id))
+      listingPage: String(processListing(listings.title, listings._id))
     },
     props: {
       listings: listings, // Pass the individual listing as props
