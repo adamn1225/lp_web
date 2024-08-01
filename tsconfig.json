@@ -24,6 +24,12 @@
         "name": "@astrojs/ts-plugin"
       }
     ],
+    "outDir": "./dist",
+    "module": "ESNext",
+    "target": "ES2020",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "types": [
       "astro/client"
     ]
