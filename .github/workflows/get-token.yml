@@ -43,8 +43,8 @@ jobs:
         - name: Use Bearer Token in Astro Project
           run: |
             # Ensure the .env file exists
-            touch .env
+            touch .env.development
             # Append the bearer token to the .env file
-            echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" >> .env
-            # Log the .env file content for debugging purposes
-            cat .env
+            echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" >> .env.development
+            # Log the .env.development file content for debugging purposes
+            cat .env.development
