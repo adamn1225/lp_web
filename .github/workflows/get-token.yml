@@ -6,8 +6,6 @@ on:
 jobs:
   get-token:
     runs-on: ubuntu-latest
-    env:
-      SHELL: /bin/bash  # Set SHELL environment variable globally
 
     steps:
       - name: Checkout repository
@@ -17,23 +15,30 @@ jobs:
         run: |
           npm install -g pnpm
           pnpm setup
+        env:
+          SHELL: /bin/bash
 
       - name: Verify pnpm Installation
         run: pnpm --version
+        env:
+          SHELL: /bin/bash
 
       - name: Install Dependencies
         run: pnpm install
+        env:
+          SHELL: /bin/bash
 
       - name: Install jq
         run: sudo apt-get install -y jq
+        env:
+          SHELL: /bin/bash
 
-      - name: Print Shell
-        run: echo $SHELL
-
-      - name: Navigate and Run Setup Script
+      - name: Run Setup Script
         run: |
-          cd path/to/your/directory
           ./scripts/setup.sh
+        working-directory: ${{ github.workspace }}
+        env:
+          SHELL: /bin/bash
 
       - name: Use Bearer Token in Astro Project
         run: |
@@ -43,3 +48,6 @@ jobs:
           echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" >> .env.development
           # Log the .env.development file content for debugging purposes
           cat .env.development
+        working-directory: ${{ github.workspace }}
+        env:
+          SHELL: /bin/bash
