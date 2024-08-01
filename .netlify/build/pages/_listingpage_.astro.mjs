@@ -116,6 +116,7 @@ Reserve
 }, "/home/adam-noah/Desktop/lp_web/src/components/ListingPageDetail.astro", void 0);
 
 const $$Astro = createAstro();
+const prerender = true;
 async function getStaticPaths() {
   const apiToken = "your_old_bearer_token";
   const response = await fetch("https://open-api.guesty.com/v1/listings?limit=100", {
@@ -157,6 +158,7 @@ const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   default: $$listingPage,
   file: $$file,
   getStaticPaths,
+  prerender,
   url: $$url
 }, Symbol.toStringTag, { value: 'Module' }));
 
