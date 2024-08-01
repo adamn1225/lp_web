@@ -60,6 +60,12 @@ jobs:
         echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
       shell: bash
 
+    - name: Log Bearer Token
+      run: echo ${{ env.BEARER_TOKEN }}
+      env:
+        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
+        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+
     - name: Use Bearer Token in Astro Project
       run: |
         # Ensure the .env file exists
