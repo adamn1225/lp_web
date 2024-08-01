@@ -6,9 +6,9 @@ import listings from './api/gapi1.ts'
 export async function getStaticPaths() {
 
   // Create paths for each listing
-  const paths = listings.map((listings: any) => ({
+  const paths = listings.map(listing => ({
     params: {
-      listingPage: processListing(listings.title, listings._id) // Adjust as necessary
+      listingPage: String(processListing(listing.title, listing._id))
     },
     props: {
       listings: listings, // Pass the individual listing as props
