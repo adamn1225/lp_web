@@ -1,35 +1,37 @@
-import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
-const apiToken = process.env.VITE_API_TOKEN;
+async function refreshToken() {
+  const myHeaders = new fetch.Headers();
+  myHeaders.append("Accept", "application/json");
+  myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-if (!apiToken) {
-  throw new Error('VITE_API_TOKEN is not defined in the environment variables');
-}
+  const urlencoded = new URLSearchParams();
+  urlencoded.append("grant_type", "client_credentials");
+  urlencoded.append("scope", "open-api");
+  urlencoded.append("client_secret", process.env.CLIENT_SECRET);
+  urlencoded.append("client_id", process.env.CLIENT_ID);
 
-const refreshToken = async () => {
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: urlencoded,
+    redirect: "manual"
+  };
+
   try {
-    const response = await fetch('https://open-api.guesty.com/v1/refresh-token', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        // Add any required body parameters here
-      })
-    });
+    const response = await fetch("https://open-api.guesty.com/oauth2/token", requestOptions);
 
     if (!response.ok) {
-      throw new Error(`Failed to refresh token: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Failed to refresh token: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     const data = await response.json();
-    console.log('New token:', data.newToken);
-    return data.newToken;
+    console.log('Token refreshed successfully:', data);
   } catch (error) {
     console.error('Error refreshing token:', error);
     process.exit(1);
   }
-};
+}
 
 refreshToken();
