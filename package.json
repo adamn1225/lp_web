@@ -9,9 +9,7 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "build:ts": "tsc",
-    "update-token": "ts-node src/updateToken.ts"
+    "astro": "astro"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
