@@ -3,12 +3,8 @@ name: Get Token
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-  issues: write
-  pages: write
-  repository-projects: write
-  actions: write
+permissions: write-all
+
 jobs:
   get-token:
     runs-on: ubuntu-latest
