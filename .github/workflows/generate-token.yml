@@ -51,8 +51,14 @@ jobs:
         echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
       shell: bash
 
+    - name: Install Dependencies
+      run: pnpm install
+      shell: bash
+      env:
+        SHELL: /bin/bash
+
     - name: Run Token Update Script
-      run: node dist/updateToken.js
+      run: node dist/updateToken.mjs
       shell: bash
       env:
         BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
@@ -68,12 +74,11 @@ jobs:
         cat .env
       shell: bash
       env:
+        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
         SHELL: /bin/bash
 
-    - name: Install Dependencies and Build Project
+    - name: Build Project
       run: |
-        # Install dependencies
-        pnpm install
         # Build the Astro project
         pnpm build
         # Deploy or perform any other necessary tasks
