@@ -1,50 +1,40 @@
 name: Get Token
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-  generate-token:
+  get-token:
     runs-on: ubuntu-latest
 
     steps:
-        - name: Checkout repository
-          uses: actions/checkout@v3
-    
-        - name: Install pnpm
-          run: |
-            npm install -g pnpm
-            pnpm setup
-          env:
-            SHELL: /bin/bash  # Explicitly set the SHELL environment variable
-    
-        - name: Verify pnpm Installation
-          run: pnpm --version
-          env:
-            SHELL: /bin/bash  # Explicitly set the SHELL environment variable
-    
-        - name: Install Dependencies
-          run: pnpm install
-          env:
-            SHELL: /bin/bash  # Explicitly set the SHELL environment variable
-    
-        - name: Install jq
-          run: sudo apt-get install -y jq
-          env:
-            SHELL: /bin/bash 
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
- 
-        - name: Checkout repository
-          uses: actions/checkout@v3
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm
+          pnpm setup
 
-        - name: Install Dependencies
-          run: pnpm install
+      - name: Verify pnpm Installation
+        run: pnpm --version
 
-        - name: Use Bearer Token in Astro Project
-          run: |
-            # Ensure the .env file exists
-            touch .env.development
-            # Append the bearer token to the .env file
-            echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" >> .env.development
-            # Log the .env.development file content for debugging purposes
-            cat .env.development
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Navigate and Run Setup Script
+        run: |
+          cd path/to/your/directory
+          ./scripts/setup.sh
+
+      - name: Use Bearer Token in Astro Project
+        run: |
+          # Ensure the .env file exists
+          touch .env.development
+          # Append the bearer token to the .env file
+          echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" >> .env.development
+          # Log the .env.development file content for debugging purposes
+          cat .env.development
