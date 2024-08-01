@@ -1,33 +1,14 @@
 ---
 import { processListing } from "../utils/utils.ts";
 import ListingPageDetail from '@components/ListingPageDetail.astro';
+import listings from '../pages/api/gapi'
 
 export async function getStaticPaths() {
-  const apiToken = import.meta.env.VITE_API_TOKEN;
-
-  // Fetch the data inside getStaticPaths
-  const response = await fetch('https://open-api.guesty.com/v1/listings?limit=100', {
-    headers: {
-      'Authorization': `Bearer ${apiToken}`
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch listings: ${response.statusText}`);
-  }
-
-  const data = await response.json();
-  const listings = data.results;
-
-  // Ensure listings is an array and has valid items
-  if (!Array.isArray(listings)) {
-    throw new Error('Expected `results` to be an array');
-  }
 
   // Create paths for each listing
   const paths = listings.map((listing) => ({
     params: {
-      listingPage: processListing(listing.title, listing._id) // Adjust as necessary
+      listingPage: processListing(listings.title, listings._id) // Adjust as necessary
     },
     props: {
       listings: listing, // Pass the individual listing as props
