@@ -6,6 +6,8 @@ on:
 jobs:
   get-token:
     runs-on: ubuntu-latest
+    env:
+      SHELL: /bin/bash  # Set SHELL environment variable globally
 
     steps:
       - name: Checkout repository
@@ -24,6 +26,9 @@ jobs:
 
       - name: Install jq
         run: sudo apt-get install -y jq
+
+      - name: Print Shell
+        run: echo $SHELL
 
       - name: Navigate and Run Setup Script
         run: |
