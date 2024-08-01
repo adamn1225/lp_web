@@ -51,12 +51,6 @@ jobs:
         echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
       shell: bash
 
-    - name: Compile TypeScript
-      run: pnpm exec tsc
-      shell: bash
-      env:
-        SHELL: /bin/bash
-
     - name: Run Token Update Script
       run: node dist/updateToken.js
       shell: bash
