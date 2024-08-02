@@ -3,11 +3,12 @@
   publish = "dist"
   functions = "netlify/functions"
   environment = { NODE_ENV = "production" }
+  node_version = "18.3.0"
 
 [build.environment]
   CI = "false"
   NODE_OPTIONS = "--max_old_space_size=4096"
-  NODE_VERSION = "18.12"
+  NODE_VERSION = "18.3.0"
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
