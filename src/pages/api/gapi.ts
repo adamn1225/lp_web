@@ -1,8 +1,9 @@
 const apiToken = import.meta.env.VITE_API_TOKEN;
 
-const response = await fetch('https://open-api.guesty.com/v1/listings?limit=20', {
+const response = await fetch('https://open-api.guesty.com/v1/listings?limit=100', {
   headers: {
-    'Authorization': `Bearer ${apiToken}`
+    accept: 'application/json; charset=utf-8',
+    Authorization: `Bearer ${apiToken}`
   }
 });
 

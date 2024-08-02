@@ -7,9 +7,8 @@ import react from '@astrojs/react';
 
 export default defineConfig({
   vite: {
-    // Add any Vite-specific configuration here if needed
   },
-  output: 'server',
+  output: 'hybrid',
   adapter: node({
     mode: 'standalone',
   }),
