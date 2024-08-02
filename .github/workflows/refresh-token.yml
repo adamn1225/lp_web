@@ -1,8 +1,10 @@
 name: CI
 
 on:
-  workflow_dispatch:
-
+  workflow_dispatch: # Allows manual triggering of the workflow
+  schedule:
+    - cron: '0 */12 * * *' # Runs every 12 hours
+    
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,3 +33,6 @@ jobs:
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         VITE_API_TOKEN: ${{ secrets.VITE_API_TOKEN }}
+        CONTENTFUL_API_TOKEN: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
+        CONTENTFUL_PREVIEW_TOKEN: ${{ secrets.CONTENTFUL_PREVIEW_ACCESS_TOKEN }}
+        CONTENTFUL_DELIVERY_TOKEN: ${{ secrets.CONTENTFUL_DELIVERY_ACCESS_TOKEN }}
