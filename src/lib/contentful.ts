@@ -10,7 +10,13 @@ export interface BlogPost {
     slug: EntryFields.Text;
     content: EntryFields.RichText;
     date: EntryFields.Date;
-    mainBlogImage: Asset; // Ensure this is typed as Asset
+    mainBlogImage?: {
+      fields: {
+        file: {
+          url: string;
+        };
+      };
+    };
   };
 }
 
