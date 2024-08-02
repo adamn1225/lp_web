@@ -6,6 +6,13 @@ import netlify from '@astrojs/netlify';
 import react from '@astrojs/react';
 
 export default defineConfig({
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['sharp']
+      }
+    }
+  },
   output: 'server',
   adapter: netlify(),
   integrations: [
