@@ -1,13 +1,12 @@
 ---
-import listings1 from '../pages/api/gapi1'
+import fetchListings from '../pages/api/gapi';
 
-
-
+const listings = await fetchListings();
 
 ---
 
   {
-      listings1.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
+      listings.map(({bedrooms, pictures, title, address, bathrooms, prices, _id }) => (
   <a href={_id}>
       <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
               <div class="bg-muted-100">
