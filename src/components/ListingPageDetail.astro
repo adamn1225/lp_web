@@ -3,10 +3,8 @@ import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
 import PropertySearch from '@components/ui/PropertySearch.astro'
-import { MessageSquare } from 'lucide-astro'
-import listings from '../pages/api/gapi';
 
-const { title, address, description, beds, bathrooms, pictures, propertyType } = Astro.props;
+const { title, beds, bathrooms, pictures, propertyType } = Astro.props;
 
 ---
 
@@ -91,7 +89,7 @@ const { title, address, description, beds, bathrooms, pictures, propertyType } =
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
                     <p class="text-muted-500 text-base xs:text-center">
-                      {description.summary}
+                     
                     </p>
                     <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
                     </p>
@@ -442,13 +440,11 @@ const { title, address, description, beds, bathrooms, pictures, propertyType } =
                 <!-- map -->
                 <iframe
                   class="min-h-[220px] w-full"
-                  marginheight="0"
-                  marginwidth="0"
+  
                   title="map"
-                  scrolling="no"
                   src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Myrtle%20Beach,%20SC+(Line%20Properties%20Inc)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
                   style="filter: grayscale(1) contrast(1.2) opacity(0.6)"
-                  frameborder="0"></iframe>
+                ></iframe>
               </div>
             </div>
           </section>

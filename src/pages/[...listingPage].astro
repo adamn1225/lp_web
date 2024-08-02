@@ -1,13 +1,11 @@
 ---
+export const prerender = true;
+
 import ListingPageDetail from '@components/ListingPageDetail.astro'
-import { Icon } from 'astro-icon/components'
-import Layout from '@layouts/Default.astro'
-import Section from '@components/Section.astro'
-import PropertySearch from '@components/ui/PropertySearch.astro'
 import listings from './api/gapi';
 
 export function getStaticPaths() {
-  const paths = listings.map((listings) => ({
+  const paths = listings.map((listings: any) => ({
     params: {
       listingPage: listings._id // Ensure this matches the requested path
     },
