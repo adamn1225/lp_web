@@ -1,5 +1,4 @@
 ---
-import { APP } from '@data/config'
 import { Icon } from 'astro-icon/components'
 import Logo from './ui/Logo.astro'
 import MegaMenu from './ui/MegaMenu.astro'
@@ -12,19 +11,19 @@ import PropertySearch from '@components/ui/PropertySearch.astro'
     id="header"
     :class="flex flex-row justify-center scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b border-muted-200 shadow-muted-300/30 : 'lg:bg-transparent' "
   >
-  <header id="MainHeader" class=" min-h-[70px] w-full max-w-full px-3 mx-auto flex justify-between items-stretch gap-3 shadow lg:shadow-md lg:px-8">
-    <div class="flex justify-between lg:justify-start items-center w-full lg:w-auto min-h-[3.25rem]">
-      <a href="/" class="flex gap-4 items-center py-2">
+  <header id="MainHeader" class=" min-h-[70px] w-full max-w-full mx-auto shadow lg:shadow-md lg:px-8">
+    <div class="lg:justify-start lg:w-auto min-h-[3.25rem]">
+      <a href="/" class="gap-4 py-2">
         <Logo class="size-8 aspect-square" />
       </a>
 
-        <div class="flex items-stretch gap-3">
+        <div class="flex gap-3">
           <button id="MenuToggle" class="lg:hidden" @click="mobileOpen = !mobileOpen">
-            <Icon id="OpenIcon" x-show="!mobileOpen" name="lucide:menu" class="pointer-events-none text-muted-500 dark:text-white size-6 aspect-auto" />
-            <Icon id="CloseIcon" x-show="mobileOpen" name="lucide:x" class="pointer-events-none text-muted-500 dark:text-white size-6 aspect-auto" />
+            <Icon id="OpenIcon" x-show="!mobileOpen" name="lucide:menu" class="pointer-events-none text-muted-500 size-6 aspect-auto" />
+            <Icon id="CloseIcon" x-show="mobileOpen" name="lucide:x" class="pointer-events-none text-muted-500 size-6 aspect-auto" />
           </button>
           <template x-if="$store.app.isLoggedIn">
-            <div class="lg:hidden flex items-center justify-center">
+            <div class="lg:hidden flex justify-center">
               <AccountMenu />
             </div>
           </template>
