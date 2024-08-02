@@ -2,7 +2,6 @@
   command = "pnpm run build"
   publish = "dist"
   environment = { NODE_ENV = "production" }
-  timeout = 600
 
 [build.environment]
   CI = "false"
