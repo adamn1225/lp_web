@@ -1,0 +1,12 @@
+[build]
+  command = "pnpm run build"
+  publish = "dist"
+  environment = { NODE_ENV = "production" }
+  timeout = 600
+
+[build.environment]
+  CI = "false"
+  NODE_OPTIONS = "--max_old_space_size=4096"
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
