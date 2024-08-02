@@ -1,25 +1,26 @@
 const apiToken = import.meta.env.VITE_API_TOKEN;
 
-async function fetchListings() {
-  try {
-    const response = await fetch('https://open-api.guesty.com/v1/listings?limit=60', {
-      headers: {
-        accept: 'application/json; charset=utf-8',
-        'Authorization': `Bearer ${apiToken}`
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch listings: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return data.results;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
+if (!apiToken) {
+  throw new Error('API token is not set. Please check your environment variables.');
 }
 
-const listings1 = await fetchListings();
-export default listings1;
+try {
+  const response = await fetch('https://open-api.guesty.com/v1/listings?limit=60', {
+    headers: {
+      accept: 'application/json; charset=utf-8',
+      Authorization: `Bearer ${apiToken}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch listings: ${response.status} ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  const listings1 = data.results;
+
+  export default listings1;
+} catch (error) {
+  console.error('Error fetching listings:', error);
+  throw new Error('Failed to fetch listings');
+}
