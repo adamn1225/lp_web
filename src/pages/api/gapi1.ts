@@ -1,17 +1,25 @@
 const apiToken = import.meta.env.VITE_API_TOKEN;
 
-// Fetch the data inside getStaticPaths
-const response = await fetch('https://open-api.guesty.com/v1/listings?limit=60', {
-  headers: {
-    'Authorization': `Bearer ${apiToken}`
-  }
-});
+async function fetchListings() {
+  try {
+    const response = await fetch('https://open-api.guesty.com/v1/listings?limit=60', {
+      headers: {
+        accept: 'application/json; charset=utf-8',
+        'Authorization': `Bearer ${apiToken}`
+      }
+    });
 
-if (!response.ok) {
-  throw new Error(`Failed to fetch listings: ${response.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch listings: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 }
 
-const data = await response.json();
-const listings1 = data.results;
-
-export default listings1
+const listings1 = await fetchListings();
+export default listings1;

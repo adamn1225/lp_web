@@ -1,45 +1,65 @@
 ---
-import { processListing } from "../utils/utils.ts";
-import ListingPageDetail from '@components/ListingPageDetail.astro';
-import listings from './api/gapi1.ts'
+import ListingPageDetail from '@components/ListingPageDetail.astro'
+import { Icon } from 'astro-icon/components'
+import Layout from '@layouts/Default.astro'
+import Section from '@components/Section.astro'
+import PropertySearch from '@components/ui/PropertySearch.astro'
+import listings from './api/gapi';
 
-export async function getStaticPaths() {
-
-  // Create paths for each listing
-  const paths = listings.map(listing => ({
+export function getStaticPaths() {
+  const paths = listings.map((listings) => ({
     params: {
-      listingPage: String(processListing(listings.title, listings._id))
+      listingPage: listings._id // Ensure this matches the requested path
     },
     props: {
-      listings: listings, // Pass the individual listing as props
-      _id: listings._id,
       title: listings.title,
-      address: listings.address,
-      description: listings.description,
-      propertyType: listings.propertyType,
+      PropertyType: listings.propertyType,
       bathrooms: listings.bathrooms,
       pictures: listings.pictures,
       beds: listings.beds
     }
   }));
 
+  console.log("Generated paths:", JSON.stringify(paths, null, 2)); // Log the generated paths
+
+  return paths; // Return the array of paths directly
+}
+
+export async function get({ params }) {
+  const listing = listings.find((listing) => listing._id === params.listingPage);
+
+  if (!listing) {
+    return {
+      status: 404,
+      body: 'Not Found'
+    };
+  }
+
   return {
-    paths,
-    fallback: false // Adjust fallback strategy if needed
+    lineListing: listings,
+    id: listings._id,
+  title: listings.title,
+  city: listings.address.city,
+  state: listings.address.state,
+  description: listings.publicDescription.summary,
+  PropertyType: listings.propertyType,
+  bathrooms: listings.bathrooms,
+  pictures: listings.pictures,
+  beds: listings.beds
   };
 }
-const {description, title, address, beds, propertyType, bathrooms, pictures, lineListing = [], _id} = Astro.props;
+
+const { title, pictures, description, beds, bathrooms, propertyType } = Astro.props;
+
+
 
 ---
 
 <ListingPageDetail
-          lineListing={lineListing}
           title={title}
-          _id={_id}
-          address={address}
+          _id={listings._id}
           description={description}
-          PropertyType={propertyType}
           bathrooms={bathrooms}
-          pictures={pictures}
           beds={beds}
+          pictures={pictures}
         />

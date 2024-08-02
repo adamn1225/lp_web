@@ -4,8 +4,9 @@ import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
 import PropertySearch from '@components/ui/PropertySearch.astro'
 import { MessageSquare } from 'lucide-astro'
+import listings from '../pages/api/gapi';
 
-const { title, address, description, beds, bathrooms, pictures = [], propertyType } = Astro.props;
+const { title, address, description, beds, bathrooms, pictures, propertyType } = Astro.props;
 
 ---
 
