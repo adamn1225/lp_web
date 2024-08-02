@@ -1,14 +1,19 @@
-import guestyBooking from '@api/guesty-booking';
+export interface BlogPostFields {
+  heroTitle: string;
+  content: string;
+  date: string;
+  mainBlogImage?: {
+    fields: {
+      file: {
+        url: string;
+      };
+    };
+  };
+  slug: string;
+}
 
-interface Property {
-  name?: string;
-  photo: string;
-  price: number;
-  address: string;
-  bedrooms: number;
-  bathroom: number;
-  livingArea: number;
-
+export interface BlogPost {
+  fields: BlogPostFields;
 }
 
 

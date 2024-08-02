@@ -1,0 +1,61 @@
+---
+export const prerender = true;
+import Navbar from '@components/Navbar.astro';
+
+import pkg from 'contentful';
+import { contentfulClient } from "../../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import type { BlogPost } from "../../lib/contentful"; // Type-only import
+
+export async function getStaticPaths() {
+  const entries = await contentfulClient.getEntries<BlogPost>({
+    content_type: "landingPageblog", // Updated content type ID
+  });
+
+  const pages = entries.items.map((item: any) => {
+    let imageUrl = '';
+    if (item.fields.mainBlogImage && item.fields.mainBlogImage.fields) {
+      try {
+        imageUrl = item.fields.mainBlogImage.fields.file.url;
+      } catch (error) {
+        console.error('Error fetching asset:', error);
+      }
+    }
+
+    return {
+      params: { slug: String(item.fields.slug) },
+      props: {
+        title: item.fields.heroTitle,
+        content: documentToHtmlString(item.fields.content), // Corrected field name
+        date: new Date(item.fields.date).toLocaleDateString(),
+        mainBlogImage: imageUrl
+      },
+    };
+  });
+
+  return pages; // Return the array directly
+}
+
+const { content, title, date, mainBlogImage } = Astro.props;
+---
+<sectoion>
+  
+  <Navbar />
+  <div class="w-full flex justify-center mt-32 mb-28">
+    <div class="flex flex-col justify-center align-middle w-1/2">
+          
+          {mainBlogImage && <img src={mainBlogImage} alt={title} />}
+          <time>{date}</time>
+      <div class="text-center">
+            <article set:html={content} />
+            <h1 class="mb-8 text-3xl font-bold text-slate-800">{title}</h1>
+            <p>This is content about fun activities in Myrtle Beach. This is just a test blog, but feel free to edit this post and replace it with whatever you guys want to talk about. This is content about fun activities in Myrtle Beach. This is just a test blog, but feel free to edit this post and replace it with whatever you guys want to talk about. This is content about fun activities in Myrtle Beach. This is just a test blog, but feel free to edit this post and replace it with whatever you guys want to talk about. This is content about fun activities in Myrtle Beach. This is just a test blog, but feel free to edit this post and replace it with whatever you guys want to talk about.</p><br />
+            <p>Cat ipsum dolor sit amet, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason.</p><br />
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><br />
+            <br />
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        
+      </div>
+    </div>
+  </div>
+</sectoion>

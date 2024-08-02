@@ -10,6 +10,7 @@ body {
   @apply h-full flex flex-col;
   font-family: "Roboto Flex", sans-serif;
   max-width: 100% !important;
+  overflow-x: hidden;
 }
 
 [x-cloak] {
