@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # Allows manual triggering of the workflow
   schedule:
     - cron: '0 */12 * * *' # Runs every 12 hours
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
