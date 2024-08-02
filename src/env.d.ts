@@ -5,6 +5,10 @@ interface ImportMetaEnv {
   readonly SECRET_ACCESS_TOKEN: string;
   readonly CLIENT_ID: string;
   readonly CLIENT_SECRET: string;
+  readonly CONTENTFUL_SPACE_ID: string;
+  readonly CONTENTFUL_DELIVERY_TOKEN: string;
+  readonly CONTENTFUL_PREVIEW_TOKEN: string;
+  readonly CONTENTFUL_ACCESS_TOKEN: string;
   // readonly SECRET_OPEN_PASSWORD: string;
   // readonly FIREBASE_PRIVATE_KEY_ID: string;
   // readonly FIREBASE_PRIVATE_KEY: string;

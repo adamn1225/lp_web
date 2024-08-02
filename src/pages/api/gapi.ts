@@ -6,7 +6,7 @@ if (!apiToken) {
 
 async function fetchListings() {
   try {
-    const response = await fetch('https://open-api.guesty.com/v1/listings?limit=40', {
+    const response = await fetch('https://open-api.guesty.com/v1/listings?limit=20', {
       headers: {
         accept: 'application/json; charset=utf-8',
         Authorization: `Bearer ${apiToken}`

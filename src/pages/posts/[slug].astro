@@ -1,0 +1,39 @@
+---
+export const prerender = true;
+
+import pkg from 'contentful';
+import { contentfulClient } from "../../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import type { BlogPost } from "../../lib/contentful";
+
+export async function getStaticPaths() {
+  const entries = await contentfulClient.getEntries<BlogPost>({
+    content_type: "landingPageblog", // Updated content type ID
+  });
+
+  const pages = entries.items.map((item) => ({
+    params: { slug: String(item.fields.slug) },
+    props: {
+      title: item.fields.heroTitle,
+      content: documentToHtmlString(item.fields.content), // Corrected field name
+      date: new Date(item.fields.date).toLocaleDateString(),
+      image: item.fields.mainBlogImage?.fields?.file?.url, // Ensure the correct path to the image URL
+    },
+  }));
+  return pages;
+}
+
+const { content, title, date, image } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <title>{title}</title>
+  </head>
+  <body>
+    <h1>{title}</h1>
+    <time>{date}</time>
+    {image && <img src={image} alt={title} />}
+    <article set:html={content} />
+  </body>
+</html>
