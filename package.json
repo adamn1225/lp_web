@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro build --verbose",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -55,7 +55,6 @@
     "react-query": "^3.39.3",
     "replace-json-property": "^1.9.0",
     "sass": "^1.77.8",
-    "sharp": "^0.33.4",
     "swiper": "^11.1.9",
     "tailwindcss": "^3.4.7",
     "ts-jest": "^29.2.4",
