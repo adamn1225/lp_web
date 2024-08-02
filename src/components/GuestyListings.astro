@@ -3,10 +3,13 @@ import fetchListings from '../pages/api/gapi';
 
 const listings = await fetchListings();
 
+
+
+
 ---
 
   {
-      listings.map(({bedrooms, pictures, title, address, bathrooms, prices, _id }) => (
+      listings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
   <a href={_id}>
       <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
               <div class="bg-muted-100">
