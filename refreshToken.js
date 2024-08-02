@@ -7,9 +7,11 @@ dotenv.config();
 async function refreshToken(retries = 3, delay = 1000) {
   const clientId = process.env.CLIENT_ID;
   const clientSecret = process.env.CLIENT_SECRET;
+  const contentfulApiToken = process.env.CONTENTFUL_API_TOKEN;
 
   console.log('CLIENT_ID:', clientId);
   console.log('CLIENT_SECRET:', clientSecret);
+  console.log('CONTENTFUL_API_TOKEN:', contentfulApiToken);
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
