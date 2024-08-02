@@ -4,7 +4,9 @@ import alpinejs from "@astrojs/alpinejs";
 import icon from "astro-icon";
 import netlify from '@astrojs/netlify';
 import react from '@astrojs/react';
+import markdoc from "@astrojs/markdoc";
 
+// https://astro.build/config
 export default defineConfig({
   vite: {
     build: {
@@ -15,10 +17,5 @@ export default defineConfig({
   },
   output: 'server',
   adapter: netlify(),
-  integrations: [
-    tailwind(),
-    icon(),
-    alpinejs(),
-    react(),
-  ],
+  integrations: [tailwind(), icon(), alpinejs(), react(), markdoc()]
 });

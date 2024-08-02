@@ -4,7 +4,23 @@ import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
 import GuestyListings from '@components/GuestyListings.astro'
 import Page2 from '@components/Page2.astro'
+import { contentfulClient } from "../lib/contentful";
+import type { BlogPost } from "../lib/contentful";
 
+const entries = await contentfulClient.getEntries<BlogPost>({
+  content_type: "landingPageblog",
+});
+
+const posts = entries.items.map((item) => {
+  const { heroTitle, content, slug, mainBlogImage, date } = item.fields;
+  return {
+    heroTitle,
+    content,
+    slug,
+    mainBlogImage,
+    date: new Date(date).toLocaleDateString(),
+  };
+});
 
 ---
 
@@ -30,6 +46,28 @@ import Page2 from '@components/Page2.astro'
             <button id="showHide" class="bg-cyan-600 px-6 py-2 shadow-md shadow-cyan-500/30 rounded-3xl text-white"> Show More </button>
           </span>
         </div>
+              <div class="flex justify-center align-center mb-4 w-full">
+                <h2 class="font-bold text-muted-900 text-lg">Check out our recent blogs</h2>
+              </div>
+   <div class="max-w-max mb-12 w-full border-none xs:mx-6 md:mx-24 lg:mx-32 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    
+    <ul class="border border-muted-200 max-h-max">
+      {posts.map((post) => (
+        <li>
+          {post.mainBlogImage && (
+            <img class="drop-shadow-lg object-cover w-full" src={post.mainBlogImage.fields.file.url} alt={post.heroTitle} />
+          )}
+          <a href={`/posts/${post.slug}/`}>
+        <div class="px-2 pt-2 flex flex-col justify-center items-center w-full">
+             <h2 class="font-bold text-muted-900 text-lg pt-1">{post.heroTitle}</h2>
+             <p class="pt-1">{post.content}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+   </div>
+
  </div>
       
       </Container>     
