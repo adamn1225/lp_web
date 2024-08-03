@@ -18,43 +18,17 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Generate Bearer Token
-        id: generate-token
-        env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          SHELL: /bin/bash
-        run: |
-          RESPONSE=$(curl --location --request POST 'https://open-api.guesty.com/oauth2/token' \
-            --header 'accept: application/json' \
-            --data-urlencode 'grant_type=client_credentials' \
-            --data-urlencode 'scope=open-api' \
-            --data-urlencode "client_secret=${CLIENT_SECRET}" \
-            --data-urlencode "client_id=${CLIENT_ID}")
-
-          echo "Response: $RESPONSE"
-
-          # Extract the bearer token from the response
-          BEARER_TOKEN=$(echo $RESPONSE | jq -r '.access_token')
-
-          echo "Generated Bearer Token: $BEARER_TOKEN"
-
-          # Set the token as an environment variable
-          echo "BEARER_TOKEN=${BEARER_TOKEN}" >> $GITHUB_ENV
-        shell: bash
-
       - name: Set environment variables
         run: |
-          echo "VITE_API_TOKEN=${{ env.BEARER_TOKEN }}" > .env
+          echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" > .env
           echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> .env
           echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> .env
-          echo "CONTENTFUL_ACCESS_TOKEN=${{ secrets.CONTENTFUL_ACCESS_TOKEN }}" >> .env
-          echo "CONTENTFUL_PREVIEW_TOKEN=${{ secrets.CONTENTFUL_PREVIEW_TOKEN }}" >> .env
-          echo "CONTENTFUL_DELIVERY_TOKEN=${{ secrets.CONTENTFUL_DELIVERY_TOKEN }}" >> .env
-          echo "CONTENTFUL_SPACE_ID=${{ secrets.CONTENTFUL_SPACE_ID }}" >> .env
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Run your script
+        run: node refreshToken.js
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
