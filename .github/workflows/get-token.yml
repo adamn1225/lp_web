@@ -1,4 +1,4 @@
-name: Retrieve Bearer Token
+name: USE THIS ONE Retrieve Bearer Token
 
 on:
   workflow_dispatch:
@@ -22,18 +22,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run refreshToken script
-        env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        run: node refreshToken.js
-
-      - name: Create or update .env.local file
+      - name: Use stored Bearer Token
         run: |
           # Ensure the .env.local file exists
           touch .env.local
-          # Append the bearer token to the .env.local file
-          echo "VITE_API_TOKEN=$(node -e 'console.log(process.env.BEARER_TOKEN)')" >> .env.local
+          # Append the stored bearer token to the .env.local file
+          echo "VITE_API_TOKEN=${{ secrets.BEARER_TOKEN }}" >> .env.local
 
       - name: Verify .env.local file
         run: cat .env.local
