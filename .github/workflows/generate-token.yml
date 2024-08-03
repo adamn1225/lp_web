@@ -69,10 +69,10 @@ jobs:
     - name: Use Bearer Token in Astro Project
       run: |
         # Ensure the .env file exists
-        touch .env
-        # Append the bearer token to the .env file
+        touch .env.local
+        # Append the bearer token to the .env.local file
         echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
-        # Log the .env file content for debugging purposes
+        # Log the .env.local file content for debugging purposes
         cat .env
       env:
         SHELL: /bin/bash  # Explicitly set the SHELL environment variable
