@@ -1,6 +1,6 @@
 ---
 export const prerender = true;
-import Layout from '@layouts/Default.astro'
+import Layout from '@layouts/Default.astro';
 
 import { contentfulClient } from "../../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
@@ -41,42 +41,11 @@ export async function getStaticPaths() {
 const { content, title, date, mainBlogImage } = Astro.props;
 ---
 <Layout>
-
-
   <div class="flex xs:flex-col md:justify-evenly lg:flex lg:justify-evenly mt-32 mb-20 w-full md:px-24 xs:px-3">
     <div class="md:flex md:flex-col items-center">
       <h1 class="text-3xl font-bold text-center text-slate-700 md:pt-12 pb-5">{title}</h1>
-        
-            {mainBlogImage && <img class="drop-shadow-lg rounded-lg" src={mainBlogImage} alt={title} />}
-
-     
-      
-            <!-- <article set:html={content} /> -->
-          
-              <h1 class="text-3xl xs:text-center font-bold text-slate-700 pt-12 pb-5">{title}</h1>
-              <span class="xs:text-center">
-              <p>{content}</p>
-              <p>This is content about fun activities in Myrtle Beach. This is just a test blog, but feel free to edit this post and replace it with whatever you guys want to talk about. This is content about fun activities in Myrtle Beach. This is just a test blog, but feel free to edit this post and replace it with whatever you guys want to talk about. This is content about fun activities in Myrtle Beach. This is just a test blog, but feel free to edit this post and replace it with whatever you guys want to talk about. This is content about fun activities in Myrtle Beach. This is just a test blog, but feel free to edit this post and replace it with whatever you guys want to talk about.</p><br />
-              <p>Cat ipsum dolor sit amet, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason. Chase imaginary bugs, purr for no reason.</p><br />
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><br />
-              <br />
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-           </span>
-      </div>
-      
-   
-
-    <div class="flex xs:text-center text-slate-700 flex-col xs:items-center xs:px-0 md:gap-2 items-center w-5/6 md:pt-32 xs:pt-12 pl-8 xs:w-full xs:mt-8 border-t-2 border-slate-300">
-      <h3 class="text-xl"><span class="font-bold">Author:</span> Adam N.</h3>
-      <p class="text-md"><span class="font-bold">Published: </span><time>{date}</time></p>
-
-<label for="helper-text" class="border-t-2 border-slate-800 xs:pt-2 xs:mt-4 block md:mb-2 xs:m-0 text-lg font-bold text-slate-700 dark:text-white">Subscribe</label>
-<input type="email" id="helper-text" aria-describedby="helper-text-explanation" class="
-bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block xs:w-full w-3/4 p-2.5 xs:mt-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@email.com">
-<p id="helper-text-explanation" class="mt-2 text-sm text-gray-500">We’ll never share your details. Read our 
-  <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p>
-
-   </div>
+      {mainBlogImage && <img class="drop-shadow-lg rounded-lg" src={mainBlogImage} alt={title} />}
+      <article set:html={content}></article>
+    </div>
   </div>
-
 </Layout>
