@@ -6,8 +6,8 @@ dotenv.config();
 
 const { createClient } = pkg;
 
-const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
-const spaceId = process.env.CONTENTFUL_SPACE_ID;
+const accessToken = import.meta.env.CONTENTFUL_ACCESS_TOKEN;
+const spaceId = import.meta.env.CONTENTFUL_SPACE_ID;
 
 if (!accessToken) {
   throw new Error('Expected parameter accessToken');
