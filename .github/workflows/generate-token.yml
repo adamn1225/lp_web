@@ -3,7 +3,7 @@ name: Generate Bearer Token
 on:
   workflow_dispatch: # Allows manual triggering of the workflow
   schedule:
-    - cron: '0 */23 * * *' # Runs every 12 hours
+    - cron: '0 */23 * * *' # Runs every 23 hours
 
 jobs:
   generate-token:
@@ -17,30 +17,25 @@ jobs:
       run: |
         npm install -g pnpm
         pnpm setup
-      env:
-        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+      shell: bash
 
     - name: Verify pnpm Installation
       run: pnpm --version
-      env:
-        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+      shell: bash
 
     - name: Install Dependencies
       run: pnpm install
-      env:
-        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+      shell: bash
 
     - name: Install jq
       run: sudo apt-get install -y jq
-      env:
-        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+      shell: bash
 
     - name: Generate Bearer Token
       id: generate-token
       env:
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        SHELL: /bin/bash
       run: |
         RESPONSE=$(curl --location --request POST 'https://open-api.guesty.com/oauth2/token' \
           --header 'accept: application/json' \
@@ -62,20 +57,17 @@ jobs:
 
     - name: Log Bearer Token
       run: echo ${{ env.BEARER_TOKEN }}
-      env:
-        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
-        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+      shell: bash
 
     - name: Use Bearer Token in Astro Project
       run: |
-        # Ensure the .env file exists
+        # Ensure the .env.local file exists
         touch .env.local
         # Append the bearer token to the .env.local file
-        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
+        echo "VITE_API_TOKEN=${{ env.BEARER_TOKEN }}" >> .env.local
         # Log the .env.local file content for debugging purposes
-        cat .env
-      env:
-        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+        cat .env.local
+      shell: bash
 
     - name: Install Dependencies and Build Project
       run: |
@@ -86,6 +78,5 @@ jobs:
         # Deploy or perform any other necessary tasks
         # e.g., pnpm deploy
       env:
-        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
         VITE_API_TOKEN: ${{ env.BEARER_TOKEN }}
-        SHELL: /bin/bash  # Explicitly set the SHELL environment variable
+      shell: bash
