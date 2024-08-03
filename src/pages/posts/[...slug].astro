@@ -2,7 +2,6 @@
 export const prerender = true;
 import Layout from '@layouts/Default.astro'
 
-import pkg from 'contentful';
 import { contentfulClient } from "../../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import type { BlogPost } from "../../lib/contentful"; // Type-only import
@@ -29,11 +28,14 @@ export async function getStaticPaths() {
         content: documentToHtmlString(item.fields.content), // Corrected field name
         date: new Date(item.fields.date).toLocaleDateString(),
         mainBlogImage: imageUrl
-      },
+      }
     };
   });
 
-  return pages; // Return the array directly
+  return {
+    paths: pages,
+    fallback: false
+  };
 }
 
 const { content, title, date, mainBlogImage } = Astro.props;
