@@ -18,6 +18,8 @@ const client = createClient({
   accessToken: accessToken,
 });
 
+export const contentfulClient = client;
+
 export interface BlogPost {
   contentTypeId: "landingPageblog";
   fields: {
