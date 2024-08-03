@@ -1,7 +1,22 @@
 import pkg from "contentful";
 import type { EntryFields, Asset } from "contentful";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const { createClient } = pkg;
+
+const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
+const spaceId = process.env.CONTENTFUL_SPACE_ID;
+
+if (!accessToken) {
+  throw new Error('Expected parameter accessToken');
+}
+
+const client = createClient({
+  space: spaceId,
+  accessToken: accessToken,
+});
 
 export interface BlogPost {
   contentTypeId: "landingPageblog";
@@ -20,10 +35,15 @@ export interface BlogPost {
   };
 }
 
-export const contentfulClient = createClient({
-  space: import.meta.env.CONTENTFUL_SPACE_ID,
-  accessToken: import.meta.env.DEV
-    ? import.meta.env.CONTENTFUL_PREVIEW_TOKEN
-    : import.meta.env.CONTENTFUL_DELIVERY_TOKEN,
-  host: import.meta.env.DEV ? "preview.contentful.com" : "cdn.contentful.com",
-});
+// Example function to fetch blog posts
+export const fetchBlogPosts = async () => {
+  try {
+    const entries = await client.getEntries<BlogPost>({
+      content_type: "landingPageblog",
+    });
+    return entries.items;
+  } catch (error) {
+    console.error("Error fetching blog posts:", error);
+    throw error;
+  }
+};
