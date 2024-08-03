@@ -28,8 +28,12 @@ jobs:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: node refreshToken.js
 
-      - name: Create .env.local file
-        run: cp .env .env.local
+      - name: Create or update .env.local file
+        run: |
+          # Ensure the .env.local file exists
+          touch .env.local
+          # Append the bearer token to the .env.local file
+          echo "VITE_API_TOKEN=$(node -e 'console.log(process.env.BEARER_TOKEN)')" >> .env.local
 
       - name: Verify .env.local file
         run: cat .env.local
