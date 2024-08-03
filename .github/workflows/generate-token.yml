@@ -73,6 +73,7 @@ jobs:
         # Log the .env file content for debugging purposes
         cat .env
       env:
+        BEARER_TOKEN: ${{ env.BEARER_TOKEN }}
         SHELL: /bin/bash  # Explicitly set the SHELL environment variable
 
     - name: Install Dependencies and Build Project
