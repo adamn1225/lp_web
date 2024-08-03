@@ -69,7 +69,7 @@ jobs:
         # Ensure the .env file exists
         touch .env
         # Append the bearer token to the .env file
-        echo "VITE_API_TOKEN=${BEARER_TOKEN}" >> .env
+        echo "VITE_API_TOKEN=${{ env.BEARER_TOKEN }}" >> .env
         # Log the .env file content for debugging purposes
         cat .env
       env:
