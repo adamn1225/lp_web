@@ -19,12 +19,6 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Download .env artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: env-file
-          path: .
-
       - name: Install dependencies
         run: pnpm install
 
@@ -33,3 +27,6 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: node refreshToken.js
+
+      - name: Verify .env file
+        run: cat .env

@@ -1,19 +1,17 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
 async function refreshToken(retries = 3, delay = 1000) {
   const clientId = process.env.CLIENT_ID;
   const clientSecret = process.env.CLIENT_SECRET;
-  const contentfulApiToken = process.env.CONTENTFUL_API_TOKEN;
 
-  if (!clientId || !clientSecret || !contentfulApiToken) {
-    throw new Error('Missing required environment variables: CLIENT_ID, CLIENT_SECRET, or CONTENTFUL_API_TOKEN');
+  if (!clientId || !clientSecret) {
+    throw new Error('Missing required environment variables: CLIENT_ID or CLIENT_SECRET');
   }
-
-  console.log('CLIENT_ID:', clientId);
-  console.log('CLIENT_SECRET:', clientSecret);
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -37,8 +35,16 @@ async function refreshToken(retries = 3, delay = 1000) {
         throw new Error(`Request failed with status ${response.status}`);
       }
       const data = await response.json();
-      console.log('Token:', data.access_token);
-      return data.access_token;
+      const bearerToken = data.access_token;
+
+      // Update the .env file with the new bearer token
+      const envPath = path.resolve(__dirname, '.env');
+      const envContent = fs.readFileSync(envPath, 'utf8');
+      const updatedEnvContent = envContent.replace(/VITE_API_TOKEN=.*/, `VITE_API_TOKEN=${bearerToken}`);
+      fs.writeFileSync(envPath, updatedEnvContent, 'utf8');
+
+      console.log('Token:', bearerToken);
+      return bearerToken;
     } catch (error) {
       console.error(`Attempt ${attempt} failed: ${error.message}`);
       if (attempt < retries) {
@@ -51,4 +57,4 @@ async function refreshToken(retries = 3, delay = 1000) {
   }
 }
 
-export default refreshToken;
+refreshToken().catch(error => console.error('Error refreshing token:', error));
