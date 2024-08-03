@@ -27,7 +27,7 @@ jobs:
     - name: Run build
       run: pnpm run build  # Adjust this command to your build script
 
-    - name: Refresh token
+    - name: Refresh tokens
       run: node refreshToken.js
       env:
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
