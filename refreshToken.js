@@ -37,7 +37,7 @@ async function refreshToken(retries = 3, delay = 1000) {
       const data = await response.json();
       const bearerToken = data.access_token;
 
-      // Update the .env file with the new bearer token
+      // Update the .env.local file with the new bearer token
       const envPath = path.resolve(__dirname, '.env.local');
       const envContent = fs.readFileSync(envPath, 'utf8');
       const updatedEnvContent = envContent.replace(/VITE_API_TOKEN=.*/, `VITE_API_TOKEN=${bearerToken}`);
