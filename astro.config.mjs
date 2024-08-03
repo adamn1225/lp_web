@@ -5,6 +5,7 @@ import icon from "astro-icon";
 import netlify from '@astrojs/netlify';
 import react from '@astrojs/react';
 import markdoc from "@astrojs/markdoc";
+import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,6 +17,8 @@ export default defineConfig({
     }
   },
   output: 'server',
-  adapter: netlify(),
+  adapter: node({
+    mode: 'standalone'
+  }),
   integrations: [tailwind(), icon(), alpinejs(), react(), markdoc()]
 });
