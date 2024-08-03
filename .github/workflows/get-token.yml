@@ -1,10 +1,10 @@
-name: Retrieve Bearer Token
+name: Import Bearer Token
 
 on:
   workflow_dispatch:
 
 jobs:
-  retrieve-token:
+  generate-token:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,25 +14,22 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.14.1'  # Updated Node.js version
+          node-version: '18.14.1'
 
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Download .env artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: env-file
-          path: .
-
-      - name: Source .env file
-        run: |
-          set -o allexport
-          source .env
-          set +o allexport
-
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run your script
-        run: node refreshToken.js
+      - name: Generate token
+        run: node generateToken.js
+
+      - name: Save token to .env
+        run: echo "BEARER_TOKEN=${{ steps.generate-token.outputs.token }}" > .env
+
+      - name: Upload .env artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: env-file
+          path: .env
