@@ -2,6 +2,11 @@ import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -37,11 +42,9 @@ async function refreshToken(retries = 3, delay = 1000) {
       const data = await response.json();
       const bearerToken = data.access_token;
 
-      // Update the .env.local file with the new bearer token
-      const envPath = path.resolve(__dirname, '.env.local');
-      const envContent = fs.readFileSync(envPath, 'utf8');
-      const updatedEnvContent = envContent.replace(/VITE_API_TOKEN=.*/, `VITE_API_TOKEN=${bearerToken}`);
-      fs.writeFileSync(envPath, updatedEnvContent, 'utf8');
+      // Write the bearer token to bearer_token.txt
+      const tokenFilePath = path.join(__dirname, 'bearer_token.txt');
+      fs.writeFileSync(tokenFilePath, bearerToken, 'utf8');
 
       console.log('Token:', bearerToken);
       return bearerToken;

@@ -1,65 +1,44 @@
 ---
-export const prerender = true;
+import fetchListings from '../pages/api/gapi'; // Adjust the import path as needed
+import ListingPageDetail from '../components/ListingPageDetail.astro';
 
-import ListingPageDetail from '@components/ListingPageDetail.astro'
-import fetchListings from './api/gapi';
-
-export async function getStaticPaths() {
-  const listings = await fetchListings();
-  const paths = listings.map((listings: any) => ({
-    params: {
-      listingPage: listings._id // Ensure this matches the requested path
-    },
-    props: {
-      title: listings.title,
-      PropertyType: listings.propertyType,
-      bathrooms: listings.bathrooms,
-      pictures: listings.pictures,
-      beds: listings.beds,
-      description: listings.publicDescription
-    }
-  }));
-
-  console.log("Generated paths:", JSON.stringify(paths, null, 2)); // Log the generated paths
-
-  return paths; // Return the array of paths directly
+interface ListingProps {
+  title: string;
+  propertyType: string;
+  bathrooms: number;
+  pictures: string[];
+  beds: number;
+  description: string;
 }
 
-export async function get({ params }) {
+type GetReturnType = 
+  | { props: ListingProps }
+  | { status: number; body: string };
+
+export async function get({ params }): Promise<GetReturnType> {
   const listings = await fetchListings(); // Fetch listings again to find the specific one
   const listing = listings.find((listing) => listing._id === params.listingPage);
 
   if (!listing) {
     return {
       status: 404,
-      body: 'Not Found'
+      body: 'Listing not found'
     };
   }
 
+  console.log("Fetched listing in get function:", listing); // Log fetched listing
+
   return {
-    lineListing: listings,
-    id: listings._id,
-  title: listings.title,
-  city: listings.address.city,
-  state: listings.address.state,
-  description: listings.publicDescription.summary,
-  PropertyType: listings.propertyType,
-  bathrooms: listings.bathrooms,
-  pictures: listings.pictures,
-  beds: listings.beds
+    props: {
+      title: listing.title,
+      propertyType: listing.propertyType,
+      bathrooms: listing.bathrooms,
+      pictures: listing.pictures,
+      beds: listing.beds,
+      description: listing.publicDescription
+    }
   };
 }
-
-const { title, pictures, description, beds, bathrooms, propertyType } = Astro.props;
-
-
-
 ---
 
-<ListingPageDetail
-          title={title}
-          description={description}
-          bathrooms={bathrooms}
-          beds={beds}
-          pictures={pictures}
-        />
+<ListingPageDetail {...Astro.props} />

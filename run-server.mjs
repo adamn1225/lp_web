@@ -1,44 +1,53 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import fetch from 'node-fetch';
-import { handler as ssrHandler } from './dist/server/entry.mjs';
+import dotenv from 'dotenv';
+import cors from 'cors';
 
+// Load environment variables
 dotenv.config();
 
+// Debugging statement to check if the script is running
+console.log('Starting server...');
+
 const app = express();
-const base = '/availability';
+const port = process.env.PORT || 5000; // Ensure PORT is set in .env
 
-// Middleware to set the Authorization header
-app.use((req, res, next) => {
-  if (req.url.startsWith(base)) {
-    res.setHeader('Authorization', `Bearer ${process.env.VITE_API_KEY}`);
+app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
+
+app.get('/api/available', async (req, res) => {
+  const { checkIn, checkOut, minOccupancy } = req.query;
+  if (!checkIn || !checkOut || !minOccupancy) {
+    return res.status(400).json({ error: 'Missing required query parameters: checkIn, checkOut, minOccupancy' });
   }
-  next();
-});
 
-// Handler to fetch listings from the remote API
-async function fetchListings(req, res) {
-  const { checkIn, checkOut } = req.query;
-  const apiUrl = `https://open-api.guesty.com/v1/listings?checkIn=${checkIn}&checkOut=${checkOut}`;
+  const apiUrl = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
 
   try {
     const response = await fetch(apiUrl, {
       headers: {
-        'Authorization': `Bearer ${process.env.VITE_API_KEY}`
+        'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+        'Accept': 'application/json'
       }
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Guesty API error: ${errorText}`);
+      return res.status(response.status).json({ error: `Guesty API error: ${errorText}` });
+    }
+
     const data = await response.json();
     res.json(data);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
+  } catch (error) {
+    console.error('Error fetching data from Guesty API:', error);
+    res.status(500).json({ error: 'Failed to fetch data from API' });
   }
-}
-
-app.use(base, express.static('dist/client/'));
-app.get('/api/listings', fetchListings);
-app.use(ssrHandler);
-
-app.listen(8080, () => {
-  console.log('Server is running on http://localhost:8080');
 });
+
+// Start the Express server
+app.listen(port, () => {
+  console.log(`Express server running on port ${port}`);
+});
+
+export default app;
