@@ -7,7 +7,7 @@ interface Props {
 const { oveflow = false, gray = false } = Astro.props
 ---
 
-<section class="pt-16 overflow-hidden md:overflow-auto" class:list={[
+<section class="overflow-hidden md:overflow-auto" class:list={[
   oveflow ? '' : 'overflow-hidden',
   gray ? 'bg-muted-50 dark:bg-muted-900' : 'bg-white dark:bg-muted-900 '
 ]}>

@@ -1,7 +1,7 @@
 ---
-import fetchListings from '../pages/api/gapi';
+import {fetchFeaturedListings} from '../pages/api/gapi.ts';
 
-const listings = await fetchListings();
+const listings = await fetchFeaturedListings();
 
 
 

@@ -1,9 +1,11 @@
 ---
 import Layout from '@layouts/Split.astro'
 import Section from '@components/Section.astro'
+import Page2 from '@components/Page2.astro'
 import { contentfulClient } from "../lib/contentful";
 import type { BlogPost } from "../lib/contentful";
 import AvailabilitySearch from '../components/AvailabilitySearch'
+import GuestyListings from '../components/GuestyListings.astro'
 
 const entries = await contentfulClient.getEntries<BlogPost>({
   content_type: "landingPageblog",
@@ -25,40 +27,46 @@ const posts = entries.items.map((item) => {
   <main id="Properties">
     <!--Properties-->
     <Section>
-      
         <AvailabilitySearch client:load />
-      
-      <div class="xs:px-6 md:px-24 lg:px-32 mt-8">
-
-       
-
-      </div>
+        <h2 class="font-bold text-cyan-900 mb-4 mt-8 text-3xl text-center">Featured Listings</h2>
+        <div class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            
+          <GuestyListings />
+          
+        </div>
+        <div class="mt-7">
+          <span id="listing2" class="hidden py-3 px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <Page2 />
+          </span>
+          <span class="flex justify-center align-center mb-4">
+            <button id="showHide" class="bg-cyan-600 px-6 py-2 shadow-md shadow-cyan-500/30 rounded-3xl text-white mt-6"> Search through more of our listings </button>
+          </span>
+        </div>
 
 
     </Section>
     <div class="flex justify-center align-center mb-4 mt-12 pt-12 border-t border-slate-400">
-      <h2 class="font-bold text-muted-900 mb-4 text-3xl">Check out our recent blogs</h2>
+      <h2 class="font-bold text-cyan-900 mb-4 px-2 text-center md:text-3xl text-2xl">Check out our recent blogs</h2>
     </div>
-    <div class="mb-12 w-full border-none xs:mx-6 md:mx-24 lg:mx-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6  overflow-x-hidden">
-      <ul class="border border-slate-300 shadow-lg shadow-muted-300 border-muted-200 p-2 rounded-md max-h-max">
-        {posts.map((post) => (
-          <a href={`/posts/${post.slug}/`}>
-            <li>
+    <div class="mb-12 md:w-full border-none xs:mx-6 md:mx-24 lg:mx-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-2 justify-items-center items-center">
+      <ul class="border border-slate-300 shadow-lg shadow-muted-300 p-2 rounded-md max-h-max">
+        {posts.map((post, index) => (
+          <li key={index}>
+            <a href={`/posts/${post.slug}/`}>
               {post.mainBlogImage && (
-                <img class="bg-white object-cover w-full shadow-lg shadow-muted-300" src="https://images.ctfassets.net/tb2fjmysreao/5MALyS8wIeCCqmq0SKZuFV/e9f02c1dc9c970397a37eb1e95fd1998/sc-beach-fun.jpg" alt={post.heroTitle} />
+                <img class="bg-white object-contain md:w-full shadow-lg shadow-muted-300" src="https://images.ctfassets.net/tb2fjmysreao/5MALyS8wIeCCqmq0SKZuFV/e9f02c1dc9c970397a37eb1e95fd1998/sc-beach-fun.jpg" alt={post.heroTitle} />
               )}
-              <div class="px-3 pt-3 flex flex-col justify-center items-center w-full">
+              <div class="md:px-3 pt-3 flex flex-col justify-center items-center md:w-full">
                 <h2 class="font-bold text-muted-900 text-lg pt-1">{post.heroTitle}</h2>
                 <p class="pt-1 text-center">{post.content}</p>
-                <span class="bg-cyan-600 py-2 flex items-strech w-full justify-center text-center text-muted-100 mt-4">Read More</span>
               </div>
-            
-            </li>
-            
-          </a>
+            </a>
+          </li>
+          ))}
+         <a href={`/posts/${posts.slug}/`} class="bg-cyan-600 py-2 flex md:w-full justify-center rounded-md text-center text-muted-100 mt-4">Read More</a>
 
-        ))}
       </ul>
+      
     </div>
   </main>
 </Layout>
