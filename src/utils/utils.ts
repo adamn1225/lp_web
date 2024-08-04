@@ -1,6 +1,6 @@
-import fetchListings from '../pages/api/gapi';
+import {fetchOneHundred} from '../pages/api/gapi';
 
-const listings = await fetchListings();
+const listings = await fetchOneHundred();
 
 export function currency(amount: number) {
   return (
