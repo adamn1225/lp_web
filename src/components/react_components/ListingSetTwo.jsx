@@ -1,61 +1,83 @@
-import React from 'react'
-import allListings2 from '../../pages/api/guestyPage2'
+import React, { useState } from 'react';
+import { Search } from 'lucide-react';
 
+interface Listing {
+  _id: string;
+  picture: {
+    thumbnail: string;
+    caption: string;
+  };
+  publicDescription: {
+    summary: string;
+  };
+  prices: {
+    basePrice: number;
+    currency: string;
+  };
+  // Add other properties as needed
+}
 
+const AvailabilitySearch: React.FC = () => {
+  const [minOccupancy, setMinOccupancy] = useState<number>(1);
+  const [checkIn, setCheckIn] = useState<string>('');
+  const [checkOut, setCheckOut] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [available, setListings] = useState<Listing[]>([]);
 
-export default function ListingSetTwo() {
-    
+  const formatDate = (date: string): string => {
+    return new Date(date).toISOString().slice(0, 10);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const formattedCheckIn = formatDate(checkIn);
+      const formattedCheckOut = formatDate(checkOut);
+      const serverPort = import.meta.env.VITE_SERVER_PORT || '5000';
+
+      const response = await fetch(`http://localhost:${serverPort}/api/available?checkIn=${encodeURIComponent(formattedCheckIn)}&checkOut=${encodeURIComponent(formattedCheckOut)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const responseText = await response.text();
+      console.log('API Response Text:', responseText);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
+      }
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (err) {
+        throw new Error('Invalid JSON response');
+      }
+
+      if (!Array.isArray(data.results)) {
+        throw new Error('Unexpected response format');
+      }
+
+      setListings(data.results);
+    } catch (err) {
+      console.error('Error fetching listings:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    
-       <>
-       {allListings2.map(function(listing) {
-        return (
-            
-            <a href={listing._id}>
-            <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
-                <div className="bg-muted-100 dark:bg-muted-800 ">
-                <img className="h-full md:h-full w-full object-cover" id="string" src={listing.pictures[0].original} />
-              </div>
-              <div className="p-5 bg-white flex flex-col justify-evenly h-full">
-            <div className="">
-              <h4 className="font-sans font-bold text-xl text-muted-900">
-                {listing.title} 
-              </h4>
-              <h3 className="font-sans font-bold text-xl text-muted-900">
-               "` ${listing.prices.basePrice}/ Day`"
-              </h3>
-              <p className="text-sm text-muted-400">
-                
-                {listing.address.city}, {listing.address.state}
-              </p>
-            </div>
-            <hr className="border-t border-muted-200 dark:border-muted-800 my-5" />
-            <div className="h-max grid grid-cols-2 flex flex-row justify-center items-center">
-          
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-2 text-muted-900 dark:text-white">
-        
-                  <p className="text-xl font-bold">{listing.beds}</p>
-                </div>
-       
-                <p className="text-md text-muted-400">Bedrooms</p>
-              </div>
-              
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-2 text-muted-900 dark:text-white">
-                  
-                  <p className="text-xl font-bold">{listing.bathrooms}</p>
-                </div>
-       
-                <p className="text-md text-muted-400">Bathroom</p>
-              </div>
-       
-            </div>
-          </div>
-        </article>
-       </a>
-       )
-    })}
-    </>
+    <form onSubmit={handleSubmit}>
+      {/* Your form elements here */}
+    </form>
   );
 };
+
+export default AvailabilitySearch;

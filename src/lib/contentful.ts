@@ -20,10 +20,13 @@ export interface BlogPost {
   };
 }
 
+const spaceId = import.meta.env.CONTENTFUL_SPACE_ID || "your_space_id";
+const previewToken = import.meta.env.CONTENTFUL_PREVIEW_TOKEN || "your_preview_token";
+const deliveryToken = import.meta.env.CONTENTFUL_DELIVERY_TOKEN || "your_delivery_token";
+const isDev = import.meta.env.DEV;
+
 export const contentfulClient = createClient({
-  space: import.meta.env.CONTENTFUL_SPACE_ID,
-  accessToken: import.meta.env.DEV
-    ? import.meta.env.CONTENTFUL_PREVIEW_TOKEN
-    : import.meta.env.CONTENTFUL_DELIVERY_TOKEN,
-  host: import.meta.env.DEV ? "preview.contentful.com" : "cdn.contentful.com",
+  space: spaceId,
+  accessToken: isDev ? previewToken : deliveryToken,
+  host: isDev ? "preview.contentful.com" : "cdn.contentful.com",
 });

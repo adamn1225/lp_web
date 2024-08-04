@@ -3,8 +3,18 @@ import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
 import PropertySearch from '@components/ui/PropertySearch.astro'
+import fetchListings from '../pages/api/gapi';
+
+const listings = await fetchListings();
 
 const { title, beds, bathrooms, pictures, propertyType } = Astro.props;
+
+// Add default values or checks
+const safeTitle = title || 'No title available';
+const safeBeds = beds || 0;
+const safeBathrooms = bathrooms || 0;
+const safePictures = pictures || [];
+const safePropertyType = propertyType || 'Unknown';
 
 ---
 
@@ -58,12 +68,12 @@ const { title, beds, bathrooms, pictures, propertyType } = Astro.props;
                 <!-- property images -->
                 <div class="flex flex-col md:flex-row items-stretch gap-4 mb-4">
                   <div class="main-image md:flex-grow-[2]">
-                    <img class="block object-cover min-h-[450px]" src={pictures[0].original} alt="Main image" width={2000} height={1333} data-zoom />
+                    <img class="block object-cover min-h-[450px]" src={pictures} alt="Main image" width={2000} height={1333} data-zoom />
                   </div>
                   <div class="flex flex-row md:flex-col xs:flex-wrap gap-4 max-w-full md:max-w-[180px] md:w-full">
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[1].original} alt="Sub image" width={2000} height={1333} data-zoom />
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[2].original} alt="Sub image" width={2000} height={1333} data-zoom />
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[3].original} alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures} alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures} alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures} alt="Sub image" width={2000} height={1333} data-zoom />
                   </div>
                 </div>
                 <!-- property content -->

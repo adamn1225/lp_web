@@ -4,6 +4,7 @@
 
 html {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -12,6 +13,9 @@ body {
   max-width: 100% !important;
   overflow-x: hidden;
 }
+
+
+
 
 [x-cloak] {
   display: none !important;
