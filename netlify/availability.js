@@ -1,4 +1,3 @@
-// netlify/functions/availability.js
 const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
@@ -7,6 +6,10 @@ exports.handler = async function(event, context) {
   if (!checkIn || !checkOut || !minOccupancy) {
     return {
       statusCode: 400,
+      headers: {
+        'Access-Control-Allow-Origin': '*', // CORS header
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ error: 'Missing required query parameters: checkIn, checkOut, minOccupancy' })
     };
   }
@@ -26,6 +29,10 @@ exports.handler = async function(event, context) {
       console.error(`Guesty API error: ${errorText}`);
       return {
         statusCode: response.status,
+        headers: {
+          'Access-Control-Allow-Origin': '*', // CORS header
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ error: `Guesty API error: ${errorText}` })
       };
     }
@@ -33,12 +40,20 @@ exports.handler = async function(event, context) {
     const data = await response.json();
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*', // CORS header
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     };
   } catch (error) {
     console.error('Error fetching data from Guesty API:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*', // CORS header
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ error: 'Failed to fetch data from API' })
     };
   }
