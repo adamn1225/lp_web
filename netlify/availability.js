@@ -1,9 +1,12 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 exports.handler = async (event, context) => {
+  console.log('Received event:', event);
+
   const { checkIn, checkOut, minOccupancy } = event.queryStringParameters;
 
   if (!checkIn || !checkOut || !minOccupancy) {
+    console.error('Missing required query parameters:', { checkIn, checkOut, minOccupancy });
     return {
       statusCode: 400,
       headers: {
