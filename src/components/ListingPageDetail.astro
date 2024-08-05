@@ -11,16 +11,17 @@ const listings = await fetchOneHundred();
 let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.props;
 
 const fallbackDescription = {
-  summary: 'Default summary.',
-  space: 'Default space description.',
-  neighborhood: 'Default neighborhood description.',
-  notes: 'Default notes.',
-  access: 'Default access information.',
-  houseRules: 'Default house rules.'
+  summary: '',
+  space: '',
+  neighborhood: '',
+  notes: '',
+  access: '',
+  houseRules: ''
 };
 
-let falsedata;
+let fetchedDescription;
 let error = null;
+
 // Fetch data from API
 try {
   const response = await fetch('/api/description');
@@ -28,12 +29,15 @@ try {
     throw new Error('Network response was not ok');
   }
 
-  falsedata = await response.json();
+  fetchedDescription = await response.json();
 } catch (err) {
   console.warn('Failed to fetch data:', err);
-  falsedata = fallbackDescription;
+  fetchedDescription = fallbackDescription;
   error = err.message;
 }
+
+// Use fetchedDescription if available, otherwise use Description from props
+Description = fetchedDescription || Description;
 
 ---
 
