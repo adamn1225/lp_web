@@ -1,7 +1,7 @@
 [build]
   command = "pnpm run build"
   publish = "dist"
-  functions = "netlify/functions"  # Ensure this is the correct path for your functions
+  functions = "netlify/functions"
   environment = { NODE_ENV = "production" }
 
 [build.environment]
