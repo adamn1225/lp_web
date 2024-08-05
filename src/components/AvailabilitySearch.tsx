@@ -45,8 +45,8 @@ const AvailabilitySearch: React.FC = () => {
 
   const serverPort = import.meta.env.VITE_SERVER_PORT || '5000';
   const apiUrl = isLocal
-    ? `http://localhost:${serverPort}/api/available`
-    : `/.netlify/functions/availability`;
+  ? `http://localhost:${serverPort}/api/available`
+  : `/.netlify/functions/availability`;
 
   const formatDate = (date: Date): string => {
     return date.toISOString().slice(0, 10);
