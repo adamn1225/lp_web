@@ -151,7 +151,7 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
+        </div>
       <div className="bg-white w-full h-full overflow-auto">
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
