@@ -6,7 +6,7 @@ import PropertySearch from '@components/ui/PropertySearch.astro'
 import GuestyListings from './GuestyListings.astro'
 import {fetchOneHundred} from '../pages/api/gapi.ts';
 
-
+const listings = await fetchOneHundred();
 
 let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.props;
 
@@ -109,7 +109,9 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
 
-            
+                    <p class="text-muted-500 text-base xs:text-center">
+                      {Description.summary}
+                     </p><br />
                     <p class="text-muted-500 text-base xs:text-center">
                       {Description.neighborhood}
                      </p>
