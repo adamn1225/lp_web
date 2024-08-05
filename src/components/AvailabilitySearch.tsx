@@ -155,14 +155,14 @@ const AvailabilitySearch: React.FC = () => {
           </div>
         )}
         <div className="search-results grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 md:px-12 px-4">
-          {available.map((property) => (
+          {available.map((property, title) => (
             
     
 <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-slate-500/30 rounded-md">
                   <div className="p-1 result-item" key={property._id}>
                     <img className="w-full h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
                    <div className="md:p-5 p-2 bg-white flex flex-col align-middle h-1/1 justify-center border-t-2 border-slate-500/30">
-                    <h3 className="font-sans font-bold text-lg text-muted-900 pb-4 text-center">{property.title}</h3>
+                    <h3 className="font-sans font-bold text-lg text-muted-900 pb-4 text-center">{title}</h3>
                    <div className="flex md:flex-row flex-col justify-center self-center md:justify-between border-t-2 border-slate-500/30 pt-6"> 
                     <p className="font-sans font-bold text-lg text-center text-muted-900 ">Price: ${property.prices.basePrice} {property.prices.currency}</p>
                     <a href={property._id}><button className=" bg-cyan-600 m-0 py-3 md:px-12 px-4 shadow-md shadow-cyan-500/30 rounded-xl text-white">Book Instantly!</button></a> 
