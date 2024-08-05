@@ -6,38 +6,9 @@ import PropertySearch from '@components/ui/PropertySearch.astro'
 import GuestyListings from './GuestyListings.astro'
 import {fetchOneHundred} from '../pages/api/gapi.ts';
 
-const listings = await fetchOneHundred();
+
 
 let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.props;
-
-const fallbackDescription = {
-  summary: '',
-  space: '',
-  neighborhood: '',
-  notes: '',
-  access: '',
-  houseRules: ''
-};
-
-let fetchedDescription;
-let error = null;
-
-// Fetch data from API
-try {
-  const response = await fetch('/api/description');
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-
-  fetchedDescription = await response.json();
-} catch (err) {
-  console.warn('Failed to fetch data:', err);
-  fetchedDescription = fallbackDescription;
-  error = err.message;
-}
-
-// Use fetchedDescription if available, otherwise use Description from props
-Description = fetchedDescription || Description;
 
 ---
 
@@ -137,9 +108,7 @@ Description = fetchedDescription || Description;
                     </ul>
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
-                    <p class="text-muted-500 text-base xs:text-center">
-                     {Description.summary}
-                    </p><br />
+
                     <p class="text-muted-500 text-base xs:text-center">
                       {Description.space}
                      </p><br />
@@ -150,15 +119,8 @@ Description = fetchedDescription || Description;
                       {Description.notes}
                      </p><br />
                      <br />
-                    <p class="text-muted-500 text-base xs:text-center">
-                      {Description.access}
-                     </p>
-                     <br />
-                     <p class="text-muted-500 text-base xs:text-center">
-                       {Description.houseRules}
-                      </p>
-                    <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
-                    </p>
+
+
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
                     <div class="boxed-amenities flex justify-center gap-3">
