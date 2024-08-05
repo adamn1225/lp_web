@@ -36,8 +36,8 @@ const AvailabilitySearch: React.FC = () => {
   ]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const formatDate = (date: string): string => {
-    return new Date(date).toISOString().slice(0, 10);
+  const formatDate = (date: Date): string => {
+    return date.toISOString().slice(0, 10);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,7 +50,7 @@ const AvailabilitySearch: React.FC = () => {
       const formattedCheckOut = formatDate(state[0].endDate);
       const serverPort = import.meta.env.VITE_SERVER_PORT || '5000';
 
-      const response = await fetch(`http://localhost:${serverPort}/api/available?checkIn=${encodeURIComponent(formattedCheckIn)}&checkOut=${encodeURIComponent(formattedCheckOut)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}`, {
+      const response = await fetch(`/.netlify/functions/availability?checkIn=${encodeURIComponent(formattedCheckIn)}&checkOut=${encodeURIComponent(formattedCheckOut)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
