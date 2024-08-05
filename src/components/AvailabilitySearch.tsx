@@ -1,17 +1,88 @@
-import React, { useState } from 'react';
-import { DateRange } from 'react-date-range';
-import { Search } from 'react-feather';
+import React, { useState } from "react";
+import { Search } from "lucide-react";
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css"; // main css file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { addDays } from "date-fns";
 
-const AvailabilitySearch = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [listings, setListings] = useState([]);
-  const [state, setState] = useState([
+interface Listing {
+  _id: string;
+  picture: {
+    thumbnail: string;
+    caption: string;
+  };
+  publicDescription: {
+    summary: string;
+  };
+  prices: {
+    basePrice: number;
+    currency: string;
+  };
+  // Add other properties as needed
+}
+
+const AvailabilitySearch: React.FC = () => {
+  const [minOccupancy, setMinOccupancy] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [available, setListings] = useState<Listing[]>([]);
+  const [state, setState] = useState<any[]>([
     {
       startDate: new Date(),
-      endDate: new Date(),
+      endDate: addDays(new Date(), 7),
       key: 'selection'
     }
   ]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const formatDate = (date: string): string => {
+    return new Date(date).toISOString().slice(0, 10);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const formattedCheckIn = formatDate(state[0].startDate);
+      const formattedCheckOut = formatDate(state[0].endDate);
+      const serverPort = import.meta.env.VITE_SERVER_PORT || '5000';
+
+      const response = await fetch(`http://localhost:${serverPort}/api/available?checkIn=${encodeURIComponent(formattedCheckIn)}&checkOut=${encodeURIComponent(formattedCheckOut)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const responseText = await response.text();
+      console.log('API Response Text:', responseText);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
+      }
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (err) {
+        throw new Error('Invalid JSON response');
+      }
+
+      if (!Array.isArray(data.results)) {
+        throw new Error('Unexpected response format');
+      }
+
+      setListings(data.results);
+      toggleModal(); // Close the modal after form submission
+    } catch (err) {
+      console.error('Error fetching listings:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -19,24 +90,6 @@ const AvailabilitySearch = () => {
 
   const clearResults = () => {
     setListings([]);
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const checkIn = state[0].startDate.toISOString().split('T')[0];
-    const checkOut = state[0].endDate.toISOString().split('T')[0];
-    const minOccupancy = 1; // Adjust as needed
-
-    try {
-      const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch available properties');
-      }
-      const data = await response.json();
-      setListings(data);
-    } catch (error) {
-      console.error('Error fetching available properties:', error);
-    }
   };
 
   return (
@@ -63,17 +116,56 @@ const AvailabilitySearch = () => {
                         onChange={item => setState([item.selection])}
                         moveRangeOnFirstSelection={false}
                         ranges={state}
+                        className="w-full"
                       />
                     </div>
                   </div>
-                  <button type="submit" className="bg-green-500 mt-4 py-2 px-4 rounded text-white">
-                    Search
-                  </button>
+                  <div className="w-full flex align-middle justify-center h-full">
+                    <button type="submit" className="flex align-middle justify-center h-full bg-cyan-600 m-0 md:w-2/3 w-full py-3 sm:mx-12 font-bold text-xl rounded-md text-muted-50">
+                      <Search size={24} /> <h3>Search available properties</h3>
+                    </button>
+                  </div>
+                  <div className="hidden">
+                    <label htmlFor="minOccupancy">Minimum Occupancy:</label>
+                    <input
+                      type="number"
+                      id="minOccupancy"
+                      value={minOccupancy}
+                      onChange={(e) => setMinOccupancy(parseInt(e.target.value))}
+                    />
+                  </div>
                 </div>
               </form>
             </div>
           </div>
         )}
+      </div>
+      <div className="bg-white w-full h-full overflow-auto">
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error}</p>}
+        {available.length > 0 && (
+          <div className="flex justify-center px-4 pt-8">
+            <button onClick={clearResults} className="bg-red-500 text-white py-3 px-6 rounded-md">
+              X Clear Results
+            </button>
+          </div>
+        )}
+        <div className="search-results grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 md:px-12 px-4">
+          {available.map((property) => (
+            <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-slate-500/30 rounded-md" key={property._id}>
+              <div className="p-1 result-item">
+                <img className="w-full h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
+                <div className="md:p-5 p-2 bg-white flex flex-col align-middle h-1/1 justify-center border-t-2 border-slate-500/30">
+                  <h3 className="font-sans font-bold text-lg text-muted-900 pb-4 text-center">{property.publicDescription.summary}</h3>
+                  <div className="flex md:flex-row flex-col justify-center self-center md:justify-between border-t-2 border-slate-500/30 pt-6">
+                    <p className="font-sans font-bold text-lg text-center text-muted-900">Price: ${property.prices.basePrice} {property.prices.currency}</p>
+                    <a href={property._id}><button className="bg-cyan-600 m-0 py-3 md:px-12 px-4 shadow-md shadow-cyan-500/30 rounded-xl text-white">Book Instantly!</button></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </div>
   );

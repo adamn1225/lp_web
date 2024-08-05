@@ -51,7 +51,7 @@ const posts = entries.items.map((item) => {
     <div class="mb-12 md:w-full border-none xs:mx-6 md:mx-24 lg:mx-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-2 justify-items-center items-center">
       <ul class="border border-slate-300 shadow-lg shadow-muted-300 p-2 rounded-md max-h-max">
         {posts.map((post, index) => (
-          <li key={index}>
+          <li>
             <a href={`/posts/${post.slug}/`}>
               {post.mainBlogImage && (
                 <img class="bg-white object-contain md:w-full shadow-lg shadow-muted-300" src="https://images.ctfassets.net/tb2fjmysreao/5MALyS8wIeCCqmq0SKZuFV/e9f02c1dc9c970397a37eb1e95fd1998/sc-beach-fun.jpg" alt={post.heroTitle} />
@@ -63,7 +63,7 @@ const posts = entries.items.map((item) => {
             </a>
           </li>
           ))}
-         <a href={`/posts/${posts.slug}/`} class="bg-cyan-600 py-2 flex md:w-full justify-center rounded-md text-center text-muted-100 mt-4">Read More</a>
+         <a href={`/posts//`} class="bg-cyan-600 py-2 flex md:w-full justify-center rounded-md text-center text-muted-100 mt-4">Read More</a>
 
       </ul>
       
