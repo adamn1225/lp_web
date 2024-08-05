@@ -12,10 +12,9 @@ const { centerText = false } = Astro.props
 
 <Section>
   <Container>
-    <div class="w-full flex flex-col">
+    <div class="w-full flex flex-col justify-center mt-12">
       <div class:list={['mb-8', { 'flex flex-col items-center': centerText }]}>
-        <h2 class="font-sans text-4xl font-medium leading-9 text-slate-900 dark:text-white">What Our Valued Vacationers Say</h2>
-        {centerText && <p class="mt-2 text-xl text-muted-400 text-center">Yeah, we know... Lots of happy people</p>}
+        <h2 class="font-sans text-4xl text-center font-bold leading-9 text-cyan-800 dark:text-white">What Our Valued Vacationers Say</h2>
       </div>
       <!--Grid-->
       <div class="py-8 flex flex-col lg:flex-row gap-6 bg-no-repeat" style="background-image: url('/images/shapes/1.svg');">
