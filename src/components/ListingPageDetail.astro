@@ -3,8 +3,9 @@ import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
 import PropertySearch from '@components/ui/PropertySearch.astro'
+import GuestyListings from './GuestyListings.astro'
 
-const { title, beds, bathrooms, pictures, propertyType } = Astro.props;
+const { title, beds, bathrooms, pictures, propertyType, Description } = Astro.props;
 
 
 
@@ -58,6 +59,13 @@ const { title, beds, bathrooms, pictures, propertyType } = Astro.props;
               <!-- left -->
               <div class="flex-grow-[2]">
                 <!-- property images -->
+
+                <!-- Start Carousel -->
+
+                
+
+                <!-- End Carousel -->
+
                 <div class="flex flex-col md:flex-row items-stretch gap-4 mb-4">
                   <div class="main-image md:flex-grow-[2]">
                     <img class="block object-cover min-h-[450px]" src={pictures[0].original} alt="Main image" width={2000} height={1333} data-zoom />
@@ -65,9 +73,26 @@ const { title, beds, bathrooms, pictures, propertyType } = Astro.props;
                   <div class="flex flex-row md:flex-col xs:flex-wrap gap-4 max-w-full md:max-w-[180px] md:w-full">
                     <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[1].original} alt="Sub image" width={2000} height={1333} data-zoom />
                     <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[2].original} alt="Sub image" width={2000} height={1333} data-zoom />
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[3].original} alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[6].original} alt="Sub image" width={2000} height={1333} data-zoom />
                   </div>
                 </div>
+
+              
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                      <img class="max-w-full h-1/3 min-h-[450px] rounded-lg" src={pictures[4].original} alt="">
+                  </div>
+                  <div>
+                      <img class="h-1/3 max-w-full min-h-[450px] rounded-lg" src={pictures[5].original} alt="">
+                  </div>
+                  <div>
+                      <img class="h-1/3 max-w-full min-h-[450px] rounded-lg" src={pictures[7].original} alt="">
+                  </div>
+                  <div>
+                      <img class="h-1/3 max-w-full min-h-[450px] rounded-lg" src={pictures[3].original} alt="">
+                  </div>
+              </div>
+
                 <!-- property content -->
                 <div class="relative" x-data="{ activeTab: 'tab-1' }">
                   <div class="tabs mb-6 flex text-base justify-between overflow-hidden overflow-x-auto">
@@ -91,8 +116,25 @@ const { title, beds, bathrooms, pictures, propertyType } = Astro.props;
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
                     <p class="text-muted-500 text-base xs:text-center">
-                     
-                    </p>
+                     {Description.summary}
+                    </p><br />
+                    <p class="text-muted-500 text-base xs:text-center">
+                      {Description.space}
+                     </p><br />
+                    <p class="text-muted-500 text-base xs:text-center">
+                      {Description.neighborhood}
+                     </p>
+                     <p class="text-muted-500 text-base xs:text-center">
+                      {Description.notes}
+                     </p><br />
+                     <br />
+                    <p class="text-muted-500 text-base xs:text-center">
+                      {Description.access}
+                     </p>
+                     <br />
+                     <p class="text-muted-500 text-base xs:text-center">
+                       {Description.houseRules}
+                      </p>
                     <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
                     </p>
                   </div>
@@ -453,8 +495,13 @@ const { title, beds, bathrooms, pictures, propertyType } = Astro.props;
           <!-- cards -->
           <div class="mt-12">
             <div class="flex flex-col">
-              <h2 class="font-sans text-2xl text-muted-900 dark:text-white xs:text-center">You might also like</h2>
-              <p class="text-muted-500 dark:text-muted-400 text-base leading-6 xs:text-center">Based on your previous matches</p>
+              <h2 class="font-sans text-2xl text-muted-900 text-center dark:text-white xs:text-center">You might also like</h2>
+              <p class="text-muted-500 dark:text-muted-400  text-center leading-6 xs:text-center">Based on your previous matches</p>
+              <div class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                  
+                <GuestyListings />
+                
+              </div>
             </div>
             <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <!-- {properties.slice(0, 3).map((property) => <PropertyCard {...property} />)} -->

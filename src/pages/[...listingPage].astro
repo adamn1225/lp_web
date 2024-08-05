@@ -17,7 +17,7 @@ export async function getStaticPaths() {
       bathrooms: listings.bathrooms,
       pictures: listings.pictures,
       beds: listings.beds,
-      description: listings.publicDescription
+      Description: listings.publicDescription
     }
   }));
 
@@ -43,7 +43,7 @@ export async function get({ params }) {
   title: listings.title,
   city: listings.address.city,
   state: listings.address.state,
-  description: listings.publicDescription.summary,
+  Description: listings.publicDescription,
   PropertyType: listings.propertyType,
   bathrooms: listings.bathrooms,
   pictures: listings.pictures,
@@ -51,7 +51,7 @@ export async function get({ params }) {
   };
 }
 
-const { title, pictures, description, beds, bathrooms, propertyType } = Astro.props;
+const { title, pictures, Description, beds, bathrooms, propertyType } = Astro.props;
 
 
 
@@ -59,7 +59,7 @@ const { title, pictures, description, beds, bathrooms, propertyType } = Astro.pr
 
 <ListingPageDetail
           title={title}
-          description={description}
+          Description={Description}
           bathrooms={bathrooms}
           beds={beds}
           pictures={pictures}
