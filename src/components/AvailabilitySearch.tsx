@@ -97,13 +97,13 @@ const AvailabilitySearch: React.FC = () => {
     <div className="bg-[url('/images/line-hero.png')] bg-slate-700 pt-64 md:pt-96 bg-auto static md:bg-left bg-center bg-repeat-y w-full h-full">
 <div className="w-full items-end align-bottom md:pb-12 pb-40">
     <div className="flex flex-row justify-center w-full">
-        <button onClick={toggleModal} className="flex align-bottom justify-center h-full bg-cyan-600 md:mb-28 w-full md:w-3/5 sm:w-4/5 py-3 px-2 shadow-md shadow-cyan-500/30 rounded-xl text-white">
+        <button onClick={toggleModal} className="flex align-bottom justify-center h-full bg-cyan-600 md:mb-28 w-3/4 md:w-3/5 sm:w-2/5 py-3 px-2 shadow-md shadow-cyan-500/30 rounded-xl text-white">
             <Search size={24} /> <h3>Search available properties</h3>
         </button>
     </div>
     {isModalOpen && (
   <div className="fixed inset-0 bg-black bg-opacity-50 object-contain flex align-evenly justify-evenly items-center overflow-auto">
-    <div className="bg-slate-100 pb-10 mt-12 mx-1 lg:p-6 rounded-lg shadow-lg md:flex justify-center lg:w-1/5 sm:w-4/5 w-full overflow-hidden">
+    <div className="bg-slate-100 pb-10 xs:mt-24 md:py-4 mx-1 lg:p-6 rounded-lg shadow-lg flex align-bottom md:flex justify-center lg:w-1/5 sm:w-4/5 w-full overflow-hidden">
 
       <form onSubmit={handleSubmit} className="w-full">
         <div className="flex flex-col gap-3 items-center xs:mx-2 justify-center md:w-full">
