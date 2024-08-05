@@ -1,6 +1,6 @@
-import fetch from 'node-fetch';
+const fetch = require('node-fetch');
 
-export const handler = async (event, context) => {
+exports.handler = async (event, context) => {
   console.log('Received event:', event);
 
   const { checkIn, checkOut, minOccupancy } = event.queryStringParameters;
