@@ -20,12 +20,15 @@ exports.handler = async (event, context) => {
   const apiUrl = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
 
   try {
+    const startTime = Date.now();
     const response = await fetch(apiUrl, {
       headers: {
         'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
         'Accept': 'application/json'
       }
     });
+    const endTime = Date.now();
+    console.log(`API request took ${endTime - startTime} ms`);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -36,12 +39,11 @@ exports.handler = async (event, context) => {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ error: `Guesty API error: ${errorText}` })
+        body: JSON.stringify({ error: errorText })
       };
     }
 
     const data = await response.json();
-    console.log('API Response Data:', data);
     return {
       statusCode: 200,
       headers: {
@@ -51,14 +53,14 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(data)
     };
   } catch (error) {
-    console.error('Error fetching data from Guesty API:', error);
+    console.error('Error fetching data:', error);
     return {
       statusCode: 500,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ error: 'Failed to fetch data from API' })
+      body: JSON.stringify({ error: 'Internal Server Error' })
     };
   }
 };
