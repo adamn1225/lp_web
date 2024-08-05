@@ -6,6 +6,11 @@ import { contentfulClient } from "../lib/contentful";
 import type { BlogPost } from "../lib/contentful";
 import AvailabilitySearch from '../components/AvailabilitySearch'
 import GuestyListings from '../components/GuestyListings.astro'
+import Testimonials from '@components/sections/Testimonials.astro';
+import Process from '@components/sections/Process.astro';
+import SideFeatureOne from '@components/sections/SideFeatureOne.astro';
+import SideFeatureTwo from '@components/sections/SideFeatureTwo.astro';
+import SideIllustrations from '@components/sections/SideIllustrations.astro';
 
 const entries = await contentfulClient.getEntries<BlogPost>({
   content_type: "landingPageblog",
@@ -43,9 +48,20 @@ const posts = entries.items.map((item) => {
           </span>
         </div>
 
+        <div class="my-12">
+          <SideIllustrations />
+        </div>
+        <div class="my-12"><Testimonials /></div>
+        <div class="my-12"><SideFeatureOne /></div>
+        
+        <div class="my-12"> 
+          <Process />
+        </div>
+        <SideFeatureTwo />
 
+         
     </Section>
-    <div class="flex justify-center align-center mb-4 mt-12 pt-12 border-t border-slate-400">
+    <!-- <div class="flex justify-center align-center mb-4 mt-12 pt-12 border-t border-slate-200/30">
       <h2 class="font-bold text-cyan-900 mb-4 px-2 text-center md:text-3xl text-2xl">Check out our recent blogs</h2>
     </div>
     <div class="mb-12 md:w-full border-none xs:mx-6 md:mx-24 lg:mx-32 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-2 justify-items-center items-center">
@@ -67,6 +83,6 @@ const posts = entries.items.map((item) => {
 
       </ul>
       
-    </div>
+    </div> -->
   </main>
 </Layout>
