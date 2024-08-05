@@ -9,7 +9,7 @@ import PropertySearch from '@components/ui/PropertySearch.astro'
 <div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full z-50 bg-slate-50 border-slate-100">
   <div
     id="header"
-    :class="flex flex-row justify-center scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b border-muted-200 shadow-muted-300/30 : 'lg:bg-transparent' "
+    :class="flex flex-row justify-center scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b w-full border-muted-200 shadow-muted-300/30 : 'lg:bg-transparent' "
   >
   <header id="MainHeader" class=" min-h-[70px] w-full max-w-full px-3 mx-auto flex justify-between  shadow lg:shadow-md lg:px-8">
     <div class="flex justify-between lg:justify-start w-full lg:w-auto min-h-[3.25rem]">
@@ -35,7 +35,7 @@ import PropertySearch from '@components/ui/PropertySearch.astro'
       <nav
         aria-label="Main Navigation"
         x-cloak
-        class="absolute top-full bg-white lg:bg-transparent start-0 lg:static px-3 lg:px-0 items-stretch justify-between"
+        class="absolute top-full bg-white lg:bg-transparent start-0 lg:static px-3 lg:px-0 items-stretch justify-between w-full"
         :class="mobileOpen ? 'block pt-5 pb-8 lg:p-0 -translate-y-px border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20': 'hidden lg:flex'"
       >
         <ul id="LeftLinks" class="flex flex-col lg:flex-row items-stretch [&>li>a]:h-full">
