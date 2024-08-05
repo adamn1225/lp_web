@@ -7,7 +7,65 @@ import GuestyListings from './GuestyListings.astro'
 
 const { title, beds, bathrooms, pictures, propertyType, Description } = Astro.props;
 
+const fallbackDescription = {
+  summary: 'Default summary text.',
+  space: 'Default space description.',
+  neighborhood: 'Default neighborhood description.',
+  notes: 'Default notes.',
+  access: 'Default access information.',
+  houseRules: 'Default house rules.'
+};
 
+// Fetch data from API
+let description;
+let picture;
+let error = null;
+
+try {
+  const response = await fetch('/api/description');
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  description = await response.json();
+} catch (err) {
+  console.error('Failed to fetch data:', err);
+  description = fallbackDescription;
+  error = err.message;
+}
+
+const fallbackPictures = [
+  { original: '/path/to/fallback1.jpg' },
+  { original: '/path/to/fallback2.jpg' },
+  { original: '/path/to/fallback3.jpg' },
+  { original: '/path/to/fallback4.jpg' },
+  { original: '/path/to/fallback5.jpg' },
+  { original: '/path/to/fallback6.jpg' },
+];
+
+
+try {
+  const response = await fetch('/api/description');
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  description = await response.json();
+} catch (err) {
+  console.error('Failed to fetch data:', err);
+  description = fallbackDescription;
+  error = err.message;
+}
+
+try {
+  const response = await fetch('/api/pictures');
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  picture = await response.json();
+} catch (err) {
+  console.error('Failed to fetch pictures:', err);
+  picture = fallbackPictures;
+  error = err.message;
+}
 
 ---
 
@@ -73,25 +131,18 @@ const { title, beds, bathrooms, pictures, propertyType, Description } = Astro.pr
                   <div class="flex flex-row md:flex-col xs:flex-wrap gap-4 max-w-full md:max-w-[180px] md:w-full">
                     <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[1].original} alt="Sub image" width={2000} height={1333} data-zoom />
                     <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[2].original} alt="Sub image" width={2000} height={1333} data-zoom />
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[6].original} alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[5].original} alt="Sub image" width={2000} height={1333} data-zoom />
                   </div>
                 </div>
-
-              
+    
                 <div class="grid grid-cols-2 gap-2">
                   <div>
-                      <img class="max-w-full h-1/3 min-h-[450px] rounded-lg" src={pictures[4].original} alt="">
+                    <img class="max-w-full h-1/3 min-h-[450px] rounded-lg" src={pictures[4].original} alt="">
                   </div>
                   <div>
-                      <img class="h-1/3 max-w-full min-h-[450px] rounded-lg" src={pictures[5].original} alt="">
+                    <img class="h-1/3 max-w-full min-h-[450px] rounded-lg" src={pictures[3].original} alt="">
                   </div>
-                  <div>
-                      <img class="h-1/3 max-w-full min-h-[450px] rounded-lg" src={pictures[7].original} alt="">
-                  </div>
-                  <div>
-                      <img class="h-1/3 max-w-full min-h-[450px] rounded-lg" src={pictures[3].original} alt="">
-                  </div>
-              </div>
+                </div>
 
                 <!-- property content -->
                 <div class="relative" x-data="{ activeTab: 'tab-1' }">
@@ -115,28 +166,34 @@ const { title, beds, bathrooms, pictures, propertyType, Description } = Astro.pr
                     </ul>
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
-                    <p class="text-muted-500 text-base xs:text-center">
-                     {Description.summary}
-                    </p><br />
-                    <p class="text-muted-500 text-base xs:text-center">
-                      {Description.space}
-                     </p><br />
-                    <p class="text-muted-500 text-base xs:text-center">
-                      {Description.neighborhood}
-                     </p>
-                     <p class="text-muted-500 text-base xs:text-center">
-                      {Description.notes}
-                     </p><br />
-                     <br />
-                    <p class="text-muted-500 text-base xs:text-center">
-                      {Description.access}
-                     </p>
-                     <br />
-                     <p class="text-muted-500 text-base xs:text-center">
-                       {Description.houseRules}
-                      </p>
-                    <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
-                    </p>
+                    {error ? (
+                      <p class="text-red-500 text-base xs:text-center">Failed to fetch data: {error}</p>
+                    ) : (
+                      <>
+                        <p class="text-muted-500 text-base xs:text-center">
+                          {description.summary}
+                        </p><br />
+                        <p class="text-muted-500 text-base xs:text-center">
+                          {description.space}
+                        </p><br />
+                        <p class="text-muted-500 text-base xs:text-center">
+                          {description.neighborhood}
+                        </p>
+                        <p class="text-muted-500 text-base xs:text-center">
+                          {description.notes}
+                        </p><br />
+                        <br />
+                        <p class="text-muted-500 text-base xs:text-center">
+                          {description.access}
+                        </p>
+                        <br />
+                        <p class="text-muted-500 text-base xs:text-center">
+                          {description.houseRules}
+                        </p>
+                        <p class="text-muted-500 dark:text-muted-400 text-base mt-4">
+                        </p>
+                      </>
+                    )}
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
                     <div class="boxed-amenities flex justify-center gap-3">
