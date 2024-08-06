@@ -32,7 +32,8 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "types": [
-      "astro/client"
+      "astro/client",
+      "express" // Add this line to include express types
     ],
     "jsx": "react-jsx" // Add this line to enable JSX support
   }

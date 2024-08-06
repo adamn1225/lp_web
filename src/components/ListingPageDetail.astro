@@ -4,7 +4,7 @@ import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
 import PropertySearch from '@components/ui/PropertySearch.astro'
 import GuestyListings from './GuestyListings.astro'
-import {fetchOneHundred} from '../pages/api/gapi.ts';
+import {fetchOneHundred} from '../pages/api/gapi';
 
 const listings = await fetchOneHundred();
 
