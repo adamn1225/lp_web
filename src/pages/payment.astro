@@ -1,0 +1,15 @@
+---
+import GuestyPayment from '../components/GuestyPayment.tsx'
+import Layout from '@layouts/Split.astro'
+import Section from '@components/Section.astro'
+---
+
+<Layout title="Payment">
+  <main id="Payment">
+    <Section>
+        <div class="max-h-max mt-24 py-24 flex flex-col mx-96 align-middle justify-center">
+            <GuestyPayment client:only="react"/>
+        </div>
+      
+    </Section>
+  </main>
