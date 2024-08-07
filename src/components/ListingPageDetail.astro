@@ -2,9 +2,10 @@
 import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
-import PropertySearch from '@components/ui/PropertySearch.astro'
+import ReservatonDateForm from '@components/ui/ReservatonDateForm'
 import GuestyListings from './GuestyListings.astro'
 import {fetchOneHundred} from '../pages/api/gapi';
+import ReservationButton from '../components/ReservationButton';
 
 const listings = await fetchOneHundred();
 
@@ -15,11 +16,11 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
 <Layout title="Property Details"> 
   <main id="PropertyDetails"> 
     <Section>
-      <div class="w-full mx-auto max-w-full px-8 xs:px-4">
+      <div class="w-full mx-auto max-w-full mt-12 px-8 xs:px-4">
         <div class="pb-12 mb-12">
           <section class="relative border-b border-muted-200 pb-12">
             <!-- breadcrumb -->
-            <nav class="mt-12 mb-6" aria-label="breadcrumbs">
+            <nav class="mt-28 mb-6" aria-label="breadcrumbs">
               <ul class="flex items-center xs:justify-center">
                 <li class="flex items-center">
                   <a href="/" class="hover:text-primary-500 pe-3 text-muted-400">
@@ -83,7 +84,14 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
                 
                       <img class="max-h-[250px] rounded-lg" src={pictures[4].original} alt="">
                       <img class="max-h-[250px] rounded-lg" src={pictures[5].original} alt="">
+                                <!-- map -->
+                                <iframe
+                                class="min-h-[220px] w-full"
                 
+                                title="map"
+                                src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Myrtle%20Beach,%20SC+(Line%20Properties%20Inc)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                                style="filter: grayscale(1) contrast(1.2) opacity(0.6)"
+                              ></iframe>
               </div>
 
                 <!-- property content -->
@@ -112,9 +120,7 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
                     <p class="text-muted-500 text-base xs:text-center">
                       {Description.summary}
                      </p><br />
-                    <p class="text-muted-500 text-base xs:text-center">
-                      {Description.neighborhood}
-                     </p>
+
                      <p class="text-muted-500 text-base xs:text-center">
                       {Description.notes}
                      </p><br />
@@ -379,7 +385,15 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
                 </div>
               </div>
               <!-- right -->
-              <div class="min-w-[300px]">
+              <div class="min-w-[350px] md:w-1/4">
+                <button
+                class="bg-cyan-600 mb-6 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
+              <span class="pl-2">Chat with an Agent</span> 
+              </button>
+                  <ReservationButton client:visible/>
+            
                 <h4 class="text-xl mb-6 font-light font-sans text-muted-900">Amenities</h4>
                 <div class="mb-6 grid grid-cols-2 justify-items-center">
                   <!-- bedroom -->
@@ -439,6 +453,7 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
                   <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Garden sharing</span>
                   <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Kids playground</span>
                 </div>
+
                 <div class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800">
                   <div class="flex items-center justify-between text-sm">
                     <p class="text-muted-400">Type</p>
@@ -448,31 +463,16 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
                     <p class="text-muted-400">Status</p>
                     <p class="text-muted-900">Available</p>
                   </div>
+                  <div class="flex items-center justify-between text-sm">
+                    <p class="text-muted-400">Price</p>
+                    <p class="text-muted-900">Available</p>
+                  </div>
                 </div>
-                <div class="mb-2">
-                  <PropertySearch />
-                </div>
-                
-                <button
-                  class="bg-cyan-600 mb-2 font-bold text-sm text-white rounded h-11 transition-all duration-300 py-2 px-4 flex items-center justify-center cursor-pointer w-full hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
-                >
-                  Reserve
-                </button>
 
-                <button
-                class="bg-cyan-600 mb-6 font-bold text-sm text-white rounded h-11 transition-all duration-300 py-2 px-4 flex items-center justify-center cursor-pointer w-full hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
-              >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
-              <span class="pl-2">Inquire about this listing</span> 
-              </button>
-                <!-- map -->
-                <iframe
-                  class="min-h-[220px] w-full"
-  
-                  title="map"
-                  src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Myrtle%20Beach,%20SC+(Line%20Properties%20Inc)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-                  style="filter: grayscale(1) contrast(1.2) opacity(0.6)"
-                ></iframe>
+                
+
+
+
               </div>
             </div>
           </section>

@@ -107,9 +107,6 @@ importers:
       contentful:
         specifier: ^10.13.1
         version: 10.13.1
-      corepack:
-        specifier: ^0.28.2
-        version: 0.28.2
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -222,6 +219,9 @@ importers:
       concurrently:
         specifier: ^8.2.2
         version: 8.2.2
+      corepack:
+        specifier: ^0.10.0
+        version: 0.10.0
       eslint-plugin-import:
         specifier: ^2.29.1
         version: 2.29.1(@typescript-eslint/parser@8.0.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)
@@ -2154,9 +2154,8 @@ packages:
   core-js@3.37.1:
     resolution: {integrity: sha512-Xn6qmxrQZyB0FFY8E3bgRXei3lWDJHhvI+u0q9TKIYM49G8pAr0FgnnrFRAmsbptZL1yxRADVXn+x5AGsbBfyw==}
 
-  corepack@0.28.2:
-    resolution: {integrity: sha512-YOo8PWW/SOQs7mqDIP6dDp9KoIyFvOJaoTofrXQEOIAZ5D24OpgKQ6JeW1HhXsRCMm1t1AunC/hXyqfT9G+5GQ==}
-    engines: {node: ^18.17.1 || >=20.10.0}
+  corepack@0.10.0:
+    resolution: {integrity: sha512-aYNDvUd909DbxnC6XQtcvwEANhfis724VSifk/ADAAgJTc9cabKHR3tREJge0nIBr67vVEo1YPuLKgrnu7r99g==}
     hasBin: true
 
   cors@2.8.5:
@@ -7407,7 +7406,7 @@ snapshots:
 
   core-js@3.37.1: {}
 
-  corepack@0.28.2: {}
+  corepack@0.10.0: {}
 
   cors@2.8.5:
     dependencies:
