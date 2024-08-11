@@ -33,8 +33,8 @@
     "skipLibCheck": true,
     "types": [
       "astro/client",
-      "express" // Add this line to include express types
+      "express"
     ],
-    "jsx": "react-jsx" // Add this line to enable JSX support
+    "jsx": "react-jsx"
   }
 }

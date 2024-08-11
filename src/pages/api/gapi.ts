@@ -1,5 +1,5 @@
 const apiToken = import.meta.env.VITE_API_TOKEN;
-
+const guestyApi = import.meta.env.GUESTY_BOOKING_API;
 if (!apiToken) {
   throw new Error('API token is not set. Please check your environment variables.');
 }
@@ -30,7 +30,7 @@ async function fetchFromApi(url: string, options: RequestInit = {}) {
 
 // Specific function to fetch listings
 async function fetchFeaturedListings() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=5&skip=5');
+  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=5&skip=200');
   return data.results; // Return the listings
 }
 
@@ -50,9 +50,9 @@ async function fetchTwoHundred() {
   return data.results; // Return the reservations
 }
 
-async function fetchOThreeHundred() {
+async function fetchThreeHundred() {
   const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=100&skip=200');
   return data.results; // Return the reservations
 }
 
-export { fetchFeaturedListings, fetchListings, fetchOneHundred, fetchTwoHundred, fetchOThreeHundred };
+export { fetchFeaturedListings, fetchListings, fetchOneHundred, fetchTwoHundred, fetchThreeHundred };

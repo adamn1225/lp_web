@@ -2,6 +2,8 @@ import express from 'express';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
+import fs from 'fs';
 
 // Load environment variables
 dotenv.config();
@@ -15,6 +17,18 @@ const port = process.env.PORT || 5000; // Ensure PORT is set in .env
 app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 
+// Function to get Bearer token
+function getBearerToken() {
+  if (process.env.NODE_ENV === 'development') {
+    const TOKEN_FILE_PATH = path.resolve(__dirname, 'guesty_token.json');
+    const tokenData = fs.readFileSync(TOKEN_FILE_PATH, 'utf-8');
+    const { token } = JSON.parse(tokenData);
+    return token;
+  } else {
+    return process.env.VITE_API_TOKEN;
+  }
+}
+
 app.get('/api/available', async (req, res) => {
   const { checkIn, checkOut, minOccupancy } = req.query;
   if (!checkIn || !checkOut || !minOccupancy) {
@@ -22,11 +36,12 @@ app.get('/api/available', async (req, res) => {
   }
 
   const apiUrl = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
+  const token = getBearerToken();
 
   try {
     const response = await fetch(apiUrl, {
       headers: {
-        'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+        'Authorization': `Bearer ${token}`,
         'Accept': 'application/json'
       }
     });

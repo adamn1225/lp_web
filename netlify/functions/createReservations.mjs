@@ -1,60 +1,58 @@
 import fetch from 'node-fetch';
 
-export const handler = async (event, context) => {
-  const reservationInfo = JSON.parse(event.body);
-
-  console.log('Received request with data:', reservationInfo);
-
-  const url = 'https://open-api.guesty.com/v1/reservations'; // Correct endpoint URL
-  const options = {
-    method: 'POST',
-    headers: {
-      accept: 'application/json',
-      'content-type': 'application/json',
-      authorization: `Bearer ${process.env.VITE_API_TOKEN}` // Ensure the token is correctly set in your environment variables
-    },
-    body: JSON.stringify({
-      listingId: reservationInfo.listingId,
-      checkInDateLocalized: reservationInfo.start,
-      checkOutDateLocalized: reservationInfo.end,
-      status: 'confirmed',
-      guestId: reservationInfo.guestId
-    })
-  };
-
+export const handler = async (event) => {
   try {
+    const reservationInfo = JSON.parse(event.body);
+    const url = 'https://booking.guesty.com/api/reservations';
+    const options = {
+      method: 'POST',
+      headers: {
+        accept: 'application/json; charset=utf-8',
+        'content-type': 'application/json',
+        authorization: `Bearer ${process.env.GUESTY_BOOKING_API}` // Use the new API token from the environment variable
+      },
+      body: JSON.stringify({
+        reservation: {
+          listingId: reservationInfo.listingId,
+          checkInDateLocalized: reservationInfo.checkInDateLocalized,
+          checkOutDateLocalized: reservationInfo.checkOutDateLocalized,
+          guestsCount: reservationInfo.guestsCount
+        },
+        guest: {
+          firstName: reservationInfo.firstName,
+          lastName: reservationInfo.lastName
+        },
+        policy: {
+          privacy: {
+            isAccepted: true,
+            version: 1,
+            dateOfAcceptance: new Date().toISOString()
+          },
+          termsAndConditions: {
+            isAccepted: true,
+            version: 1,
+            dateOfAcceptance: new Date().toISOString()
+          }
+        }
+      })
+    };
+
     const response = await fetch(url, options);
-    const responseText = await response.text();
-    console.log('Guesty API Response Text:', responseText);
+    const data = await response.json();
 
     if (!response.ok) {
-      console.error('Guesty API Error:', responseText);
-      return {
-        statusCode: response.status,
-        body: JSON.stringify({ error: 'Failed to create reservation. Guesty API error.' })
-      };
-    }
-
-    let data;
-    try {
-      data = JSON.parse(responseText);
-    } catch (error) {
-      console.error('Failed to parse JSON response:', error);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: 'Failed to create reservation. Invalid response from Guesty API.' })
-      };
+      throw new Error(`Error: ${response.status} ${response.statusText} - ${JSON.stringify(data)}`);
     }
 
     return {
-      statusCode: response.status,
+      statusCode: 200,
       body: JSON.stringify(data)
     };
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error creating reservation:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to create reservation.' })
+      body: JSON.stringify({ error: error.message })
     };
   }
 };

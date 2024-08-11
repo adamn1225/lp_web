@@ -2,11 +2,11 @@
 export const prerender = true;
 
 import ListingPageDetail from '@components/ListingPageDetail.astro'
-import {fetchOneHundred} from '../pages/api/gapi.ts';
+import {fetchThreeHundred} from '../pages/api/gapi.ts';
 
 
 export async function getStaticPaths() {
-  const listings = await fetchOneHundred();
+  const listings = await fetchThreeHundred();
   const paths = listings.map((listings: any) => ({
     params: {
       listingPage: listings._id // Ensure this matches the requested path
@@ -17,17 +17,18 @@ export async function getStaticPaths() {
       bathrooms: listings.bathrooms,
       pictures: listings.pictures,
       beds: listings.beds,
-      Description: listings.publicDescription
+      Description: listings.publicDescription,
+      listingId: listings._id
     }
   }));
 
-  console.log("Generated paths:", JSON.stringify(paths, null, 2)); // Log the generated paths
+  // console.log("Generated paths:", JSON.stringify(paths, null, 2)); // Log the generated paths
 
   return paths; // Return the array of paths directly
 }
 
 export async function get({ params }) {
-  const listings = await fetchOneHundred(); // Fetch listings again to find the specific one
+  const listings = await fetchThreeHundred(); // Fetch listings again to find the specific one
   const listing = listings.find((listing) => listing._id === params.listingPage);
 
   if (!listing) {
@@ -47,11 +48,12 @@ export async function get({ params }) {
   PropertyType: listings.propertyType,
   bathrooms: listings.bathrooms,
   pictures: listings.pictures,
-  beds: listings.beds
+  beds: listings.beds,
+  listingId: listings._id
   };
 }
 
-const { title, pictures, Description, beds, bathrooms, propertyType } = Astro.props;
+const { title, pictures, Description, beds, bathrooms, listingId } = Astro.props;
 
 
 
@@ -63,4 +65,5 @@ const { title, pictures, Description, beds, bathrooms, propertyType } = Astro.pr
           bathrooms={bathrooms}
           beds={beds}
           pictures={pictures}
+          listingId={listingId}
         />

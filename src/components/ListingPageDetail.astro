@@ -2,14 +2,35 @@
 import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
-import ReservatonDateForm from '@components/ui/ReservatonDateForm'
+import ReservationForm from './ReservationForm'
 import GuestyListings from './GuestyListings.astro'
-import {fetchOneHundred} from '../pages/api/gapi';
-import ReservationButton from '../components/ReservationButton';
+import { fetchOneHundred } from '../pages/api/gapi';
+import { fetchReservedDates } from '../utils/utils';
+import ChatBox from '../components/ChatBox';
+
+const conversationId = '66b3f8f071f818003606c0d3';
 
 const listings = await fetchOneHundred();
 
-let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.props;
+const { title, propertyType, bathrooms, pictures, Description } = Astro.props;
+const listingId = Astro.props.listingId;
+// console.log('Listing ID:', listingId); // Debugging line
+
+// Determine the date range dynamically
+const currentDate = new Date();
+const futureDate = new Date();
+futureDate.setFullYear(currentDate.getFullYear() + 1); // Set future date to one year from now
+
+const startDate = currentDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+const endDate = futureDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+
+// Fetch reserved dates with error handling
+let reservedDates = [];
+try {
+  reservedDates = await fetchReservedDates(listingId, startDate, endDate);
+} catch (error) {
+  console.error('Error fetching reserved dates:', error);
+}
 
 ---
 
@@ -24,7 +45,7 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
               <ul class="flex items-center xs:justify-center">
                 <li class="flex items-center">
                   <a href="/" class="hover:text-primary-500 pe-3 text-muted-400">
-                    <Icon class="h-4 aspect-square" name="lucide:home" />
+                    <Icon name="lucide:home" />
                   </a>
                 </li>
                 <li class="flex items-center before:content-['/'] before:text-muted-400">
@@ -47,11 +68,11 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
               <!-- right -->
               <div class="right flex xs:justify-center xs:items-center xs:w-full gap-4">
                 <a href="#" class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline">
-                  <Icon class="h-4 aspect-square" name="lucide:share-2" />
+                  <Icon name="h-4 aspect-square" name="lucide:share-2" />
                   <span class="relative">Share</span>
                 </a>
                 <a href="#" class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline">
-                  <Icon class="h-4 aspect-square" name="lucide:heart" />
+                  <Icon name="h-4 aspect-square" name="lucide:heart" />
                   <span class="relative">Save</span>
                 </a>
               </div>
@@ -123,6 +144,11 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
 
                      <p class="text-muted-500 text-base xs:text-center">
                       {Description.notes}
+                     </p><br />
+                     <br />
+
+                     <p class="text-muted-500 text-base xs:text-center">
+                      {Description.access}
                      </p><br />
                      <br />
 
@@ -386,13 +412,14 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
               </div>
               <!-- right -->
               <div class="min-w-[350px] md:w-1/4">
-                <button
+                <ChatBox conversationId={conversationId} client:load={true} />
+                <!-- <button
                 class="bg-cyan-600 mb-6 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
               >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
-              <span class="pl-2">Chat with an Agent</span> 
-              </button>
-                  <ReservationButton client:visible/>
+              <span class="pl-2">Send Message</span> 
+              </button> -->
+                <ReservationForm listingId={listingId} reservedDates={reservedDates} client:load={true}/>
             
                 <h4 class="text-xl mb-6 font-light font-sans text-muted-900">Amenities</h4>
                 <div class="mb-6 grid grid-cols-2 justify-items-center">
@@ -414,7 +441,7 @@ let { title, beds, bathrooms, pictures, propertyType, Description } = Astro.prop
                         data-darkreader-inline-stroke=""
                         ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
                       </svg>
-                      <p class="text-lg font-bold">{beds}</p>
+                      <p class="text-lg font-bold">{propertyType}</p>
                     </div>
                     <p class="text-sm text-muted-400">Beds</p>
                   </div>

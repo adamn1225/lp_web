@@ -114,10 +114,10 @@ const AvailabilitySearch: React.FC = () => {
         </div>
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 object-contain flex align-evenly justify-evenly items-center overflow-auto">
-            <div className="bg-slate-100 pb-10 xs:mt-24 md:py-4 mx-1 lg:p-6 rounded-lg shadow-lg flex align-bottom md:flex justify-center lg:w-1/5 sm:w-4/5 w-full overflow-hidden">
+            <div className="bg-slate-100 pb-10 xs:mt-24 md:py-4 mx-1 lg:p-6 rounded-lg shadow-lg flex align-bottom md:flex justify-center lg:w-1/4 sm:w-4/5 w-full overflow-hidden">
               <form onSubmit={handleSubmit} className="w-full">
                 <div className="flex flex-col gap-3 items-center xs:mx-2 justify-center md:w-full">
-                  <button onClick={toggleModal} className="bg-red-500 mb-2 flex xs:mt-6 justify-center md:w-3/5 w-4/5 z-50 font-bold text-muted-50 text-xl rounded-md py-3">
+                  <button onClick={toggleModal} className="bg-red-500 mb-2 flex xs:mt-6 justify-center md:w-3/5 w-4/5 z-50 font-bold text-slate-50 text-xl rounded-md py-3">
                     Close Property Search
                   </button>
                   <div className="flex flex-col md:flex-row sx:w-full justify-center items-center">
@@ -133,7 +133,7 @@ const AvailabilitySearch: React.FC = () => {
                     </div>
                   </div>
                   <div className="w-full flex align-middle justify-center h-full">
-                    <button type="submit" className="flex align-middle justify-center h-full bg-cyan-600 m-0 md:w-3/5 w-full py-3 px-1 xs:mx-2 font-bold text-xl rounded-md text-muted-50">
+                    <button type="submit" className="flex align-middle justify-center h-full bg-cyan-600 m-0 md:w-4/5 w-full py-3 px-1 xs:mx-2 font-bold text-xl rounded-md text-slate-50">
                       <Search size={24} /> <h3>Search available properties</h3>
                     </button>
                   </div>
@@ -156,21 +156,23 @@ const AvailabilitySearch: React.FC = () => {
   {loading && <p>Loading...</p>}
   {error && <p>Error: {error}</p>}
   {available.length > 0 && (
-    <div className="flex justify-center px-4 pt-8">
-      <button onClick={clearResults} className="bg-red-500 text-white py-3 px-6 rounded-md">
+    <div className="flex flex-col justify-start items-center pt-8">
+      <h2  className="font-sans font-bold border-b-2 border-slate-700 text-3xl text-slate-900 bb-4 text-center">Available for Instant Booking!</h2>
+      <button onClick={clearResults} className="bg-red-500 text-white w-1/5 py-3 px-1 mt-12 rounded-md">
         X Clear Results
       </button>
     </div>
+    
   )}
   <div className="search-results grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 md:px-12 px-4">
     {available.map((property) => (
-      <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-slate-500/30 rounded-md" key={property._id}>
+      <article className="flex flex-col bg-white shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md" key={property._id}>
         <div className="p-1 result-item">
           <img className="w-full h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
           <div className="md:p-5 p-2 bg-white flex flex-col align-middle h-1/1 justify-center border-t-2 border-slate-500/30">
-            <h3 className="font-sans font-bold text-lg text-muted-900 pb-4 text-center">{property.title}</h3>
+            <h3 className="font-sans font-bold text-lg text-slate-900 pb-4 text-center">{property.title}</h3>
             <div className="flex flex-col mb-2 justify-center self-center md:justify-between border-t-2 border-slate-500/30 pt-6">
-              <p className="font-sans font-bold text-lg text-center text-muted-900">Price: ${property.prices.basePrice} {property.prices.currency}</p>
+              <p className="font-sans font-bold text-lg text-center text-slate-900">Price: ${property.prices.basePrice} {property.prices.currency}</p>
               <a href={property._id}>
                 <button className="bg-cyan-600 m-0 py-3 md:px-12 px-4 shadow-md shadow-cyan-500/30 rounded-xl text-white">
                   Book Instantly!

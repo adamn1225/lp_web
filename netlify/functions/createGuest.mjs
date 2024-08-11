@@ -36,10 +36,10 @@ export const handler = async (event, context) => {
       body: JSON.stringify(data)
     };
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error creating guest:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to create guest.' })
+      body: JSON.stringify({ error: 'Internal Server Error' })
     };
   }
 };
