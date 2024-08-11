@@ -69,7 +69,7 @@ const AvailabilitySearch: React.FC = () => {
       });
 
       const responseText = await response.text();
-      console.log('API Response Text:', responseText);
+      // console.log('API Response Text:', responseText);
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
