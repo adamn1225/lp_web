@@ -7,8 +7,8 @@ import react from '@astrojs/react';
 import markdoc from "@astrojs/markdoc";
 import node from '@astrojs/node';
 import fetch from 'node-fetch';
-import path from 'path';
-import { load } from 'cheerio';
+import * as cheerio from 'cheerio';
+
 
 // Middleware function to proxy requests to the Guesty API
 async function proxyMiddleware(req, res, next) {
@@ -45,6 +45,19 @@ async function proxyMiddleware(req, res, next) {
   } else {
     next();
   }
+}
+
+function fixCheerioImport() {
+  return {
+    name: 'fix-cheerio-import',
+    enforce: 'pre',
+    transform(code, id) {
+      if (id.includes('node_modules/@iconify/tools/lib/svg/index.mjs')) {
+        return code.replace("import cheerio from 'cheerio';", "import * as cheerio from 'cheerio';");
+      }
+      return code;
+    }
+  };
 }
 
 // https://astro.build/config
