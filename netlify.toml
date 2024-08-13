@@ -2,12 +2,17 @@
   command = "pnpm run build"
   publish = "dist"
 
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
 [functions]
-  directory = "netlify/functions"
   external_node_modules = [
     "module-one",
     "module-two"
   ]
+
+[functions."refreshToken"]
+  schedule = "0 */23 * * *" # Every 23 hours
 
 [dev.environment]
   NODE_ENV = "development"

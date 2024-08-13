@@ -7,6 +7,8 @@ import react from '@astrojs/react';
 import markdoc from "@astrojs/markdoc";
 import node from '@astrojs/node';
 import fetch from 'node-fetch';
+import path from 'path';
+import cheerio from './cheerio-alias.js';
 
 // Middleware function to proxy requests to the Guesty API
 async function proxyMiddleware(req, res, next) {
@@ -48,6 +50,11 @@ async function proxyMiddleware(req, res, next) {
 // https://astro.build/config
 export default defineConfig({
   vite: {
+    resolve: {
+      alias: {
+        cheerio: path.resolve('./cheerio-alias.js')
+      }
+    },
     build: {
       rollupOptions: {
         external: ['sharp']

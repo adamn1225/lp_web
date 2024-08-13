@@ -27,11 +27,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   const [captchaToken, setCaptchaToken] = useState<string | null>(null); // Declare captchaToken in state
 
   useEffect(() => {
-    Modal.setAppElement('#root');
-  }, []);
-
-  useEffect(() => {
     setIsClient(true);
+    Modal.setAppElement('#root');
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,9 +157,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
                   onVerify={setCaptchaToken}
                 />
               )}
-              <button
-                type="submit"
-                className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
+              <button 
+                type="submit" 
+                className="bg-cyan-600 text-white px-4 py-2 rounded-lg drop-shadow-lg"
               >
                 Submit
               </button>
