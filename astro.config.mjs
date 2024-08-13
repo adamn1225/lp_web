@@ -5,8 +5,6 @@ import icon from 'astro-icon';
 import alpinejs from 'astro-alpinejs';
 import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
-import proxyMiddleware from 'some-proxy-middleware';
-
 
 // Middleware function to proxy requests to the Guesty API
 async function proxyMiddleware(req, res, next) {
