@@ -129,5 +129,21 @@ document.getElementById("showHide").onclick = function() {
 }
 </script>
     <script is:inline src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+    <script is:inline>
+      function onSubmit(token) {
+        fetch("/recaptcha", {
+          method: "POST",
+          body: JSON.stringify({ recaptcha: token })
+        })
+        .then((response) => response.json())
+        .then((gResponse) => {
+          if (gResponse.success) {
+            // Captcha verification was a success
+          } else {
+            // Captcha verification failed
+          }
+        })
+      }
+    </script>
   </body>
 </html>
