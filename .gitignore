@@ -13,8 +13,8 @@ pnpm-debug.log*
 
 .env
 
-
-.env
-
 # Local Netlify folder
 .netlify
+
+# Ignore netlify.toml
+netlify.toml
