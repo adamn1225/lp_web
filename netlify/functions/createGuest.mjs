@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 export async function handler(event, context) {
   const { firstName, lastName, phone, email, checkIn, checkOut, listingId, captchaToken } = JSON.parse(event.body);
 
-  if (!firstName || !lastName || !phone || !email || !checkIn || !checkOut || !listingId || !captchaToken) {
+  if (!firstName || !lastName || !phone || !checkIn || !checkOut || !listingId || !captchaToken) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Missing required fields' })
@@ -16,7 +16,7 @@ export async function handler(event, context) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    body: `secret=${process.env.REACT_APP_RECAPTCHA_SECRET_KEY}&response=${captchaToken}`
+    body: `secret=${process.env.VITE_RECAPTCHA_SECRET_KEY}&response=${captchaToken}`
   });
 
   const captchaData = await captchaResponse.json();
