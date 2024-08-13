@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import ErrorBoundary from './ui/ErrorBoundary';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { default as RenamedCaptcha } from '../utils/captcha';
 
 interface ReservationFormProps {
   listingId: string;
@@ -22,9 +22,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const hcaptchaRef = useRef<HCaptcha>(null);
+  const hcaptchaRef = useRef<RenamedCaptcha>(null);
   const [isClient, setIsClient] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null); // Declare captchaToken in state
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -57,7 +57,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
     const formattedData = {
       ...formData,
       status: 'inquiry',
-      captchaToken: captchaToken, // Include the hCaptcha token
+      captchaToken: captchaToken,
     };
 
     try {
@@ -71,7 +71,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
 
       const data = await response.json();
       console.log('Response from Netlify function:', data);
-      setModalIsOpen(false); // Close the modal on successful submission
+      setModalIsOpen(false);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -80,6 +80,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   const handleButtonClick = () => {
     console.log('Button clicked');
     setModalIsOpen(true);
+  };
+
+  const handleVerificationSuccess = (token: string, ekey: string) => {
+    setCaptchaToken(token);
+    console.log('hCaptcha token:', token);
+    console.log('hCaptcha ekey:', ekey);
   };
 
   return (
@@ -151,10 +157,10 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               />
               {/* hCaptcha */}
               {isClient && (
-                <HCaptcha
+                <RenamedCaptcha
                   ref={hcaptchaRef}
                   sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
-                  onVerify={setCaptchaToken}
+                  onVerify={handleVerificationSuccess}
                 />
               )}
               <button 

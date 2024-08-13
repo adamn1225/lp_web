@@ -31,7 +31,7 @@ export async function handler(event, context) {
   const headers = {
     accept: 'application/json',
     'content-type': 'application/json',
-    authorization: `Bearer ${process.env.VITE_API_TOKEN}`
+    authorization: `Bearer ${process.env.API_TOKEN}`
   };
 
   const guestUrl = 'https://open-api.guesty.com/v1/guests-crud';
