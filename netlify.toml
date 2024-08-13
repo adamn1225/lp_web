@@ -6,16 +6,22 @@
   package = "@netlify/plugin-scheduled-functions"
 
   [plugins.inputs]
-    schedule = "0 */23 * * *" # Every 23 hours
+    schedules = [
+      { "name": "refreshToken", "cron": "0 */23 * * *" } # Every 23 hours
+    ]
 
-[[functions]]
-  name = "refreshToken"
-  schedule = "0 */23 * * *" # Every 23 hours
+[functions]
+  external_node_modules = [
+    "module-one",
+    "module-two"
+  ]
 
 [dev.environment]
   NODE_ENV = "development"
   VITE_SERVER_PORT = 5000
   PORT = 5000
+  CLIENT_SECRET = "${CLIENT_SECRET}"
+  CLIENT_ID = "${CLIENT_ID}"
   VITE_RECAPTCHA_SECRET_KEY = "${RECAPTCHA_SECRET_KEY}"
   VITE_RECAPTCHA_SITE_KEY = "${RECAPTCHA_SITE_KEY}"
   VITE_API_TOKEN = "${API_TOKEN}"
