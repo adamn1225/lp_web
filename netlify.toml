@@ -5,10 +5,9 @@
 [[plugins]]
   package = "@netlify/plugin-scheduled-functions"
 
-  [plugins.inputs]
-    schedules = [
-      { "name": "refreshToken", "cron": "0 */23 * * *" } # Every 23 hours
-    ]
+  [[plugins.inputs.schedules]]
+    name = "refreshToken"
+    cron = "0 */23 * * *" # Every 23 hours
 
 [functions]
   external_node_modules = [
