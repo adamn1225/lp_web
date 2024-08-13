@@ -4,13 +4,6 @@ import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
 import ReservationForm from './ReservationForm'
 import GuestyListings from './GuestyListings.astro'
-import { fetchOneHundred } from '../pages/api/gapi';
-import { fetchReservedDates } from '../utils/utils';
-import ChatBox from '../components/ChatBox';
-
-const conversationId = '66b3f8f071f818003606c0d3';
-
-const listings = await fetchOneHundred();
 
 const { title, propertyType, bathrooms, pictures, Description, listingId } = Astro.props;
 
@@ -73,29 +66,15 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
 
                 <div class="flex flex-col md:flex-row items-stretch gap-4 mb-4">
                   <div class="main-image md:flex-grow-[2]">
-                    <img class="block object-cover min-h-[450px]" src={pictures[0].original} alt="Main image" width={2000} height={1333} data-zoom />
+                    <img class="block object-cover min-h-[450px]" src={pictures[0].original} alt="Main image" width={2000} height={1333} data-zoom loading="lazy" />
                   </div>
                   <div class="flex flex-row md:flex-col xs:flex-wrap gap-4 max-w-full md:max-w-[180px] md:w-full">
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[1].original} alt="Sub image" width={2000} height={1333} data-zoom />
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[2].original} alt="Sub image" width={2000} height={1333} data-zoom />
-                    <img class="object-cover w-1/3 md:w-auto flex-1" src={pictures[3].original} alt="Sub image" width={2000} height={1333} data-zoom />
+                    <img class="object-cover md:w-auto flex-1" src={pictures[1].original} alt="Sub image" width={2000} height={1333} data-zoom loading="lazy" />
+                    <img class="object-cover md:w-auto flex-1" src={pictures[2].original} alt="Sub image" width={2000} height={1333} data-zoom loading="lazy" />
+                    <img class="object-cover md:w-auto flex-1" src={pictures[3].original} alt="Sub image" width={2000} height={1333} data-zoom loading="lazy" />
                   </div>
                 </div>
-
-              
-                <div class="flex justify-start align-baseline gap-2 mb-4">
                 
-                      <img class="max-h-[250px] rounded-lg" src={pictures[4].original} alt="">
-                      <img class="max-h-[250px] rounded-lg" src={pictures[5].original} alt="">
-                                <!-- map -->
-                                <iframe
-                                class="min-h-[220px] w-full"
-                
-                                title="map"
-                                src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Myrtle%20Beach,%20SC+(Line%20Properties%20Inc)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-                                style="filter: grayscale(1) contrast(1.2) opacity(0.6)"
-                              ></iframe>
-              </div>
 
                 <!-- property content -->
                 <div class="relative" x-data="{ activeTab: 'tab-1' }">
@@ -492,7 +471,7 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
               <p class="text-muted-500 dark:text-muted-400  text-center leading-6 xs:text-center">Based on your previous matches</p>
               <div class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
                   
-                <GuestyListings />
+                <!-- <GuestyListings /> -->
                 
               </div>
             </div>
