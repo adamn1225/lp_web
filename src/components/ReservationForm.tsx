@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'react-phone-number-input/style.css';
+import ErrorBoundary from './ui/ErrorBoundary';
 
 interface ReservationFormProps {
   listingId: string;
@@ -78,16 +79,15 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   };
 
   const handleButtonClick = () => {
-    setFormData(prevState => ({
-      ...prevState,
-      status: 'inquiry'
-    }));
+    console.log('Button clicked');
+    setModalIsOpen(true);
   };
 
   return (
+    <ErrorBoundary>
     <div className="flex justify-center items-center">
       <button 
-        onClick={() => setModalIsOpen(true)} 
+        onClick={handleButtonClick} 
         className="bg-cyan-600 text-white px-4 py-2 rounded-lg drop-shadow-lg"
       >
         Inquire about this listing
@@ -159,7 +159,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
             )}
             <button
               type="submit"
-              onClick={handleButtonClick}
               className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
             >
               Submit
@@ -168,6 +167,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
         </div>
       </Modal>
     </div>
+  </ErrorBoundary>
   );
 };
 
