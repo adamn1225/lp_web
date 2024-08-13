@@ -1,13 +1,13 @@
 ---
-export const prerender = false;
+export const prerender = true;
 
 import ListingPageDetail from '@components/ListingPageDetail.astro'
-import {fetchThreeHundred, fetchTwoHundred, fetchOneHundred} from '../pages/api/gapi.ts';
+import {fetchThreeHundred, fetchTwoHundred} from '../pages/api/gapi.ts';
 
 
 export async function getStaticPaths() {
-  const [threeHundredListings, twoHundredListings, oneHundredListings] = await Promise.all([fetchThreeHundred(), fetchTwoHundred(), fetchOneHundred()]);
-  const listings = [...threeHundredListings, ...twoHundredListings, ...oneHundredListings];
+  const [threeHundredListings, twoHundredListings] = await Promise.all([fetchThreeHundred(), fetchTwoHundred(), ]);
+  const listings = [...threeHundredListings, ...twoHundredListings,];
   const paths = listings.map((listings: any) => ({
     params: {
       listingPage: listings._id // Ensure this matches the requested path

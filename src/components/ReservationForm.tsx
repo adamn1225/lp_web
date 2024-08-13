@@ -7,12 +7,11 @@ interface ReservationFormProps {
 
 const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    firstName: 'New',
+    lastName: 'Inquirer #101',
     phone: '',
-    email: '',
-    checkIn: '',
-    checkOut: '',
+    checkIn: '2050-01-01',
+    checkOut: '2050-01-06',
     listingId: listingId,
     status: ''
   });
@@ -97,14 +96,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               value={formData.phone} 
               onChange={handleChange} 
               placeholder="Phone" 
-              className="w-full px-4 py-2 border rounded"
-            />
-            <input 
-              type="email" 
-              name="email" 
-              value={formData.email} 
-              onChange={handleChange} 
-              placeholder="Email" 
               className="w-full px-4 py-2 border rounded"
             />
             <input 
