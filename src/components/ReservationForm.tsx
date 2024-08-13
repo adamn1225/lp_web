@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
-import ReCAPTCHA from 'react-google-recaptcha';
 import 'react-phone-number-input/style.css';
 import ErrorBoundary from './ui/ErrorBoundary';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 interface ReservationFormProps {
   listingId: string;
@@ -22,8 +22,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const hcaptchaRef = useRef<HCaptcha>(null);
   const [isClient, setIsClient] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -47,18 +48,15 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Get reCAPTCHA response token
-    const token = recaptchaRef.current?.getValue();
-
-    if (!token) {
-      alert('Please complete the reCAPTCHA');
+    if (!captchaToken) {
+      alert('Please complete the hCaptcha');
       return;
     }
 
     const formattedData = {
       ...formData,
       status: 'inquiry',
-      captchaToken: token, // Include the reCAPTCHA token
+      captchaToken: captchaToken, // Include the hCaptcha token
     };
 
     try {
@@ -150,11 +148,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               placeholder="Listing ID"
               className="hidden w-full px-4 py-2 border rounded"
             />
-            {/* Google reCAPTCHA */}
+            {/* hCaptcha */}
             {isClient && (
-              <ReCAPTCHA
-                ref={recaptchaRef}
-                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+              <HCaptcha
+                ref={hcaptchaRef}
+                sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
+                onVerify={setCaptchaToken}
               />
             )}
             <button

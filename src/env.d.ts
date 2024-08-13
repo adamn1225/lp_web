@@ -13,6 +13,8 @@ interface ImportMetaEnv {
   readonly GUESTY_BOOKING_API: string;
   readonly VITE_RECAPTCHA_SECRET_KEY: string;
   readonly VITE_RECAPTCHA_SITE_KEY: string;
+  readonly HCAPTCHA_SITE_KEY: string;
+  readonly HCAPTCHA_SECRET_KEY: string;
   // readonly SECRET_OPEN_PASSWORD: string;
   // readonly FIREBASE_PRIVATE_KEY_ID: string;
   // readonly FIREBASE_PRIVATE_KEY: string;
