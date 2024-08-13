@@ -154,7 +154,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
             />
             {/* <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Get a Verification Code</h2> */}
               {/*  Google reCAPTCHA */}
-            <div className="g-recaptcha" data-sitekey="6LfJ_iUqAAAAAPWZxoP8pT29QO8Hp8nCmMhUKewE"></div>
+            <div className="g-recaptcha" data-sitekey="6LdqGCYqAAAAACraJnA6_itcy1-IXOhvqO3Olk4D"></div>
             <button 
               type="submit" 
               onClick={handleButtonClick} 
