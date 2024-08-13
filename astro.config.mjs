@@ -1,13 +1,11 @@
-import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
-import alpinejs from "@astrojs/alpinejs";
-import icon from "astro-icon";
-import netlify from '@astrojs/netlify';
+import { defineConfig } from 'vite';
+import netlify from '@sveltejs/adapter-netlify';
+import tailwind from '@astrojs/tailwind';
+import icon from 'astro-icon';
+import alpinejs from 'astro-alpinejs';
 import react from '@astrojs/react';
-import markdoc from "@astrojs/markdoc";
-import node from '@astrojs/node';
-import fetch from 'node-fetch';
-import * as cheerio from 'cheerio';
+import markdoc from '@astrojs/markdoc';
+import proxyMiddleware from 'some-proxy-middleware';
 
 
 // Middleware function to proxy requests to the Guesty API

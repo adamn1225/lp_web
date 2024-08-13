@@ -19,6 +19,7 @@
     "@astrojs/node": "^8.3.2",
     "@astrojs/react": "^3.6.2",
     "@astrojs/rss": "^4.0.7",
+    "@astrojs/tailwind": "^5.1.0",
     "@contentful/rich-text-html-renderer": "^16.6.8",
     "@guestyorg/tokenization-js": "^1.0.4",
     "@hcaptcha/react-hcaptcha": "^1.10.3",
