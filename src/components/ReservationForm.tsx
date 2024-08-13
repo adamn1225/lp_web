@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';  // Import the custom PhoneInput component
+import reCAPTCHA from "react-google-recaptcha"
+import 'react-phone-number-input/style.css';
 
 interface ReservationFormProps {
   listingId: string;
@@ -154,7 +155,10 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
             />
             {/* <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Get a Verification Code</h2> */}
               {/*  Google reCAPTCHA */}
-            <div className="g-recaptcha" data-sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}></div>
+              
+              <div
+             className="g-recaptcha"
+             data-sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY} />
             <button 
               type="submit" 
               onClick={handleButtonClick} 
