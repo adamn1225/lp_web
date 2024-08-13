@@ -1,12 +1,13 @@
 import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
+import { schedule } from '@netlify/functions';
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const TOKEN_FILE_PATH = path.resolve(__dirname, 'guesty_token.json');
 
-export async function handler(event, context) {
+const refreshTokenHandler = async function(event, context) {
   try {
     const response = await fetch('https://open-api.guesty.com/oauth2/token', {
       method: 'POST',
@@ -48,4 +49,6 @@ export async function handler(event, context) {
       body: JSON.stringify({ error: error.message })
     };
   }
-}
+};
+
+export const handler = schedule('0 */23 * * *', refreshTokenHandler); // Every 23 hours
