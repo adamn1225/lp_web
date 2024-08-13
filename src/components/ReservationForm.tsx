@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';  // Import the custom PhoneInput component
 
 interface ReservationFormProps {
   listingId: string;
@@ -10,6 +12,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
     firstName: 'New',
     lastName: 'Inquirer #101',
     phone: '',
+    email: '', // Assuming you need an email field
     checkIn: '2050-01-01',
     checkOut: '2050-01-06',
     listingId: listingId,
@@ -24,6 +27,13 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
       ...prevState,
       [name]: value
     }));
+  };
+
+  const handlePhoneChange = (value: string | undefined) => {
+    setFormData({
+      ...formData,
+      phone: value || '',
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -80,7 +90,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               value={formData.firstName} 
               onChange={handleChange} 
               placeholder="First Name" 
-              className="w-full px-4 py-2 border rounded"
+              className="hidden w-full px-4 py-2 border rounded"
             />
             <input 
               type="text" 
@@ -88,31 +98,37 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               value={formData.lastName} 
               onChange={handleChange} 
               placeholder="Last Name" 
-              className="w-full px-4 py-2 border rounded"
+              className="hidden w-full px-4 py-2 border rounded"
+            />
+            <PhoneInput
+              value={formData.phone}
+              onChange={handlePhoneChange}
+              defaultCountry="US"
+              placeholder="(---) --- ----"
             />
             <input 
-              type="text" 
-              name="phone" 
-              value={formData.phone} 
-              onChange={handleChange} 
-              placeholder="Phone" 
-              className="w-full px-4 py-2 border rounded"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className="hidden w-full px-4 py-2 border rounded"
             />
             <input 
-              type="date" 
-              name="checkIn" 
-              value={formData.checkIn} 
-              onChange={handleChange} 
-              placeholder="Check-In Date" 
-              className="w-full px-4 py-2 border rounded"
+              type="date"
+              name="checkIn"
+              value={formData.checkIn}
+              onChange={handleChange}
+              placeholder="Check-In Date"
+              className="hidden w-full px-4 py-2 border rounded"
             />
             <input 
-              type="date" 
-              name="checkOut" 
-              value={formData.checkOut} 
-              onChange={handleChange} 
-              placeholder="Check-Out Date" 
-              className="w-full px-4 py-2 border rounded"
+              type="date"
+              name="checkOut"
+              value={formData.checkOut}
+              onChange={handleChange}
+              placeholder="Check-Out Date"
+              className="hidden w-full px-4 py-2 border rounded"
             />
             <input 
               type="text" 
@@ -122,6 +138,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               placeholder="Listing ID" 
               className="hidden w-full px-4 py-2 border rounded"
             />
+            <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Get a Verification Code</h2>
             <button 
               type="submit" 
               onClick={handleButtonClick} 
@@ -132,7 +149,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
           </form>
           <button 
             onClick={() => setModalIsOpen(false)} 
-            className="mt-4 bg-red-500 text-white px-4 py-2 rounded w-full"
+            className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full"
           >
             Close
           </button>

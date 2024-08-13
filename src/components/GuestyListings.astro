@@ -1,7 +1,7 @@
 ---
-import {fetchFeaturedListings} from '../pages/api/gapi.ts';
+import {fetchFeaturedListings} from '../pages/api/gapi';
 
-const listings = await fetchFeaturedListings();
+const listingsFeatured = await fetchFeaturedListings();
 
 
 
@@ -9,7 +9,7 @@ const listings = await fetchFeaturedListings();
 ---
 
   {
-      listings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
+      listingsFeatured.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
   <a href={_id}>
       <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
               <div class="bg-muted-100">
