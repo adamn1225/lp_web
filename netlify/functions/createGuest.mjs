@@ -51,7 +51,8 @@ export async function handler(event, context) {
     // Create guest
     const guestResponse = await fetch(guestUrl, guestOptions);
     if (!guestResponse.ok) {
-      throw new Error('Failed to create guest');
+      const errorText = await guestResponse.text();
+      throw new Error(`Failed to create guest: ${errorText}`);
     }
     const guestData = await guestResponse.json();
     const { _id: guestId } = guestData;
@@ -72,7 +73,8 @@ export async function handler(event, context) {
 
     const reservationResponse = await fetch(reservationUrl, reservationOptions);
     if (!reservationResponse.ok) {
-      throw new Error('Failed to create reservation inquiry');
+      const errorText = await reservationResponse.text();
+      throw new Error(`Failed to create reservation inquiry: ${errorText}`);
     }
     const reservationData = await reservationResponse.json();
 
