@@ -9,8 +9,8 @@ interface ReservationFormProps {
 
 const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   const [formData, setFormData] = useState({
-    firstName: 'New',
-    lastName: 'Inquirer #101',
+    firstName: '',
+    lastName: '',
     phone: '',
     email: '', // Assuming you need an email field
     checkIn: '2050-01-01',
@@ -38,18 +38,28 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Get reCAPTCHA response token
+    const token = (window as any).grecaptcha.getResponse();
+
+    if (!token) {
+      alert('Please complete the reCAPTCHA');
+      return;
+    }
+
     const formattedData = {
       ...formData,
-      status: 'inquiry'
+      status: 'inquiry',
+      captchaToken: token, // Include the reCAPTCHA token
     };
 
     try {
       const response = await fetch('/.netlify/functions/createGuest', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formattedData)
+        body: JSON.stringify(formattedData),
       });
 
       const data = await response.json();
@@ -66,6 +76,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
       status: 'inquiry'
     }));
   };
+
 
   return (
     <div className="flex justify-center items-center">
@@ -84,36 +95,39 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
         <div className="bg-white px-8 py-4 rounded shadow-lg w-full max-w-md">
           <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Let us know about who you are and when you're planning stay and your host will respond instantly!</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input 
-              type="text" 
-              name="firstName" 
-              value={formData.firstName} 
-              onChange={handleChange} 
-              placeholder="First Name" 
-              className="hidden w-full px-4 py-2 border rounded"
-            />
-            <input 
-              type="text" 
-              name="lastName" 
-              value={formData.lastName} 
-              onChange={handleChange} 
-              placeholder="Last Name" 
-              className="hidden w-full px-4 py-2 border rounded"
-            />
+<div className='flex justify-center gap-1 w-full mt-3'>
+              <input 
+                type="text" 
+                name="firstName" 
+                value={formData.firstName} 
+                onChange={handleChange} 
+                placeholder="First Name" 
+                className="px-2 py-2 border rounded w-2/3"
+              />
+              <input 
+                type="text" 
+                name="lastName" 
+                value={formData.lastName} 
+                onChange={handleChange} 
+                placeholder="Last Name" 
+                className="px-2 py-2 border rounded w-2/3"
+              />
+</div>
             <PhoneInput
               value={formData.phone}
               onChange={handlePhoneChange}
               defaultCountry="US"
               placeholder="(---) --- ----"
+              className='mx-3 flex justify-center items-center'
             />
-            <input 
+            {/* <input 
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="Email"
               className="hidden w-full px-4 py-2 border rounded"
-            />
+            /> */}
             <input 
               type="date"
               name="checkIn"
@@ -138,7 +152,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               placeholder="Listing ID" 
               className="hidden w-full px-4 py-2 border rounded"
             />
-            <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Get a Verification Code</h2>
+            {/* <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Get a Verification Code</h2> */}
+              {/* Google reCAPTCHA */}
+            <div className="g-recaptcha" data-sitekey="6LfJ_iUqAAAAAPWZxoP8pT29QO8Hp8nCmMhUKewE"></div>
             <button 
               type="submit" 
               onClick={handleButtonClick} 

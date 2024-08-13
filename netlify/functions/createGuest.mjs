@@ -1,12 +1,30 @@
 import fetch from 'node-fetch';
 
 export async function handler(event, context) {
-  const { firstName, lastName, phone, email, checkIn, checkOut, listingId } = JSON.parse(event.body);
+  const { firstName, lastName, phone, email, checkIn, checkOut, listingId, captchaToken } = JSON.parse(event.body);
 
-  if (!firstName || !lastName || !phone || !email || !checkIn || !checkOut || !listingId) {
+  if (!firstName || !lastName || !phone || !email || !checkIn || !checkOut || !listingId || !captchaToken) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Missing required fields' })
+    };
+  }
+
+  // Verify reCAPTCHA token
+  const captchaResponse = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captchaToken}`
+  });
+
+  const captchaData = await captchaResponse.json();
+
+  if (!captchaData.success) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'Captcha verification failed' })
     };
   }
 
