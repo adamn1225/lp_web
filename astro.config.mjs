@@ -8,7 +8,7 @@ import markdoc from "@astrojs/markdoc";
 import node from '@astrojs/node';
 import fetch from 'node-fetch';
 import path from 'path';
-import cheerio from './cheerio-alias.js';
+import { load } from 'cheerio';
 
 // Middleware function to proxy requests to the Guesty API
 async function proxyMiddleware(req, res, next) {
@@ -50,27 +50,21 @@ async function proxyMiddleware(req, res, next) {
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    resolve: {
-      alias: {
-        cheerio: path.resolve('./cheerio-alias.js')
-      }
-    },
-    build: {
-      rollupOptions: {
-        external: ['sharp']
-      }
-    },
-    server: {
-      watch: {
-        ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**']
-      },
-      port: 4321 // Ensure the server is set to run on port 4321
+    plugins: [fixCheerioImport()],
+  },
+  build: {
+    rollupOptions: {
+      external: ['sharp']
     }
+  },
+  server: {
+    watch: {
+      ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**']
+    },
+    port: 4321, // Ensure the server is set to run on port 4321
+    middleware: [proxyMiddleware]
   },
   output: 'server',
   adapter: netlify(),
-  integrations: [tailwind(), icon(), alpinejs(), react(), markdoc()],
-  server: {
-    middleware: [proxyMiddleware]
-  }
+  integrations: [tailwind(), icon(), alpinejs(), react(), markdoc()]
 });
