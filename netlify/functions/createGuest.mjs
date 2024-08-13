@@ -11,12 +11,12 @@ export async function handler(event, context) {
   }
 
   // Verify reCAPTCHA token
-  const captchaResponse = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
+  const captchaResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    body: `secret=${process.env.VITE_RECAPTCHA_SECRET_KEY}&response=${captchaToken}`
+    body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captchaToken}`
   });
 
   const captchaData = await captchaResponse.json();
