@@ -16,5 +16,3 @@ pnpm-debug.log*
 # Local Netlify folder
 .netlify
 
-# Ignore netlify.toml
-netlify.toml
