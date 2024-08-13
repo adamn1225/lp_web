@@ -1,45 +1,60 @@
 import fetch from 'node-fetch';
 
-export const handler = async (event, context) => {
-  const guestInfo = JSON.parse(event.body);
+export async function handler(event, context) {
+  const { firstName, lastName, phone, email, checkIn, checkOut, listingId } = JSON.parse(event.body);
 
-  console.log('Received guest creation request with data:', guestInfo);
-
-  const url = 'https://open-api.guesty.com/v1/guests-crud';
-  const options = {
+  const guestUrl = 'https://open-api.guesty.com/v1/guests-crud';
+  const guestOptions = {
     method: 'POST',
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
-      authorization: `Bearer ${process.env.VITE_API_TOKEN}` // Ensure this token is correctly set in your environment variables
+      authorization: `Bearer ${process.env.VITE_API_TOKEN}`
     },
-    body: JSON.stringify(guestInfo)
+    body: JSON.stringify({
+      firstName,
+      lastName,
+      phone,
+      contactType: 'guest',
+      email,
+    })
   };
 
   try {
-    const response = await fetch(url, options);
-    const responseText = await response.text();
-    console.log('Guesty API Response Text:', responseText);
+    // Create guest
+    const guestResponse = await fetch(guestUrl, guestOptions);
+    const guestData = await guestResponse.json();
+    const { _id: guestId } = guestData;
 
-    if (!response.ok) {
-      console.error('Guesty API Error:', responseText);
-      return {
-        statusCode: response.status,
-        body: JSON.stringify({ error: 'Failed to create guest. Guesty API error.' })
-      };
-    }
+    // Create reservation inquiry
+    const reservationUrl = 'https://open-api.guesty.com/v1/reservations';
+    const reservationOptions = {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        authorization: `Bearer ${process.env.VITE_API_TOKEN}`
+      },
+      body: JSON.stringify({
+        listingId,
+        checkInDateLocalized: checkIn,
+        checkOutDateLocalized: checkOut,
+        status: 'inquiry',
+        guestId
+      })
+    };
 
-    const data = JSON.parse(responseText);
+    const reservationResponse = await fetch(reservationUrl, reservationOptions);
+    const reservationData = await reservationResponse.json();
 
     return {
-      statusCode: response.status,
-      body: JSON.stringify(data)
+      statusCode: 200,
+      body: JSON.stringify({ guestData, reservationData })
     };
   } catch (error) {
-    console.error('Error creating guest:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Internal Server Error' })
+      body: JSON.stringify({ error: 'Failed to create guest or reservation inquiry' })
     };
   }
-};
+}

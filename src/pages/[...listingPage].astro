@@ -1,5 +1,5 @@
 ---
-export const prerender = false;
+export const prerender = true;
 
 import ListingPageDetail from '@components/ListingPageDetail.astro'
 import {fetchThreeHundred, fetchTwoHundred, fetchOneHundred} from '../pages/api/gapi.ts';
@@ -41,7 +41,6 @@ export async function get({ params }) {
 
   return {
     lineListing: listings,
-    id: listings._id,
   title: listings.title,
   city: listings.address.city,
   state: listings.address.state,

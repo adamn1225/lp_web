@@ -1,204 +1,153 @@
-import React, { useState, useEffect } from 'react';
-import { DateRange } from 'react-date-range';
-import { addDays } from 'date-fns';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-
-type Listing = {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    // Add other properties as needed
-};
+import React, { useState } from 'react';
+import Modal from 'react-modal';
 
 interface ReservationFormProps {
   listingId: string;
-  reservedDates: Date[];
-  "client:load": boolean;
 }
 
-const ReservationForm: React.FC<ReservationFormProps> = ({ listingId, reservedDates }) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [guestCount, setGuestCount] = useState(1);
-  const [nights, setNights] = useState(1);
-  const [state, setState] = useState<any[]>([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: 'selection'
-    }
-  ]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const [available, setListings] = useState<Listing[]>([]);
-  const [isLocal, setIsLocal] = useState<boolean>(false);
+const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    checkIn: '',
+    checkOut: '',
+    listingId: listingId,
+    status: ''
+  });
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsLocal(window.location.hostname === 'localhost');
-    }
-  }, []);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const serverPort = import.meta.env.VITE_SERVER_PORT || '5000';
-  const apiUrl = isLocal
-    ? `http://localhost:${serverPort}/api/available`
-    : `/.netlify/functions/availability`;
-
-  const formatDate = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
-  const checkAvailability = async () => {
-    setLoading(true);
-    setError('');
-
-    try {
-      const formattedCheckIn = formatDate(state[0].startDate);
-      const formattedCheckOut = formatDate(state[0].endDate);
-
-      const response = await fetch(`${apiUrl}?checkIn=${encodeURIComponent(formattedCheckIn)}&checkOut=${encodeURIComponent(formattedCheckOut)}&minOccupancy=${encodeURIComponent(guestCount.toString())}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const responseText = await response.text();
-      // console.log('API Response Text:', responseText);
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
-      }
-
-      let data;
-      try {
-        data = JSON.parse(responseText);
-      } catch (err) {
-        throw new Error('Invalid JSON response');
-      }
-
-      if (!Array.isArray(data.results)) {
-        throw new Error('Unexpected response format');
-      }
-
-      setListings(data.results);
-    } catch (err) {
-      console.error('Error fetching listings:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setLoading(true);
-    setError('');
-
-    const reservationData = {
-      listingId: listingId,
-      checkInDateLocalized: formatDate(state[0].startDate),
-      checkOutDateLocalized: formatDate(state[0].endDate),
-      guestsCount: guestCount,
-      firstName: firstName,
-      lastName: lastName
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formattedData = {
+      ...formData,
+      status: 'inquiry'
     };
 
     try {
-      const response = await fetch('/.netlify/functions/createReservations', {
+      const response = await fetch('/.netlify/functions/createGuest', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(reservationData)
+        body: JSON.stringify(formattedData)
       });
 
-      const jsonResponse = await response.json();
-      console.log(jsonResponse);
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText} - ${jsonResponse}`);
-      }
-
-      alert('Reservation successful!');
-    } catch (err) {
-      console.error('Error creating reservation:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      const data = await response.json();
+      console.log('Response from Netlify function:', data);
+      setModalIsOpen(false); // Close the modal on successful submission
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
+  const handleButtonClick = () => {
+    setFormData(prevState => ({
+      ...prevState,
+      status: 'inquiry'
+    }));
+  };
+
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-2 '>
-      <h1 className='text-center font-bold text-slate-600 text-xl decoration-slate-600 underline underline-offset-4'>Book Instantly</h1>
-      <div className='text-slate-600 font-bold flex flex-col'>
-        <label>First Name</label>
-        <input
-          type="text"
-          placeholder='First Name'
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-        />
-      </div>
-      <div className='text-slate-600 font-bold flex flex-col'>
-        <label>Last Name</label>
-        <input
-          type="text"
-          placeholder='Last Name'
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          required
-        />
-      </div>
-      <div className='grid grid-cols-2 items-center align-middle text-slate-600 font-bold'>
-        <label>Number of Guests:</label>
-        <select
-          value={guestCount}
-          onChange={(e) => setGuestCount(Number(e.target.value))}
-          required
-        >
-          {[...Array(5).keys()].map((i) => (
-            <option key={i + 1} value={i + 1}>
-              {i + 1}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className='flex flex-col items-stretch text-slate-600 font-bold'>
-        <label>
-          Number of Nights:
-          <input
-            type="number"
-            value={nights}
-            onChange={(e) => setNights(Number(e.target.value))}
-            min="1"
-            required
-            className='w-full'
-          />
-        </label>
-      </div>
-      <h3 className="text-center pb-4 text-2xl">How long is your trip?</h3>
-      <div className='flex flex-col items-center justify-center self-center align-middle text-slate-600 font-bold'>
-        <label>Date Range:</label>
-        <DateRange
-          ranges={state}
-          onChange={(item) => setState([item.selection])}
-          disabledDates={reservedDates}
-        />
-      </div>
-      <button className='bg-cyan-600 mb-6 font-bold text-sm text-white rounded h-11 transition-all duration-300 py-2 px-4 flex items-center justify-center cursor-pointer w-full hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300' type="submit">
-        Reserve
+    <div className="flex justify-center items-center">
+      <button 
+        onClick={() => setModalIsOpen(true)} 
+        className="bg-cyan-600 text-white px-4 py-2 rounded-lg drop-shadow-lg"
+      >
+        Inquire about this listing
       </button>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-    </form>
+      <Modal 
+        isOpen={modalIsOpen} 
+        onRequestClose={() => setModalIsOpen(false)}
+        className="flex justify-center items-center h-screen"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      >
+        <div className="bg-white px-8 py-4 rounded shadow-lg w-full max-w-md">
+          <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Let us know about who you are and when you're planning stay and your host will respond instantly!</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input 
+              type="text" 
+              name="firstName" 
+              value={formData.firstName} 
+              onChange={handleChange} 
+              placeholder="First Name" 
+              className="w-full px-4 py-2 border rounded"
+            />
+            <input 
+              type="text" 
+              name="lastName" 
+              value={formData.lastName} 
+              onChange={handleChange} 
+              placeholder="Last Name" 
+              className="w-full px-4 py-2 border rounded"
+            />
+            <input 
+              type="text" 
+              name="phone" 
+              value={formData.phone} 
+              onChange={handleChange} 
+              placeholder="Phone" 
+              className="w-full px-4 py-2 border rounded"
+            />
+            <input 
+              type="email" 
+              name="email" 
+              value={formData.email} 
+              onChange={handleChange} 
+              placeholder="Email" 
+              className="w-full px-4 py-2 border rounded"
+            />
+            <input 
+              type="date" 
+              name="checkIn" 
+              value={formData.checkIn} 
+              onChange={handleChange} 
+              placeholder="Check-In Date" 
+              className="w-full px-4 py-2 border rounded"
+            />
+            <input 
+              type="date" 
+              name="checkOut" 
+              value={formData.checkOut} 
+              onChange={handleChange} 
+              placeholder="Check-Out Date" 
+              className="w-full px-4 py-2 border rounded"
+            />
+            <input 
+              type="text" 
+              name="listingId" 
+              value={formData.listingId} 
+              onChange={handleChange} 
+              placeholder="Listing ID" 
+              className="hidden w-full px-4 py-2 border rounded"
+            />
+            <button 
+              type="submit" 
+              onClick={handleButtonClick} 
+              className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
+            >
+              Submit
+            </button>
+          </form>
+          <button 
+            onClick={() => setModalIsOpen(false)} 
+            className="mt-4 bg-red-500 text-white px-4 py-2 rounded w-full"
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
+    </div>
   );
 };
 

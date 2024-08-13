@@ -12,25 +12,8 @@ const conversationId = '66b3f8f071f818003606c0d3';
 
 const listings = await fetchOneHundred();
 
-const { title, propertyType, bathrooms, pictures, Description } = Astro.props;
-const listingId = Astro.props.listingId;
-// console.log('Listing ID:', listingId); // Debugging line
+const { title, propertyType, bathrooms, pictures, Description, listingId } = Astro.props;
 
-// Determine the date range dynamically
-const currentDate = new Date();
-const futureDate = new Date();
-futureDate.setFullYear(currentDate.getFullYear() + 1); // Set future date to one year from now
-
-const startDate = currentDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-const endDate = futureDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-
-// Fetch reserved dates with error handling
-let reservedDates = [];
-try {
-  reservedDates = await fetchReservedDates(listingId, startDate, endDate);
-} catch (error) {
-  console.error('Error fetching reserved dates:', error);
-}
 
 ---
 
@@ -412,14 +395,14 @@ try {
               </div>
               <!-- right -->
               <div class="min-w-[350px] md:w-1/4">
-                <ChatBox conversationId={conversationId} client:load={true} />
+                <!-- <ChatBox conversationId={conversationId} client:load={true} /> -->
                 <!-- <button
                 class="bg-cyan-600 mb-6 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
               >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
               <span class="pl-2">Send Message</span> 
               </button> -->
-                <ReservationForm listingId={listingId} reservedDates={reservedDates} client:load={true}/>
+             
             
                 <h4 class="text-xl mb-6 font-light font-sans text-muted-900">Amenities</h4>
                 <div class="mb-6 grid grid-cols-2 justify-items-center">
@@ -496,7 +479,7 @@ try {
                   </div>
                 </div>
 
-                
+                <ReservationForm listingId={listingId} client:load={true} />
 
 
 
