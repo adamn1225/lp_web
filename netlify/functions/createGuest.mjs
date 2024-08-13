@@ -16,7 +16,7 @@ export async function handler(event, context) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captchaToken}`
+    body: `secret=${process.env.REACT_APP_RECAPTCHA_SECRET_KEY}&response=${captchaToken}`
   });
 
   const captchaData = await captchaResponse.json();

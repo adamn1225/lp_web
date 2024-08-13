@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   readonly CONTENTFUL_ACCESS_TOKEN: string;
   readonly VITE_API_TOKEN: string;
   readonly GUESTY_BOOKING_API: string;
+  readonly REACT_APP_RECAPTCHA_SECRET_KEY: string;
+  readonly VITE_RECAPTCHA_SITE_KEY: string;
   // readonly SECRET_OPEN_PASSWORD: string;
   // readonly FIREBASE_PRIVATE_KEY_ID: string;
   // readonly FIREBASE_PRIVATE_KEY: string;
