@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
-import reCAPTCHA from "react-google-recaptcha"
+import ReCAPTCHA from 'react-google-recaptcha';
 import 'react-phone-number-input/style.css';
 
 interface ReservationFormProps {
@@ -13,7 +13,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
     firstName: '',
     lastName: '',
     phone: '',
-    email: '', // Assuming you need an email field
+    email: '',
     checkIn: '2050-01-01',
     checkOut: '2050-01-06',
     listingId: listingId,
@@ -21,6 +21,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,7 +42,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
     e.preventDefault();
 
     // Get reCAPTCHA response token
-    const token = (window as any).grecaptcha.getResponse();
+    const token = recaptchaRef.current?.getValue();
 
     if (!token) {
       alert('Please complete the reCAPTCHA');
@@ -78,7 +79,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
     }));
   };
 
-
   return (
     <div className="flex justify-center items-center">
       <button 
@@ -96,7 +96,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
         <div className="bg-white px-8 py-4 rounded shadow-lg w-full max-w-md">
           <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Let us know about who you are and when you're planning stay and your host will respond instantly!</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-<div className='flex justify-center gap-1 w-full mt-3'>
+            <div className='flex justify-center gap-1 w-full mt-3'>
               <input 
                 type="text" 
                 name="firstName" 
@@ -113,7 +113,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
                 placeholder="Last Name" 
                 className="px-2 py-2 border rounded w-2/3"
               />
-</div>
+            </div>
             <PhoneInput
               value={formData.phone}
               onChange={handlePhoneChange}
@@ -121,14 +121,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               placeholder="(---) --- ----"
               className='mx-3 flex justify-center items-center'
             />
-            {/* <input 
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className="hidden w-full px-4 py-2 border rounded"
-            /> */}
             <input 
               type="date"
               name="checkIn"
@@ -148,31 +140,24 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
             <input 
               type="text" 
               name="listingId" 
-              value={formData.listingId} 
-              onChange={handleChange} 
-              placeholder="Listing ID" 
+              value={formData.listingId}
+              onChange={handleChange}
+              placeholder="Listing ID"
               className="hidden w-full px-4 py-2 border rounded"
             />
-            {/* <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Get a Verification Code</h2> */}
-              {/*  Google reCAPTCHA */}
-              
-              <div
-             className="g-recaptcha"
-             data-sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY} />
-            <button 
-              type="submit" 
-              onClick={handleButtonClick} 
+            {/* Google reCAPTCHA */}
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+            />
+            <button
+              type="submit"
+              onClick={handleButtonClick}
               className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
             >
               Submit
             </button>
           </form>
-          <button 
-            onClick={() => setModalIsOpen(false)} 
-            className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full"
-          >
-            Close
-          </button>
         </div>
       </Modal>
     </div>

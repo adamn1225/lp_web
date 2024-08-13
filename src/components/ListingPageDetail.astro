@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components'
 import Layout from '@layouts/Default.astro'
+import Default from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
 import ReservationForm from './ReservationForm'
 import GuestyListings from './GuestyListings.astro'
@@ -9,7 +10,7 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
 
 ---
 
-<Layout title="Property Details"> 
+<Default title="Property Details"> 
   <main id="PropertyDetails"> 
     <Section>
       <div class="w-full mx-auto max-w-full mt-12 px-8 xs:px-4">
@@ -457,7 +458,7 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
                   </div>
                 </div>
 
-                <ReservationForm listingId={listingId} client:load />
+                <ReservationForm listingId={listingId} client:only="react" />
 
 
 
@@ -483,4 +484,4 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
       </div>
     </Section>
   </main>
-</Layout>
+</Default>
