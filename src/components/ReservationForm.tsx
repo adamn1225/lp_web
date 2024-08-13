@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -22,6 +22,11 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -146,10 +151,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               className="hidden w-full px-4 py-2 border rounded"
             />
             {/* Google reCAPTCHA */}
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-            />
+            {isClient && (
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+              />
+            )}
             <button
               type="submit"
               onClick={handleButtonClick}
