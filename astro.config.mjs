@@ -1,10 +1,12 @@
-import { defineConfig } from 'vite';
-import netlify from '@sveltejs/adapter-netlify';
-import tailwind from '@astrojs/tailwind';
-import icon from 'astro-icon';
-import alpinejs from 'astro-alpinejs';
+import { defineConfig } from "astro/config";
+import tailwind from "@astrojs/tailwind";
+import alpinejs from "@astrojs/alpinejs";
+import icon from "astro-icon";
+import netlify from '@astrojs/netlify';
 import react from '@astrojs/react';
-import markdoc from '@astrojs/markdoc';
+import markdoc from "@astrojs/markdoc";
+import node from '@astrojs/node';
+import fetch from 'node-fetch';
 
 // Middleware function to proxy requests to the Guesty API
 async function proxyMiddleware(req, res, next) {
@@ -43,37 +45,25 @@ async function proxyMiddleware(req, res, next) {
   }
 }
 
-function fixCheerioImport() {
-  return {
-    name: 'fix-cheerio-import',
-    enforce: 'pre',
-    transform(code, id) {
-      if (id.includes('node_modules/@iconify/tools/lib/svg/index.mjs')) {
-        return code.replace("import cheerio from 'cheerio';", "import * as cheerio from 'cheerio';");
-      }
-      return code;
-    }
-  };
-}
-
 // https://astro.build/config
 export default defineConfig({
   vite: {
-    plugins: [fixCheerioImport()],
-  },
-  build: {
-    rollupOptions: {
-      external: ['sharp']
-    }
-  },
-  server: {
-    watch: {
-      ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**']
+    build: {
+      rollupOptions: {
+        external: ['sharp']
+      }
     },
-    port: 4321, // Ensure the server is set to run on port 4321
-    middleware: [proxyMiddleware]
+    server: {
+      watch: {
+        ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**']
+      },
+      port: 4321 // Ensure the server is set to run on port 4321
+    }
   },
   output: 'server',
   adapter: netlify(),
-  integrations: [tailwind(), icon(), alpinejs(), react(), markdoc()]
+  integrations: [tailwind(), icon(), alpinejs(), react(), markdoc()],
+  server: {
+    middleware: [proxyMiddleware]
+  }
 });

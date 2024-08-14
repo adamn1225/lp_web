@@ -1,8 +1,6 @@
 {
   "extends": "astro/tsconfigs/base",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "types": ["astro/client", "express", "react", "react-dom"],
     "baseUrl": ".",
     "paths": {
       "@layouts/*": [
