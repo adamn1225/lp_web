@@ -28,16 +28,16 @@ export async function handler(event) {
     }
   };
 
-  console.log('Request URL:', url);
-  console.log('Request Options:', options);
+  // console.log('Request URL:', url);
+  // console.log('Request Options:', options);
 
   try {
     const response = await fetch(url, options);
     const data = await response.json();
 
-    console.log('Response Status:', response.status);
-    console.log('Response Headers:', response.headers.raw());
-    console.log('Response Data:', data);
+    // console.log('Response Status:', response.status);
+    // console.log('Response Headers:', response.headers.raw());
+    // console.log('Response Data:', data);
 
     if (!response.ok) {
       console.error('API Error:', data);

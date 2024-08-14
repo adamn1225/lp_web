@@ -33,7 +33,7 @@ const PropertySearch: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log('API Response:', data); // Log the response data
+        // console.log('API Response:', data); // Log the response data
 
         // Ensure the data structure is as expected
         if (!data.results || !Array.isArray(data.results)) {

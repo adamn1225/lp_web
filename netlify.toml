@@ -1,0 +1,20 @@
+[build]
+  command = "pnpm run build"
+  publish = "dist"
+  environment = { NODE_VERSION = "18.14.1" }
+
+[context.production.environment]
+  VITE_API_TOKEN = "${VITE_API_TOKEN}"
+
+[functions]
+  directory = "netlify/functions"
+
+[[functions]]
+  name = "refreshToken"
+  schedule = "0 */23 * * *"  # Update the schedule to every 23 hours
+
+[build.environment]
+  NODE_ENV = "production"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs-cache"

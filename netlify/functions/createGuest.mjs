@@ -1,37 +1,19 @@
 import fetch from 'node-fetch';
 
 export async function handler(event, context) {
-  const { firstName, lastName, phone, email, checkIn, checkOut, listingId, captchaToken } = JSON.parse(event.body);
+  const { firstName, lastName, phone, email, checkIn, checkOut, listingId } = JSON.parse(event.body);
 
-  if (!firstName || !lastName || !phone || !checkIn || !checkOut || !listingId || !captchaToken) {
+  if (!firstName || !lastName || !phone || !checkIn || !checkOut || !listingId) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Missing required fields' })
     };
   }
 
-  // Verify reCAPTCHA token
-  const captchaResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captchaToken}`
-  });
-
-  const captchaData = await captchaResponse.json();
-
-  if (!captchaData.success) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Captcha verification failed' })
-    };
-  }
-
   const headers = {
     accept: 'application/json',
     'content-type': 'application/json',
-    authorization: `Bearer ${process.env.API_TOKEN}`
+    authorization: `Bearer ${process.env.VITE_API_TOKEN}`
   };
 
   const guestUrl = 'https://open-api.guesty.com/v1/guests-crud';
@@ -51,8 +33,7 @@ export async function handler(event, context) {
     // Create guest
     const guestResponse = await fetch(guestUrl, guestOptions);
     if (!guestResponse.ok) {
-      const errorText = await guestResponse.text();
-      throw new Error(`Failed to create guest: ${errorText}`);
+      throw new Error('Failed to create guest');
     }
     const guestData = await guestResponse.json();
     const { _id: guestId } = guestData;
@@ -73,8 +54,7 @@ export async function handler(event, context) {
 
     const reservationResponse = await fetch(reservationUrl, reservationOptions);
     if (!reservationResponse.ok) {
-      const errorText = await reservationResponse.text();
-      throw new Error(`Failed to create reservation inquiry: ${errorText}`);
+      throw new Error('Failed to create reservation inquiry');
     }
     const reservationData = await reservationResponse.json();
 
