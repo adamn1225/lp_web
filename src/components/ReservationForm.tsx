@@ -169,7 +169,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
           </form>
           <button 
             onClick={() => setModalIsOpen(false)} 
-            className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full"
+            className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full "
           >
             Close
           </button>
