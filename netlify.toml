@@ -1,0 +1,20 @@
+[build]
+  command = "pnpm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18.14.1"
+  NODE_ENV = "production"
+
+[context.production.environment]
+  VITE_API_TOKEN = eyJraWQiOiI1OVBtSUFVdG91YjNQS1RWaE1VRF9JZ0E1WUd6QUN4djhPMlkteTdnS1JjIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmhwanY4UDMyWS1xLXY5Z3RnM2lOT2xKUXI1THQ1ejFaR1FHV3FCNlByd00iLCJpc3MiOiJodHRwczovL2xvZ2luLmd1ZXN0eS5jb20vb2F1dGgyL2F1czFwOHFyaDUzQ2NRVEk5NWQ3IiwiYXVkIjoiaHR0cHM6Ly9vcGVuLWFwaS5ndWVzdHkuY29tIiwiaWF0IjoxNzIzNjU2MDE0LCJleHAiOjE3MjM3NDI0MTQsImNpZCI6IjBvYWlxdjlqczUwRFlOcWNwNWQ3Iiwic2NwIjpbIm9wZW4tYXBpIl0sInJlcXVlc3RlciI6IkVYVEVSTkFMIiwiYWNjb3VudElkIjoiNjUzYjBmOGQ3ZTg5ODJkZWZhZmFhZjViIiwic3ViIjoiMG9haXF2OWpzNTBEWU5xY3A1ZDciLCJ1c2VyUm9sZXMiOlt7InJvbGVJZCI6eyJwZXJtaXNzaW9ucyI6WyJhZG1pbiJdfX1dLCJyb2xlIjoidXNlciIsImNsaWVudFR5cGUiOiJvcGVuYXBpIiwiaWFtIjoidjMiLCJhY2NvdW50TmFtZSI6IkxpbmUgcHJvcGVydGllcyBJbmMiLCJuYW1lIjoiTFBfV2ViIn0.dSVzZfGmQHrHhkwNFtugT6AE-ldqwG3Ycf6I-JeEWKN_RxQxamBlycUAU5cvgZ-FW5KYY3g1kfM5fo9iJClCVPeb1KLj02njDCpMgRItpplGA-e0gUCG0saaUc1dECWLqNf47U3oTNKBCEd4CuFKrCyIu28xAqCcL6Sp-3diQ1hVYIfunI7YJtjUziylkjMdRFjRqOrPUKAUp69C_KXD7HpLu4zFFChT4f9_0gIe8e97Uw5pNd1zdw3182-juODfg8l4QalG9OdPIZn2hvviNnDNxX2Q-4wNOSgZFDg3yU7eqEHBSN1Z8zqaiRZsHl10JPL-4Yw5Ubti6WwLkHn0Aw
+
+[functions]
+  directory = "netlify/functions"
+
+[[scheduled_functions]]
+  name = "refreshToken"
+  schedule = "0 */23 * * *"  # Update the schedule to every 23 hours
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
