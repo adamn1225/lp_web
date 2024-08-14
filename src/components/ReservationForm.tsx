@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
-import reCAPTCHA from "react-google-recaptcha"
 import 'react-phone-number-input/style.css';
 
 interface ReservationFormProps {
