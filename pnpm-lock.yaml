@@ -108,7 +108,7 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       contentful:
-        specifier: ^10.13.2
+        specifier: ^10.11.12
         version: 10.13.2
       cors:
         specifier: ^2.8.5
