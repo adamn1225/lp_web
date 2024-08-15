@@ -29,7 +29,7 @@ export async function handler(event) {
   };
 
   console.log('Request URL:', url);
-  console.log('Request Options:', options);
+  console.log('Request Options:', options) ;
 
   try {
     const response = await fetch(url, options);
