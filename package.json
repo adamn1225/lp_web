@@ -102,6 +102,7 @@
     "postinstall-postinstall": "^2.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "@netlify/plugin-lighthouse": "^2.0.0",
   }
 }
