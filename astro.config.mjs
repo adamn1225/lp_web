@@ -60,8 +60,11 @@ export default defineConfig({
       port: 4321 // Ensure the server is set to run on port 4321
     }
   },
+  experimental: {
+    serverIslands: true
+  },
   output: 'server',
-  adapter: netlify(),
+  adapter: node({ mode: "standalone" }),
   integrations: [tailwind(), icon(), alpinejs(), react(), markdoc()],
   server: {
     middleware: [proxyMiddleware]
