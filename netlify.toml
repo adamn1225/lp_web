@@ -15,7 +15,7 @@
 
 [[scheduled_functions]]
   name = "refreshToken"
-  schedule = "0 */23 * * *"  # Update the schedule to every 23 hours
+  schedule = "0 */23 * * *"  # Updates the schedule to every 23 hours
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
