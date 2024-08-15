@@ -7,7 +7,7 @@
   NPM_FLAGS = "--frozen-lockfile"
 
 [context.production.environment]
-  VITE_API_TOKEN = ${VITE_API_TOKEN}
+  VITE_API_TOKEN = "${VITE_API_TOKEN}"
 
 [functions]
   directory = "netlify/functions"
