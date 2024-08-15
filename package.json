@@ -5,7 +5,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prebuild": "rm -rf node_modules && rm -f pnpm-lock.yaml && pnpm install",
     "preinstall": "npx only-allow pnpm",
     "dev": "NODE_ENV=development astro dev",
     "start": "node server.js",
@@ -99,6 +98,7 @@
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "ts-node": "^10.9.2",
