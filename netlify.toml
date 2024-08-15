@@ -19,3 +19,4 @@
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
+  package = "@netlify/plugin-cache-clear"
