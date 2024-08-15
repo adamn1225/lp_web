@@ -10,7 +10,8 @@
     "start": "node server.js",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@apollo/client": "^3.11.2",
