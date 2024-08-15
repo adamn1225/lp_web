@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prebuild": "rm -rf node_modules && rm -f pnpm-lock.yaml && pnpm install",
     "preinstall": "npx only-allow pnpm",
     "dev": "NODE_ENV=development astro dev",
     "start": "node server.js",

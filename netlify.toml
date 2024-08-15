@@ -19,3 +19,10 @@
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
+
+[build.processing]
+  skip_processing = true
+
+[build.cache]
+  # Clear the cache for node_modules
+  paths = ["node_modules/**"]
