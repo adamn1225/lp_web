@@ -2,27 +2,6 @@
 
 import {fetchTwoHundred} from '../pages/api/fetch';
 
-async function fetchFromNetlifyFunction(endpoint: string): Promise<any> {
-  try {
-    const response = await fetch(`/.netlify/functions/${endpoint}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch from ${endpoint}: ${response.status} ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error(`Error fetching from Netlify function ${endpoint}:`, error);
-    throw error;
-  }
-}
-
-let listingsTwo = [];
-try {
-  listingsTwo = await fetchFromNetlifyFunction('fetchListings?type=twoHundred');
-  console.log('Fetched listings:', listingsTwo);
-} catch (error) {
-  console.error('Error fetching listings:', error);
-}
-
 const arrTwo = await fetchTwoHundred();
 ---
 {

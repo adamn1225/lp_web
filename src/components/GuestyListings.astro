@@ -1,26 +1,12 @@
 ---
 import {fetchFeaturedListings} from '../pages/api/fetch';
-const fetchListings = await fetchFeaturedListings();
-async function fetchFromNetlifyFunction(endpoint: string): Promise<any> {
-  const response = await fetch(`/.netlify/functions/${endpoint}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch from ${endpoint}: ${response.status} ${response.statusText}`);
-  }
-  return await response.json();
-}
 
-let listingsFeatured = [];
-try {
-  listingsFeatured = await fetchFromNetlifyFunction('fetchListings?type=featured');
-} catch (error) {
-  console.error('Error fetching listings:', error);
-}
-const listings = listingsFeatured;
+const arr2 = await fetchFeaturedListings();
 
 ---
 
   {
-      fetchListings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
+      arr2.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
   <a href={_id}>
       <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
               <div class="bg-muted-100">

@@ -4,8 +4,8 @@ import {fetchThreeHundred, fetchTwoHundred, fetchFeaturedListings} from '../page
 import ListingPageDetail from '../components/ListingPageDetail.astro';
 
 export async function getStaticPaths() {
-  const [threeHundredListings, twoHundredListings, oneHundredListings] = await Promise.all([fetchThreeHundred(), fetchTwoHundred(), fetchFeaturedListings()]);
-  const listings = [...threeHundredListings, ...twoHundredListings, ...oneHundredListings];
+  const [threeHundredListings, oneHundredListings] = await Promise.all([fetchThreeHundred(), fetchFeaturedListings()]);
+  const listings = [...threeHundredListings, ...oneHundredListings];
   const paths = listings.map((listings: any) => ({
     params: {
       listingPage: listings._id // Ensure this matches the requested path

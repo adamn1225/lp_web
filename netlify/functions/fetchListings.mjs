@@ -1,4 +1,3 @@
-// netlify/functions/fetchListings.mjs
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
@@ -6,75 +5,48 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const apiToken = process.env.VITE_API_TOKEN;
+const baseUrl = process.env.BASE_URL;
 
 if (!apiToken) {
   throw new Error('API token is not set. Please check your environment variables.');
 }
 
-// Helper function for retrying fetch requests with exponential backoff
-async function retryFetch(url, options = {}, retries = 5, delay = 1000) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const response = await fetch(url, options);
-      if (response.status === 429) {
-        const retryAfter = response.headers.get('Retry-After');
-        const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : delay * Math.pow(2, i);
-        await new Promise(resolve => setTimeout(resolve, waitTime));
-      } else {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch from ${url}: ${response.status} ${response.statusText}`);
-        }
-        return await response.json();
-      }
-    } catch (error) {
-      if (i === retries - 1) throw error;
-      await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
-    }
-  }
-  throw new Error(`Failed to fetch from ${url} after ${retries} retries`);
+if (!baseUrl) {
+  throw new Error('Base URL is not set. Please check your environment variables.');
 }
 
-// Generic fetch function
-async function fetchFromApi(url, options = {}) {
-  try {
-    const response = await retryFetch(url, {
-      headers: {
-        accept: 'application/json; charset=utf-8',
-        Authorization: `Bearer ${apiToken}`
-      },
-      ...options
-    });
-    return response; // Return the data
-  } catch (error) {
-    console.error(`Error fetching from ${url}:`, error);
-    throw new Error(`Failed to fetch from ${url}`);
+async function fetchFromNetlifyFunction(endpoint) {
+  const response = await fetch(`${baseUrl}/.netlify/functions/${endpoint}`, {
+    headers: {
+      accept: 'application/json; charset=utf-8',
+      Authorization: `Bearer ${apiToken}`
+    }
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch from ${endpoint}: ${response.status} ${response.statusText}`);
   }
+  return await response.json();
 }
 
 // Specific function to fetch listings
 async function fetchFeaturedListings() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=5&skip=100');
+  const data = await fetchFromNetlifyFunction('listings?limit=5&skip=100');
   return data.results; // Return the listings
 }
 
 async function fetchOneHundred() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=100');
+  const data = await fetchFromNetlifyFunction('listings?limit=100');
   return data.results; // Return the reservations
 }
 
 async function fetchTwoHundred() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=100&skip=100');
+  const data = await fetchFromNetlifyFunction('listings?limit=100&skip=100');
   return data.results; // Return the reservations
 }
 
 async function fetchThreeHundred() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=100&skip=200');
+  const data = await fetchFromNetlifyFunction('listings?limit=100&skip=200');
   return data.results; // Return the reservations
-}
-
-export async function fetchFromNetlifyFunction(endpoint) {
-  const data = await fetchFromApi(`https://open-api.guesty.com/v1/${endpoint}`);
-  return data.results;
 }
 
 export async function handler(event, context) {
