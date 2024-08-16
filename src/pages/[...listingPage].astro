@@ -19,18 +19,18 @@ export async function getStaticPaths() {
       fetchFromNetlifyFunction('fetchListings?type=featured')
     ]);
     const listings = [...threeHundredListings, ...twoHundredListings, ...featuredListings]; //Combine all listings
-    const paths = listings.map((listing: any) => ({
+    const paths = listings.map((listings: any) => ({
       params: {
-        listingPage: listing._id // Ensure this matches the requested path
+        listingPage: listings._id // Ensure this matches the requested path
       },
       props: {
-        title: listing.title,
-        PropertyType: listing.propertyType,
-        bathrooms: listing.bathrooms,
-        pictures: listing.pictures,
-        beds: listing.beds,
-        Description: listing.publicDescription,
-        listingId: listing._id
+        title: listings.title,
+        PropertyType: listings.propertyType,
+        bathrooms: listings.bathrooms,
+        pictures: listings.pictures,
+        beds: listings.beds,
+        Description: listings.publicDescription,
+        listingId: listings._id
       }
     }));
 
