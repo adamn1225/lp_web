@@ -1,4 +1,7 @@
 ---
+
+import {fetchTwoHundred} from '../pages/api/fetch';
+
 async function fetchFromNetlifyFunction(endpoint: string): Promise<any> {
   try {
     const response = await fetch(`/.netlify/functions/${endpoint}`);
@@ -20,7 +23,7 @@ try {
   console.error('Error fetching listings:', error);
 }
 
-const arrTwo = listingsTwo;
+const arrTwo = await fetchTwoHundred();
 ---
 {
     arrTwo.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (

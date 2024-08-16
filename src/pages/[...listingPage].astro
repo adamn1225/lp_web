@@ -1,90 +1,66 @@
 ---
 export const prerender = true;
-
+import {fetchThreeHundred, fetchTwoHundred, fetchFeaturedListings} from '../pages/api/fetch';
 import ListingPageDetail from '../components/ListingPageDetail.astro';
 
-async function fetchFromNetlifyFunction(endpoint) {
-  const response = await fetch(`/.netlify/functions/${endpoint}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch from ${endpoint}: ${response.status} ${response.statusText}`);
-  }
-  return await response.json();
-}
-
 export async function getStaticPaths() {
-  try {
-    const [threeHundredListings, twoHundredListings, featuredListings] = await Promise.all([
-      fetchFromNetlifyFunction('fetchListings?type=threeHundred'),
-      fetchFromNetlifyFunction('fetchListings?type=twoHundred'),
-      fetchFromNetlifyFunction('fetchListings?type=featured')
-    ]);
-    const listings = [...threeHundredListings, ...twoHundredListings, ...featuredListings]; //Combine all listings
-    const paths = listings.map((listings: any) => ({
-      params: {
-        listingPage: listings._id // Ensure this matches the requested path
-      },
-      props: {
-        title: listings.title,
-        PropertyType: listings.propertyType,
-        bathrooms: listings.bathrooms,
-        pictures: listings.pictures,
-        beds: listings.beds,
-        Description: listings.publicDescription,
-        listingId: listings._id
-      }
-    }));
+  const [threeHundredListings, twoHundredListings, oneHundredListings] = await Promise.all([fetchThreeHundred(), fetchTwoHundred(), fetchFeaturedListings()]);
+  const listings = [...threeHundredListings, ...twoHundredListings, ...oneHundredListings];
+  const paths = listings.map((listings: any) => ({
+    params: {
+      listingPage: listings._id // Ensure this matches the requested path
+    },
+    props: {
+      title: listings.title,
+      PropertyType: listings.propertyType,
+      bathrooms: listings.bathrooms,
+      pictures: listings.pictures,
+      beds: listings.beds,
+      Description: listings.publicDescription,
+      listingId: listings._id
+    }
+  }));
 
-    // console.log("Generated paths:", JSON.stringify(paths, null, 2)); // Log the generated paths
+  // console.log("Generated paths:", JSON.stringify(paths, null, 2)); // Log the generated paths
 
-    return paths; // Return the array of paths directly
-  } catch (error) {
-    console.error('Error in getStaticPaths:', error);
-    return [];
-  }
+  return paths; // Return the array of paths directly
 }
 
 export async function get({ params }) {
-  try {
-    const listings = await fetchFromNetlifyFunction('fetchListings?type=threeHundred'); // Fetch listings again to find the specific one
-    const listing = listings.find((listing) => listing._id === params.listingPage);
+  const listings = await fetchTwoHundred(); // Fetch listings again to find the specific one
+  const listing = listings.find((listing) => listing._id === params.listingPage);
 
-    if (!listing) {
-      return {
-        status: 404,
-        body: 'Not Found'
-      };
-    }
-
+  if (!listing) {
     return {
-      props: {
-        title: listings.title,
-        city: listings.address.city,
-        state: listings.address.state,
-        Description: listings.publicDescription,
-        PropertyType: listings.propertyType,
-        bathrooms: listings.bathrooms,
-        pictures: listings.pictures,
-        beds: listings.beds,
-        listingId: listings._id
-      }
-    };
-  } catch (error) {
-    console.error('Error in get function:', error);
-    return {
-      status: 500,
-      body: 'Internal Server Error'
+      status: 404,
+      body: 'Not Found'
     };
   }
+
+  return {
+  title: listings.title,
+  city: listings.address.city,
+  state: listings.address.state,
+  Description: listings.publicDescription,
+  PropertyType: listings.propertyType,
+  bathrooms: listings.bathrooms,
+  pictures: listings.pictures,
+  beds: listings.beds,
+  listingId: listings._id
+  };
 }
 
 const { title, pictures, Description, beds, bathrooms, listingId } = Astro.props;
+
+
+
 ---
 
 <ListingPageDetail
-  title={title}
-  Description={Description}
-  bathrooms={bathrooms}
-  beds={beds}
-  pictures={pictures}
-  listingId={listingId}
-/>
+          title={title}
+          Description={Description}
+          bathrooms={bathrooms}
+          beds={beds}
+          pictures={pictures}
+          listingId={listingId}
+        />

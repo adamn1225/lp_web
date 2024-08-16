@@ -1,4 +1,6 @@
 ---
+import {fetchFeaturedListings} from '../pages/api/fetch';
+const fetchListings = await fetchFeaturedListings();
 async function fetchFromNetlifyFunction(endpoint: string): Promise<any> {
   const response = await fetch(`/.netlify/functions/${endpoint}`);
   if (!response.ok) {
@@ -18,7 +20,7 @@ const listings = listingsFeatured;
 ---
 
   {
-      listings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
+      fetchListings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
   <a href={_id}>
       <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
               <div class="bg-muted-100">
