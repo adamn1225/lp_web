@@ -18,7 +18,7 @@ export async function getStaticPaths() {
       fetchFromNetlifyFunction('fetchListings?type=twoHundred'),
       fetchFromNetlifyFunction('fetchListings?type=featured')
     ]);
-    const listings = [...threeHundredListings, ...twoHundredListings, ...featuredListings]; // Combine all listings
+    const listings = [...threeHundredListings, ...twoHundredListings, ...featuredListings]; //Combine all listings
     const paths = listings.map((listing: any) => ({
       params: {
         listingPage: listing._id // Ensure this matches the requested path
