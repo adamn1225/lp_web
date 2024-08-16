@@ -46,7 +46,7 @@ async function fetchFromApi(url: string, options: RequestInit = {}) {
 
 // Specific function to fetch listings
 async function fetchFeaturedListings() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=5&skip=100');
+  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=5&skip=80');
   return data.results; // Return the listings
 }
 
@@ -61,7 +61,7 @@ async function fetchTwoHundred() {
 }
 
 async function fetchThreeHundred() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=50&skip=200');
+  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=50&skip=201');
   return data.results; // Return the reservations
 }
 
