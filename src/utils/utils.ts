@@ -1,12 +1,6 @@
-async function fetchFromNetlifyFunction(endpoint: string) {
-  const response = await fetch(`/.netlify/functions/${endpoint}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch from ${endpoint}: ${response.status} ${response.statusText}`);
-  }
-  return await response.json();
-}
+import {fetchTwoHundred} from '../pages/api/fetch';
 
-const listings = await fetchFromNetlifyFunction('fetchListings?type=twoHundred');
+const listings = await fetchTwoHundred();
 
 export function currency(amount: number) {
   return (
