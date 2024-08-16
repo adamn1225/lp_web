@@ -1,8 +1,4 @@
 import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-
-// Load environment variables from .env file
-dotenv.config();
 
 export async function handler(event, context) {
   const { firstName, lastName, phone, email, checkIn, checkOut, listingId } = JSON.parse(event.body);
@@ -64,9 +60,10 @@ export async function handler(event, context) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(reservationData)
+      body: JSON.stringify({ guestData, reservationData })
     };
   } catch (error) {
+    console.error('Error:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message })

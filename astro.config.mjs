@@ -45,25 +45,16 @@ async function proxyMiddleware(req, res, next) {
   }
 }
 
-// https://astro.build/config
 export default defineConfig({
-  vite: {
-    build: {
-      rollupOptions: {
-        external: ['sharp']
-      }
-    },
-    server: {
-      watch: {
-        ignored: ['**/node_modules/**', '**/.git/**', '**/dist/**']
-      },
-      port: 4321 // Ensure the server is set to run on port 4321
-    }
-  },
   output: 'server',
   adapter: netlify(),
-  integrations: [tailwind(), icon(), alpinejs(), react(), markdoc()],
-  server: {
-    middleware: [proxyMiddleware]
+  integrations: [tailwind(), alpinejs(), icon(), react(), markdoc()],
+  vite: {
+    server: {
+      middlewareMode: 'ssr',
+      proxy: {
+        '/api/available': proxyMiddleware
+      }
+    }
   }
 });

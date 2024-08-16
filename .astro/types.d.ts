@@ -27,7 +27,7 @@ declare module 'astro:content' {
 		E extends ValidContentEntrySlug<C> | (string & {}),
 	>(
 		collection: C,
-		// Note that this has to accept a regular string too, for SSR
+		// Note - that this has to accept a regular string too, for SSR
 		entrySlug: E
 	): E extends ValidContentEntrySlug<C>
 		? Promise<CollectionEntry<C>>

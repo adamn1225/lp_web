@@ -1,6 +1,6 @@
-import {fetchTwoHundred} from '../pages/api/fetch';
+import {fetchOneHundred} from '../pages/api/fetch';
 
-const listings = await fetchTwoHundred();
+const listings = await fetchOneHundred();
 
 export function currency(amount: number) {
   return (
