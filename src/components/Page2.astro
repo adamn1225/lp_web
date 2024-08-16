@@ -1,7 +1,18 @@
 ---
-import {fetchThreeHundred} from '../pages/api/gapi';
+async function fetchFromNetlifyFunction(endpoint: string): Promise<any> {
+  const response = await fetch(`/.netlify/functions/${endpoint}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch from ${endpoint}: ${response.status} ${response.statusText}`);
+  }
+  return await response.json();
+}
 
-const listingsThree = await fetchThreeHundred();
+let listingsThree = [];
+try {
+  listingsThree = await fetchFromNetlifyFunction('fetchListings?type=threeHundred');
+} catch (error) {
+  console.error('Error fetching listings:', error);
+}
 
 ---
 {

@@ -1,5 +1,5 @@
 ---
-import { currency } from '@utils/utils'
+
 const apiToken = import.meta.env.VITE_API_TOKEN;
 const response = await fetch('https://open-api.guesty.com/v1/listings?limit=20&skip=21', {
   headers: {
@@ -32,7 +32,7 @@ const { pictures = allListings.pictures } = Astro.props;
         <div class="p-5 bg-white dark:bg-muted-950 border border-muted-200 dark:border-muted-800">
       <div class="flex flex-col">
         <h4 class="font-sans font-bold text-xl text-muted-900 dark:text-white">
-          {currency(allListings.price)}
+        
         </h4>
         <p class="text-sm text-muted-400">
           {allListings.address}

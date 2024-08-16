@@ -5,6 +5,7 @@
 [build.environment]
   NODE_VERSION = "18.20.4"
   NPM_FLAGS = "--frozen-lockfile"
+  VITE_API_TOKEN = "${VITE_API_TOKEN}"
 
 [context.production.environment]
   VITE_API_TOKEN = "${VITE_API_TOKEN}"

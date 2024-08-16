@@ -1,6 +1,12 @@
-import {fetchTwoHundred} from '../pages/api/gapi';
+async function fetchFromNetlifyFunction(endpoint: string) {
+  const response = await fetch(`/.netlify/functions/${endpoint}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch from ${endpoint}: ${response.status} ${response.statusText}`);
+  }
+  return await response.json();
+}
 
-const listings = await fetchTwoHundred();
+const listings = await fetchFromNetlifyFunction('fetchListings?type=twoHundred');
 
 export function currency(amount: number) {
   return (
