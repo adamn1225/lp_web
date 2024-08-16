@@ -1,6 +1,6 @@
 ---
 export const prerender = true;
-import {fetchThreeHundred, fetchTwoHundred, fetchFeaturedListings} from '../pages/api/fetch';
+import {fetchThreeHundred, fetchOneHundred, fetchFeaturedListings} from '../pages/api/fetch';
 import ListingPageDetail from '../components/ListingPageDetail.astro';
 
 export async function getStaticPaths() {
@@ -27,8 +27,8 @@ export async function getStaticPaths() {
 }
 
 export async function get({ params }) {
-  const listings = await fetchTwoHundred(); // Fetch listings again to find the specific one
-  const listing = listings.find((listing) => listing._id === params.listingPage);
+  const listings = await fetchOneHundred(); // Fetch listings again to find the specific one
+  const listing = listings.find((listings : any) => listings._id === params.listingPage);
 
   if (!listing) {
     return {
