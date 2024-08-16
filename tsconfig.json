@@ -3,21 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@layouts/*": [
-        "src/layouts/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@data/*": [
-        "src/data/*"
-      ],
-      "@/*": [
-        "src/*"
-      ]
+      "@layouts/*": ["src/layouts/*"],
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"],
+      "@data/*": ["src/data/*"],
+      "@/*": ["src/*"]
     },
     "plugins": [
       {
@@ -31,12 +21,9 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "types": [
-      "astro/client",
-      "express"
-    ],
+    "types": ["astro/client", "express"],
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*.ts", "src/**/*.mts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.astro"],
   "exclude": ["node_modules"]
 }

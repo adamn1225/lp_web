@@ -2,12 +2,12 @@
 export const prerender = true;
 
 import ListingPageDetail from '../components/ListingPageDetail.astro'
-import {fetchThreeHundred, fetchFeaturedListings} from '../pages/api/gapi';
+import {fetchThreeHundred, fetchFeaturedListings, fetchTwoHundred} from '../pages/api/gapi';
 
 
 export async function getStaticPaths() {
-  const [threeHundredListings, twoHundredListings] = await Promise.all([fetchThreeHundred(), fetchFeaturedListings()]);
-  const listings = [...threeHundredListings, ...twoHundredListings];
+  const [threeHundredListings, twoHundredListings, featuredListings] = await Promise.all([fetchThreeHundred(), fetchFeaturedListings(), fetchTwoHundred()]);
+  const listings = [...threeHundredListings, ...twoHundredListings, ...featuredListings]; // Combine all listings
   const paths = listings.map((listings: any) => ({
     params: {
       listingPage: listings._id // Ensure this matches the requested path
