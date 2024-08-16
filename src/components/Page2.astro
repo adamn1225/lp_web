@@ -7,16 +7,16 @@ async function fetchFromNetlifyFunction(endpoint: string): Promise<any> {
   return await response.json();
 }
 
-let listingsThree = [];
+let listingsTwo = [];
 try {
-  listingsThree = await fetchFromNetlifyFunction('fetchListings?type=threeHundred');
+  listingsTwo = await fetchFromNetlifyFunction('fetchListings?type=twoHundred');
 } catch (error) {
   console.error('Error fetching listings:', error);
 }
 
 ---
 {
-    listingsThree.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
+    listingsTwo.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
 <a href={_id}>
     <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
             <div class="bg-muted-100 dark:bg-muted-800 ">
