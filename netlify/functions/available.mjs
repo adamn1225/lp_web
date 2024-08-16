@@ -1,21 +1,10 @@
-import express from 'express';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 
 // Load environment variables
 dotenv.config();
-
-// Debugging statement to check if the script is running
-console.log('Starting server...');
-
-const app = express();
-const port = process.env.PORT || 5000; // Ensure PORT is set in .env
-
-app.use(express.json());
-app.use(cors()); // Enable CORS for all routes
 
 // Function to get Bearer token
 function getBearerToken() {
@@ -29,10 +18,13 @@ function getBearerToken() {
   }
 }
 
-app.get('/api/available', async (req, res) => {
-  const { checkIn, checkOut, minOccupancy } = req.query;
+export async function handler(event, context) {
+  const { checkIn, checkOut, minOccupancy } = event.queryStringParameters;
   if (!checkIn || !checkOut || !minOccupancy) {
-    return res.status(400).json({ error: 'Missing required query parameters: checkIn, checkOut, minOccupancy' });
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'Missing required query parameters: checkIn, checkOut, minOccupancy' })
+    };
   }
 
   const apiUrl = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
@@ -49,20 +41,22 @@ app.get('/api/available', async (req, res) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`Guesty API error: ${errorText}`);
-      return res.status(response.status).json({ error: `Guesty API error: ${errorText}` });
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({ error: `Guesty API error: ${errorText}` })
+      };
     }
 
     const data = await response.json();
-    res.json(data);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(data)
+    };
   } catch (error) {
     console.error('Error fetching data from Guesty API:', error);
-    res.status(500).json({ error: 'Failed to fetch data from API' });
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Failed to fetch data from API' })
+    };
   }
-});
-
-// Start the Express server
-app.listen(port, () => {
-  console.log(`Express server running on port ${port}`);
-});
-
-export default app;
+}

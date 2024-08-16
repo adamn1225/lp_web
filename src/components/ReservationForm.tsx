@@ -9,8 +9,8 @@ interface ReservationFormProps {
 
 const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   const [formData, setFormData] = useState({
-    firstName: 'New',
-    lastName: 'Inquirer #101',
+    firstName: '',
+    lastName: '',
     phone: '',
     email: '', // Assuming you need an email field
     checkIn: '2050-01-01',
