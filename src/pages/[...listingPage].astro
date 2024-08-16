@@ -57,15 +57,15 @@ export async function get({ params }) {
 
     return {
       props: {
-        title: listing.title,
-        city: listing.address.city,
-        state: listing.address.state,
-        Description: listing.publicDescription,
-        PropertyType: listing.propertyType,
-        bathrooms: listing.bathrooms,
-        pictures: listing.pictures,
-        beds: listing.beds,
-        listingId: listing._id
+        title: listings.title,
+        city: listings.address.city,
+        state: listings.address.state,
+        Description: listings.publicDescription,
+        PropertyType: listings.propertyType,
+        bathrooms: listings.bathrooms,
+        pictures: listings.pictures,
+        beds: listings.beds,
+        listingId: listings._id
       }
     };
   } catch (error) {
