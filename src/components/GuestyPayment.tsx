@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { loadScript } from '@guestyorg/tokenization-js';
 import type { GuestyTokenizationNamespace, GuestyTokenizationRenderOptions } from '@guestyorg/tokenization-js';
 
-const GuestyPayment: React.FC = () => {
+const GuestyPayment = () => {
+  const [isFormValid, setIsFormValid] = useState(false);
+
   useEffect(() => {
-    const initializeGuestyTokenization = () => {
+    const initializeGuestyTokenization = async () => {
       const options: GuestyTokenizationRenderOptions = {
         containerId: 'payment-container',
         providerId: '65667fb19986e2000e99278f', // Replace with your actual valid provider ID
         amount: 100, // Replace with the actual amount
         currency: 'USD', // Replace with the actual currency
-        onStatusChange: (isValid: boolean) => {
+        onStatusChange: (isValid) => {
+          setIsFormValid(isValid);
           console.log('Form validity changed:', isValid);
-        }
+        },
       };
 
       console.log('Loading Guesty Tokenization JS SDK...');

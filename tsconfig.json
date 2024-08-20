@@ -22,7 +22,8 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "types": ["astro/client", "express"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "typeRoots": ["node_modules/@types"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.astro"],
   "exclude": ["node_modules"]

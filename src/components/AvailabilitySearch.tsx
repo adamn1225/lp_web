@@ -134,7 +134,7 @@ const AvailabilitySearch: React.FC = () => {
                   </div>
                   <div className="w-full flex align-middle justify-center h-full">
                     <button type="submit" className="flex align-middle justify-center h-full bg-cyan-600 m-0 md:w-4/5 w-full py-3 px-1 xs:mx-2 font-bold text-xl rounded-md text-slate-50">
-                      <Search size={24} /> <h3>Search available properties</h3>
+                      <Search size={24} /> <h3>Search properties</h3>
                     </button>
                   </div>
                   <div className="hidden">

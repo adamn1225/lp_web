@@ -15,10 +15,15 @@ body {
 }
 
 
-
-
+/* global.scss */
 [x-cloak] {
   display: none !important;
 }
 
-
+/* customDateRange.css */
+.rdrCalendarWrapper .rdrDay span.rdrStartEdge,
+.rdrCalendarWrapper .rdrDay span.rdrEndEdge,
+.rdrCalendarWrapper .rdrDay span.rdrInRange {
+  background-color: #0891b2; /* cyan-600 */
+  color: white;
+}

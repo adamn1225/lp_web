@@ -71,7 +71,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
     <div className="flex justify-center items-center">
       <button 
         onClick={() => setModalIsOpen(true)} 
-        className="bg-cyan-600 text-white px-4 py-2 rounded-lg drop-shadow-lg"
+        className="bg-cyan-600 mb-6 text-white px-4 py-2 rounded-lg drop-shadow-lg"
       >
         Inquire about this listing
       </button>
@@ -81,25 +81,27 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
         className="flex justify-center items-center h-screen"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       >
-        <div className="bg-white px-8 py-4 rounded shadow-lg w-full max-w-md">
+        <div className="bg-white xs:mx-2 xs:px-4 px-8 py-4 rounded shadow-lg w-full max-w-md">
           <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Let us know about who you are and when you're planning stay and your host will respond instantly!</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input 
-              type="text" 
-              name="firstName" 
-              value={formData.firstName} 
-              onChange={handleChange} 
-              placeholder="First Name" 
-              className="hidden w-full px-4 py-2 border rounded"
-            />
-            <input 
-              type="text" 
-              name="lastName" 
-              value={formData.lastName} 
-              onChange={handleChange} 
-              placeholder="Last Name" 
-              className="hidden w-full px-4 py-2 border rounded"
-            />
+            <div className="flex gap-1">
+              <input 
+                type="text" 
+                name="firstName" 
+                value={formData.firstName} 
+                onChange={handleChange} 
+                placeholder="First Name" 
+                className="w-full px-4 py-2 border rounded"
+              />
+              <input 
+                type="text" 
+                name="lastName" 
+                value={formData.lastName} 
+                onChange={handleChange} 
+                placeholder="Last Name" 
+                className="w-full px-4 py-2 border rounded"
+              />
+            </div>
             <PhoneInput
               value={formData.phone}
               onChange={handlePhoneChange}

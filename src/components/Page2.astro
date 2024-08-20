@@ -1,11 +1,11 @@
 ---
 
-import {fetchTwoHundred} from '../pages/api/fetch';
+import {fetchOneHundred} from '../pages/api/fetch';
 
-const arrTwo = await fetchTwoHundred();
+const listings = await fetchOneHundred();
 ---
 {
-    arrTwo.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
+    listings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (
 <a href={_id}>
     <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
             <div class="bg-muted-100 dark:bg-muted-800 ">

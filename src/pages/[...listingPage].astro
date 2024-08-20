@@ -1,11 +1,17 @@
 ---
 export const prerender = true;
-import {fetchThreeHundred, fetchOneHundred, fetchFeaturedListings} from '../pages/api/fetch.ts';
+import {fetchThreeHundred, fetchOneHundred, fetchTwoHundred, fetchFeaturedListings} from '../pages/api/fetch.ts';
 import ListingPageDetail from '../components/ListingPageDetail.astro';
 
 export async function getStaticPaths() {
-  const [threeHundredListings, oneHundredListings] = await Promise.all([fetchThreeHundred(), fetchFeaturedListings()]);
-  const listings = [...threeHundredListings, ...oneHundredListings];
+  const [threeHundredListings, oneHundredListings, twoHundredListings, featuredListings] = await Promise.all([
+    fetchThreeHundred(),
+    fetchOneHundred(),
+    fetchTwoHundred(),
+    fetchFeaturedListings()
+  ]);
+
+  const listings = [...threeHundredListings, ...oneHundredListings, ...twoHundredListings, ...featuredListings];
   const paths = listings.map((listings: any) => ({
     params: {
       listingPage: listings._id // Ensure this matches the requested path
@@ -27,7 +33,7 @@ export async function getStaticPaths() {
 }
 
 export async function get({ params }) {
-  const listings = await fetchOneHundred(); // Fetch listings again to find the specific one
+  const listings = await fetchThreeHundred(); // Fetch listings again to find the specific one
   const listing = listings.find((listings : any) => listings._id === params.listingPage);
 
   if (!listing) {

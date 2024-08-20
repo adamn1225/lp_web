@@ -19,12 +19,12 @@ async function fetchAllListings() {
   return combinedListings;
 }
 
-const listings = await fetchAllListings();
+const allListings = await fetchAllListings();
 
 export function processListing(title: string, _id: string) {
   return {
-    title: title === "" ? listings.oneHundred.title : title,
-    _id: _id === "" ? listings.oneHundred._id : _id
+    title: title === "" ? allListings.oneHundred.title : title,
+    _id: _id === "" ? allListings.oneHundred._id : _id
   };
 }
 

@@ -4,6 +4,7 @@ import Layout from '@layouts/Default.astro'
 import Section from '@components/Section.astro'
 import ReservationForm from './ReservationForm'
 import GuestyListings from './GuestyListings.astro'
+import InstantBooking from './InstantBooking.tsx'
 
 const { title, propertyType, bathrooms, pictures, Description, listingId } = Astro.props;
 
@@ -381,8 +382,9 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
               <span class="pl-2">Send Message</span> 
               </button> -->
               
-            
-                <h4 class="text-xl mb-6 font-light font-sans text-muted-900">Amenities</h4>
+              <ReservationForm listingId={listingId} client:load />
+              <InstantBooking client:load />
+                <h4 class="text-xl mt-6 font-light font-sans text-muted-900">Amenities</h4>
                 <div class="mb-6 grid grid-cols-2 justify-items-center">
                   <!-- bedroom -->
                   <div class="flex flex-col">
@@ -441,7 +443,7 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
                   <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Garden sharing</span>
                   <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Kids playground</span>
                 </div>
-
+                
                 <div class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800">
                   <div class="flex items-center justify-between text-sm">
                     <p class="text-muted-400">Type</p>
@@ -457,10 +459,12 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
                   </div>
                 </div>
 
-                <ReservationForm listingId={listingId} client:load />
+             
 
+                  
+                  
 
-
+              
               </div>
             </div>
           </section>

@@ -1,12 +1,12 @@
 ---
 import {fetchFeaturedListings} from '../pages/api/fetch';
 
-const arr2 = await fetchFeaturedListings();
+const featured = await fetchFeaturedListings();
 
 ---
 
   {
-      arr2.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
+      featured.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (
   <a href={_id}>
       <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full border border-muted-200">
               <div class="bg-muted-100">

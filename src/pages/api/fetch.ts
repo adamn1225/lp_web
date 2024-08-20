@@ -51,7 +51,7 @@ async function fetchFeaturedListings() {
 }
 
 async function fetchOneHundred() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=100');
+  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=100&skip=0');
   return data.results; // Return the reservations
 }
 
@@ -61,7 +61,7 @@ async function fetchTwoHundred() {
 }
 
 async function fetchThreeHundred() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=50&skip=201');
+  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=95&skip=201');
   return data.results; // Return the reservations
 }
 
