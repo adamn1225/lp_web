@@ -1,21 +1,30 @@
-import {fetchOneHundred} from '../pages/api/fetch';
+import { fetchOneHundred, fetchThreeHundred, fetchTwoHundred, fetchFeaturedListings } from '../pages/api/fetch';
 
-const listings = await fetchOneHundred();
+async function fetchAllListings() {
+  const [oneHundred, threeHundred, twoHundred, featured] = await Promise.all([
+    fetchOneHundred(),
+    fetchThreeHundred(),
+    fetchTwoHundred(),
+    fetchFeaturedListings(),
+  ]);
 
-export function currency(amount: number) {
-  return (
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(amount) + " USD"
-  );
+  // Combine the listings into one object or array as needed
+  const combinedListings = {
+    oneHundred,
+    threeHundred,
+    twoHundred,
+    featured
+  };
+
+  return combinedListings;
 }
+
+const listings = await fetchAllListings();
 
 export function processListing(title: string, _id: string) {
   return {
-    title: title === "" ? listings.title : title,
-    _id: _id === "" ? listings._id : _id
+    title: title === "" ? listings.oneHundred.title : title,
+    _id: _id === "" ? listings.oneHundred._id : _id
   };
 }
 
