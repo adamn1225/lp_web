@@ -1,8 +1,6 @@
-[build.environment]
-  NODE_VERSION = "18.20.4"
-  NPM_FLAGS = "--frozen-lockfile"
-
-[context.production.environment]
+[build]
+  publish = "dist"  # Ensure this matches your build output directory
+  command = "pnpm run build"
 
 [functions]
   directory = "netlify/functions"
@@ -10,9 +8,6 @@
 [[scheduled_functions]]
   name = "refreshToken"
   schedule = "0 */23 * * *"  # Updates the schedule to every 23 hours
-
-[[plugins]]
-  package = "@netlify/plugin-lighthouse"
 
 [build.processing]
   skip_processing = true
