@@ -111,11 +111,13 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   return (
     <div className="mt-4">
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <CalendarComponent
-        state={state}
-        setState={setState}
-        disabledDates={disabledDates}
-      />
+
+        <CalendarComponent
+          state={state}
+          setState={setState}
+          disabledDates={disabledDates}
+        />
+
       <div className="flex flex-col justify-center items-center">
         <button
           type="button"

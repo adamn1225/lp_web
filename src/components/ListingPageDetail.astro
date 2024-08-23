@@ -78,20 +78,20 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
                 
 
                 <!-- property content -->
-                <div class="relative" x-data="{ activeTab: 'tab-1' }">
+                <div class="relative" x-data="{ activeTab: 'tab-2' }">
                   <div class="tabs mb-6 flex text-base justify-between overflow-hidden overflow-x-auto">
                     <ul class="flex items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none">
-                      <li :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-primary-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
+                      <li :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
                         <a @click.prevent="activeTab = 'tab-1'" class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
                           >Description</a
                         >
                       </li>
-                      <li :class="activeTab === 'tab-2' && 'is-active [&>a]:border-b-2 [&>a]:border-primary-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
+                      <li :class="activeTab === 'tab-2' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
                         <a @click.prevent="activeTab = 'tab-2'" class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
                           >Amenities</a
                         >
                       </li>
-                      <li :class="activeTab === 'tab-3' && 'is-active [&>a]:border-b-2 [&>a]:border-primary-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
+                      <li :class="activeTab === 'tab-3' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
                         <a @click.prevent="activeTab = 'tab-3'" class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
                           >Comments</a
                         >
@@ -117,7 +117,7 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
 
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
-                    <div class="boxed-amenities flex justify-center gap-3">
+                    <div class="boxed-amenities flex flex-wrap justify-center gap-3">
                       <!-- Amenity -->
                       <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
                         <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
@@ -373,7 +373,7 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
                 </div>
               </div>
               <!-- right -->
-              <div class="min-w-[350px] md:w-1/4">
+              <div class="xs:min-w-full md:w-1/4 xs:flex flex-col items-center px-7">
                 <!-- <ChatBox conversationId={conversationId} client:load={true} /> -->
                 <!-- <button
                 class="bg-cyan-600 mb-6 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
@@ -383,7 +383,7 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
               </button> -->
               
               <ReservationForm listingId={listingId} client:load />
-              <InstantBooking listingId={listingId} client:load />
+              <div class="xs:px-6"><InstantBooking listingId={listingId} client:load /></div>
                 <h4 class="text-xl mt-6 font-light font-sans text-muted-900">Amenities</h4>
                 <div class="mb-6 grid grid-cols-2 justify-items-center">
                   <!-- bedroom -->
