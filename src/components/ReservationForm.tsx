@@ -71,7 +71,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
     <div className="flex justify-center items-center">
       <button 
         onClick={() => setModalIsOpen(true)} 
-        className="bg-cyan-600 mb-6 text-white px-4 py-2 rounded-lg drop-shadow-lg"
+        className="lp-button mb-6 text-white px-4 py-2 rounded-lg drop-shadow-lg"
       >
         Inquire about this listing
       </button>

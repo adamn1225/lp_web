@@ -43,7 +43,7 @@ const ChatBoxForm: React.FC<ChatBoxFormProps> = ({ conversationId }) => {
         placeholder="Type your message"
         disabled={isSending}
       />
-      <button className='bg-cyan-600 mb-6 mt-2 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"' type="submit" disabled={isSending}>
+      <button className='lp-button mb-6 mt-2 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"' type="submit" disabled={isSending}>
         {isSending ? 'Sending...' : 'Send'}
       </button>
     </form>

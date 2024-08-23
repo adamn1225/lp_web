@@ -1,10 +1,13 @@
 import fetch from 'node-fetch';
-import fs from 'fs';
-import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const TOKEN_FILE_PATH = path.resolve(__dirname, 'guesty_token.json');
+const MY_SITE_ID = process.env.MY_SITE_ID;
+const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
+const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
 
 export async function handler(event, context) {
   try {
@@ -29,20 +32,42 @@ export async function handler(event, context) {
     const data = await response.json();
     const token = data.access_token;
 
-    // Store the token in an environment variable or a secure storage
-    if (process.env.NODE_ENV === 'development') {
-      // Store the token in a local file for development
-      fs.writeFileSync(TOKEN_FILE_PATH, JSON.stringify({ token }));
-    } else {
-      // Store the token in an environment variable for production
-      process.env.GUESTY_BEARER_TOKEN = token;
+    // Update the environment variable in Netlify
+    const updateResponse = await fetch(`https://api.netlify.com/api/v1/sites/${MY_SITE_ID}/env/VITE_API_TOKEN`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${NETLIFY_AUTH_TOKEN}`
+      },
+      body: JSON.stringify({
+        value: token
+      })
+    });
+
+    if (!updateResponse.ok) {
+      throw new Error(`Failed to update environment variable: ${updateResponse.status} ${updateResponse.statusText}`);
     }
+
+    const updateData = await updateResponse.json();
+    console.log('Update Response:', updateData);
+
+    // Send a Slack notification
+    await fetch(SLACK_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: `Token refreshed successfully: ${token}`
+      })
+    });
 
     return {
       statusCode: 200,
       body: JSON.stringify({ message: 'Token refreshed successfully', token })
     };
   } catch (error) {
+    console.error('Error:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message })

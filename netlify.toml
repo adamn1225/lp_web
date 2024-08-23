@@ -7,7 +7,7 @@
 
 [[scheduled_functions]]
   name = "refreshToken"
-  schedule = "0 */23 * * *"  # Updates the schedule to every 23 hours
+  schedule = "0 */24 * * *"  # Updates the schedule to every 12 hours
 
 [build.processing]
   skip_processing = true

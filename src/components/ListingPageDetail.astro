@@ -383,7 +383,7 @@ const { title, propertyType, bathrooms, pictures, Description, listingId } = Ast
               </button> -->
               
               <ReservationForm listingId={listingId} client:load />
-              <InstantBooking client:load />
+              <InstantBooking listingId={listingId} client:load />
                 <h4 class="text-xl mt-6 font-light font-sans text-muted-900">Amenities</h4>
                 <div class="mb-6 grid grid-cols-2 justify-items-center">
                   <!-- bedroom -->

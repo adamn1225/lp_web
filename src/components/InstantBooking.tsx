@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { DateRange } from "react-date-range";
-import { Search } from "lucide-react";
-import "react-date-range/dist/styles.css"; // main css file
-import "react-date-range/dist/theme/default.css"; // theme css file
 import { addDays } from "date-fns";
-import _ from 'lodash';
+import CalendarComponent from "./CalendarComponent";
+import BookingFormModal from "./BookingFormModal";
 
 interface Listing {
   _id: string;
@@ -23,7 +20,7 @@ interface Listing {
   // Add other properties as needed
 }
 
-const InstantBooking: React.FC = () => {
+const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -38,6 +35,10 @@ const InstantBooking: React.FC = () => {
   const [unavailableDates, setUnavailableDates] = useState<Date[]>([]);
   const [bookedDates, setBookedDates] = useState<Date[]>([]);
   const [isLocal, setIsLocal] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [guests, setGuests] = useState<number>(1);
+  const [pets, setPets] = useState<number>(0);
+  const [price, setPrice] = useState<number | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -47,7 +48,6 @@ const InstantBooking: React.FC = () => {
     // Fetch unavailable and booked dates when the component mounts
     const fetchUnavailableDates = async () => {
       try {
-        const listingId = window.location.pathname.split('/').pop();
         const startDate = new Date().toISOString().slice(0, 10);
         const endDate = '2025-08-24'; // Set end date to 2025-08-24
         const apiUrl = isLocal
@@ -90,27 +90,52 @@ const InstantBooking: React.FC = () => {
     };
 
     fetchUnavailableDates();
-  }, [isLocal]);
+  }, [isLocal, listingId]);
 
   // Combine unavailable and booked dates
   const disabledDates = [...unavailableDates, ...bookedDates];
 
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Calculate the price based on guests and pets
+    const basePrice = 100; // Example base price
+    const guestPrice = guests * 20; // Example price per guest
+    const petPrice = pets * 10; // Example price per pet
+    const totalPrice = basePrice + guestPrice + petPrice;
+    setPrice(totalPrice);
+  };
+
   return (
     <div className="mt-4">
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <DateRange
-        editableDateInputs={true}
-        onChange={item => setState([item.selection])}
-        moveRangeOnFirstSelection={false}
-        ranges={state}
-        disabledDates={disabledDates} // Pass combined disabledDates to DateRange
+      <CalendarComponent
+        state={state}
+        setState={setState}
+        disabledDates={disabledDates}
       />
-<div className="flex flex-col justify-center items-center">
-        <button type="submit" className="h-full bg-cyan-600 m-0 md:w-1/2 drop-shadow-lg w-full py-1 px-4 xs:mx-2 text-lg rounded-lg text-white">
-         Book Instantly!
+      <div className="flex flex-col justify-center items-center">
+        <button
+          type="button"
+          className="h-full lp-button m-0 drop-shadow-lg w-5/6 py-1 xs:mx-2 text-lg rounded-lg text-white"
+          onClick={openModal}
+        >
+          Get Pricing Details
         </button>
-</div>
-
+      </div>
+      <BookingFormModal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        guests={guests}
+        setGuests={setGuests}
+        pets={pets}
+        setPets={setPets}
+        price={price}
+        dateRange={state}
+        setDateRange={setState}
+      />
     </div>
   );
 };
