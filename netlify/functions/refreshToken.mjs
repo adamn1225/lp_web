@@ -1,70 +1,94 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
+// Load environment variables from .env file
 dotenv.config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const MY_SITE_ID = process.env.MY_SITE_ID;
 const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
-const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+const SITE_ID = 'your-site-id'; // Replace with your actual site ID
+const ACCOUNT_SLUG = 'adamn1225';
+
+async function triggerRedeploy() {
+  const redeployUrl = `https://api.netlify.com/api/v1/sites/${SITE_ID}/builds`;
+
+  const response = await fetch(redeployUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${NETLIFY_AUTH_TOKEN}`
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to trigger redeploy: ${response.status} ${response.statusText} - ${errorText}`);
+  }
+
+  const data = await response.json();
+  console.log('Redeploy triggered:', data);
+}
 
 export async function handler(event, context) {
   try {
-    const response = await fetch('https://open-api.guesty.com/oauth2/token', {
+    console.log('Starting token refresh process...');
+
+    // Fetch new token from Guesty API
+    const tokenResponse = await fetch('https://open-api.guesty.com/oauth2/token', {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
+        'accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: new URLSearchParams({
         'grant_type': 'client_credentials',
         'scope': 'open-api',
-        'client_secret': CLIENT_SECRET,
-        'client_id': CLIENT_ID
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET
       })
     });
 
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text();
+      throw new Error(`Failed to fetch new token: ${tokenResponse.status} ${tokenResponse.statusText} - ${errorText}`);
     }
 
-    const data = await response.json();
-    const token = data.access_token;
+    const tokenData = await tokenResponse.json();
+    const token = tokenData.access_token;
+    console.log('Fetched new token:', token);
 
-    // Update the environment variable in Netlify
-    const updateResponse = await fetch(`https://api.netlify.com/api/v1/sites/${MY_SITE_ID}/env/VITE_API_TOKEN`, {
-      method: 'PUT',
+    // Construct the URL for updating the environment variable
+    const updateUrl = `https://api.netlify.com/api/v1/accounts/${ACCOUNT_SLUG}/env/VITE_API_TOKEN?site_id=${SITE_ID}`;
+
+    // Update environment variable in Netlify
+    const updateResponse = await fetch(updateUrl, {
+      method: 'PATCH', // Use PATCH method
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${NETLIFY_AUTH_TOKEN}`
       },
       body: JSON.stringify({
-        value: token
+        key: 'VITE_API_TOKEN',
+        value: token,
+        context: 'production' // Set context to a valid value
       })
     });
 
     if (!updateResponse.ok) {
-      throw new Error(`Failed to update environment variable: ${updateResponse.status} ${updateResponse.statusText}`);
+      const errorText = await updateResponse.text();
+      throw new Error(`Failed to update environment variable: ${updateResponse.status} ${updateResponse.statusText} - ${errorText}`);
     }
 
     const updateData = await updateResponse.json();
-    console.log('Update Response:', updateData);
+    console.log('Environment variable updated:', updateData);
 
-    // Send a Slack notification
-    await fetch(SLACK_WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        text: `Token refreshed successfully: ${token}`
-      })
-    });
+    // Trigger a redeploy
+    await triggerRedeploy();
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Token refreshed successfully', token })
+      body: JSON.stringify({ message: 'Token refreshed successfully and redeploy triggered', token })
     };
   } catch (error) {
     console.error('Error:', error);

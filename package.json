@@ -9,7 +9,8 @@
     "start": "node server.js",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "pnpm exec jest"
   },
   "dependencies": {
     "@apollo/client": "^3.11.4",
@@ -82,6 +83,8 @@
   "devDependencies": {
     "@astrojs/check": "^0.7.0",
     "@astrojs/ts-plugin": "^1.10.1",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
     "@rollup/plugin-yaml": "^4.1.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
@@ -93,12 +96,15 @@
     "@types/react-phone-number-input": "^3.1.37",
     "@typescript-eslint/eslint-plugin": "^8.2.0",
     "@typescript-eslint/parser": "^8.2.0",
+    "babel-jest": "^29.7.0",
     "concurrently": "^8.2.2",
     "corepack": "^0.10.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "jest": "^29.7.0",
+    "jest-fetch-mock": "^3.0.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
