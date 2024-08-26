@@ -32,8 +32,16 @@ const posts = entries.items.map((item) => {
   <main id="Properties">
     <!--Properties-->
     <Section>
+
+<div class="md:bg-[url('/images/lp-temp.svg')] h-full bg-auto bg-stone-200 xs:pt-36 md:pt-64 bg-no-repeat md:bg-left-quarter md:px-24 px-3">
+    <h1 class="font-bold text-cyan-900 mb-4 text-3xl text-center">Find your perfect vacation rental</h1>
+    <p class="text-center text-slate-500">Book your next vacation rental with us. We offer a wide selection of vacation rentals in the most popular destinations. </p>
+    <div class="flex flex-row justify-center align-middle h-full w-full md:mb-20 mt-5">
         <AvailabilitySearch client:load />
-        <h2 class="font-bold text-cyan-900 mb-4 mt-8 text-3xl text-center">Featured Listings</h2>
+    </div>
+</div>
+        
+        <h2 class="font-bold text-cyan-900 mb-4 mt-2 text-3xl text-center">Featured Listings</h2>
         <div class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             
           <GuestyListings />

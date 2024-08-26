@@ -105,8 +105,8 @@ const AvailabilitySearch: React.FC = () => {
   };
 
   return (
-    <div className="bg-[url('/images/line-hero.png')] bg-slate-700 pt-64 md:pt-96 bg-auto static md:bg-left bg-center bg-repeat-y w-full h-full">
-      <div className="w-full items-end align-bottom md:pb-12 pb-40">
+    <div className="static w-full h-full">
+      <div className="w-full items-end align-bottom md:pb-12 pb-20">
         <div className="flex flex-row justify-center align-middle h-full w-full md:mb-40">
           <button onClick={toggleModal} className="flex align-bottom justify-center h-full bg-cyan-600 sm:w-1/5 py-3 px-2 shadow-md shadow-cyan-500/30 rounded-xl text-white">
             <Search size={24} /> <h3>Search available properties</h3>

@@ -29,5 +29,6 @@ body {
 }
 
 .lp-button {
-  background-color: #0e7490; /* slate-700 */
+  @apply bg-cyan-600 /* slate-700 */
+  text-white rounded-lg px-4 py-2;
 }

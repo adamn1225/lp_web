@@ -12,6 +12,10 @@ module.exports = {
       backgroundImage: {
         homehero: "url('/images/line-hero.png')"
       },
+      backgroundPosition: {
+        'left-quarter': '10% bottom',
+        'right-quarter': '10% right',
+      },
       screens: {
         xs: { max: '639px' },
         sm: '640px',
