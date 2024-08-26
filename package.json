@@ -71,6 +71,7 @@
     "react-modal": "^3.16.1",
     "react-phone-number-input": "^3.4.5",
     "react-query": "^3.39.3",
+    "react-whatsapp": "^0.3.0",
     "replace-json-property": "^1.9.0",
     "sass": "^1.77.8",
     "sharp": "^0.33.5",
