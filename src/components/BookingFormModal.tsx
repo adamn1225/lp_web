@@ -16,9 +16,13 @@ interface BookingFormModalProps {
   setDateRange: (dateRange: { startDate: Date; endDate: Date }[]) => void;
   listingId: string;
   firstName: string;
+  setFirstName: React.Dispatch<React.SetStateAction<string>>;
   lastName: string;
+  setLastName: React.Dispatch<React.SetStateAction<string>>;
   phone: string;
+  setPhone: React.Dispatch<React.SetStateAction<string>>;
   email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const BookingFormModal: React.FC<BookingFormModalProps> = ({
@@ -31,6 +35,14 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   dateRange,
   setDateRange,
   listingId,
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  phone,
+  setPhone,
+  email,
+  setEmail,
 }) => {
   const [basePrice, setBasePrice] = useState<number>(0);
   const [weeklyPriceFactor, setWeeklyPriceFactor] = useState<number>(1);

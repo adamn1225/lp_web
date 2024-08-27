@@ -15,6 +15,10 @@ interface Listing {
   publicDescription: {
     summary: string;
   };
+  address: {
+    city: string;
+    state: string;
+  };
   prices: {
     basePrice: number;
     currency: string;
@@ -35,18 +39,8 @@ const AvailabilitySearch: React.FC = () => {
     }
   ]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isLocal, setIsLocal] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsLocal(window.location.hostname === 'localhost');
-    }
-  }, []);
-
-  const serverPort = import.meta.env.VITE_SERVER_PORT || '5000';
-  const apiUrl = isLocal
-  ? `http://localhost:${serverPort}/api/available`
-  : `/.netlify/functions/availability`;
+  const apiUrl = '/.netlify/functions/availability';
 
   const formatDate = (date: Date): string => {
     return date.toISOString().slice(0, 10);
@@ -61,6 +55,8 @@ const AvailabilitySearch: React.FC = () => {
       const formattedCheckIn = formatDate(state[0].startDate);
       const formattedCheckOut = formatDate(state[0].endDate);
 
+      console.log('API URL:', `${apiUrl}?checkIn=${encodeURIComponent(formattedCheckIn)}&checkOut=${encodeURIComponent(formattedCheckOut)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}`);
+
       const response = await fetch(`${apiUrl}?checkIn=${encodeURIComponent(formattedCheckIn)}&checkOut=${encodeURIComponent(formattedCheckOut)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}`, {
         method: 'GET',
         headers: {
@@ -69,7 +65,7 @@ const AvailabilitySearch: React.FC = () => {
       });
 
       const responseText = await response.text();
-      // console.log('API Response Text:', responseText);
+      console.log('API Response Text:', responseText);
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
@@ -117,11 +113,14 @@ const AvailabilitySearch: React.FC = () => {
             <div className="bg-slate-100 pb-10 xs:mt-24 md:py-4 mx-1 lg:p-6 rounded-lg shadow-lg flex align-bottom md:flex justify-center lg:w-1/4 sm:w-4/5 w-full overflow-hidden">
               <form onSubmit={handleSubmit} className="w-full">
                 <div className="flex flex-col gap-3 items-center xs:mx-2 justify-center md:w-full">
-                  <button onClick={toggleModal} className="bg-red-500 mb-2 flex xs:mt-6 justify-center md:w-3/5 w-4/5 z-50 font-bold text-slate-50 text-xl rounded-md py-3">
-                    Close Property Search
-                  </button>
                   <div className="flex flex-col md:flex-row sx:w-full justify-center items-center">
                     <div className="px-2 pb-2 pt-3 w-full bg-slate-100 drop-shadow border rounded-lg md:w-full xs:w-full overflow-hidden">
+                  <button
+                    className="absolute right-1 top-0 text-stone-900 hover:text-slate-800 text-4xl"
+                    onClick={toggleModal}
+                  >
+                    &times;
+                  </button>
                       <h3 className="text-center pb-4 text-2xl">How long is your trip?</h3>
                       <DateRange
                         editableDateInputs={true}
@@ -151,40 +150,37 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           </div>
         )}
-        </div>
-        <div className="bg-white w-full h-full overflow-auto">
-  {loading && <p>Loading...</p>}
-  {error && <p>Error: {error}</p>}
-  {available.length > 0 && (
-    <div className="flex flex-col justify-start items-center pt-8">
-      <h2  className="font-sans font-bold border-b-2 border-slate-700 text-3xl text-slate-900 bb-4 text-center">Available for Instant Booking!</h2>
-      <button onClick={clearResults} className="bg-red-500 text-white w-1/5 py-3 px-1 mt-12 rounded-md">
-        X Clear Results
-      </button>
-    </div>
-    
-  )}
-  <div className="search-results grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 md:px-12 px-4">
-    {available.map((property) => (
-      <article className="flex flex-col bg-white shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md" key={property._id}>
-        <div className="p-1 result-item">
-          <img className="w-full h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
-          <div className="md:p-5 p-2 bg-white flex flex-col align-middle h-1/1 justify-center border-t-2 border-slate-500/30">
-            <h3 className="font-sans font-bold text-lg text-slate-900 pb-4 text-center">{property.title}</h3>
-            <div className="flex flex-col mb-2 justify-center self-center md:justify-between border-t-2 border-slate-500/30 pt-6">
-              <p className="font-sans font-bold text-lg text-center text-slate-900">Price: ${property.prices.basePrice} {property.prices.currency}</p>
-              <a href={property._id}>
-                <button className="bg-cyan-600 m-0 py-3 md:px-12 px-4 shadow-md shadow-cyan-500/30 rounded-xl text-white">
-                  Book Instantly!
-                </button>
-              </a>
-            </div>
+      </div>
+      <div className="bg-stone-200 w-full h-full overflow-auto">
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error}</p>}
+        {available.length > 0 && (
+          <div className="flex flex-col justify-start items-center pt-8">
+            <h2 className="font-sans font-bold border-b-2 border-slate-700 text-3xl text-slate-900 bb-4 text-center">Available for Instant Booking!</h2>
+            <button onClick={clearResults} className="bg-red-500 text-white w-1/5 py-3 px-1 my-6 rounded-md">
+              X Clear Results
+            </button>
           </div>
+
+        )}
+        <div className="search-results grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 md:px-12 px-4">
+          {available.map((property) => (
+<a href={property._id}>
+              <article className="flex flex-col bg-white shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md" key={property._id}>
+                <div className="p-1 result-item">
+                  <img className="w-full object-cover h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
+                  <div className="px-10 py-4 text-center flex flex-col gap-4">
+                    <h3 className="text-xl font-bold">{property.title}</h3>
+                    <div className="border border-stone-300"> </div>
+                    <p className="text-lg font-medium">{property.address.city}, {property.address.state}</p>
+                    {/* <p className="font-bold">${property.prices.basePrice} {property.prices.currency}</p> */}
+                  </div>
+                </div>
+              </article>
+</a>
+          ))}
         </div>
-      </article>
-    ))}
-  </div>
-</div>
+      </div>
     </div>
   );
 };

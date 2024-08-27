@@ -38,6 +38,10 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [guests, setGuests] = useState<number>(1);
   const [pets, setPets] = useState<number>(0);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -125,7 +129,15 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
         setPets={setPets}
         dateRange={state}
         setDateRange={setState}
-        listingId={listingId}
+        listingId={listingId} // Use the prop directly
+        firstName={firstName}
+        setFirstName={setFirstName}
+        lastName={lastName}
+        setLastName={setLastName}
+        phone={phone}
+        setPhone={setPhone}
+        email={email}
+        setEmail={setEmail}
       />
     </div>
   );
