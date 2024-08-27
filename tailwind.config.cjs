@@ -16,6 +16,13 @@ module.exports = {
         'left-quarter': '10% bottom',
         'right-quarter': '10% right',
       },
+      borderWidth: {
+        '10': '10px',
+        '12': '12px',
+        '14': '14px',
+        '16': '16px',
+        // Add more as needed
+      },
       screens: {
         xs: { max: '639px' },
         sm: '640px',

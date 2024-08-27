@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';  // Import the custom PhoneInput component
+
+
 
 interface BookingFormModalProps {
   isModalOpen: boolean;
@@ -11,6 +15,10 @@ interface BookingFormModalProps {
   dateRange: { startDate: Date; endDate: Date }[];
   setDateRange: (dateRange: { startDate: Date; endDate: Date }[]) => void;
   listingId: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
 }
 
 const BookingFormModal: React.FC<BookingFormModalProps> = ({
@@ -30,6 +38,26 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [cleaningFee, setCleaningFee] = useState<number>(0);
   const [petFee, setPetFee] = useState<number>(0);
   const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handlePhoneChange = (value: string | undefined) => {
+    setFormData({
+      ...formData,
+      phone: value || '',
+    });
+  };
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -105,54 +133,82 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     }
   }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, pets]);
 
+
+
   return (
     <Modal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Booking Form"
-      className="bg-white px-4 rounded-lg drop-shadow-2xl shadow-lg w-96"
+      className="bg-white px-20 border-t-14 border-cyan-600 rounded-md shadow-cyan-950 shadow-2xl w-1/3"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
     >
-      <div className="relative py-8 flex flex-col h-full text-slate-800 font-semibold text-lg">
+      <div className="relative py-8 flex flex-col h-full text-slate-800 text-lg">
+        <h2 className="text-xl font-bold text-center">Booking Form</h2>
         <button
           className="absolute right-1 text-slate-500 hover:text-slate-800 text-3xl"
           onClick={closeModal}
         >
           &times;
         </button>
-        <form className="flex flex-col justify-center items-center">
-          <div>
-            <div className="mb-4">
-              <label htmlFor="guests" className="block text-slate-800">Number of Guests:</label>
+        <form>
+          <div className="flex flex-col justify-center items-center gap-3 pt-5">
+            <div className="flex gap-8">
+              <label htmlFor="firstName" className="block w-full text-slate-800">First Name:
               <input
-                type="number"
-                id="guests"
-                value={guests}
-                onChange={(e) => setGuests(Number(e.target.value))}
-                className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
-                min="1"
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange} 
+                placeholder="First Name"
+                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 "
               />
+              </label>
+              <label htmlFor="lastName" className="block w-full text-slate-800">Last Name:
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange} 
+                placeholder="Last Name"
+                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 "
+              />
+              </label>
             </div>
-            <div className="mb-4">
-              <label htmlFor="pets" className="block text-slate-800">Number of Pets:</label>
+            <label htmlFor="phone" className="block text-balance text-slate-800 w-full border border-stone-200 rounded-md shadow-sm ">Phone:
+            <PhoneInput
+              value={formData.phone}
+              onChange={handlePhoneChange}
+              defaultCountry="US"
+              placeholder="(---) --- ----"
+              className="w-full px-4 py-2focus:ring-2 focus:ring-slate-800 "
+            />
+            </label>
+            <label htmlFor="email" className="block w-full text-slate-800">Email:
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 "
+            />
+            </label>
+              <label htmlFor="pets" className="w-full text-slate-800">Number of Pets:
               <input
                 type="number"
                 id="pets"
                 value={pets}
                 onChange={(e) => setPets(Number(e.target.value))}
-                className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
+                className="w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
                 min="0"
               />
-            </div>
+            </label>
           </div>
         </form>
         {calculatedPrice !== null && (
-          <div className="flex flex-col mx-10 justify-between mt-3">
+          <div className="flex flex-col mx-5 justify-between mt-3">
             <div className='text-justify'>
-              <div className="flex justify-between">
-                <p><strong>Guest Price:</strong></p>
-                <p>$0</p>
-              </div>
               <div className="flex justify-between">
                 <p><strong>Pet Price:</strong></p>
                 <p>${pets > 0 ? petFee : 0}</p>
