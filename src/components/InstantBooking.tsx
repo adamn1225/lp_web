@@ -38,7 +38,6 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [guests, setGuests] = useState<number>(1);
   const [pets, setPets] = useState<number>(0);
-  const [price, setPrice] = useState<number | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -98,25 +97,15 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Calculate the price based on guests and pets
-    const basePrice = 100; // Example base price
-    const guestPrice = guests * 20; // Example price per guest
-    const petPrice = pets * 10; // Example price per pet
-    const totalPrice = basePrice + guestPrice + petPrice;
-    setPrice(totalPrice);
-  };
-
   return (
     <div className="mt-4">
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-        <CalendarComponent
-          state={state}
-          setState={setState}
-          disabledDates={disabledDates}
-        />
+      <CalendarComponent
+        state={state}
+        setState={setState}
+        disabledDates={disabledDates}
+      />
 
       <div className="flex flex-col justify-center items-center">
         <button
@@ -134,9 +123,9 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
         setGuests={setGuests}
         pets={pets}
         setPets={setPets}
-        price={price}
         dateRange={state}
         setDateRange={setState}
+        listingId={listingId}
       />
     </div>
   );
