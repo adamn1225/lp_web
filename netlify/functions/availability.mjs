@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 export const handler = async (event, context) => {
-  console.log('Received event:', event);
+  // console.log('Received event:', event);
 
   const { checkIn, checkOut, minOccupancy } = event.queryStringParameters;
 
@@ -28,7 +28,7 @@ export const handler = async (event, context) => {
       }
     });
     const endTime = Date.now();
-    console.log(`API request took ${endTime - startTime} ms`);
+    // console.log(`API request took ${endTime - startTime} ms`);
 
     if (!response.ok) {
       const errorText = await response.text();

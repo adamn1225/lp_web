@@ -25,10 +25,11 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
+  const [initialized, setInitialized] = useState<boolean>(false);
   const [state, setState] = useState<any[]>([
     {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
+      startDate: null,
+      endDate: null,
       key: 'selection'
     }
   ]);
@@ -38,10 +39,6 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [guests, setGuests] = useState<number>(1);
   const [pets, setPets] = useState<number>(0);
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -52,10 +49,10 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
     const fetchUnavailableDates = async () => {
       try {
         const startDate = new Date().toISOString().slice(0, 10);
-        const endDate = '2025-08-24'; // Set end date to 2025-08-24
+        const endDate = '2028-08-24'; // Set end date to 2025-08-24
         const apiUrl = isLocal
-          ? `http://localhost:8888/.netlify/functions/instantBooking?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`
-          : `/.netlify/functions/instantBooking?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`;
+          ? `http://localhost:8888/.netlify/functions/fetchPricingData?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`
+          : `/.netlify/functions/fetchPricingData?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`;
 
         console.log('Fetching unavailable dates from:', apiUrl);
         console.log('isLocal:', isLocal);
@@ -95,6 +92,19 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
     fetchUnavailableDates();
   }, [isLocal, listingId]);
 
+  useEffect(() => {
+    if (!initialized) {
+      setState([
+        {
+          startDate: new Date(),
+          endDate: addDays(new Date(), 7),
+          key: 'selection'
+        }
+      ]);
+      setInitialized(true);
+    }
+  }, [initialized]);
+
   // Combine unavailable and booked dates
   const disabledDates = [...unavailableDates, ...bookedDates];
 
@@ -129,15 +139,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
         setPets={setPets}
         dateRange={state}
         setDateRange={setState}
-        listingId={listingId} // Use the prop directly
-        firstName={firstName}
-        setFirstName={setFirstName}
-        lastName={lastName}
-        setLastName={setLastName}
-        phone={phone}
-        setPhone={setPhone}
-        email={email}
-        setEmail={setEmail}
+        listingId={listingId}
       />
     </div>
   );

@@ -1,9 +1,6 @@
+import { set } from "date-fns";
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
-import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';  // Import the custom PhoneInput component
-
-
 
 interface BookingFormModalProps {
   isModalOpen: boolean;
@@ -15,14 +12,6 @@ interface BookingFormModalProps {
   dateRange: { startDate: Date; endDate: Date }[];
   setDateRange: (dateRange: { startDate: Date; endDate: Date }[]) => void;
   listingId: string;
-  firstName: string;
-  setFirstName: React.Dispatch<React.SetStateAction<string>>;
-  lastName: string;
-  setLastName: React.Dispatch<React.SetStateAction<string>>;
-  phone: string;
-  setPhone: React.Dispatch<React.SetStateAction<string>>;
-  email: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const BookingFormModal: React.FC<BookingFormModalProps> = ({
@@ -35,14 +24,6 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   dateRange,
   setDateRange,
   listingId,
-  firstName,
-  setFirstName,
-  lastName,
-  setLastName,
-  phone,
-  setPhone,
-  email,
-  setEmail,
 }) => {
   const [basePrice, setBasePrice] = useState<number>(0);
   const [weeklyPriceFactor, setWeeklyPriceFactor] = useState<number>(1);
@@ -50,32 +31,19 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [cleaningFee, setCleaningFee] = useState<number>(0);
   const [petFee, setPetFee] = useState<number>(0);
   const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-  });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
-  const handlePhoneChange = (value: string | undefined) => {
-    setFormData({
-      ...formData,
-      phone: value || '',
-    });
-  };
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
+  const [cityTax, setCityTax] = useState<number>(0);
+  const [localTax, setLocalTax] = useState<number>(0);
 
   useEffect(() => {
     const fetchPricingData = async () => {
       try {
+        const { startDate, endDate } = dateRange[0];
+        const formattedStartDate = startDate.toISOString().slice(0, 10);
+        const formattedEndDate = endDate.toISOString().slice(0, 10);
+
         console.log('Fetching pricing data...');
-        const response = await fetch(`/.netlify/functions/fetchPricingData?listingId=${listingId}`);
+        const response = await fetch(`/.netlify/functions/fetchPricingData?listingId=${listingId}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`);
         console.log('API response:', response);
 
         if (!response.ok) {
@@ -85,45 +53,39 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         const data = await response.json();
         console.log('Fetched pricing data:', data);
 
-        setBasePrice(data.basePrice);
-        setWeeklyPriceFactor(data.weeklyPriceFactor);
-        setMonthlyPriceFactor(data.monthlyPriceFactor);
-        setCleaningFee(data.cleaningFee);
-        setPetFee(data.petFee);
-      } catch (error) {
-        console.error('Error fetching pricing data:', error);
-      }
-    };
+        setBasePrice(data.basePrice || 0);
+        setWeeklyPriceFactor(data.weeklyPriceFactor || 1);
+        setMonthlyPriceFactor(data.monthlyPriceFactor || 1);
+        setCleaningFee(data.cleaningFee || 0);
+        setPetFee(data.petFee || 0);
+        setCityTax(data.cityTax || 0);
+        setLocalTax(data.localTax || 0);
 
-    fetchPricingData();
-  }, [listingId]);
+        const timeDiff = endDate.getTime() - startDate.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        let stayPrice = 0;
 
-  useEffect(() => {
-    const fetchPricingData = async () => {
-      try {
-        console.log('Fetching pricing data...');
-        const response = await fetch(`/.netlify/functions/fetchPricingData?listingId=${listingId}`);
-        console.log('API response:', response);
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        for (let i = 0; i < daysDiff; i++) {
+          const currentDate = new Date(startDate);
+          currentDate.setDate(currentDate.getDate() + i);
+          const formattedDate = currentDate.toISOString().slice(0, 10);
+          stayPrice += data.datePrices[formattedDate] || data.basePrice;
         }
 
-        const data = await response.json();
-        console.log('Fetched pricing data:', data);
-
-        setBasePrice(data.basePrice);
-        setWeeklyPriceFactor(data.weeklyPriceFactor);
-        setMonthlyPriceFactor(data.monthlyPriceFactor);
-        setCleaningFee(data.cleaningFee);
-        setPetFee(data.petFee);
+        const guestPrice = 0;
+        const petPrice = pets > 0 ? petFee : 0;
+        const totalPrice = stayPrice + cleaningFee + petPrice;
+        const taxes = (cityTax + localTax) * 0.01;
+        const afterTax = totalPrice + (totalPrice * taxes);
+        console.log('Calculated afterTax:', afterTax);
+        setCalculatedPrice(afterTax);
       } catch (error) {
         console.error('Error fetching pricing data:', error);
       }
     };
 
     fetchPricingData();
-  }, [listingId]);
+  }, [listingId, dateRange, pets, petFee, cityTax, localTax]);
 
   useEffect(() => {
     const { startDate, endDate } = dateRange[0];
@@ -138,107 +100,81 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         stayPrice *= weeklyPriceFactor;
       }
 
-      const guestPrice = 0; // Assuming no extra guest fee
+      const guestPrice = 0;
       const petPrice = pets > 0 ? petFee : 0;
       const totalPrice = stayPrice + cleaningFee + petPrice;
-      setCalculatedPrice(totalPrice);
+      const taxes = (cityTax + localTax) * 0.01;
+      const afterTax = totalPrice + (totalPrice * taxes);
+      console.log('Calculated afterTax in second useEffect:', afterTax);
+      setCalculatedPrice(afterTax);
     }
-  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, pets]);
-
-
+  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, pets, cityTax, localTax]);
 
   return (
     <Modal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Booking Form"
-      className="bg-white px-20 border-t-14 border-cyan-600 rounded-md shadow-cyan-950 shadow-2xl w-1/3"
+      className="bg-white px-4 rounded-lg drop-shadow-2xl shadow-lg w-96"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
     >
-      <div className="relative py-8 flex flex-col h-full text-slate-800 text-lg">
-        <h2 className="text-xl font-bold text-center">Booking Form</h2>
+      <div className="relative py-8 flex flex-col h-full text-slate-800 font-semibold text-lg">
         <button
           className="absolute right-1 text-slate-500 hover:text-slate-800 text-3xl"
           onClick={closeModal}
         >
           &times;
         </button>
-        <form>
-          <div className="flex flex-col justify-center items-center gap-3 pt-5">
-            <div className="flex gap-8">
-              <label htmlFor="firstName" className="block w-full text-slate-800">First Name:
+        <form className="flex flex-col justify-center items-center">
+          <div>
+            <div className="mb-4">
+              <label htmlFor="guests" className="block text-slate-800">Number of Guests:</label>
               <input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange} 
-                placeholder="First Name"
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 "
+                type="number"
+                id="guests"
+                value={guests}
+                onChange={(e) => setGuests(Number(e.target.value))}
+                className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
+                min="1"
               />
-              </label>
-              <label htmlFor="lastName" className="block w-full text-slate-800">Last Name:
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange} 
-                placeholder="Last Name"
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 "
-              />
-              </label>
             </div>
-            <label htmlFor="phone" className="block text-balance text-slate-800 w-full border border-stone-200 rounded-md shadow-sm ">Phone:
-            <PhoneInput
-              value={formData.phone}
-              onChange={handlePhoneChange}
-              defaultCountry="US"
-              placeholder="(---) --- ----"
-              className="w-full px-4 py-2focus:ring-2 focus:ring-slate-800 "
-            />
-            </label>
-            <label htmlFor="email" className="block w-full text-slate-800">Email:
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 "
-            />
-            </label>
-              <label htmlFor="pets" className="w-full text-slate-800">Number of Pets:
+            <div className="mb-4">
+              <label htmlFor="pets" className="block text-slate-800">Number of Pets:</label>
               <input
                 type="number"
                 id="pets"
                 value={pets}
                 onChange={(e) => setPets(Number(e.target.value))}
-                className="w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
+                className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
                 min="0"
               />
-            </label>
+            </div>
           </div>
         </form>
         {calculatedPrice !== null && (
-          <div className="flex flex-col mx-5 justify-between mt-3">
+          <div className="flex flex-col mx-10 justify-between mt-3">
             <div className='text-justify'>
-              <div className="flex justify-between">
-                <p><strong>Pet Price:</strong></p>
-                <p>${pets > 0 ? petFee : 0}</p>
-              </div>
-              <div className="flex justify-between">
-                <p><strong>Stay Price:</strong></p>
-                <p>${(basePrice * Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24))).toFixed(2)} ({basePrice} * {Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24))} days)</p>
-              </div>
+              {pets > 0 && petFee > 0 && (
+                <div className="flex justify-between">
+                  <p><strong>Pet Price:</strong></p>
+                  <p>${petFee}</p>
+                </div>
+              )}
+              
+              {/* <div className="flex justify-between">
+                <p><strong></strong></p>
+                <p>${basePrice ? (basePrice * Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24))).toFixed(2) : '0.00'} ({basePrice} * {Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24))})</p>
+              </div> */}
               {Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24)) >= 7 && (
                 <div className="flex justify-between">
-                  <p><strong>Weekly Price Factor:</strong></p>
-                  <p>{weeklyPriceFactor}</p>
+                  {/* <p><strong>Weekly Price Factor:</strong></p>
+                  <p>{weeklyPriceFactor}</p> */}
                 </div>
               )}
               {Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24)) >= 30 && (
                 <div className="flex justify-between">
-                  <p><strong>Monthly Price Factor:</strong></p>
-                  <p>{monthlyPriceFactor}</p>
+                  {/* <p><strong>Monthly Price Factor:</strong></p>
+                  <p>{monthlyPriceFactor}</p> */}
                 </div>
               )}
               <div className="flex justify-between">
@@ -248,8 +184,9 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
               <div className='border border-x-0 border-y-1 border-slate-800 my-2'> </div>
               <div className="flex justify-between">
                 <p><strong>Total Price:</strong></p>
-                <p className="text-cyan-950 font-bold">${calculatedPrice.toFixed(2)}</p>
+                <p className="text-cyan-950 font-bold">${calculatedPrice !== null ? calculatedPrice.toFixed(2) : '0.00'}</p>
               </div>
+              
             </div>
             <button
               className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"

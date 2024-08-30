@@ -1,0 +1,206 @@
+{
+  "status": 200,
+  "data": {
+    "days": [
+      {
+        "date": "2024-10-03",
+        "listingId": "6566109da55360001fa7ddcf",
+        "currency": "USD",
+        "price": 79,
+        "isBasePrice": true,
+        "minNights": 2,
+        "isBaseMinNights": true,
+        "status": "available",
+        "blocks": {
+          "m": false,
+          "r": false,
+          "b": false,
+          "bd": false,
+          "sr": false,
+          "abl": false,
+          "a": false,
+          "bw": false,
+          "o": false,
+          "pt": false
+        },
+        "blockRefs": [],
+        "cta": false,
+        "ctd": false,
+        "requestToBook": false,
+        "rulesApplied": [
+          {
+            "rule": "Oct 79/99",
+            "minNights": 2,
+            "adjustmentPercentage": 0
+          }
+        ]
+      },
+      {
+        "date": "2024-10-04",
+        "listingId": "6566109da55360001fa7ddcf",
+        "currency": "USD",
+        "price": 99,
+        "isBasePrice": true,
+        "minNights": 2,
+        "isBaseMinNights": true,
+        "status": "available",
+        "blocks": {
+          "m": false,
+          "r": false,
+          "b": false,
+          "bd": false,
+          "sr": false,
+          "abl": false,
+          "a": false,
+          "bw": false,
+          "o": false,
+          "pt": false
+        },
+        "blockRefs": [],
+        "cta": false,
+        "ctd": false,
+        "requestToBook": false,
+        "rulesApplied": [
+          {
+            "rule": "Oct 99/99",
+            "minNights": 2,
+            "adjustmentAbsolute": 20
+          }
+        ]
+      },
+      {
+        "date": "2024-10-05",
+        "listingId": "6566109da55360001fa7ddcf",
+        "currency": "USD",
+        "price": 99,
+        "isBasePrice": true,
+        "minNights": 2,
+        "isBaseMinNights": true,
+        "status": "available",
+        "blocks": {
+          "m": false,
+          "r": false,
+          "b": false,
+          "bd": false,
+          "sr": false,
+          "abl": false,
+          "a": false,
+          "bw": false,
+          "o": false,
+          "pt": false
+        },
+        "blockRefs": [],
+        "cta": false,
+        "ctd": false,
+        "requestToBook": false,
+        "rulesApplied": [
+          {
+            "rule": "Oct 99/99",
+            "minNights": 2,
+            "adjustmentAbsolute": 20
+          }
+        ]
+      },
+      {
+        "date": "2024-10-06",
+        "listingId": "6566109da55360001fa7ddcf",
+        "currency": "USD",
+        "price": 79,
+        "isBasePrice": true,
+        "minNights": 2,
+        "isBaseMinNights": true,
+        "status": "available",
+        "blocks": {
+          "m": false,
+          "r": false,
+          "b": false,
+          "bd": false,
+          "sr": false,
+          "abl": false,
+          "a": false,
+          "bw": false,
+          "o": false,
+          "pt": false
+        },
+        "blockRefs": [],
+        "cta": false,
+        "ctd": false,
+        "requestToBook": false,
+        "rulesApplied": [
+          {
+            "rule": "Oct 79/99",
+            "minNights": 2,
+            "adjustmentPercentage": 0
+          }
+        ]
+      },
+      {
+        "date": "2024-10-07",
+        "listingId": "6566109da55360001fa7ddcf",
+        "currency": "USD",
+        "price": 79,
+        "isBasePrice": true,
+        "minNights": 2,
+        "isBaseMinNights": true,
+        "status": "available",
+        "blocks": {
+          "m": false,
+          "r": false,
+          "b": false,
+          "bd": false,
+          "sr": false,
+          "abl": false,
+          "a": false,
+          "bw": false,
+          "o": false,
+          "pt": false
+        },
+        "blockRefs": [],
+        "cta": false,
+        "ctd": false,
+        "requestToBook": false,
+        "rulesApplied": [
+          {
+            "rule": "Oct 79/99",
+            "minNights": 2,
+            "adjustmentPercentage": 0
+          }
+        ]
+      },
+      {
+        "date": "2024-10-08",
+        "listingId": "6566109da55360001fa7ddcf",
+        "currency": "USD",
+        "price": 79,
+        "isBasePrice": true,
+        "minNights": 2,
+        "isBaseMinNights": true,
+        "status": "available",
+        "blocks": {
+          "m": false,
+          "r": false,
+          "b": false,
+          "bd": false,
+          "sr": false,
+          "abl": false,
+          "a": false,
+          "bw": false,
+          "o": false,
+          "pt": false
+        },
+        "blockRefs": [],
+        "cta": false,
+        "ctd": false,
+        "requestToBook": false,
+        "rulesApplied": [
+          {
+            "rule": "Oct 79/99",
+            "minNights": 2,
+            "adjustmentPercentage": 0
+          }
+        ]
+      }
+    ]
+  },
+  "message": "OK"
+}

@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 export const handler = async (event, context) => {
-  console.log('Received event:', event);
+  // console.log('Received event:', event);
 
   const { listingId, startDate, endDate } = event.queryStringParameters;
 
@@ -33,10 +33,10 @@ export const handler = async (event, context) => {
     }
 
     const data = await response.json();
-    console.log('Fetched data:', data);
+    // console.log('Fetched data:', data);
 
     if (!data.data || !Array.isArray(data.data.days)) {
-      console.error('Invalid data structure:', data);
+      // console.error('Invalid data structure:', data);
       return {
         statusCode: 500,
         headers: {
@@ -60,8 +60,8 @@ export const handler = async (event, context) => {
       .filter(day => day.status === 'booked')
       .map(day => day.date);
 
-    console.log('Unavailable dates:', unavailableDates);
-    console.log('Booked dates:', bookedDates);
+    // console.log('Unavailable dates:', unavailableDates);
+    // console.log('Booked dates:', bookedDates);
 
     return {
       statusCode: 200,

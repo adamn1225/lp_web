@@ -22,7 +22,9 @@ export async function getStaticPaths() {
       pictures: listing.pictures,
       beds: listing.beds,
       Description: listing.publicDescription,
-      listingId: listing._id
+      listingId: listing._id,
+      checkIn: listing.defaultCheckInTime,
+      checkOut: listing.defaultCheckOutTime
     }
   }));
 
@@ -55,11 +57,13 @@ export async function get({ params }) {
     bathrooms: listing.bathrooms,
     pictures: listing.pictures,
     beds: listing.beds,
-    listingId: listing._id
+    listingId: listing._id,
+    checkIn: listing.defaultCheckInTime,
+    checkOut: listing.defaultCheckOutTime
   };
 }
 
-const { title, pictures, Description, beds, bathrooms, listingId, PropertyType } = Astro.props;
+const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, checkIn, checkOut } = Astro.props;
 
 
 
@@ -438,7 +442,15 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType }
               </button> -->
               
               <ReservationForm listingId={listingId} client:load />
-              <div class="xs:px-6"><InstantBooking listingId={listingId} client:load /></div>
+              <div id="main" class="xs:px-6">                
+                <div class="flex gap-2 justify-center items-center" >
+                  <p><span class="font-bold">Check in: </span>{checkIn}</p>
+                  <p><span class="font-bold">Check Out: </span>{checkOut}</p>
+                  
+                </div>
+                <span class="text-sm font-light flex justify-center items-center gap-1"><span class="font-bold">Note: </span> Checkin and Checkout times are in UTC.</span>
+                <InstantBooking listingId={listingId} client:load />
+              </div>
                 <h4 class="text-xl mt-6 font-light font-sans text-muted-900">Amenities</h4>
                 <div class="mb-6 grid grid-cols-2 justify-items-center">
                   <!-- bedroom -->

@@ -10,13 +10,19 @@ interface CalendarComponentProps {
 }
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates }) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set time to midnight to avoid timezone issues
+
+  const initialRange = [{ startDate: null, endDate: null, key: 'selection' }];
+
   return (
     <DateRange
       editableDateInputs={true}
       onChange={item => setState([item.selection])}
       moveRangeOnFirstSelection={false}
-      ranges={state}
-      disabledDates={disabledDates} // Pass combined disabledDates to DateRange
+      ranges={state.length ? state : initialRange}
+      disabledDates={disabledDates}
+      minDate={today} // Prevent selection of past dates
     />
   );
 };

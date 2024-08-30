@@ -7,6 +7,11 @@ html {
   overflow-x: hidden;
 }
 
+p, h1, h2, h3, h4, h5, h6, a, li {
+  margin: 0;
+  font-family: sans-serif
+}
+
 body {
   @apply h-full flex flex-col;
   font-family: "Roboto Flex", sans-serif;
