@@ -34,34 +34,6 @@ import '@/styles/global.scss'
     <slot />
     <ScrollTop />
     <Footer />
-    <script>
-      import { MASONRY_THEME, MASONRY_LOGGEDIN } from '@/constants'
-
-      document.addEventListener('alpine:init', () => {
-        //@ts-ignore
-        Alpine.store('app', {
-          init() {
-            this.isDark = MASONRY_THEME in localStorage ? localStorage.getItem(MASONRY_THEME) === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
-
-            this.isLoggedIn = MASONRY_LOGGEDIN in localStorage ? localStorage.getItem(MASONRY_LOGGEDIN) === 'true' : false
-          },
-          toggleTheme() {
-            this.isDark = !this.isDark
-            localStorage.setItem(MASONRY_THEME, this.isDark ? 'dark' : 'light')
-          },
-          login() {
-            this.isLoggedIn = true
-            localStorage.setItem(MASONRY_LOGGEDIN, 'true')
-          },
-          logout() {
-            this.isLoggedIn = false
-            localStorage.setItem(MASONRY_LOGGEDIN, 'false')
-          },
-          isDark: false,
-          isLoggedIn: false,
-        })
-      })
-    </script>
 
     
       <script is:inline>

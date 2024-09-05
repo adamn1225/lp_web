@@ -66,6 +66,8 @@ export const handler = async (event, context) => {
             .filter(day => day.status === 'booked')
             .map(day => day.date);
 
+        const accommodates = data1.accommodates || 2;
+
         const accountTaxes = data1.accountTaxes || [];
         const localTax = accountTaxes.length > 0 ? accountTaxes[0].amount : 0;
         const cityTax = accountTaxes.length > 1 ? accountTaxes[1].amount : 0;
@@ -96,7 +98,8 @@ export const handler = async (event, context) => {
                 datePrices,
                 accountTaxes,
                 localTax,
-                cityTax
+                cityTax,
+                accommodates
             })
         };
     } catch (error) {

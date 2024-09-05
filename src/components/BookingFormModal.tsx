@@ -12,6 +12,8 @@ interface BookingFormModalProps {
   dateRange: { startDate: Date; endDate: Date }[];
   setDateRange: (dateRange: { startDate: Date; endDate: Date }[]) => void;
   listingId: string;
+  occupancy: number;
+  setOccupancy: (maxOccupancy: number) => void;
 }
 
 const BookingFormModal: React.FC<BookingFormModalProps> = ({
@@ -24,6 +26,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   dateRange,
   setDateRange,
   listingId,
+  occupancy,
+  setOccupancy,
 }) => {
   const [basePrice, setBasePrice] = useState<number>(0);
   const [weeklyPriceFactor, setWeeklyPriceFactor] = useState<number>(1);
@@ -34,6 +38,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [cityTax, setCityTax] = useState<number>(0);
   const [localTax, setLocalTax] = useState<number>(0);
+  const [accommodates, setAccommodates ] = useState<number>(0);
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -60,6 +65,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         setPetFee(data.petFee || 0);
         setCityTax(data.cityTax || 0);
         setLocalTax(data.localTax || 0);
+        setAccommodates(data.accommodates || 2);
 
         const timeDiff = endDate.getTime() - startDate.getTime();
         const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -85,7 +91,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     };
 
     fetchPricingData();
-  }, [listingId, dateRange, pets, petFee, cityTax, localTax]);
+  }, [listingId, dateRange, pets, petFee, cityTax, localTax, accommodates]);
 
   useEffect(() => {
     const { startDate, endDate } = dateRange[0];
@@ -110,6 +116,15 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     }
   }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, pets, cityTax, localTax]);
 
+  const handleGuestsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.target.value);
+    if (value <= accommodates) {
+      setGuests(value);
+    } else {
+      alert(`The maximum number of guests allowed is ${accommodates}.`);
+    }
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -128,12 +143,12 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         <form className="flex flex-col justify-center items-center">
           <div>
             <div className="mb-4">
-              <label htmlFor="guests" className="block text-slate-800">Number of Guests:</label>
+              <label htmlFor="guests" className="block text-slate-800">Number of Guests</label>
               <input
                 type="number"
                 id="guests"
                 value={guests}
-                onChange={(e) => setGuests(Number(e.target.value))}
+                onChange={handleGuestsChange}
                 className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
                 min="1"
               />

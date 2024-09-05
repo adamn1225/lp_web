@@ -9,9 +9,9 @@ import AccountMenu from './ui/AccountMenu.astro'
 
 <div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full z-50 bg-slate-50 border-slate-100">
 
-  <header id="MainHeader" class=" min-h-[70px] w-full max-w-full px-3 mx-auto flex flex-col md:flex-row justify-evenly shadow lg:shadow-md lg:px-8">
-    <div class="flex justify-evenly lg:justify-start items-center w-full lg:w-auto min-h-[3.25rem]">
-      <a href="/" class="flex gap-4 items-center py-2">
+  <header id="MainHeader" class=" min-h-[70px] w-full max-w-full px-3 mx-auto flex flex-col md:flex-row md:justify-start justify-evenly shadow lg:shadow-md lg:px-8">
+    <div class="flex justify-evenly md:justify-start items-start w-full lg:w-auto min-h-[3.25rem]">
+      <a href="/" class="flex gap-4 items-start py-2">
         <img src="/images/lp-temp.svg" alt="logo" class="h-auto w-44" />
       </a>
       </div>
