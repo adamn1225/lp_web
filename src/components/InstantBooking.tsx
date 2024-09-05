@@ -39,6 +39,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [guests, setGuests] = useState<number>(1);
   const [pets, setPets] = useState<number>(0);
+  const [occupancy, setOccupancy] = useState<number>(2);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -140,6 +141,8 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
         dateRange={state}
         setDateRange={setState}
         listingId={listingId}
+        occupancy={occupancy}
+        setOccupancy={setOccupancy}
       />
     </div>
   );
