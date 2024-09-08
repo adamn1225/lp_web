@@ -1,6 +1,8 @@
 import { set } from "date-fns";
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
+import { loadScript } from '@guestyorg/tokenization-js';
+import type { GuestyTokenizationNamespace, GuestyTokenizationRenderOptions } from '@guestyorg/tokenization-js';
 
 interface BookingFormModalProps {
   isModalOpen: boolean;
@@ -38,7 +40,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [cityTax, setCityTax] = useState<number>(0);
   const [localTax, setLocalTax] = useState<number>(0);
-  const [accommodates, setAccommodates ] = useState<number>(0);
+  const [accommodates, setAccommodates] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(1); // State to track the current step
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -125,13 +128,69 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     }
   };
 
+  const GuestyPayment = () => {
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    useEffect(() => {
+      const initializeGuestyTokenization = async () => {
+        const options: GuestyTokenizationRenderOptions = {
+          containerId: 'payment-container',
+          providerId: '65667fb19986e2000e99278f', // Replace with your actual valid provider ID
+          amount: calculatedPrice, // Replace with the actual amount
+          currency: 'USD', // Replace with the actual currency
+          onStatusChange: (isValid) => {
+            setIsFormValid(isValid);
+            console.log('Form validity changed:', isValid);
+          },
+        };
+
+        console.log('Loading Guesty Tokenization JS SDK...');
+        loadScript()
+          .then((guestyTokenization: GuestyTokenizationNamespace) => {
+            console.log('Guesty Tokenization JS SDK loaded:', guestyTokenization);
+
+            const container = document.getElementById(options.containerId);
+            if (!container) {
+              console.error(`Container with id ${options.containerId} not found.`);
+              return;
+            }
+
+            guestyTokenization.render(options);
+            console.log('Guesty Tokenization JS SDK initialized with options:', options);
+          })
+          .catch((error) => {
+            if (error.response) {
+              console.error('Error response:', error.response);
+            } else if (error.request) {
+              console.error('Error request:', error.request);
+            }
+            console.error('Error message:', error.message);
+            console.error('Failed to load the Guesty Tokenization JS SDK script', error);
+          });
+      };
+
+      initializeGuestyTokenization();
+    }, [calculatedPrice]);
+
+    return (
+      <div className="h-full w-full md:px-2">
+        <div id="payment-container"></div>
+        <div className="flex justify-between mt-4">
+          <p><strong>Total Price:</strong></p>
+          <p className="text-cyan-950 font-bold">${calculatedPrice !== null ? calculatedPrice.toFixed(2) : '0.00'}</p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Booking Form"
-      className="bg-white px-4 rounded-lg drop-shadow-2xl shadow-lg w-96"
+      className="bg-white px-4 rounded-lg drop-shadow-2xl shadow-lg w-full max-w-lg"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      appElement={document.getElementById('Top')!} 
     >
       <div className="relative py-8 flex flex-col h-full text-slate-800 font-semibold text-lg">
         <button
@@ -140,78 +199,67 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         >
           &times;
         </button>
-        <form className="flex flex-col justify-center items-center">
-          <div>
-            <div className="mb-4">
-              <label htmlFor="guests" className="block text-slate-800">Number of Guests</label>
-              <input
-                type="number"
-                id="guests"
-                value={guests}
-                onChange={handleGuestsChange}
-                className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
-                min="1"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="pets" className="block text-slate-800">Number of Pets:</label>
-              <input
-                type="number"
-                id="pets"
-                value={pets}
-                onChange={(e) => setPets(Number(e.target.value))}
-                className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
-                min="0"
-              />
-            </div>
-          </div>
-        </form>
-        {calculatedPrice !== null && (
-          <div className="flex flex-col mx-10 justify-between mt-3">
-            <div className='text-justify'>
-              {pets > 0 && petFee > 0 && (
-                <div className="flex justify-between">
-                  <p><strong>Pet Price:</strong></p>
-                  <p>${petFee}</p>
+        {currentStep === 1 && (
+          <>
+            <form className="flex flex-col justify-center items-center">
+              <div>
+                <div className="mb-4">
+                  <label htmlFor="guests" className="block text-slate-800">Number of Guests</label>
+                  <input
+                    type="number"
+                    id="guests"
+                    value={guests}
+                    onChange={handleGuestsChange}
+                    className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
+                    min="1"
+                  />
                 </div>
-              )}
-              
-              {/* <div className="flex justify-between">
-                <p><strong></strong></p>
-                <p>${basePrice ? (basePrice * Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24))).toFixed(2) : '0.00'} ({basePrice} * {Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24))})</p>
-              </div> */}
-              {Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24)) >= 7 && (
-                <div className="flex justify-between">
-                  {/* <p><strong>Weekly Price Factor:</strong></p>
-                  <p>{weeklyPriceFactor}</p> */}
+                <div className="mb-4">
+                  <label htmlFor="pets" className="block text-slate-800">Number of Pets:</label>
+                  <input
+                    type="number"
+                    id="pets"
+                    value={pets}
+                    onChange={(e) => setPets(Number(e.target.value))}
+                    className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
+                    min="0"
+                  />
                 </div>
-              )}
-              {Math.ceil((dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime()) / (1000 * 3600 * 24)) >= 30 && (
-                <div className="flex justify-between">
-                  {/* <p><strong>Monthly Price Factor:</strong></p>
-                  <p>{monthlyPriceFactor}</p> */}
-                </div>
-              )}
-              <div className="flex justify-between">
-                <p><strong>Cleaning Fee:</strong></p>
-                <p>${cleaningFee.toFixed(2)}</p>
               </div>
-              <div className='border border-x-0 border-y-1 border-slate-800 my-2'> </div>
-              <div className="flex justify-between">
-                <p><strong>Total Price:</strong></p>
-                <p className="text-cyan-950 font-bold">${calculatedPrice !== null ? calculatedPrice.toFixed(2) : '0.00'}</p>
+            </form>
+            {calculatedPrice !== null && (
+              <div className="flex flex-col mx-10 justify-between mt-3">
+                <div className='text-justify'>
+                  {pets > 0 && petFee > 0 && (
+                    <div className="flex justify-between">
+                      <p><strong>Pet Price:</strong></p>
+                      <p>${petFee}</p>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <p><strong>Cleaning Fee:</strong></p>
+                    <p>${cleaningFee.toFixed(2)}</p>
+                  </div>
+                  <div className='border border-x-0 border-y-1 border-slate-800 my-2'> </div>
+                  <div className="flex justify-between">
+                    <p><strong>Total Price:</strong></p>
+                    <p className="text-cyan-950 font-bold">${calculatedPrice !== null ? calculatedPrice.toFixed(2) : '0.00'}</p>
+                  </div>
+                </div>
+                <button
+                  className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+                  onClick={() => setCurrentStep(2)} // Move to the next step
+                >
+                  Proceed to Payment
+                </button>
               </div>
-              
-            </div>
-            <button
-              className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
-            >
-              Book Instantly!
-            </button>
-          </div>
+            )}
+          </>
         )}
+        {currentStep === 2 && <GuestyPayment />}
       </div>
     </Modal>
   );
-}
+};
+
 export default BookingFormModal;
