@@ -1,206 +1,617 @@
 {
-  "status": 200,
-  "data": {
-    "days": [
-      {
-        "date": "2024-10-03",
-        "listingId": "6566109da55360001fa7ddcf",
-        "currency": "USD",
-        "price": 79,
-        "isBasePrice": true,
-        "minNights": 2,
-        "isBaseMinNights": true,
-        "status": "available",
-        "blocks": {
-          "m": false,
-          "r": false,
-          "b": false,
-          "bd": false,
-          "sr": false,
-          "abl": false,
-          "a": false,
-          "bw": false,
-          "o": false,
-          "pt": false
-        },
-        "blockRefs": [],
-        "cta": false,
-        "ctd": false,
-        "requestToBook": false,
-        "rulesApplied": [
-          {
-            "rule": "Oct 79/99",
-            "minNights": 2,
-            "adjustmentPercentage": 0
-          }
-        ]
-      },
-      {
-        "date": "2024-10-04",
-        "listingId": "6566109da55360001fa7ddcf",
-        "currency": "USD",
-        "price": 99,
-        "isBasePrice": true,
-        "minNights": 2,
-        "isBaseMinNights": true,
-        "status": "available",
-        "blocks": {
-          "m": false,
-          "r": false,
-          "b": false,
-          "bd": false,
-          "sr": false,
-          "abl": false,
-          "a": false,
-          "bw": false,
-          "o": false,
-          "pt": false
-        },
-        "blockRefs": [],
-        "cta": false,
-        "ctd": false,
-        "requestToBook": false,
-        "rulesApplied": [
-          {
-            "rule": "Oct 99/99",
-            "minNights": 2,
-            "adjustmentAbsolute": 20
-          }
-        ]
-      },
-      {
-        "date": "2024-10-05",
-        "listingId": "6566109da55360001fa7ddcf",
-        "currency": "USD",
-        "price": 99,
-        "isBasePrice": true,
-        "minNights": 2,
-        "isBaseMinNights": true,
-        "status": "available",
-        "blocks": {
-          "m": false,
-          "r": false,
-          "b": false,
-          "bd": false,
-          "sr": false,
-          "abl": false,
-          "a": false,
-          "bw": false,
-          "o": false,
-          "pt": false
-        },
-        "blockRefs": [],
-        "cta": false,
-        "ctd": false,
-        "requestToBook": false,
-        "rulesApplied": [
-          {
-            "rule": "Oct 99/99",
-            "minNights": 2,
-            "adjustmentAbsolute": 20
-          }
-        ]
-      },
-      {
-        "date": "2024-10-06",
-        "listingId": "6566109da55360001fa7ddcf",
-        "currency": "USD",
-        "price": 79,
-        "isBasePrice": true,
-        "minNights": 2,
-        "isBaseMinNights": true,
-        "status": "available",
-        "blocks": {
-          "m": false,
-          "r": false,
-          "b": false,
-          "bd": false,
-          "sr": false,
-          "abl": false,
-          "a": false,
-          "bw": false,
-          "o": false,
-          "pt": false
-        },
-        "blockRefs": [],
-        "cta": false,
-        "ctd": false,
-        "requestToBook": false,
-        "rulesApplied": [
-          {
-            "rule": "Oct 79/99",
-            "minNights": 2,
-            "adjustmentPercentage": 0
-          }
-        ]
-      },
-      {
-        "date": "2024-10-07",
-        "listingId": "6566109da55360001fa7ddcf",
-        "currency": "USD",
-        "price": 79,
-        "isBasePrice": true,
-        "minNights": 2,
-        "isBaseMinNights": true,
-        "status": "available",
-        "blocks": {
-          "m": false,
-          "r": false,
-          "b": false,
-          "bd": false,
-          "sr": false,
-          "abl": false,
-          "a": false,
-          "bw": false,
-          "o": false,
-          "pt": false
-        },
-        "blockRefs": [],
-        "cta": false,
-        "ctd": false,
-        "requestToBook": false,
-        "rulesApplied": [
-          {
-            "rule": "Oct 79/99",
-            "minNights": 2,
-            "adjustmentPercentage": 0
-          }
-        ]
-      },
-      {
-        "date": "2024-10-08",
-        "listingId": "6566109da55360001fa7ddcf",
-        "currency": "USD",
-        "price": 79,
-        "isBasePrice": true,
-        "minNights": 2,
-        "isBaseMinNights": true,
-        "status": "available",
-        "blocks": {
-          "m": false,
-          "r": false,
-          "b": false,
-          "bd": false,
-          "sr": false,
-          "abl": false,
-          "a": false,
-          "bw": false,
-          "o": false,
-          "pt": false
-        },
-        "blockRefs": [],
-        "cta": false,
-        "ctd": false,
-        "requestToBook": false,
-        "rulesApplied": [
-          {
-            "rule": "Oct 79/99",
-            "minNights": 2,
-            "adjustmentPercentage": 0
-          }
-        ]
-      }
-    ]
+  "_id": "6566a03d6cd8160019b3e9f9",
+  "SaaS": {
+    "autoRenew": true
   },
-  "message": "OK"
+  "cleaningStatus": {
+    "value": "dirty",
+    "updatedBy": "Guesty automation",
+    "updatedAt": "2024-05-08T20:48:55.282Z"
+  },
+  "picture": {
+    "caption": "",
+    "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/qlm5qwdqnbvxg1lnpzxi?_a=BAMCcSGi0"
+  },
+  "terms": {
+    "minNights": 30,
+    "maxNights": 365
+  },
+  "prices": {
+    "monthlyPriceFactor": 0.8,
+    "weeklyPriceFactor": 0.9,
+    "currency": "USD",
+    "basePrice": 89,
+    "weekendDays": [
+      5,
+      6
+    ],
+    "securityDepositFee": null,
+    "guestsIncludedInRegularFee": 1,
+    "extraPersonFee": 0,
+    "cleaningFee": 99,
+    "weekendBasePrice": null
+  },
+  "publicDescription": {
+    "summary": "1 Bedroom, 1 Bath condo in the Golf Colony neighborhood in Surfside Beach, 2nd floor. Great central location and close to all the Grand Strand has to offer: championship golf courses, excellent restaurants, entertainment, fishing, shopping, medical facilities, not too far from the Myrtle Beach International Airport, Marsh-Walk and the beautiful beaches of the Grand Strand. Use this as your vacation location at Surfside Beach!",
+    "space": "2nd floor (must climb stairs)  1 bedroom/1 bath condo. 1 king bed and pullout sofa in the living room\nWasher/dryer available in unit.\nKitchen is fully equipped with all basics (condiments are not available)\nDining area open to living room.\nSheets and linens provided.  \nFree WiFi and cable TV.\n*Pets are not allowed.\n*Beach items are not included due to damage/loss of these items.\n*Towels are provided for showers only.",
+    "access": "*The condo is rented in full. Guests have access to the entire place. Owners are not on the premises while guests are staying. \n* No mailbox for this location.\n*Pool access with access card only. There is a $50 charge for each lost or broken card.\n* motorcycles and trailers are not allowed on premises.",
+    "notes": "*No mailbox for this location.\n*Pool access card is documented before each stay.\n*Please review my house rules.\n*Pets are not allowed. \n*Only initial amount of toiletries, paper towel and toilet paper provided, guests should bring their own extras.\n*Bed sheets are provided (one set per bed)\n*Bath towels are included (one per guest, must not leave unit)\n*Bring your own beach towels (do not use bath towels)\n*condo is inspected prior to your arrival to make sure all is clean and working properly. please contact me immediately for any questions or concerns.",
+    "houseRules": "Please review the rules prior your after checking out. the guest must report on any issue immediately so that the host can try to resolve it quickly and efficiently. \n\n*YOU MUST BE 21 years old or older to book and check in. \n\n*If determined that a guest was smoking they will be fined an automatic fee of $500.\n\n*SMOKING IS FORBIDDEN in the apartment or balcony at any time. in case of any evidence of smoking or smoking odor in the condo, damage fee will be charged in full.\n\n*No mailbox for this location. Host is not responsible for any mail or packages delivery.\n\n*Please KEEP the QUIET TIME between 10pm-9am\n\n*NO hanging towels in the balcony.\n\n*Only initial amount of SOAPS and toiletries are provided. guests must bring their own extras if needed.\n\n*TOWELS provided for showering only, not for makeup remover, pool or beach use, or any other use.  Damage fee will be activated for stained or damaged towels, same goes for linens. If you need to wash them please do so, and please remember we are not a hotel and our supply is limited.\n\n*PETS ARE NOT ALLOWED.\n\n*Please be sure to throw out the TRASH before you check out.\n~~~~~~~~~~~~~~~~~~~~~~~~~\nWE APPRECIATE YOUR COOPERATION AND HOPE YOUR STAY WILL BE MEMORABLE!\n"
+  },
+  "privateDescription": {
+    "directions": ""
+  },
+  "pms": {
+    "automation": {
+      "answeringMachine": {
+        "confirmedBeforeCheckIn": {
+          "delayInMinutes": 45
+        },
+        "confirmedDayOfCheckIn": {
+          "delayInMinutes": 45
+        },
+        "confirmedDayOfCheckOut": {
+          "delayInMinutes": 45
+        },
+        "confirmedDuringStay": {
+          "delayInMinutes": 45
+        },
+        "confirmedAfterCheckOut": {
+          "delayInMinutes": 45
+        },
+        "unconfirmedFirstMessage": {
+          "delayInMinutes": 55
+        },
+        "unconfirmedSubsequentMessage": {
+          "delayInMinutes": 45
+        }
+      },
+      "hooks": {
+        "ignoredHooks": []
+      },
+      "calendarSmartRules": {
+        "blockListings": []
+      },
+      "autoReviews": {
+        "templates": [
+          "{{guest_first}} was a great guest and is recommended to all hosts!",
+          "{{guest_first}} were very good. Welcome to come back anytime.",
+          "{{guest_first}} were wonderful. I would definitely recommend them to other hosts.",
+          "It was a pleasure hosting {{guest_first}}. Would host them again for sure!",
+          "{{guest_first}} booked with us and were excellent guests. I can only recommend them and wish them the best :)"
+        ],
+        "starRating": 5,
+        "daysBeforeSending": 6,
+        "active": false
+      },
+      "autoPricing": {
+        "rules": []
+      }
+    },
+    "tasks": {
+      "defaultTasks": []
+    },
+    "autoPayments": {
+      "policy": [
+        {
+          "scheduleTo": {
+            "timeRelation": {
+              "relation": "AT",
+              "unit": "HOURS",
+              "amount": 1
+            },
+            "reservationEvent": "CONFIRMATION"
+          },
+          "_id": "65a5b68c545942000f65280d",
+          "chargeType": "PERCENTAGE",
+          "isAuthorizationHold": false,
+          "useGuestCard": true,
+          "amount": 30
+        },
+        {
+          "scheduleTo": {
+            "timeRelation": {
+              "relation": "BEFORE",
+              "unit": "DAYS",
+              "amount": 60
+            },
+            "reservationEvent": "CHECK_IN"
+          },
+          "_id": "65a5b68c545942000f65280e",
+          "chargeType": "PERCENTAGE",
+          "isAuthorizationHold": false,
+          "useGuestCard": true,
+          "amount": 30
+        },
+        {
+          "scheduleTo": {
+            "timeRelation": {
+              "relation": "BEFORE",
+              "unit": "DAYS",
+              "amount": 29
+            },
+            "reservationEvent": "CHECK_IN"
+          },
+          "_id": "66145e30cc1dd000a41ce4fd",
+          "chargeType": "REST_OF_PAYMENT",
+          "isAuthorizationHold": false,
+          "useGuestCard": true
+        }
+      ]
+    },
+    "cleaningStatus": {
+      "active": true
+    },
+    "active": true
+  },
+  "sales": {
+    "salesService": {
+      "atPhones": []
+    }
+  },
+  "receptionistsService": {
+    "receptionDesk": {
+      "atPhones": [],
+      "ittt": []
+    },
+    "screening": {
+      "checklist": []
+    }
+  },
+  "calendarRules": {
+    "defaultAvailability": "AVAILABLE",
+    "advanceNotice": {
+      "bookingCom": {
+        "isCutOffHoursEnabled": false,
+        "hours": 4
+      },
+      "expedia": {
+        "isCutOffHoursEnabled": false
+      },
+      "airbnb2": {
+        "isCutOffHoursEnabled": true
+      },
+      "directBookings": {
+        "isCutOffHoursEnabled": false
+      },
+      "defaultSettings": {
+        "hours": 4,
+        "allowRequestToBook": false
+      },
+      "updatedAt": "2024-05-03T14:36:49.336Z",
+      "updatedBy": "AuthService"
+    },
+    "bookingWindow": {
+      "defaultSettings": {
+        "days": 365
+      },
+      "updatedAt": "2024-05-03T14:36:49.336Z",
+      "updatedBy": "AuthService"
+    },
+    "preparationTime": {
+      "defaultSettings": {
+        "days": 0
+      },
+      "updatedAt": "2024-05-03T14:36:49.336Z",
+      "updatedBy": "AuthService"
+    },
+    "defaultAvailabilityUpdatedAt": "2024-05-03T14:36:49.336Z",
+    "rentalPeriods": [],
+    "nightsLimit": {
+      "2024": {
+        "limit": 1
+      },
+      "2025": {
+        "limit": 1
+      },
+      "active": false,
+      "defaultNightsLimit": 1,
+      "updatedBy": "kllucky33@gmail.com",
+      "updatedAt": "2024-05-03T14:36:49.074Z"
+    },
+    "defaultAvailabilityUpdatedBy": "AuthService"
+  },
+  "type": "SINGLE",
+  "tags": [
+    "MB",
+    "no bikes",
+    "2ndfloor",
+    "*MB*",
+    "Andrea",
+    "1BR"
+  ],
+  "owners": [
+    "655b88e5e869d6003302d5f6"
+  ],
+  "amenities": [
+    "Suitable for children (2-12 years)",
+    "Suitable for infants (under 2 years)",
+    "Stove",
+    "TV",
+    "Smoke detector",
+    "Dishwasher",
+    "Dryer",
+    "Coffee maker",
+    "Oven",
+    "Cookware",
+    "Wireless Internet",
+    "Microwave",
+    "Air conditioning",
+    "Hot water",
+    "Swimming pool",
+    "Hair dryer",
+    "Heating",
+    "Refrigerator",
+    "Free parking on premises",
+    "Washer",
+    "Kitchen",
+    "Iron",
+    "Bed linens",
+    "Long term stays allowed",
+    "Toaster",
+    "Towels provided",
+    "Hangers",
+    "Dishes and silverware"
+  ],
+  "amenitiesNotIncluded": [],
+  "useAccountRevenueShare": true,
+  "netIncomeFormula": "host_payout",
+  "commissionFormula": "net_income",
+  "ownerRevenueFormula": "net_income - pm_commission",
+  "useAccountAdditionalFees": true,
+  "taxes": [],
+  "useAccountTaxes": true,
+  "markups": {},
+  "useAccountMarkups": true,
+  "active": true,
+  "preBooking": [],
+  "nickname": "G8",
+  "title": "Golf colony amazing condo with pool",
+  "propertyType": "Condominium",
+  "roomType": "Entire home/apt",
+  "bedrooms": 1,
+  "bathrooms": 1,
+  "beds": 2,
+  "isListed": true,
+  "address": {
+    "street": "1881 Colony Drive",
+    "city": "Myrtle Beach",
+    "state": "South Carolina",
+    "zipcode": "29575",
+    "country": "United States of America",
+    "lat": 33.6267509,
+    "lng": -78.9829096,
+    "apt": "8G",
+    "full": "1881 Colony Drive 8G, Myrtle Beach, South Carolina 29575, United States of America"
+  },
+  "defaultCheckInTime": "16:00",
+  "defaultCheckInEndTime": "00:00",
+  "defaultCheckOutTime": "11:00",
+  "integrations": [
+    {
+      "bookingCom": {
+        "acceptedCreditCards": [],
+        "errors": [],
+        "initialComplexListing": false,
+        "publishCompanyLogo": false,
+        "isPublishedCompanyLogo": false,
+        "publishCompanyInfo": false,
+        "isPublishedCompanyInfo": false,
+        "taxInfo": []
+      },
+      "airbnb2": {
+        "id": "654998128179535512",
+        "instantBookingAllowedCategory": "everyone",
+        "bookingLeadTime": {
+          "hours": 4,
+          "allowRequestToBook": false
+        },
+        "maxDaysNotice": {
+          "days": 365,
+          "allowRequestToBook": false
+        },
+        "turnoverDays": 0,
+        "tier": "marketplace",
+        "syncCategory": "sync_all",
+        "syncCategoryUpdatedAt": "2023-11-29T02:21:37.599Z",
+        "cancellationPolicy": "strict_14_with_grace_period",
+        "cancellationPenaltyEnabled": false,
+        "daysOfWeekMinimumNights": [],
+        "promotions": [],
+        "permits": {
+          "regulations": [],
+          "lastUpdatedOn": "2023-11-29T02:22:00.713Z"
+        },
+        "status": "COMPLETED",
+        "approvalStatus": {
+          "status": "approved"
+        }
+      },
+      "platform": "airbnb2",
+      "externalUrl": "https://www.airbnb.com/rooms/654998128179535512",
+      "_id": "6565fc322aa335000f193d4f"
+    }
+  ],
+  "accommodates": 4,
+  "timezone": "America/New_York",
+  "pictures": [
+    {
+      "_id": "66270fc0d7a1b73fb24237dc",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835966/qlm5qwdqnbvxg1lnpzxi.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/qlm5qwdqnbvxg1lnpzxi?_a=BAMCcSGi0",
+      "height": 900,
+      "width": 1200,
+      "size": 103876
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237dd",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/o6x3tr4opy79n3za6lcs.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/o6x3tr4opy79n3za6lcs?_a=BAMCcSGi0",
+      "height": 900,
+      "width": 1200,
+      "size": 110976
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237de",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/s7xtz0smjrlu4xq8eotj.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/s7xtz0smjrlu4xq8eotj?_a=BAMCcSGi0",
+      "height": 900,
+      "width": 1200,
+      "size": 103871
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237df",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/ja9hijddbi7lib8at81j.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/ja9hijddbi7lib8at81j?_a=BAMCcSGi0",
+      "height": 1600,
+      "width": 1200,
+      "size": 104601
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e0",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/quswlhpin8lhqip4hldr.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/quswlhpin8lhqip4hldr?_a=BAMCcSGi0",
+      "height": 786,
+      "width": 1200,
+      "size": 185927
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e1",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/te24vmyquvei3u6navw7.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/te24vmyquvei3u6navw7?_a=BAMCcSGi0",
+      "height": 787,
+      "width": 1200,
+      "size": 163983
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e2",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/bs6o3dg36q6zywgtxdpg.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/bs6o3dg36q6zywgtxdpg?_a=BAMCcSGi0",
+      "height": 900,
+      "width": 1200,
+      "size": 93736
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e3",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835966/t8qydlujyc8miljpsai8.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/t8qydlujyc8miljpsai8?_a=BAMCcSGi0",
+      "height": 900,
+      "width": 1200,
+      "size": 86782
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e4",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/itpujjnwioypkinrtrgb.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/itpujjnwioypkinrtrgb?_a=BAMCcSGi0",
+      "height": 900,
+      "width": 1200,
+      "size": 102032
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e5",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/cnlmoex0vpcmnpueenhm.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/cnlmoex0vpcmnpueenhm?_a=BAMCcSGi0",
+      "height": 900,
+      "width": 1200,
+      "size": 92156
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e6",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/c1gepa9gjvqdiorjzpjc.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/c1gepa9gjvqdiorjzpjc?_a=BAMCcSGi0",
+      "height": 1600,
+      "width": 1200,
+      "size": 107341
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e7",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/zxrvpcv4ol5djncqgkkn.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/zxrvpcv4ol5djncqgkkn?_a=BAMCcSGi0",
+      "height": 1824,
+      "width": 1026,
+      "size": 39448
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e8",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/uxwsolxlzge4dvwt1nvi.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/uxwsolxlzge4dvwt1nvi?_a=BAMCcSGi0",
+      "height": 1824,
+      "width": 1026,
+      "size": 146805
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237e9",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/xst9mxcvygj88ln19y6k.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/xst9mxcvygj88ln19y6k?_a=BAMCcSGi0",
+      "height": 1824,
+      "width": 1026,
+      "size": 120345
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237ea",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/dmurol1nkyxoufv6sxjb.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/dmurol1nkyxoufv6sxjb?_a=BAMCcSGi0",
+      "height": 900,
+      "width": 1200,
+      "size": 147068
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237eb",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/cacgwss3widrbjlnnvnf.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/cacgwss3widrbjlnnvnf?_a=BAMCcSGi0",
+      "height": 1600,
+      "width": 1200,
+      "size": 193416
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237ec",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/twnwhufsby0ylnml9djr.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/twnwhufsby0ylnml9djr?_a=BAMCcSGi0",
+      "height": 1600,
+      "width": 1200,
+      "size": 182356
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237ed",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/suiq8pwj8x6cckugo1bx.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/suiq8pwj8x6cckugo1bx?_a=BAMCcSGi0",
+      "height": 792,
+      "width": 1200,
+      "size": 162839
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237ee",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835964/gaanvjezmd7zyrvoakli.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/gaanvjezmd7zyrvoakli?_a=BAMCcSGi0",
+      "height": 675,
+      "width": 1200,
+      "size": 156378
+    },
+    {
+      "_id": "66270fc0d7a1b73fb24237ef",
+      "caption": "",
+      "original": "https://assets.guesty.com/image/upload/v1713835965/ioiad0yzcsdxjeo3lq1q.jpg",
+      "thumbnail": "https://assets.guesty.com/image/upload/c_fit,h_200/ioiad0yzcsdxjeo3lq1q?_a=BAMCcSGi0",
+      "height": 793,
+      "width": 1200,
+      "size": 202871
+    }
+  ],
+  "accountId": "653b0f8d7e8982defafaaf5b",
+  "createdAt": "2023-11-29T02:21:49.399Z",
+  "lastUpdatedAt": "2024-07-16T19:23:01.897Z",
+  "pendingTasks": [],
+  "listingRooms": [
+    {
+      "_id": "66c34127dfc268cc55f29c27",
+      "roomNumber": 0,
+      "beds": [
+        {
+          "type": "SOFA_BED",
+          "quantity": 1
+        }
+      ],
+      "id": "200179751"
+    },
+    {
+      "_id": "66c34127dfc268cc55f29c28",
+      "roomNumber": 1,
+      "beds": [
+        {
+          "type": "KING_BED",
+          "quantity": 1
+        }
+      ],
+      "id": "200179705"
+    }
+  ],
+  "customFields": [
+    {
+      "_id": "6696c89537c06d000f0b7c8e",
+      "fieldId": "654d3f1771529200347b9abf",
+      "value": "*Please send an update about your arrival time so I can know that you’ve checked in easily.\n*Upon arrival please report immediately in case of any issue or malfunction so that I can repair it asap. \n*Smoking in the home is strictly prohibited. Any evidence of smoking will be accompanied by full damage fee charge. \n*Parking is limited, please inform how many vehicles are coming. \n*Pool access with access card only. Please keep this card safe and return to the condo before you leave. There’s a $50 fee for any lost/broken card.\n*Keep the quiet time after 10p.m. \n*Only an initial amount of soaps and paper products will be provided for you to get started and you’ll need to bring your own extras. \n*Kitchen is equipped with all basics. please report if any necessities are missing. \n*Towels are for bathing only, one towel for each guest. towels must not leave the house. Please use only special wipes for removing makeup. towels can be washed if needed. *Pets are not allowed.\n*The garbage bins located outside by the house.\n*Anytime after 4pm and before midnight is good for arrival. \n*The cleaners work very hard on cleanliness but mistakes happen so please report immediately if any correction required. Their busy schedule and overlapping guest arrivals requires guests checking out at 11am, every minute beyond 11am will be accompanied with $1 charge.\n*Before checking out Please take out the trash if you can and check you have all your belongings, there is a service fee of $10+shipping cost to retrieve the items and mail them back to you.\n*The house is treated by pest control company every month. If you notice any kind of insects please report immediately so we can repeat the treatment. Insects are common and cannot be 100% prevented, we do everything possible to prevent insects from penetrating the house.\n\n",
+      "fullText": "*Please send an update about your arrival time so I can know that you’ve checked in easily.\n*Upon arrival please report immediately in case of any issue or malfunction so that I can repair it asap. \n*Smoking in the home is strictly prohibited. Any evidence of smoking will be accompanied by full damage fee charge. \n*Parking is limited, please inform how many vehicles are coming. \n*Pool access with access card only. Please keep this card safe and return to the condo before you leave. There’s a $50 fee for any lost/broken card.\n*Keep the quiet time after 10p.m. \n*Only an initial amount of soaps and paper products will be provided for you to get started and you’ll need to bring your own extras. \n*Kitchen is equipped with all basics. please report if any necessities are missing. \n*Towels are for bathing only, one towel for each guest. towels must not leave the house. Please use only special wipes for removing makeup. towels can be washed if needed. *Pets are not allowed.\n*The garbage bins located outside by the house.\n*Anytime after 4pm and before midnight is good for arrival. \n*The cleaners work very hard on cleanliness but mistakes happen so please report immediately if any correction required. Their busy schedule and overlapping guest arrivals requires guests checking out at 11am, every minute beyond 11am will be accompanied with $1 charge.\n*Before checking out Please take out the trash if you can and check you have all your belongings, there is a service fee of $10+shipping cost to retrieve the items and mail them back to you.\n*The house is treated by pest control company every month. If you notice any kind of insects please report immediately so we can repeat the treatment. Insects are common and cannot be 100% prevented, we do everything possible to prevent insects from penetrating the house.\n\n"
+    },
+    {
+      "_id": "6696c89537c06d000f0b7c8f",
+      "fieldId": "654d3f4718bea0003a98f85c",
+      "value": "Wifi network: SpectrumSetup-50\nWiFi password: yellowsnail961\n\n"
+    },
+    {
+      "_id": "6696c89537c06d000f0b7c90",
+      "fieldId": "654d3f22df3140002b1757f4",
+      "value": "Before you leave please take the trash out  and lock the door behind you.\nNo need for any washing or laundry, the cleaning crew will be there by then and they will take care of it.\nPlease check you have all your belongings, there is a minimum charge of $15 to retrieve the items and mail them back to you.\n"
+    },
+    {
+      "_id": "6696c89537c06d000f0b7c91",
+      "fieldId": "654d3fae7a8de10045c3d2f0",
+      "value": "0321"
+    }
+  ],
+  "offeredServices": [],
+  "importedAt": "2023-11-29T02:21:49.399Z",
+  "occupancyStats": [],
+  "__v": 49,
+  "yieldManagement": {},
+  "hostName": "",
+  "houseManual": "",
+  "parkingInstructions": "",
+  "trashCollectedOn": "",
+  "wifiName": "SpectrumSetup-50",
+  "wifiPassword": "yellowsnail961",
+  "businessModel": {
+    "id": "65fa33af7c2853b9780346e7",
+    "name": "STD-10",
+    "activationDate": "2024-01-01T17:00:00.000Z",
+    "version": 4
+  },
+  "accountTaxes": [
+    {
+      "_id": "65675ab41bd3d617310b1ec1",
+      "type": "LOCAL_TAX",
+      "amount": 3,
+      "units": "PERCENTAGE",
+      "quantifier": "PER_STAY",
+      "appliedToAllFees": false,
+      "appliedOnFees": [
+        "AF"
+      ],
+      "isAppliedByDefault": false,
+      "appliedByDefaultOnChannels": [],
+      "__v": 0
+    },
+    {
+      "_id": "65675ab41bd3d617310b1ec2",
+      "type": "CITY_TAX",
+      "amount": 10,
+      "units": "PERCENTAGE",
+      "quantifier": "PER_STAY",
+      "appliedToAllFees": false,
+      "appliedOnFees": [
+        "AF"
+      ],
+      "isAppliedByDefault": false,
+      "appliedByDefaultOnChannels": [],
+      "__v": 0
+    }
+  ]
 }

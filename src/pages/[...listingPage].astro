@@ -7,10 +7,11 @@ import ReservationForm from '@components/ReservationForm'
 import GuestyListings from '@components/GuestyListings.astro'
 import InstantBooking from '@components/InstantBooking.tsx'
 import { fetchAllListings } from './api/dataFetcher';
+import fetchReviews from './api/listingReviews';
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
-
+  const reviews = await fetchReviews();
   const paths = listings.map((listing: any) => ({
     params: {
       listingPage: listing._id // Ensure this matches the requested path
@@ -24,7 +25,8 @@ export async function getStaticPaths() {
       Description: listing.publicDescription,
       listingId: listing._id,
       checkIn: listing.defaultCheckInTime,
-      checkOut: listing.defaultCheckOutTime
+      checkOut: listing.defaultCheckOutTime,
+      reviews: Array.isArray(reviews) ? reviews.filter((review: any) => review.listingId === listing._id) : [] // Filter reviews for the listing
     }
   }));
 
@@ -59,17 +61,19 @@ export async function get({ params }) {
     beds: listing.beds,
     listingId: listing._id,
     checkIn: listing.defaultCheckInTime,
-    checkOut: listing.defaultCheckOutTime
+    checkOut: listing.defaultCheckOutTime,
+    reviews: Array.isArray(reviews) ? reviews.filter((review: any) => review.listingId === listing._id) : [] // Filter reviews for the listing
   };
 }
 
-const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, checkIn, checkOut } = Astro.props;
+const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, checkIn, checkOut, reviews } = Astro.props;
 
-
+console.log(reviews);
 
 ---
 
 <Layout title="Property Details"> 
+
   <main id="PropertyDetails"> 
     <Section>
       <div class="w-full mx-auto max-w-full mt-12 px-8 xs:px-4">
@@ -137,7 +141,7 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                 
 
                 <!-- property content -->
-                <div class="relative" x-data="{ activeTab: 'tab-2' }">
+                <div class="relative" x-data="{ activeTab: 'tab-1' }">
                   <div class="tabs mb-6 flex text-base justify-between overflow-hidden overflow-x-auto">
                     <ul class="flex items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none">
                       <li :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
@@ -176,7 +180,7 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
 
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
-                    <div class="boxed-amenities flex flex-wrap justify-center gap-3">
+                    <div class="boxed-amenities flex flex-wrap justify-start gap-3">
                       <!-- Amenity -->
                       <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
                         <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
@@ -226,16 +230,6 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                           <p class="text-sm text-muted-400">Bathrooms</p>
                         </div>
                       </div>
-                      <!-- Amenity -->
-                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-                        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
-                          <Icon class="text-2xl h-6" name="lucide:car" />
-                          <span>2</span>
-                        </div>
-                        <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">Parking spots</p>
-                        </div>
-                      </div>
 
                       <!-- Amenity -->
                       <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
@@ -249,188 +243,149 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                       </div>
                     </div>
                   </div>
-                  <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
-                    <div class="relative">
-                      <div class="grid grid-cols-2 gap-6 max-w-xl">
-                        <!--Review-->
-                        <div class="relative">
-                          <div class="flex items-center justify-between max-w-xl">
-                            <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>Cleanliness</span>
-                            </div>
-                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                              <progress
-                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value="95"
-                                max="100"
-                              >
-                                98%
-                              </progress>
-                              <span class="ms-3 font-medium text-base text-muted-900">4.8</span>
-                            </div>
-                          </div>
-                        </div>
+<div x-cloak x-show="activeTab === 'tab-3'" class="relative">
+  {reviews.map((review: any) => (
+    <div class="relative">
+      <div class="grid grid-cols-2 gap-6 max-w-xl">
+        <!--Review-->
+        <div class="relative">
+          <div class="flex items-center justify-between max-w-xl">
+            <div class="text-base text-muted-700 dark:text-muted-200">
+              <span>{review.rawReview.category_ratings[0].category}</span>
+            </div>
+            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+              <progress
+                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                value={review.rawReview.category_ratings[0].rating}
+                max="5"
+              >
+                {review.rawReview.category_ratings[0].rating}
+              </progress>
+              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[0].rating}</span>
+            </div>
+          </div>
+        </div>
 
-                        <!--Review-->
-                        <div class="relative">
-                          <div class="flex items-center justify-between max-w-xl">
-                            <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>Amenities</span>
-                            </div>
-                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                              <progress
-                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value="88"
-                                max="100"
-                              >
-                                90%
-                              </progress>
-                              <span class="ms-3 font-medium text-base text-muted-900">4.5</span>
-                            </div>
-                          </div>
-                        </div>
-                        <!--Review-->
-                        <div class="relative">
-                          <div class="flex items-center justify-between max-w-xl">
-                            <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>Service</span>
-                            </div>
-                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                              <progress
-                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value="94"
-                                max="100"
-                              >
-                                94%
-                              </progress>
-                              <span class="ms-3 font-medium text-base text-muted-900">4.7</span>
-                            </div>
-                          </div>
-                        </div>
-                        <!--Review-->
-                        <div class="relative">
-                          <div class="flex items-center justify-between max-w-xl">
-                            <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>Location</span>
-                            </div>
-                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                              <progress
-                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value="90"
-                                max="100"
-                              >
-                                90%
-                              </progress>
-                              <span class="ms-3 font-medium text-base text-muted-900">4.6</span>
-                            </div>
-                          </div>
-                        </div>
-                        <!--Review-->
-                        <div class="relative">
-                          <div class="flex items-center justify-between max-w-xl">
-                            <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>Price</span>
-                            </div>
-                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                              <progress
-                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value="94"
-                                max="100"
-                              >
-                                94%
-                              </progress>
-                              <span class="ms-3 font-medium text-base text-muted-900">4.7</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="pt-16">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
-                          <!--Comment-->
-                          <div class="relative">
-                            <div class="gap-4 mb-6 flex items-center">
-                              <div class="meta">
-                                <h4 class="text-base font-semibold font-sans text-muted-900">Adam</h4>
-                                <span class="text-base text-muted-400">3 days ago</span>
-                              </div>
-                            </div>
-                            <p class="text-muted-700 dark:text-muted-200 text-sm">
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt. Non risu
-                              potius quam oratione eiciendum? Istic sum, inquit. Ita prorsus, inquam.
-                            </p>
-                          </div>
-                          <!--Comment-->
-                          <div class="relative">
-                            <div class="gap-4 mb-6 flex items-center">
-                              <div class="meta">
-                                <h4 class="text-base font-semibold font-sans text-muted-900">Moshe</h4>
-                                <span class="text-base text-muted-400">5 days ago</span>
-                              </div>
-                            </div>
-                            <p class="text-muted-700 dark:text-muted-200 text-sm">
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt.
-                            </p>
-                          </div>
-                          <!--Comment-->
-                          <div class="relative">
-                            <div class="gap-4 mb-6 flex items-center">
+        <!--Review-->
+        <div class="relative">
+          <div class="flex items-center justify-between max-w-xl">
+            <div class="text-base text-muted-700 dark:text-muted-200">
+              <span>{review.rawReview.category_ratings[1].category}</span>
+            </div>
+            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+              <progress
+                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                value={review.rawReview.category_ratings[1].rating}
+                max="5"
+              >
+                {review.rawReview.category_ratings[1].rating}
+              </progress>
+              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[1].rating}</span>
+            </div>
+          </div>
+        </div>
 
-                              <div class="meta">
-                                <h4 class="text-base font-semibold font-sans text-muted-900">Sharon</h4>
-                                <span class="text-base text-muted-400">a week ago</span>
-                              </div>
-                            </div>
-                            <p class="text-muted-700 dark:text-muted-200 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est.</p>
-                          </div>
-                          <!--Comment-->
-                          <div class="relative">
-                            <div class="gap-4 mb-6 flex items-center">
-                              <div class="meta">
-                                <h4 class="text-base font-semibold font-sans text-muted-900">Molly</h4>
-                                <span class="text-base text-muted-400">2 weeks ago</span>
-                              </div>
-                            </div>
-                            <p class="text-muted-700 dark:text-muted-200 text-sm">
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt. Non risu
-                              potius quam oratione eiciendum? Istic sum, inquit.
-                            </p>
-                          </div>
-                          <!--Comment-->
-                          <div class="relative">
-                            <div class="gap-4 mb-6 flex items-center">
-                              <div class="meta">
-                                <h4 class="text-base font-semibold font-sans text-muted-900">Rivka</h4>
-                                <span class="text-base text-muted-400">2 weeks ago</span>
-                              </div>
-                            </div>
-                            <p class="text-muted-700 dark:text-muted-200 text-sm">
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt.
-                            </p>
-                          </div>
-                          <!--Comment-->
-                          <div class="relative">
-                            <div class="gap-4 mb-6 flex items-center">
-                              <div class="meta">
-                                <h4 class="text-base font-semibold font-sans text-muted-900">Noah</h4>
-                                <span class="text-base text-muted-400">2 weeks ago</span>
-                              </div>
-                            </div>
-                            <p class="text-muted-700 dark:text-muted-200 text-sm">
-                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maximus dolor, inquit, brevis est. Comprehensum, quod cognitum non habet? Si longus, levis dictata sunt.
-                            </p>
-                          </div>
-                        </div>
-                        <div class="relatives-action mt-8">
-                          <button
-                            class="h-11 transition-all duration-300 text-sm rounded text-slate-100 bg-cyan-600 dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center dark:text-muted-400"
-                            >See all comments</button
-                          >
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+        <!--Review-->
+        <div class="relative">
+          <div class="flex items-center justify-between max-w-xl">
+            <div class="text-base text-muted-700 dark:text-muted-200">
+            <span>{review.rawReview.category_ratings[2].category}</span>
+            </div>
+            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+              <progress
+                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                value={review.rawReview.category_ratings[2].rating}
+                max="5"
+              >
+                {review.rawReview.category_ratings[2].rating}
+              </progress>
+              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[2].rating}</span>
+            </div>
+          </div>
+        </div>
+
+        <!--Review-->
+        <div class="relative">
+          <div class="flex items-center justify-between max-w-xl">
+            <div class="text-base text-muted-700 dark:text-muted-200">
+              <span>{review.rawReview.category_ratings[3].category}</span>
+            </div>
+            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+              <progress
+                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                value={review.rawReview.category_ratings[3].rating}
+                max="5"
+              >
+                {review.rawReview.category_ratings[3].rating}
+              </progress>
+              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[3].rating}</span>
+            </div>
+          </div>
+        </div>
+
+        <!--Review-->
+        <div class="relative">
+          <div class="flex items-center justify-between max-w-xl">
+            <div class="text-base text-muted-700 dark:text-muted-200">
+              <span>{review.rawReview.category_ratings[4].category}</span>
+            </div>
+            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+              <progress
+                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                value={review.rawReview.category_ratings[4].rating}
+                max="5"
+              >
+              {review.rawReview.category_ratings[4].rating}
+              </progress>
+              <span class="ms-3 font-medium text-base text-grey-900">{review.rawReview.category_ratings[4].rating}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="flex items-center justify-between max-w-xl">
+            <div class="text-base text-muted-700 dark:text-muted-200">
+              <span>{review.rawReview.category_ratings[5].category}</span>
+            </div>
+            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+              <progress
+                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                value={review.rawReview.category_ratings[5].rating}
+                max="5"
+              >
+                {review.rawReview.category_ratings[5].rating}
+              </progress>
+              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[5].rating}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pt-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
+          <div class="relative">
+            <div class="gap-4 mb-6 flex items-center">
+              <div class="meta">
+                <div>
+                  <h4 class="text-base font-semibold font-sans text-slate-950">{review.rawReview.public_review}</h4>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="relatives-action mt-8">
+          <button class="h-11 transition-all duration-300 text-sm rounded text-slate-100 bg-cyan-600 dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center dark:text-muted-400">
+            See all comments
+          </button>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+                </div>
+              </div>
+              
               <!-- right -->
               <div class="xs:min-w-full md:w-1/4 xs:flex flex-col items-center px-7">
                 <!-- <ChatBox conversationId={conversationId} client:load={true} /> -->

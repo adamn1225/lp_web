@@ -1,63 +1,60 @@
-// netlify/functions/available.js
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import path from 'path';
-import fs from 'fs';
+import fs from 'fs/promises';
 
 // Load environment variables
 dotenv.config();
 
 // Function to get Bearer token
-function getBearerToken() {
+async function getBearerToken() {
   if (process.env.NODE_ENV === 'development') {
     const TOKEN_FILE_PATH = path.resolve(process.cwd(), 'guesty_token.json');
-    const tokenData = fs.readFileSync(TOKEN_FILE_PATH, 'utf-8');
-    const { token } = JSON.parse(tokenData);
-    return token;
+    try {
+      const tokenData = await fs.readFile(TOKEN_FILE_PATH, 'utf-8');
+      const { token } = JSON.parse(tokenData);
+      return token;
+    } catch (error) {
+      console.error('Error reading token file:', error);
+      throw new Error('Failed to read token file');
+    }
   } else {
-    return process.env.VITE_API_TOKEN;
+    const token = process.env.VITE_API_TOKEN;
+    if (!token) {
+      throw new Error('VITE_API_TOKEN is not set');
+    }
+    return token;
   }
 }
 
-export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy } = event.queryStringParameters;
-  if (!checkIn || !checkOut || !minOccupancy) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Missing required query parameters: checkIn, checkOut, minOccupancy' }),
-    };
-  }
+const apiUrl = `https://open-api.guesty.com/v1/listings?limit=100&skip=101`;
 
-  const apiUrl = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
-  const token = getBearerToken();
-
+export async function handler(event, context) {
   try {
+    const token = await getBearerToken();
     const response = await fetch(apiUrl, {
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-      },
+        accept: 'application/json',
+        Authorization: `Bearer ${token}`
+      }
     });
-
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Guesty API error: ${errorText}`);
       return {
         statusCode: response.status,
-        body: JSON.stringify({ error: `Guesty API error: ${errorText}` }),
+        body: JSON.stringify({ error: `HTTP error! status: ${response.status}` })
       };
     }
-
     const data = await response.json();
+    console.log('Fetched data:', JSON.stringify(data, null, 2)); // Log the fetched data in a readable format
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     };
   } catch (error) {
-    console.error('Error fetching data from Guesty API:', error);
+    console.error(`Error fetching listings:`, error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch data from API' }),
+      body: JSON.stringify({ error: 'Failed to fetch listings' })
     };
   }
-};
+}
