@@ -68,8 +68,6 @@ export async function get({ params }) {
 
 const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, checkIn, checkOut, reviews } = Astro.props;
 
-console.log(reviews);
-
 ---
 
 <Layout title="Property Details"> 
@@ -244,144 +242,58 @@ console.log(reviews);
                     </div>
                   </div>
 <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
-  {reviews.map((review: any) => (
-    <div class="relative">
-      <div class="grid grid-cols-2 gap-6 max-w-xl">
-        <!--Review-->
-        <div class="relative">
-          <div class="flex items-center justify-between max-w-xl">
-            <div class="text-base text-muted-700 dark:text-muted-200">
-              <span>{review.rawReview.category_ratings[0].category}</span>
-            </div>
-            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-              <progress
-                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                value={review.rawReview.category_ratings[0].rating}
-                max="5"
-              >
-                {review.rawReview.category_ratings[0].rating}
-              </progress>
-              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[0].rating}</span>
-            </div>
-          </div>
+  {reviews && reviews.length > 0 ? (
+    reviews.map((review: any) => (
+      <div class="relative">
+        <div class="grid grid-cols-2 gap-6 max-w-xl">
+          {review.rawReview.category_ratings && review.rawReview.category_ratings.length > 0 ? (
+            review.rawReview.category_ratings.map((rating: any, index: number) => (
+              <div class="relative" key={index}>
+                <div class="flex items-center justify-between max-w-xl">
+                  <div class="text-base text-muted-700 dark:text-muted-200">
+                    <span>{rating.category}</span>
+                  </div>
+                  <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                    <progress
+                      class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                      value={rating.rating}
+                      max="5"
+                    >
+                      {rating.rating}
+                    </progress>
+                    <span class="ms-3 font-medium text-base text-muted-900">{rating.rating}</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No category ratings available</p>
+          )}
         </div>
 
-        <!--Review-->
-        <div class="relative">
-          <div class="flex items-center justify-between max-w-xl">
-            <div class="text-base text-muted-700 dark:text-muted-200">
-              <span>{review.rawReview.category_ratings[1].category}</span>
-            </div>
-            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-              <progress
-                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                value={review.rawReview.category_ratings[1].rating}
-                max="5"
-              >
-                {review.rawReview.category_ratings[1].rating}
-              </progress>
-              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[1].rating}</span>
-            </div>
-          </div>
-        </div>
-
-        <!--Review-->
-        <div class="relative">
-          <div class="flex items-center justify-between max-w-xl">
-            <div class="text-base text-muted-700 dark:text-muted-200">
-            <span>{review.rawReview.category_ratings[2].category}</span>
-            </div>
-            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-              <progress
-                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                value={review.rawReview.category_ratings[2].rating}
-                max="5"
-              >
-                {review.rawReview.category_ratings[2].rating}
-              </progress>
-              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[2].rating}</span>
-            </div>
-          </div>
-        </div>
-
-        <!--Review-->
-        <div class="relative">
-          <div class="flex items-center justify-between max-w-xl">
-            <div class="text-base text-muted-700 dark:text-muted-200">
-              <span>{review.rawReview.category_ratings[3].category}</span>
-            </div>
-            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-              <progress
-                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                value={review.rawReview.category_ratings[3].rating}
-                max="5"
-              >
-                {review.rawReview.category_ratings[3].rating}
-              </progress>
-              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[3].rating}</span>
-            </div>
-          </div>
-        </div>
-
-        <!--Review-->
-        <div class="relative">
-          <div class="flex items-center justify-between max-w-xl">
-            <div class="text-base text-muted-700 dark:text-muted-200">
-              <span>{review.rawReview.category_ratings[4].category}</span>
-            </div>
-            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-              <progress
-                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                value={review.rawReview.category_ratings[4].rating}
-                max="5"
-              >
-              {review.rawReview.category_ratings[4].rating}
-              </progress>
-              <span class="ms-3 font-medium text-base text-grey-900">{review.rawReview.category_ratings[4].rating}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="relative">
-          <div class="flex items-center justify-between max-w-xl">
-            <div class="text-base text-muted-700 dark:text-muted-200">
-              <span>{review.rawReview.category_ratings[5].category}</span>
-            </div>
-            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-              <progress
-                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                value={review.rawReview.category_ratings[5].rating}
-                max="5"
-              >
-                {review.rawReview.category_ratings[5].rating}
-              </progress>
-              <span class="ms-3 font-medium text-base text-muted-900">{review.rawReview.category_ratings[5].rating}</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="pt-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
-          <div class="relative">
-            <div class="gap-4 mb-6 flex items-center">
-              <div class="meta">
-                <div>
-                  <h4 class="text-base font-semibold font-sans text-slate-950">{review.rawReview.public_review}</h4>
+        <div class="pt-16">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
+            <div class="relative">
+              <div class="gap-4 mb-6 flex items-center">
+                <div class="meta">
+                  <div>
+                    <h4 class="text-base font-semibold font-sans text-slate-950">{review.rawReview.public_review}</h4>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="relatives-action mt-8">
-          <button class="h-11 transition-all duration-300 text-sm rounded text-slate-100 bg-cyan-600 dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center dark:text-muted-400">
-            See all comments
-          </button>
+          <div class="relatives-action mt-8">
+            <button class="h-11 transition-all duration-300 text-sm rounded text-slate-100 bg-cyan-600 dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center dark:text-muted-400">
+              See all comments
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  ))}
+    ))
+  ) : (
+    <p>No reviews available</p>
+  )}
 </div>
                 </div>
               </div>
