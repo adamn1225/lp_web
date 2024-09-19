@@ -248,7 +248,7 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
         <div class="grid grid-cols-2 gap-6 max-w-xl">
           {review.rawReview.category_ratings && review.rawReview.category_ratings.length > 0 ? (
             review.rawReview.category_ratings.map((rating: any, index: number) => (
-              <div class="relative" key={index}>
+              <div class="relative">
                 <div class="flex items-center justify-between max-w-xl">
                   <div class="text-base text-muted-700 dark:text-muted-200">
                     <span>{rating.category}</span>

@@ -48,7 +48,6 @@ export async function handler(event, context) {
     console.log('Fetched data:', JSON.stringify(data, null, 2)); // Log the fetched data in a readable format
     return {
       statusCode: 200,
-      body: JSON.stringify(data)
     };
   } catch (error) {
     console.error(`Error fetching listings:`, error);
