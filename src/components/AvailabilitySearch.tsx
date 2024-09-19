@@ -148,22 +148,22 @@ const AvailabilitySearch: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className="w-full flex align-middle justify-center h-full">
-                <button type="submit" className="flex align-middle justify-center h-full bg-cyan-600 m-0 md:w-4/5 w-full py-3 px-1 font-bold text-xl rounded-md text-slate-50">
-                  <Search size={24} /> <h3>Search properties</h3>
-                </button>
-              </div>
               <div className="flex gap-4 pt-2 flex-wrap justify-center items-end">
                 {tags.map((tag) => (
                   <button
                     key={tag}
                     type="button"
                     onClick={() => handleTagClick(tag)}
-                    className={`text-grey-950 font-semibold py-1 px-4 rounded-3xl bg-slate-300 w-full max-w-min text-nowrap ${selectedTags.includes(tag) ? 'bg-blue-500 text-cyan-600' : ''}`}
+                    className={`text-grey-950 font-semibold py-1 px-4 rounded-3xl w-full max-w-min text-nowrap ${selectedTags.includes(tag) ? 'bg-cyan-600 text-slate-300 drop-shadow-xl' : 'bg-slate-300 drop-shadow'}`}
                   >
                     {tag}
                   </button>
                 ))}
+              </div>
+              <div className="w-full flex align-middle justify-center h-full">
+                <button type="submit" className="flex align-middle justify-center h-full bg-cyan-600 m-0 md:w-4/5 w-full py-3 px-1 font-bold text-xl rounded-md text-slate-50">
+                  <Search size={24} /> <h3>Search properties</h3>
+                </button>
               </div>
             </div>
           </form>
