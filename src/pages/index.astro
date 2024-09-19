@@ -11,7 +11,6 @@ import Process from '@components/sections/Process.astro';
 import SideFeatureOne from '@components/sections/SideFeatureOne.astro';
 import SideFeatureTwo from '@components/sections/SideFeatureTwo.astro';
 import SideIllustrations from '@components/sections/SideIllustrations.astro';
-import LineCatagories from '@components/LineCatagories';
 
 const entries = await contentfulClient.getEntries<BlogPost>({
   content_type: "landingPageblog",
@@ -43,7 +42,7 @@ const posts = entries.items.map((item) => {
 </div>
         
         <h2 class="font-bold text-cyan-900 mb-4 mt-2 text-3xl text-center">Featured Listings</h2>
-        <!-- <LineCatagories client:load/> -->
+    
         
         <div class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             
