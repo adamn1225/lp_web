@@ -36,7 +36,7 @@ const AvailabilitySearch: React.FC = () => {
   const apiUrl = '/.netlify/functions/availability';
   const tagsApiUrl = '/.netlify/functions/tags'; // Netlify function endpoint for fetching tags
 
-  const allowedTags = ["ocean front", "Ocean view", "pool", "studio"];
+  const allowedTags = ["ocean front", "Ocean view", "pool", "studio", "Pets"];
 
   useEffect(() => {
     const fetchTags = async () => {
