@@ -2,47 +2,59 @@ import fetch from 'node-fetch';
 
 export const handler = async (event) => {
   try {
+    if (!event.body) {
+      throw new Error('Request body is missing');
+    }
+
     const reservationInfo = JSON.parse(event.body);
-    const url = 'https://booking.guesty.com/api/reservations';
+
+    // Log the parsed reservation info
+    console.log('Parsed reservation info:', JSON.stringify(reservationInfo, null, 2));
+
+    if (!process.env.VITE_API_TOKEN) {
+      throw new Error('VITE_API_TOKEN environment variable is not set');
+    }
+
+    const url = 'https://open-api.guesty.com/v1/reservations';
+    const requestBody = {
+      guest: {
+        firstName: reservationInfo.firstName,
+        lastName: reservationInfo.lastName,
+        phone: reservationInfo.phone,
+        email: reservationInfo.email,
+      },
+      listingId: reservationInfo.listingId,
+      checkInDateLocalized: reservationInfo.checkInDateLocalized,
+      checkOutDateLocalized: reservationInfo.checkOutDateLocalized,
+      status: 'confirmed',
+      guestsCount: reservationInfo.guestsCount
+    };
+
+    // Log the request body before making the API call
+    console.log('Request Body:', JSON.stringify(requestBody, null, 2));
+
     const options = {
       method: 'POST',
       headers: {
-        accept: 'application/json; charset=utf-8',
+        accept: 'application/json',
         'content-type': 'application/json',
-        authorization: `Bearer ${process.env.GUESTY_BOOKING_API}` // Use the new API token from the environment variable
+        authorization: `Bearer ${process.env.VITE_API_TOKEN}`
       },
-      body: JSON.stringify({
-        reservation: {
-          listingId: reservationInfo.listingId,
-          checkInDateLocalized: reservationInfo.checkInDateLocalized,
-          checkOutDateLocalized: reservationInfo.checkOutDateLocalized,
-          guestsCount: reservationInfo.guestsCount
-        },
-        guest: {
-          firstName: reservationInfo.firstName,
-          lastName: reservationInfo.lastName
-        },
-        policy: {
-          privacy: {
-            isAccepted: true,
-            version: 1,
-            dateOfAcceptance: new Date().toISOString()
-          },
-          termsAndConditions: {
-            isAccepted: true,
-            version: 1,
-            dateOfAcceptance: new Date().toISOString()
-          }
-        }
-      })
+      body: JSON.stringify(requestBody)
     };
 
+    console.log('Request URL:', url);
+    console.log('Request Headers:', JSON.stringify(options.headers, null, 2));
+
     const response = await fetch(url, options);
-    const data = await response.json();
+    const responseText = await response.text(); // Get the response text
+    console.log('Response text:', responseText); // Log the response text
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.status} ${response.statusText} - ${JSON.stringify(data)}`);
+      throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
     }
+
+    const data = JSON.parse(responseText); // Parse the response text as JSON
 
     return {
       statusCode: 200,

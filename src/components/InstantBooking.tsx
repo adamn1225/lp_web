@@ -143,6 +143,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
         listingId={listingId}
         occupancy={occupancy}
         setOccupancy={setOccupancy}
+        taxes={0}
       />
     </div>
   );

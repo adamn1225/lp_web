@@ -1,0 +1,67 @@
+{
+  "_id": "66ec95843543d20013036378",
+  "money": {
+    "payments": [
+      {
+        "paymentMethodStatus": "ACTIVE",
+        "isAuthorizationHold": false,
+        "status": "SUCCEEDED",
+        "_id": "66ec964fc95548fe7ad1e657",
+        "paymentMethodId": "58a1931c85e33bd55ec5c8c4",
+        "isSecurityDeposit": false,
+        "chargebacksData": {
+          "chargebacks": []
+        },
+        "refunds": [],
+        "amount": 100,
+        "currency": "USD",
+        "shouldBePaidAt": "2024-09-19T21:23:27.511Z",
+        "paidAt": "2024-09-19T21:23:27.511Z",
+        "receiptId": 140164757,
+        "attempts": [],
+        "createdAt": "2024-09-19T21:23:27.816Z",
+        "authorizationHoldCaptures": [],
+        "receiptTargets": [],
+        "guestId": "563e0b6a08a2710e00057b82",
+        "guest": {
+          "_id": "563e0b6a08a2710e00057b82",
+          "fullName": ""
+        },
+        "paymentMethod": {
+          "_id": "58a1931c85e33bd55ec5c8c4",
+          "method": "DEBIT"
+        }
+      },
+      {
+        "paymentMethodStatus": "ACTIVE",
+        "isAuthorizationHold": false,
+        "status": "SUCCEEDED",
+        "_id": "66ec96fbe31740161ed4fb95",
+        "paymentMethodId": "58a1931c85e33bd55ec5c8c4",
+        "isSecurityDeposit": false,
+        "chargebacksData": {
+          "chargebacks": []
+        },
+        "refunds": [],
+        "amount": 10,
+        "currency": "USD",
+        "shouldBePaidAt": "2024-09-19T21:26:19.822Z",
+        "paidAt": "2024-09-19T21:26:19.822Z",
+        "receiptId": 140164760,
+        "attempts": [],
+        "createdAt": "2024-09-19T21:26:19.858Z",
+        "authorizationHoldCaptures": [],
+        "receiptTargets": [],
+        "guestId": "563e0b6a08a2710e00057b82",
+        "guest": {
+          "_id": "563e0b6a08a2710e00057b82",
+          "fullName": ""
+        },
+        "paymentMethod": {
+          "_id": "58a1931c85e33bd55ec5c8c4",
+          "method": "DEBIT"
+        }
+      }
+    ]
+  }
+}

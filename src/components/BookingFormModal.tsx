@@ -1,6 +1,7 @@
-import { set } from "date-fns";
-import React, { useState, useEffect } from "react";
-import Modal from "react-modal";
+import React, { useState, useEffect } from 'react';
+import Modal from 'react-modal';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import { loadScript } from '@guestyorg/tokenization-js';
 import type { GuestyTokenizationNamespace, GuestyTokenizationRenderOptions } from '@guestyorg/tokenization-js';
 
@@ -16,6 +17,7 @@ interface BookingFormModalProps {
   listingId: string;
   occupancy: number;
   setOccupancy: (maxOccupancy: number) => void;
+  taxes: number;
 }
 
 const BookingFormModal: React.FC<BookingFormModalProps> = ({
@@ -30,6 +32,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   listingId,
   occupancy,
   setOccupancy,
+  taxes,
 }) => {
   const [basePrice, setBasePrice] = useState<number>(0);
   const [weeklyPriceFactor, setWeeklyPriceFactor] = useState<number>(1);
@@ -41,7 +44,16 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [cityTax, setCityTax] = useState<number>(0);
   const [localTax, setLocalTax] = useState<number>(0);
   const [accommodates, setAccommodates] = useState<number>(0);
-  const [currentStep, setCurrentStep] = useState<number>(1); // State to track the current step
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [beforeTax, setBeforeTax] = useState<number>(0);
+  const [maintenanceFee, setMaintenanceFee] = useState<number>(0);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [reservationId, setReservationId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -85,9 +97,11 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         const petPrice = pets > 0 ? petFee : 0;
         const totalPrice = stayPrice + cleaningFee + petPrice;
         const taxes = (cityTax + localTax) * 0.01;
+        const beforeTax = totalPrice * taxes;
         const afterTax = totalPrice + (totalPrice * taxes);
         console.log('Calculated afterTax:', afterTax);
         setCalculatedPrice(afterTax);
+        setBeforeTax(beforeTax);
       } catch (error) {
         console.error('Error fetching pricing data:', error);
       }
@@ -111,13 +125,15 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
 
       const guestPrice = 0;
       const petPrice = pets > 0 ? petFee : 0;
-      const totalPrice = stayPrice + cleaningFee + petPrice;
+      const maintenanceFee = 20;
+      const totalPrice = stayPrice + cleaningFee + petPrice + maintenanceFee;
       const taxes = (cityTax + localTax) * 0.01;
       const afterTax = totalPrice + (totalPrice * taxes);
       console.log('Calculated afterTax in second useEffect:', afterTax);
       setCalculatedPrice(afterTax);
+      setMaintenanceFee(maintenanceFee);
     }
-  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, pets, cityTax, localTax]);
+  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, pets, cityTax, localTax, beforeTax, maintenanceFee]);
 
   const handleGuestsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
@@ -127,6 +143,48 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       alert(`The maximum number of guests allowed is ${accommodates}.`);
     }
   };
+
+  const createReservation = async () => {
+    try {
+      setLoading(true);
+      const reservationInfo = {
+        listingId,
+        checkInDateLocalized: dateRange[0].startDate?.toISOString().slice(0, 10),
+        checkOutDateLocalized: dateRange[0].endDate?.toISOString().slice(0, 10),
+        guestsCount: guests,
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: ''
+      };
+
+
+      console.log('Creating reservation with info:', reservationInfo); // Log the reservation info
+
+      const response = await fetch('/.netlify/functions/createReservations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reservationInfo)
+      });
+      
+
+      const responseText = await response.text(); // Get the response text
+      console.log('Response text:', responseText); // Log the response text
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
+      }
+
+      const data = await response.json();
+      return { status: response.status, data };
+    } catch (error) {
+      console.error('Error creating reservation:', error);
+      return { status: 500, error };
+    }
+  };
+
 
   const GuestyPayment = () => {
     const [isFormValid, setIsFormValid] = useState(false);
@@ -183,6 +241,21 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     );
   };
 
+  const handleProceedToPayment = async () => {
+    try {
+      const response = await createReservation();
+      if (response.status >= 400 && response.status < 600) {
+        console.error('Reservation creation failed:', response);
+        // Handle error (e.g., show an error message to the user)
+        return;
+      }
+      setCurrentStep(2);
+    } catch (error) {
+      console.error('Error creating reservation:', error);
+      // Handle error (e.g., show an error message to the user)
+    }
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -190,7 +263,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       contentLabel="Booking Form"
       className="bg-white px-4 rounded-lg drop-shadow-2xl shadow-lg w-full max-w-lg"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-      appElement={document.getElementById('Top')!} 
+      appElement={document.getElementById('Top')!}
     >
       <div className="relative py-8 flex flex-col h-full text-slate-800 font-semibold text-lg">
         <button
@@ -201,8 +274,10 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         </button>
         {currentStep === 1 && (
           <>
-            <form className="flex flex-col justify-center items-center">
+            <form onSubmit={(e) => { e.preventDefault(); createReservation(); }} className="flex flex-col justify-center items-center">
               <div>
+                <h2 className="text-slate-800 text-3xl mb-4 underline">Book Instantly</h2>
+                <h2 className="text-slate-800 text-xl mb-4 underline">Fill out the form below and reserve the date</h2>
                 <div className="mb-4">
                   <label htmlFor="guests" className="block text-slate-800">Number of Guests</label>
                   <input
@@ -221,9 +296,56 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     id="pets"
                     value={pets}
                     onChange={(e) => setPets(Number(e.target.value))}
-                    className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
+                    className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
                     min="0"
                   />
+                </div>
+                <div className="mb-4 flex gap-4 w-full">
+                  <label htmlFor="firstName" className="text-slate-800">First Name
+                    <input
+                      type="text"
+                      id="firstName"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="mt-1 w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
+                      placeholder="Enter your first name"
+                    />
+                  </label>
+
+                  <label htmlFor="lastName" className="text-slate-800">Last Name
+                    <input
+                      type="text"
+                      id="lastName"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="mt-1 w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
+                      placeholder="Enter your last name"
+                    />
+                  </label>
+                </div>
+                <div className="mb-4 flex gap-4">
+                  <label htmlFor="email" className="block text-slate-800">Email
+                    <input
+                      type="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
+                      placeholder="email@address.com"
+                    />
+                  </label>
+
+                  <label htmlFor="phone" className="block text-slate-800">
+                    Phone
+                    <PhoneInput
+                      id="phone"
+                      value={phone}
+                      onChange={setPhone}
+                      className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
+                      defaultCountry="US"
+                      placeholder="(---) --- ----"
+                    />
+                  </label>
                 </div>
               </div>
             </form>
@@ -240,6 +362,14 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     <p><strong>Cleaning Fee:</strong></p>
                     <p>${cleaningFee.toFixed(2)}</p>
                   </div>
+                  <div className="flex justify-between">
+                    <p><strong>Taxes:</strong></p>
+                    <p>${beforeTax.toFixed(2)}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p><strong>Maintenance Fee:</strong></p>
+                    <p>${maintenanceFee.toFixed(2)}</p>
+                  </div>
                   <div className='border border-x-0 border-y-1 border-slate-800 my-2'> </div>
                   <div className="flex justify-between">
                     <p><strong>Total Price:</strong></p>
@@ -248,7 +378,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 </div>
                 <button
                   className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
-                  onClick={() => setCurrentStep(2)} // Move to the next step
+                  type="button"
+                  onClick={handleProceedToPayment} disabled={loading} // Combine createReservation and move to the next step
                 >
                   Proceed to Payment
                 </button>
