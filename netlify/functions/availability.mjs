@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 export const handler = async (event, context) => {
   // console.log('Received event:', event);
 
-  const { checkIn, checkOut, minOccupancy } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, tags } = event.queryStringParameters;
 
   if (!checkIn || !checkOut || !minOccupancy) {
     console.error('Missing required query parameters:', { checkIn, checkOut, minOccupancy });
@@ -17,7 +17,15 @@ export const handler = async (event, context) => {
     };
   }
 
-  const apiUrl = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
+  // Construct the API URL with the required parameters
+  let apiUrl = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
+
+  // Append tags to the API URL if they exist
+  if (tags) {
+    const tagsArray = Array.isArray(tags) ? tags : [tags];
+    const tagsQuery = tagsArray.map(tag => `tags=${encodeURIComponent(tag)}`).join('&');
+    apiUrl += `&${tagsQuery}`;
+  }
 
   try {
     const startTime = Date.now();

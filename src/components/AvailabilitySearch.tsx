@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { addDays } from "date-fns";
 
@@ -30,8 +30,37 @@ const AvailabilitySearch: React.FC = () => {
   const [available, setListings] = useState<Listing[]>([]);
   const [checkInDate, setCheckInDate] = useState<string>(new Date().toISOString().slice(0, 10));
   const [checkOutDate, setCheckOutDate] = useState<string>(addDays(new Date(), 7).toISOString().slice(0, 10));
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
 
   const apiUrl = '/.netlify/functions/availability';
+  const tagsApiUrl = '/.netlify/functions/tags'; // Netlify function endpoint for fetching tags
+
+  const allowedTags = ["ocean front", "Ocean view", "pool", "studio"];
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await fetch(tagsApiUrl);
+        const data = await response.json();
+        console.log('Fetched tags:', data); // Log the fetched tags
+        const filteredTags = data.filter((tag: string) => allowedTags.includes(tag));
+        setTags(filteredTags); // Set only the allowed tags
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+      }
+    };
+
+    fetchTags();
+  }, []);
+
+  const handleTagClick = (tag: string) => {
+    setSelectedTags((prevSelected) =>
+      prevSelected.includes(tag)
+        ? prevSelected.filter((t) => t !== tag)
+        : [...prevSelected, tag]
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,9 +68,11 @@ const AvailabilitySearch: React.FC = () => {
     setError('');
 
     try {
-      console.log('API URL:', `${apiUrl}?checkIn=${encodeURIComponent(checkInDate)}&checkOut=${encodeURIComponent(checkOutDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}`);
+      const tagsQuery = selectedTags.map(tag => `tags=${encodeURIComponent(tag)}`).join('&');
+      const url = `${apiUrl}?checkIn=${encodeURIComponent(checkInDate)}&checkOut=${encodeURIComponent(checkOutDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&${tagsQuery}`;
+      console.log('API URL:', url);
 
-      const response = await fetch(`${apiUrl}?checkIn=${encodeURIComponent(checkInDate)}&checkOut=${encodeURIComponent(checkOutDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}`, {
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -122,12 +153,23 @@ const AvailabilitySearch: React.FC = () => {
                   <Search size={24} /> <h3>Search properties</h3>
                 </button>
               </div>
-
+              <div className="flex gap-4 pt-2 flex-wrap justify-center items-end">
+                {tags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => handleTagClick(tag)}
+                    className={`text-grey-950 font-semibold py-1 px-4 rounded-3xl bg-slate-300 w-full max-w-min text-nowrap ${selectedTags.includes(tag) ? 'bg-blue-500 text-cyan-600' : ''}`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
             </div>
           </form>
         </div>
       </div>
-      <div className="bg-stone-50  w-full h-full overflow-auto">
+      <div className="bg-stone-50 w-full h-full overflow-auto">
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
         {available.length > 0 && (
