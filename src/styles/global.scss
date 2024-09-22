@@ -52,6 +52,59 @@ body {
   /* Push the text upwards */
 }
 
+        .swiper-button-next,
+        .swiper-button-prev {
+          color: #d86c6c;
+          /* Change this to the desired color */
+          font-weight: 900;
+          width: 55px;
+          height: 55px;
+          /* Optional: Add background for better visibility */
+          border-radius: 50%;
+          /* Optional: Make the buttons circular */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          top: 25%;
+          transform: translateY(-50%);
+          z-index: 10;
+        }
+    
+        .swiper-button-next {
+          right: 10px;
+        }
+    
+        .swiper-button-prev {
+          left: 10px;
+        }
+    
+        .swiper-pagination {
+          position: absolute;
+          top: 33%;
+          /* Adjust this value to position the dots correctly */
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 10;
+        }
+    
+        .swiper-container .swiper-pagination .swiper-pagination-bullet {
+          background: #d86c6c !important;
+          /* Change this to the desired color */
+        }
+    
+        .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
+          background: #d86c6c !important;
+          /* Change this to the desired color */
+        }
+
+article {
+  border-radius: 1.5rem;
+  /* Equivalent to rounded-3xl */
+  overflow: hidden;
+  /* Ensure child elements respect the border-radius */
+}
+
 .hover\:pop-out-right:hover {
   transform: scaleX(1) skewY(2deg);
   /* Scale and skew the button on hover */
