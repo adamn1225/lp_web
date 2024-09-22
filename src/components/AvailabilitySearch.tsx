@@ -138,11 +138,11 @@ const AvailabilitySearch: React.FC = () => {
                       id="checkOutDate"
                     />
                   </div>
-                <div className="w-4/5 flex flex-col">
+                <div className="w-3/5 flex flex-col">
                   <label htmlFor="minOccupancy" className="text-slate-800 font-semibold max-w-min text-nowrap">
                     How many guests?
                   </label>
-                  <div className="flex">
+                  <div className="flex w-full">
                     <button
                       type="button"
                       id="decrement-button"
