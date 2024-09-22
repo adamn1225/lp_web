@@ -117,15 +117,32 @@ import WhatsAppButton from '@components/WhatsAppButton.tsx';
         })
       })
     </script>
-      <script is:inline>
+<script is:inline>
 document.getElementById("showHide").onclick = function() {
     var theDiv = document.getElementById("listing2");
-    if (theDiv.style.display == 'none') {
+    var doorText = this.querySelector(".door-text");
+    if (theDiv.style.display == 'none' || theDiv.style.display === '') {
         theDiv.style.display = 'grid';
-        this.innerHTML = 'Show Less';
+        doorText.innerHTML = 'Show Less';
     } else {
         theDiv.style.display = 'none';
-        this.innerHTML = 'Search through more of our listings';
+        doorText.innerHTML = 'Enter through here to see more listings';
+    }
+}
+</script>
+
+<script is:inline>
+document.getElementById("showHide").onclick = function() {
+    var theDiv = document.getElementById("listing2");
+    var doorText = this.querySelector(".door-text");
+    if (theDiv.style.display == 'none' || theDiv.style.display === '') {
+        theDiv.style.display = 'grid';
+        doorText.innerHTML = 'Show Less';
+        this.classList.add('opened'); // Add the 'opened' class
+    } else {
+        theDiv.style.display = 'none';
+        doorText.innerHTML = 'More Listings Here';
+        this.classList.remove('opened'); // Remove the 'opened' class
     }
 }
 </script>

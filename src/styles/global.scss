@@ -7,18 +7,121 @@ html {
   overflow-x: hidden;
 }
 
-p, h1, h2, h3, h4, h5, h6, a, li {
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+li {
   margin: 0;
-  font-family: sans-serif
+  font-family: sans-serif;
 }
 
 body {
-  @apply h-full flex flex-col;
+  @apply bg-slate-100;
   font-family: "Roboto Flex", sans-serif;
   max-width: 100% !important;
   overflow-x: hidden;
 }
 
+.door-shape {
+  border-radius: 1.5rem 1.5rem 0 0;
+  /* Rounded top corners */
+  height: 300px;
+  /* Adjust height as needed */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 100px;
+  transform-origin: left;
+    /* Set the origin of the transformation to the left side */
+  transition: transform 0.3s ease-out;
+}
+
+.door-text {
+  margin-bottom: auto;
+  margin-right: 20px;
+  margin-left: 4px;
+  text-align: justify;
+  /* Push the text upwards */
+}
+
+.hover\:pop-out-right:hover {
+  transform: scaleX(1) skewY(2deg);
+  /* Scale and skew the button on hover */
+}
+
+.opened {
+  transform: scaleX(1) skewY(2deg);
+  /* Keep the button transformed when clicked */
+}
+
+// @keyframes pop-in-right {
+//   0% {
+//     transform: translateX(100%);
+//     opacity: 0;
+//   }
+
+//   100% {
+//     transform: translateX(0);
+//     opacity: 1;
+//   }
+// }
+
+// .animate-pop-in-right {
+//   animation: pop-in-right 0.5s ease-out forwards;
+// }
+
+.welcome-mat {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d86c6c;
+  /* Tailwind's bg-gray-100 */
+  border-radius: 0 0 1rem 1rem;
+  /* Rounded bottom corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow */
+  width: 80%;
+  /* Make the mat wider */
+  max-width: 280px;
+  /* Limit the maximum width */
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  transform: skew(-10deg);
+  /* Skew the mat */
+}
+
+.welcome-mat__content {
+  text-align: center;
+  transform: skew(10deg);
+  /* Unskew the content */
+}
+
+
+
+.welcome-mat__content__inner__text {
+  color: #1e293b;
+  /* Tailwind's text-slate-900 */
+}
+
+/* global.scss */
+[x-cloak] {
+  display: none !important;
+}
+
+.custom-date-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #06b6d4;
+  /* cyan-600 */
+}
 
 /* global.scss */
 [x-cloak] {
@@ -53,6 +156,17 @@ body {
 
 .react-datepicker__day--today {
   font-weight: bold;
+}
+
+.custom-number-input::-webkit-outer-spin-button,
+.custom-number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.custom-number-input {
+  -moz-appearance: textfield;
+  /* Firefox */
 }
 
 /* customDateRange.css */

@@ -44,6 +44,7 @@ module.exports = {
         success: colors.green,
         warning: colors.amber,
         danger: colors.rose,
+        secondary: '#d86c6c',
       },
       animation: {
         gelatine: 'gelatine 600ms both',

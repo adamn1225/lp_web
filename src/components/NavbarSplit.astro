@@ -4,6 +4,7 @@ import Logo from './ui/Logo.astro'
 import MegaMenu from './ui/MegaMenu.astro'
 import AccountMenu from './ui/AccountMenu.astro'
 import PropertySearch from '@components/ReservatonDateForm'
+import '../styles/global.scss'
 ---
 
 <div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full z-50 bg-slate-50 border-slate-100">
@@ -14,7 +15,7 @@ import PropertySearch from '@components/ReservatonDateForm'
   <header id="MainHeader" class=" min-h-[70px] w-full max-w-full px-3 mx-auto flex = shadow lg:shadow-md lg:px-8">
     <div class="flex justify-between lg:justify-start w-full lg:w-auto min-h-[3.25rem]">
       <a href="/" class="flex gap-4 py-2">
-        <img src="/images/lp-temp.svg" alt="logo" class="h-auto w-44" />
+        <img src="/images/lp-temp.svg" alt="logo" class="h-auto w-56" />
       </a>
 
         <div class="flex items-stretch gap-3">
@@ -71,20 +72,20 @@ import PropertySearch from '@components/ReservatonDateForm'
             </li>
            -->
            <li>
-            <a href="/properties" class="hover:text-cyan-600 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400  dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1">
-              <span>All Properties</span>
+            <a href="/properties" class="py-2 px-3  group text-base text-muted-500 transition-all duration-300 flex items-center justify-center gap-1">
+              <span class="text-2xl text-cyan-900 hover:text-secondary">All Properties</span>
             </a>
             </li>
 
             <li>
             <a href="/contact" class="hover:text-cyan-600 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400  dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1">
-              <span>Contact Us</span>
+              <span class="text-2xl text-cyan-900 hover:text-secondary">Contact Us</span>
             </a>
             </li>
           <template x-if="$store.app.isLoggedIn === false">
             <li>
               <a href="#" class="hover:text-cyan-600 py-2 leading-6 text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300">
-                <span>Vacation Guides</span>
+                <span class="text-2xl text-cyan-900 hover:text-secondary">Vacation Guides</span>
               </a>
             </li>
           </template>

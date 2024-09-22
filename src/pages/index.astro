@@ -29,34 +29,51 @@ const posts = entries.items.map((item) => {
 ---
 
 <Layout title="Properties">
-  <main id="Properties">
+<main>
+  <Section>
     <!--Properties-->
-    <Section>
 
-<div class="md:bg-[url('/images/lp-temp.svg')] h-full bg-auto bg-stone-200 xs:pt-36 md:pt-64 bg-no-repeat md:bg-left-quarter md:px-24 px-3">
-    <h1 class="font-bold text-cyan-900 mb-4 text-3xl text-center">Find your perfect vacation rental</h1>
-    <p class="text-center text-slate-500">Book your next vacation rental with us. We offer a wide selection of vacation rentals in the most popular destinations. </p>
-    <div class="flex flex-row justify-center align-middle h-full w-full md:mb-20 mt-5">
-        <AvailabilitySearch client:only />
-    </div>
+<div class="relative flex flex-col justify-center items-center bg-[url('https://assets.guesty.com/image/upload/v1713834676/kop5uviux1z7u9ywluaj.jpg')] bg-blend-overlay h-full w-full bg-cover bg-neutral-950/50 xs:pt-36 md:min-h-[1100px] bg-center bg-no-repeat md:px-24 px-3">
+
+  <div class="h-full w-full">
+      <AvailabilitySearch client:only />
+  </div>
+
+  <div class="absolute bottom-0 left-0 w-full h-0 border-t-[50px] border-t-transparent border-l-[50vw] border-l-transparent border-r-[50vw] border-r-transparent border-b-[200px] border-b-slate-200"></div>
 </div>
+
         
-        <h2 class="font-bold text-cyan-900 mb-4 mt-2 text-3xl text-center">Featured Listings</h2>
-    
-        
-        <div class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            
-          <GuestyListings />
-          
+
+
+<div class="bg-slate-200 ">
+  <div class="bg-white">
+    <h2 class="font-bold text-cyan-900 m-0 bg-slate-200 text-5xl pb-12 text-center">Featured Listings</h2>
+    <div class="pb-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 mx-16 my-0 bg-slate-200  gap-6">
+      <GuestyListings />
+    </div>
+      <span class="flex bg-slate-200 mx-16 justify-center  h-full py-8 align-center">
+  <button id="showHide" class="relative w-64 ml-8 top-0 text-2xl font-extrabold bg-secondary pb-2 drop-shadow-2xl shadow-black text-slate-100 door-shape">
+    <span class="door-text">More Listings Here</span>
+    <div class="absolute top-1/2 right-2 transform -translate-y-1/2 w-6 h-6 bg-slate-100 rounded-full"></div>
+  </button>
+      </span>
+    <div class="pt-7 w-full bg-white">
+      <span id="listing2" class="hidden py-3 px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <Page2 />
+      </span>
+
+      <!-- <div class="welcome-mat">
+        <div class="welcome-mat__content">
+          <div class="welcome-mat__content__inner">
+            <div class="welcome-mat__content__inner__text">
+              <h2 class="font-bold text-cyan-900 mb-12 pt-8 text-3xl text-center">Welcome</h2>
+            </div>
+          </div>
         </div>
-        <div class="mt-7">
-          <span id="listing2" class="hidden py-3 px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            <Page2 />
-          </span>
-          <span class="flex justify-center align-center mb-8">
-            <button id="showHide" class="bg-cyan-600 px-6 py-2 shadow-md shadow-cyan-500/30 rounded-3xl text-white mt-6"> Search through more of our listings </button>
-          </span>
-        </div>
+      </div> -->
+    </div>
+  </div>
+</div>
 
         <div class="md:mb-12 mt-20">
           <SideIllustrations />
