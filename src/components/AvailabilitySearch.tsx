@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import '../styles/global.scss';
 import { addDays } from "date-fns";
 
 interface Listing {
@@ -28,8 +31,8 @@ const AvailabilitySearch: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
-  const [checkInDate, setCheckInDate] = useState<string>(new Date().toISOString().slice(0, 10));
-  const [checkOutDate, setCheckOutDate] = useState<string>(addDays(new Date(), 7).toISOString().slice(0, 10));
+  const [checkInDate, setCheckInDate] = useState<Date | null>(new Date());
+  const [checkOutDate, setCheckOutDate] = useState<Date | null>(addDays(new Date(), 7));
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
 
@@ -69,7 +72,7 @@ const AvailabilitySearch: React.FC = () => {
 
     try {
       const tagsQuery = selectedTags.map(tag => `tags=${encodeURIComponent(tag)}`).join('&');
-      const url = `${apiUrl}?checkIn=${encodeURIComponent(checkInDate)}&checkOut=${encodeURIComponent(checkOutDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&${tagsQuery}`;
+      const url = `${apiUrl}?checkIn=${encodeURIComponent(checkInDate?.toISOString().slice(0, 10) || '')}&checkOut=${encodeURIComponent(checkOutDate?.toISOString().slice(0, 10) || '')}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&${tagsQuery}`;
       console.log('API URL:', url);
 
       const response = await fetch(url, {
@@ -116,38 +119,62 @@ const AvailabilitySearch: React.FC = () => {
         <div className="flex flex-row justify-center align-middle h-full w-full md:mb-16">
           <form onSubmit={handleSubmit} className="w-full max-w-3xl bg-slate-100 p-6 rounded-lg shadow-lg">
             <div className="flex flex-col gap-3 items-center justify-center">
-              <div className="flex flex-col md:flex-row justify-center items-center gap-2">
-                <div>
-                  <label className="text-slate-800 font-semibold" htmlFor="checkInDate">Check-In Date:</label>
-                  <input
-                    type="date"
-                    id="checkInDate"
-                    value={checkInDate}
-                    onChange={(e) => setCheckInDate(e.target.value)}
-                    className="border rounded-md p-2 w-full"
-                  />
-                </div>
-                <div>
-                  <label className="text-slate-800 font-semibold" htmlFor="checkOutDate">Check-Out Date:</label>
-                  <input
-                    type="date"
-                    id="checkOutDate"
-                    value={checkOutDate}
-                    onChange={(e) => setCheckOutDate(e.target.value)}
-                    className="border rounded-md p-2 w-full"
-                  />
-                </div>
-                <div>
-                  <label className="text-slate-800 font-semibold" htmlFor="minOccupancy">How many guests?</label>
-                  <input
-                    type="number"
-                    id="minOccupancy"
-                    value={minOccupancy}
-                    onChange={(e) => setMinOccupancy(parseInt(e.target.value))}
-                    className="border rounded-md p-2 w-full"
-                  />
-                </div>
+              <div className="flex sm:flex-col md:flex-row justify-center items-center gap-4 w-full">
+                  <div className="w-full flex flex-col">
+                    <label className="text-slate-800 font-semibold" htmlFor="checkInDate">Check-In Date:</label>
+                    <DatePicker
+                      selected={checkInDate}
+                      onChange={(date: Date | null) => setCheckInDate(date)}
+                      className="border rounded-md p-2 w-full custom-date-input"
+                      id="checkInDate"
+                    />
+                  </div>
+                <div className="w-full flex flex-col">
+                    <label className="text-slate-800 font-semibold" htmlFor="checkOutDate">Check-Out Date:</label>
+                    <DatePicker
+                      selected={checkOutDate}
+                      onChange={(date: Date | null) => setCheckOutDate(date)}
+                      className="border rounded-md p-2 w-full custom-date-input"
+                      id="checkOutDate"
+                    />
+                  </div>
+                <div className="w-4/5 flex flex-col">
+                  <label htmlFor="minOccupancy" className="text-slate-800 font-semibold max-w-min text-nowrap">
+                    How many guests?
+                  </label>
+                  <div className="flex">
+                    <button
+                      type="button"
+                      id="decrement-button"
+                      onClick={() => setMinOccupancy(minOccupancy > 0 ? minOccupancy - 1 : 0)}
+                      className="bg-cyan-600 border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
+                    >
+                      <svg className="w-3 h-3 text-slate-50" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                      </svg>
+                    </button>
+                    <input
+                      type="number"
+                      id="minOccupancy"
+                      value={minOccupancy}
+                      onChange={(e) => setMinOccupancy(parseInt(e.target.value))}
+                      className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2.5"
+                      placeholder="0"
+                      required
+                    />
+                    <button
+                      type="button"
+                      id="increment-button"
+                      onClick={() => setMinOccupancy(minOccupancy + 1)}
+                      className="bg-cyan-600 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
+                    >
+                      <svg className="w-3 h-3 text-slate-50" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                      </svg>
+                    </button>
+                  </div>
               </div>
+            </div>
               <div className="flex gap-4 pt-2 flex-wrap justify-center items-end">
                 {tags.map((tag) => (
                   <button
@@ -160,8 +187,12 @@ const AvailabilitySearch: React.FC = () => {
                   </button>
                 ))}
               </div>
-              <div className="w-full flex align-middle justify-center h-full">
-                <button type="submit" className="flex align-middle justify-center h-full bg-cyan-600 m-0 md:w-4/5 w-full py-3 px-1 font-bold text-xl rounded-md text-slate-50">
+              <div className="w-full flex align-middle justify-center h-full gap-4">
+                <button className="text-grey-950 drop-shadow-xl bg-slate-300 font-semibold py-1 px-4 rounded-md w-full max-w-min text-nowrap">
+                  Advanced Search
+                  </button>
+                
+                <button type="submit" className="flex align-middle drop-shadow-xl justify-center h-full bg-cyan-600 m-0 md:w-4/5 w-full py-3 px-1 font-bold text-xl rounded-md text-slate-50">
                   <Search size={24} /> <h3>Search properties</h3>
                 </button>
               </div>

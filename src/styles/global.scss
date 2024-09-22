@@ -25,6 +25,36 @@ body {
   display: none !important;
 }
 
+.custom-date-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #06b6d4;
+  /* cyan-600 */
+}
+
+.custom-date-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.5) sepia(1) saturate(5) hue-rotate(180deg);
+}
+
+.custom-date-input::selection {
+  background: #06b6d4;
+  /* cyan-600 */
+  color: white;
+}
+
+/* Custom styles for react-datepicker */
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range,
+.react-datepicker__day--keyboard-selected {
+  background-color: #06b6d4 !important;
+  /* cyan-600 */
+  color: white !important;
+}
+
+.react-datepicker__day--today {
+  font-weight: bold;
+}
+
 /* customDateRange.css */
 .rdrCalendarWrapper .rdrDay span.rdrStartEdge,
 .rdrCalendarWrapper .rdrDay span.rdrEndEdge,
