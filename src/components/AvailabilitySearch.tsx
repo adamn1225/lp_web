@@ -115,15 +115,15 @@ const AvailabilitySearch: React.FC = () => {
 
   return (
     <div className="static w-full h-full flex flex-col justify-center items-center gap-2">
-        <h1 className="font-extrabold text-secondary mb-4 text-5xl text-center">Find your perfect vacation rental</h1>
-      <h2 className="text-center text-slate-50 font-bold pb-2 text-3xl  text-wrap w-1/2">Book your next vacation rental with us. We offer a wide selection of vacation rentals in the most popular destinations.</h2>
-        <div className="flex flex-row justify-center align-middle h-full w-full md:mb-16">
+        <h1 className="font-extrabold text-secondary mb-4 text-3xl md:text-5xl text-center">Find your perfect vacation rental</h1>
+      <h2 className="text-center text-slate-50 font-bold pb-2 text-xl md:text-3xl text-wrap md:w-1/2">Book your next vacation rental with us. We offer a wide selection of vacation rentals in the most popular destinations.</h2>
+        <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full md:mb-16">
 
-          <form onSubmit={handleSubmit} className="w-full flex flex-col justify-center max-w-6xl min-h-72 bg-slate-100 px-6 rounded-3xl shadow-2xl">
+          <form onSubmit={handleSubmit} className="w-full z-50 xs:py-5 flex flex-col justify-center max-w-6xl min-h-72 bg-slate-100 px-6 rounded-3xl shadow-2xl">
 
 
             <div className="flex flex-col gap-3 items-center justify-center w-full">
-              <div className="flex sm:flex-col md:flex-row justify-center items-center gap-4 w-full">
+              <div className="flex xs:flex-col md:flex-row justify-center items-center gap-4 w-full">
                   <div className="w-full flex flex-col">
                     <label className="text-slate-800 font-semibold" htmlFor="checkInDate">Check-In Date:</label>
                     <DatePicker
@@ -191,12 +191,12 @@ const AvailabilitySearch: React.FC = () => {
                   </button>
                 ))}
               </div>
-              <div className="w-2/3 flex align-middle justify-center h-full mt-4 gap-4">
+              <div className="md:w-2/3 flex align-middle justify-center h-full mt-4 gap-4">
               {/* <button className="text-grey-950 shadow-lg shadow-secondary/40 bg-slate-300 font-semibold py-1 px-4 rounded-md w-full max-w-min text-nowrap">
                   Advanced Search
                   </button> */}
                 
-                <button type="submit" className="flex align-middle  shadow-lg shadow-secondary/40 justify-center h-full bg-cyan-600 m-0 md:w-4/5 w-full py-3 px-1 font-bold text-xl rounded-md text-slate-50">
+              <button type="submit" className="flex items-stretch shadow-lg shadow-secondary/40 justify-stretch text-nowrap md:justify-center h-full bg-cyan-600 m-0 w-full md:w-4/5  py-3 px-1 font-bold text-xl rounded-md text-slate-50">
                   <Search size={24} /> <h3>Search properties</h3>
                 </button>
               </div>

@@ -70,7 +70,7 @@ const featured: Listing[] = await fetchFeaturedListings();
 
 {featured.map(({ bedrooms, pictures, title, address, bathrooms, prices, _id }) => (
   
-    <article class="flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative">
+    <article class="flex flex-col bg-white xs:m-0 xs:w-full shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative">
       <div class="swiper-container">
         <div class="swiper-wrapper">
           {pictures.slice(0, 3).map((picture, index) => (
@@ -89,7 +89,7 @@ const featured: Listing[] = await fetchFeaturedListings();
         <div class="swiper-button-prev"></div>
       </div>
       <a href={_id} id={_id}>
-      <div class="p-5 bg-white flex flex-col justify-start h-2/3">
+      <div class="xs:p-4 w-full md:p-5 bg-white flex flex-col justify-start h-2/3">
         <div class="min-h-[100px]">
           <h4 class="font-sans text-wrap font-medium text-xl text-slate-900">{title}</h4>
           <h3 class="font-sans font-light text-xl text-slate-900">${prices.basePrice}/ Day</h3>
