@@ -154,10 +154,10 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         checkInDateLocalized: dateRange[0].startDate?.toISOString().slice(0, 10),
         checkOutDateLocalized: dateRange[0].endDate?.toISOString().slice(0, 10),
         guestsCount: guests,
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: ''
+        firstName,
+        lastName,
+        phone,
+        email
       };
 
       console.log('Creating reservation with info:', reservationInfo); // Log the reservation info
@@ -194,57 +194,65 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     }
   };
 
-  const GuestyPayment = () => {
+  const GuestyPayment = ({ calculatedPrice }) => {
     const [isFormValid, setIsFormValid] = useState(false);
+    const [guestyTokenization, setGuestyTokenization] = useState<GuestyTokenizationNamespace | null>(null);
 
     useEffect(() => {
       const initializeGuestyTokenization = async () => {
-        const options: GuestyTokenizationRenderOptions = {
-          containerId: 'payment-container',
-          providerId: '65667fb19986e2000e99278f', // Replace with your actual valid provider ID
-          amount: calculatedPrice, // Replace with the actual amount
-          currency: 'USD', // Replace with the actual currency
-          onStatusChange: (isValid) => {
-            setIsFormValid(isValid);
-            console.log('Form validity changed:', isValid);
-          },
-        };
+        try {
+          const guestyTokenization = await loadScript();
+          setGuestyTokenization(guestyTokenization);
 
-        console.log('Loading Guesty Tokenization JS SDK...');
-        loadScript()
-          .then((guestyTokenization: GuestyTokenizationNamespace) => {
-            console.log('Guesty Tokenization JS SDK loaded:', guestyTokenization);
+          const options: GuestyTokenizationRenderOptions = {
+            containerId: 'guesty-tokenization-container',
+            providerId: '65667fb19986e2000e99278f', // Replace with your actual valid provider ID
+            amount: calculatedPrice, // Replace with the actual amount
+            currency: 'USD', // Replace with the actual currency
+            onStatusChange: (isValid) => {
+              setIsFormValid(isValid);
+              console.log('Form validity changed:', isValid);
+            },
+          };
 
-            const container = document.getElementById(options.containerId);
-            if (!container) {
-              console.error(`Container with id ${options.containerId} not found.`);
-              return;
-            }
-
-            guestyTokenization.render(options);
-            console.log('Guesty Tokenization JS SDK initialized with options:', options);
-          })
-          .catch((error) => {
-            if (error.response) {
-              console.error('Error response:', error.response);
-            } else if (error.request) {
-              console.error('Error request:', error.request);
-            }
-            console.error('Error message:', error.message);
-            console.error('Failed to load the Guesty Tokenization JS SDK script', error);
-          });
+          console.log('Loading Guesty Tokenization JS SDK...');
+          await guestyTokenization.render(options);
+          console.log('Guesty Tokenization JS SDK initialized with options:', options);
+        } catch (error) {
+          console.error('Failed to load the Guesty Tokenization JS SDK script', error);
+        }
       };
 
       initializeGuestyTokenization();
     }, [calculatedPrice]);
 
+    const handleSubmit = async () => {
+      if (guestyTokenization) {
+        try {
+          const paymentMethod = await guestyTokenization.submit();
+          console.log('Payment method:', paymentMethod);
+          // Process payment method via Guesty's API
+        } catch (error) {
+          console.error('Failed to submit the Guesty Tokenization form', error);
+        }
+      }
+    };
+
     return (
       <div className="h-full w-full md:px-2">
-        <div id="payment-container"></div>
+        <div id="guesty-tokenization-container"></div>
         <div className="flex justify-between mt-4">
           <p><strong>Total Price:</strong></p>
           <p className="text-cyan-950 font-bold">${calculatedPrice !== null ? calculatedPrice.toFixed(2) : '0.00'}</p>
         </div>
+        <button
+          className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+          type="button"
+          onClick={handleSubmit}
+          disabled={!isFormValid}
+        >
+          Submit Payment
+        </button>
       </div>
     );
   };
@@ -263,6 +271,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       setErrorMessage(error.responseText || 'An error occurred while creating the reservation.');
     }
   };
+
+
 
   return (
     <Modal
@@ -395,7 +405,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
             )}
           </>
         )}
-        {currentStep === 2 && <GuestyPayment />}
+        {currentStep === 2 && <GuestyPayment calculatedPrice={calculatedPrice} />}
       </div>
       {errorMessage && (
         <Alert message={errorMessage} onClose={() => setErrorMessage(null)} />
