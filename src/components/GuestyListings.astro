@@ -69,7 +69,7 @@ const featured: Listing[] = await fetchFeaturedListings();
 </head>
 
 {featured.map(({ bedrooms, pictures, title, address, bathrooms, prices, _id }) => (
-  
+    <a href={_id}> 
     <article class="flex flex-col bg-white xs:m-0 xs:w-full shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative">
       <div class="swiper-container">
         <div class="swiper-wrapper">
@@ -88,7 +88,7 @@ const featured: Listing[] = await fetchFeaturedListings();
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
       </div>
-      <a href={_id} id={_id}>
+    
       <div class="xs:p-4 w-full md:p-5 bg-white flex flex-col justify-start h-2/3">
         <div class="min-h-[100px]">
           <h4 class="font-sans text-wrap font-medium text-xl text-slate-900">{title}</h4>
@@ -124,7 +124,7 @@ const featured: Listing[] = await fetchFeaturedListings();
           </div>
         </div>
         <div class="flex min-h-min flex-row justify-center align-bottom">
-          <button class="lp-button mt-4">View Details</button>
+     <button class="lp-button mt-4">  View Details</button>
         </div>
       </div>
     </article>

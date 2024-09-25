@@ -64,7 +64,7 @@ export const handler = async (event) => {
     console.error('Error creating reservation:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message })
+      body: JSON.stringify({ message: error.responseText || error.message })
     };
   }
 };

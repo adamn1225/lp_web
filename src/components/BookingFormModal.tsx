@@ -4,6 +4,7 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { loadScript } from '@guestyorg/tokenization-js';
 import type { GuestyTokenizationNamespace, GuestyTokenizationRenderOptions } from '@guestyorg/tokenization-js';
+import Alert from './Alert';
 
 interface BookingFormModalProps {
   isModalOpen: boolean;
@@ -54,6 +55,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [reservationId, setReservationId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -158,7 +160,6 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         email: ''
       };
 
-
       console.log('Creating reservation with info:', reservationInfo); // Log the reservation info
 
       const response = await fetch('/.netlify/functions/createReservations', {
@@ -168,23 +169,30 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         },
         body: JSON.stringify(reservationInfo)
       });
-      
 
       const responseText = await response.text(); // Get the response text
       console.log('Response text:', responseText); // Log the response text
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
+        let errorMessage = responseText;
+        try {
+          const errorData = JSON.parse(responseText); // Parse the response text as JSON
+          errorMessage = errorData.message || `Error: ${response.statusText}`;
+        } catch (e) {
+          console.error('Failed to parse error response as JSON:', e);
+        }
+        throw new Error(errorMessage);
       }
 
-      const data = await response.json();
+      const data = JSON.parse(responseText); // Parse the response text as JSON
       return { status: response.status, data };
     } catch (error) {
       console.error('Error creating reservation:', error);
-      return { status: 500, error };
+      return { status: 500, error: error.message || 'An error occurred while creating the reservation.' };
+    } finally {
+      setLoading(false);
     }
   };
-
 
   const GuestyPayment = () => {
     const [isFormValid, setIsFormValid] = useState(false);
@@ -246,13 +254,13 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       const response = await createReservation();
       if (response.status >= 400 && response.status < 600) {
         console.error('Reservation creation failed:', response);
-        // Handle error (e.g., show an error message to the user)
+        setErrorMessage(response.error);
         return;
       }
       setCurrentStep(2);
     } catch (error) {
       console.error('Error creating reservation:', error);
-      // Handle error (e.g., show an error message to the user)
+      setErrorMessage(error.responseText || 'An error occurred while creating the reservation.');
     }
   };
 
@@ -389,6 +397,9 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         )}
         {currentStep === 2 && <GuestyPayment />}
       </div>
+      {errorMessage && (
+        <Alert message={errorMessage} onClose={() => setErrorMessage(null)} />
+      )}
     </Modal>
   );
 };
