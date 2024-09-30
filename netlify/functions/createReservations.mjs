@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 export const handler = async (event) => {
   try {
-    const { guestInfo, paymentMethod } = JSON.parse(event.body);
+    const { guestInfo, paymentMethod, listingId, checkInDate, checkOutDate } = JSON.parse(event.body);
 
     console.log('Parsed guest info:', JSON.stringify(guestInfo, null, 2));
     console.log('Parsed payment method:', JSON.stringify(paymentMethod, null, 2));
@@ -12,7 +12,7 @@ export const handler = async (event) => {
     }
 
     // Create guest
-    const guestUrl = `${process.env.BASE_URL}guests-crud`;
+    const guestUrl = 'https://open-api.guesty.com/v1/guests-crud';
     const guestRequestBody = {
       firstName: guestInfo.firstName,
       lastName: guestInfo.lastName,
@@ -46,38 +46,49 @@ export const handler = async (event) => {
     const guestData = JSON.parse(guestResponseText);
     console.log('Guest created:', guestData);
 
-    // Tokenize payment
-    const tokenizationUrl = 'https://pay.guesty.com/api/tokenize/v2';
-    const tokenizationPayload = {
+    // Create reservation
+    const reservationUrl = 'https://open-api.guesty.com/v1/reservations';
+    const reservationRequestBody = {
+      listingId,
+      checkInDateLocalized: checkInDate,
+      checkOutDateLocalized: checkOutDate,
+      status: 'inquiry',
+      guestId: guestData._id,
       paymentMethod,
     };
 
-    console.log('Tokenization Payload:', JSON.stringify(tokenizationPayload, null, 2));
+    console.log('Reservation Request Body:', JSON.stringify(reservationRequestBody, null, 2));
 
-    const tokenizationResponse = await fetch(tokenizationUrl, {
+    const reservationOptions = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        accept: 'application/json',
+        'content-type': 'application/json',
+        authorization: `Bearer ${process.env.VITE_API_TOKEN}`
       },
-      body: JSON.stringify(tokenizationPayload)
-    });
+      body: JSON.stringify(reservationRequestBody)
+    };
 
-    const tokenizationResponseText = await tokenizationResponse.text();
-    console.log('Tokenization Response text:', tokenizationResponseText);
+    console.log('Reservation Request URL:', reservationUrl);
+    console.log('Reservation Request Headers:', JSON.stringify(reservationOptions.headers, null, 2));
 
-    if (!tokenizationResponse.ok) {
-      throw new Error(`Error: ${tokenizationResponse.status} ${tokenizationResponse.statusText} - ${tokenizationResponseText}`);
+    const reservationResponse = await fetch(reservationUrl, reservationOptions);
+    const reservationResponseText = await reservationResponse.text();
+    console.log('Reservation Response text:', reservationResponseText);
+
+    if (!reservationResponse.ok) {
+      throw new Error(`Error: ${reservationResponse.status} ${reservationResponse.statusText} - ${reservationResponseText}`);
     }
 
-    const tokenizationData = JSON.parse(tokenizationResponseText);
-    console.log('Tokenization successful:', tokenizationData);
+    const reservationData = JSON.parse(reservationResponseText);
+    console.log('Reservation created:', reservationData);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ guestData, tokenizationData })
+      body: JSON.stringify({ guestData, reservationData })
     };
   } catch (error) {
-    console.error('Error creating guest or tokenizing payment:', error);
+    console.error('Error creating guest or reservation:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message })

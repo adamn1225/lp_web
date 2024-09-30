@@ -194,19 +194,26 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       email,
     };
 
+    const reservationDetails = {
+      listingId,
+      checkInDate: dateRange[0].startDate.toISOString().slice(0, 10),
+      checkOutDate: dateRange[0].endDate.toISOString().slice(0, 10),
+    };
+
     console.log('Parsed guest info:', JSON.stringify(guestInfo, null, 2));
+    console.log('Parsed reservation details:', JSON.stringify(reservationDetails, null, 2));
 
     try {
       // Tokenize payment
       const paymentMethod = await guestyTokenization?.submit();
       console.log('Payment Method:', paymentMethod);
 
-      const response = await fetch('/.netlify/functions/createReservationAndTokenizePayment', {
+      const response = await fetch('/.netlify/functions/createReservations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ guestInfo, paymentMethod })
+        body: JSON.stringify({ guestInfo, paymentMethod, ...reservationDetails })
       });
 
       const responseText = await response.text();

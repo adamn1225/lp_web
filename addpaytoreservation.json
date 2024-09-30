@@ -1,21 +1,449 @@
-{"integration":{"limitations":{"availableStatuses":[]},"bookingCom":{"invalidCreditCards":[],"reports":[]},"_id":"654d588b55b5bb003b0ecf37","platform":"manual","object":{"airbnb":{"ignored":{"listings":[],"reservations":[]},"importCalendars":true},"rentalsUnited":{"ignored":{"listings":[],"reservations":[]},"cleaningFeeIncludedInNightlyPrice":{"agoda":true,"bookingCom":false,"canadaStays":true,"despegar":true,"expedia":true,"homeAway":true,"hostelworld":true}},"bookingCom":{"ignored":{"listings":[],"reservations":[]}},"homeAway":{"ignored":{"listings":[],"reservations":[]}},"homeaway2":{"ignored":{"listings":[]}},"agoda":{"ignored":{"listings":[],"reservations":[]}},"tripAdvisor":{"ignored":{"listings":[],"reservations":[]}},"_id":"654d588b55b5bb003b0ecf37","platform":"manual","active":true,"incomingEmail":"LinepropertiesInc-75ad2@user.guesty.com","createdAt":"2023-11-09T22:09:15.429Z","createAt":"2023-11-09T22:09:15.429Z","package":"Pro"}},"review":{"shouldReview":true},"atTimeOfConfirmation":{"snapshotCreated":true,"monthlyPriceFactor":0.8,"weeklyPriceFactor":0.9,"taxes":[{"appliedOnFees":["AF"],"appliedByDefaultOnChannels":[],"_id":"65675ab41bd3d617310b1ec1","type":"LOCAL_TAX","amount":3,"units":"PERCENTAGE","quantifier":"PER_STAY","appliedToAllFees":false,"isAppliedByDefault":false},{"appliedOnFees":["AF"],"appliedByDefaultOnChannels":[],"_id":"65675ab41bd3d617310b1ec2","type":"CITY_TAX","amount":10,"units":"PERCENTAGE","quantifier":"PER_STAY","appliedToAllFees":false,"isAppliedByDefault":false}],"channelCommission":{"useAccountSettings":true,"_id":"66f418e0a52e2d0013ea2ea2","manual":[]},"useAccountRevenueShare":true,"cleaningFee":119},"earlyCheckIn":{"blockDay":false},"lateCheckOut":{"blockDay":false},"guestStay":{"status":"not_set","createdAt":"2024-09-25T14:06:23.176Z","updatedAt":"2024-09-25T14:06:23.176Z"},"flag":false,"accountingEnabled":true,"isBMApplied":true,"confirmedPreBookings":[],"sourceMeta":{"guestyUrl":null,"customUrl":null,"businessName":null},"pulledByDailySync":false,"manuallyCreated":false,"creationInfo":null,"_id":"66f418dfa52e2d0013ea2e88","guest":{"airbnb":{"id":"838670488380197"},"airbnb2":{"index":"index","id":"838670488389113"},"policy":{"marketing":{"isAccepted":false},"termsAndConditions":{"isAccepted":false}},"verifications":[],"emails":[],"phones":[],"communicationMethods":[],"interests":[],"allergies":[],"dietaryPreferences":[],"tags":[],"contactType":"guest","_id":"66f418de08d9c792b7fa2d86","paymentProvidersCustomers":[],"isOtaModified":false,"otaLinks":[],"phone":"","email":"","fullName":"","lastName":"","firstName":"","createdAt":"2024-09-25T14:06:22.983Z"},"listingId":"6566109da55360001fa7ddcf","checkInDateLocalized":"2025-09-17","checkOutDateLocalized":"2025-09-19","status":"confirmed","guestsCount":1,"accountId":"653b0f8d7e8982defafaaf5b","guestId":"66f418de08d9c792b7fa2d86","money":{"settingsSnapshot":{"currency":{"rate":1,"rateDate":"2024-09-25T14:06:23.644Z","from":"USD","to":"USD"},"monthlyPriceFactor":0.8,"weeklyPriceFactor":0.9,"additionalFees":[{"automationSources":[],"automationPlatforms":[],"RUSources":[],"_id":"65ab0734d4325e000e9aac15","isPercentage":true,"isAutomated":true,"allPlatforms":false,"allRUSources":false,"allSources":true,"isSyncToSupportedChannelsEnabled":true,"type":"RESORT","name":"Credit card processing fee","value":3,"targetFee":"ACCOMMODATION_FARE","accountId":"653b0f8d7e8982defafaaf5b","isDeducted":false}],"taxes":[{"appliedOnFees":["AF"],"appliedByDefaultOnChannels":[],"_id":"65675ab41bd3d617310b1ec1","type":"LOCAL_TAX","amount":3,"units":"PERCENTAGE","quantifier":"PER_STAY","appliedToAllFees":false,"isAppliedByDefault":false},{"appliedOnFees":["AF"],"appliedByDefaultOnChannels":[],"_id":"65675ab41bd3d617310b1ec2","type":"CITY_TAX","amount":10,"units":"PERCENTAGE","quantifier":"PER_STAY","appliedToAllFees":false,"isAppliedByDefault":false}],"markup":null,"channelCommission":{"manual":[]},"useAccountRevenueShare":true,"useAccountAdditionalFees":true,"cleaningFee":119,"financials":{"cleaningFee":{"value":{"_id":"65a9e0ba8c019b000f089a50","multiplier":"PER_STAY","formula":119,"valueType":"FIXED"},"lastUpdated":"2024-01-19T02:38:50.912Z"},"petFee":{"value":{"_id":"65a9e0ba8c019b000f089a51","multiplier":"PER_PET_PER_STAY","formula":75,"valueType":"FIXED"},"lastUpdated":"2024-01-19T02:38:50.913Z"}}},"channelCommissionRules":null,"paymentProviderIds":["65667fb19986e2000e99278f"],"altered":false,"_id":"66f418e0ed7bee0011a9ebed","invoiceItems":[{"_id":"66f418e0ed7bee0011a9ebe8","normalType":"AF","amount":158,"title":"Accommodation fare","currency":"USD","origin":"AUTOMATIC","isLocked":true,"type":"ACCOMMODATION_FARE","refId":"ea068414-22a5-4db1-b094-fa717b84c431"},{"_id":"66f418e0ed7bee0011a9ebe9","normalType":"CF","amount":119,"title":"Cleaning fee","currency":"USD","origin":"AUTOMATIC","isLocked":true,"type":"CLEANING_FEE","baseAmount":119,"refId":"50b819f0-8241-499f-8d1e-118b7479c8af"},{"_id":"66f418e0ed7bee0011a9ebea","normalType":"AFE","amount":4.74,"title":"Credit card processing fee","currency":"USD","origin":"AUTOMATIC","secondIdentifier":"RESORT","type":"ADDITIONAL","isLocked":true,"isAutoAdditionalFee":true,"baseAmount":4.74,"refId":"58b9f98a-8543-49e5-81ad-f21a3850406a"},{"_id":"66f418e0ed7bee0011a9ebeb","normalType":"LT","amount":4.74,"title":"LOCAL_TAX","currency":"USD","origin":"AUTOMATIC","type":"TAX","isLocked":true,"isTax":true,"metadata":{"calculated":true},"refId":"64d68ecb-d7c8-4e7e-b3b2-dbc58d9ce741","baseAmount":4.74},{"_id":"66f418e0ed7bee0011a9ebec","normalType":"CT","amount":15.8,"title":"CITY_TAX","currency":"USD","origin":"AUTOMATIC","type":"TAX","isLocked":true,"isTax":true,"metadata":{"calculated":true},"refId":"1c365bd4-3ef3-471d-b8bd-665ebb4f0692","baseAmount":15.8}],"currency":"USD","version":1,"fareAccommodation":158,"fareAccommodationBundleFeesApplied":0,"fareCleaning":119,"fareAccommodationAdjustment":0,"fareAccommodationDiscount":0,"fareAccommodationAdjusted":158,"hostServiceFee":0,"hostServiceFeeTax":0,"hostServiceFeeIncTax":0,"totalFees":123.74,"subTotalPrice":281.74,"hostPayout":302.28,"hostPayoutUsd":302.28,"totalTaxes":20.54,"useAccountRevenueShare":true,"netIncomeFormula":"host_payout","netIncome":302.28,"commissionFormula":"net_income","commission":302.28,"commissionTaxPercentage":0,"commissionTax":0,"commissionIncTax":302.28,"ownerRevenueFormula":"net_income - pm_commission","ownerRevenue":0,"currencyConversionRateToAccount":1,"nightlyRateInvoiceItems":[{"isCalculatedByGuesty":true,"_id":"66f418e0ed7bee0011a9ebf6","normalType":"AF","nightsBreakdown":[{"_id":"66f418e0ed7bee0011a9ebf7","date":"2025-09-17","basePrice":79},{"_id":"66f418e0ed7bee0011a9ebf8","date":"2025-09-18","basePrice":79}],"adjustments":[],"includedAdjustments":[],"totalPrice":158,"totalNightsPrice":158,"title":"Accommodation fare","refId":"ea068414-22a5-4db1-b094-fa717b84c431","origin":"AUTOMATIC"},{"isCalculatedByGuesty":true,"_id":"66f418e0ed7bee0011a9ebf9","normalType":"CF","nightsBreakdown":[{"_id":"66f418e0ed7bee0011a9ebfa","basePrice":59.5,"date":"2025-09-17"},{"_id":"66f418e0ed7bee0011a9ebfb","basePrice":59.5,"date":"2025-09-18"}],"adjustments":[],"includedAdjustments":[],"totalPrice":119,"totalNightsPrice":119,"title":"Cleaning fee","multiplier":"PER_STAY","refId":"50b819f0-8241-499f-8d1e-118b7479c8af","origin":"AUTOMATIC"},{"isCalculatedByGuesty":true,"_id":"66f418e0ed7bee0011a9ebfc","normalType":"AFE","nightsBreakdown":[{"_id":"66f418e0ed7bee0011a9ebfd","basePrice":2.37,"date":"2025-09-17"},{"_id":"66f418e0ed7bee0011a9ebfe","basePrice":2.37,"date":"2025-09-18"}],"adjustments":[],"includedAdjustments":[],"totalPrice":4.74,"totalNightsPrice":4.74,"title":"Credit card processing fee","secondIdentifier":"RESORT","multiplier":"PER_STAY","refId":"58b9f98a-8543-49e5-81ad-f21a3850406a","origin":"AUTOMATIC"},{"isCalculatedByGuesty":true,"_id":"66f418e0ed7bee0011a9ebff","normalType":"LT","nightsBreakdown":[{"_id":"66f418e0ed7bee0011a9ec00","basePrice":2.37,"date":"2025-09-17"},{"_id":"66f418e0ed7bee0011a9ec01","basePrice":2.37,"date":"2025-09-18"}],"adjustments":[],"includedAdjustments":[],"totalPrice":4.74,"totalNightsPrice":4.74,"title":"LOCAL_TAX","multiplier":"PER_STAY","refId":"64d68ecb-d7c8-4e7e-b3b2-dbc58d9ce741","origin":"AUTOMATIC"},{"isCalculatedByGuesty":true,"_id":"66f418e0ed7bee0011a9ec02","normalType":"CT","nightsBreakdown":[{"_id":"66f418e0ed7bee0011a9ec03","basePrice":7.9,"date":"2025-09-17"},{"_id":"66f418e0ed7bee0011a9ec04","basePrice":7.9,"date":"2025-09-18"}],"adjustments":[],"includedAdjustments":[],"totalPrice":15.8,"totalNightsPrice":15.8,"title":"CITY_TAX","multiplier":"PER_STAY","refId":"1c365bd4-3ef3-471d-b8bd-665ebb4f0692","origin":"AUTOMATIC"}],"platform":"manual","reservationId":"66f418dfa52e2d0013ea2e88","bundledFees":[],"createdAt":"2024-09-25T14:06:24.085Z","updatedAt":"2024-09-25T14:06:24.085Z","payments":[{"chargebacksData":{"chargebacks":[]},"paymentMethodStatus":"ACTIVE","isAuthorizationHold":false,"status":"PENDING","_id":"66f418e0a52e2d0013ea2e98","policyItemId":"65a5b68c545942000f65280d","shouldBePaidAt":"2024-09-25T14:06:23.365Z","currency":"USD","amount":90.68,"paymentMethodId":"589894a91d756b9c47ce1e87","refunds":[],"authorizationHoldCaptures":[],"createdAt":"2024-09-25T14:06:24.340Z","attempts":[],"receiptTargets":[]},{"chargebacksData":{"chargebacks":[]},"paymentMethodStatus":"ACTIVE","isAuthorizationHold":false,"status":"PENDING","_id":"66f418e0a52e2d0013ea2e99","policyItemId":"65a5b68c545942000f65280e","shouldBePaidAt":"2025-07-19T20:00:00.000Z","currency":"USD","amount":90.68,"paymentMethodId":"589894a91d756b9c47ce1e87","refunds":[],"authorizationHoldCaptures":[],"createdAt":"2024-09-25T14:06:24.341Z","attempts":[],"receiptTargets":[]},{"chargebacksData":{"chargebacks":[]},"paymentMethodStatus":"ACTIVE","isAuthorizationHold":false,"status":"PENDING","_id":"66f418e0a52e2d0013ea2e9a","policyItemId":"66145e30cc1dd000a41ce4fd","shouldBePaidAt":"2025-08-19T20:00:00.000Z","currency":"USD","amount":120.92,"paymentMethodId":"589894a91d756b9c47ce1e87","refunds":[],"authorizationHoldCaptures":[],"createdAt":"2024-09-25T14:06:24.341Z","attempts":[],"receiptTargets":[]}],"balanceDue":302.28,"isFullyPaid":false,"paymentsDue":302.28,"totalRefunded":0,"totalPaid":0,"autoPaymentsPolicy":[{"scheduleTo":{"timeRelation":{"relation":"AT","unit":"HOURS","amount":1},"reservationEvent":"CONFIRMATION"},"_id":"65a5b68c545942000f65280d","chargeType":"PERCENTAGE","isAuthorizationHold":false,"useGuestCard":true,"amount":30},{"scheduleTo":{"timeRelation":{"relation":"BEFORE","unit":"DAYS","amount":60},"reservationEvent":"CHECK_IN"},"_id":"65a5b68c545942000f65280e","chargeType":"PERCENTAGE","isAuthorizationHold":false,"useGuestCard":true,"amount":30},{"scheduleTo":{"timeRelation":{"relation":"BEFORE","unit":"DAYS","amount":29},"reservationEvent":"CHECK_IN"},"_id":"66145e30cc1dd000a41ce4fd","chargeType":"REST_OF_PAYMENT","isAuthorizationHold":false,"useGuestCard":true}]},"source":"Manual","confirmationCode":"16qwl4Evo","mtl":{"assigned":false,"_id":"66f418e0a52e2d0013ea2e9e"},"isReturningGuest":false,"checkIn":"2025-09-17T20:00:00.000Z","checkOut":"2025-09-19T15:00:00.000Z","nightsCount":2,"guestyFeeDetails":{"commission":3,"planItems":[{"_id":"653b0f8d7b73f40033459e61","name":"SOFTWARE","planType":"RESERVATION_COMMISSION","value":3,"isLocked":true,"id":"653b0f8d7b73f40033459e61"}],"feeMinimum":3,"fee":10,"feeUsd":10,"isMinimumFee":false,"isMaximumFee":false},"confirmedAt":"2024-09-25T14:06:23.365Z","additionalFeesAtCreation":[{"automationSources":[],"automationPlatforms":[],"RUSources":[],"_id":"65ab0734d4325e000e9aac15","isPercentage":true,"isAutomated":true,"allPlatforms":false,"allRUSources":false,"allSources":true,"isSyncToSupportedChannelsEnabled":true,"type":"RESORT","name":"Credit card processing fee","value":3,"targetFee":"ACCOMMODATION_FARE","accountId":"653b0f8d7e8982defafaaf5b","isDeducted":false}],"createdAt":"2024-09-25T14:06:24.349Z","pendingTasks":[],"customFields":[],"daysInAdvance":357,"lastUpdatedAt":"2024-09-25T14:06:24.372Z","listing":{"financials":{"cleaningFee":{"value":{"_id":"65a9e0ba8c019b000f089a50","multiplier":"PER_STAY","formula":119,"valueType":"FIXED"},"lastUpdated":"2024-01-19T02:38:50.912Z"},"petFee":{"value":{"_id":"65a9e0ba8c019b000f089a51","multiplier":"PER_PET_PER_STAY","formula":75,"valueType":"FIXED"},"lastUpdated":"2024-01-19T02:38:50.913Z"}},"address":{"street":"4757 Wild Iris Dr","city":"Myrtle Beach","state":"South Carolina","zipcode":"29577","country":"United States of America","lat":33.73338317871094,"lng":-78.86463928222656,"apt":"202","full":"4757 Wild Iris Dr 202, Myrtle Beach, South Carolina 29577, United States of America"},"cleaningStatus":{"value":"dirty","updatedBy":"Guesty automation","updatedAt":"2024-01-15T21:47:32.786Z"},"picture":{"caption":"","thumbnail":"https://res.cloudinary.com/guesty/image/upload/c_fit,h_200/wgbkekuwladb92lbbud6?_a=BAMCcSGi0"},"terms":{"minNights":2,"maxNights":1125},"prices":{"monthlyPriceFactor":0.8,"weeklyPriceFactor":0.9,"currency":"USD","basePrice":79,"weekendDays":[5,6],"securityDepositFee":null,"guestsIncludedInRegularFee":null,"extraPersonFee":null,"cleaningFee":119,"weekendBasePrice":null,"petFee":75},"publicDescription":{"summary":"2nd floor + elevator! Let this be your gateway for family and friends vacation in the Grand Strand with great 2 bedrooms and 2 bathrooms. located in the heart of Myrtle Beach, built around the Myrtlewood Golf Club, just off the bypass, minuets from the beach and all main attractions. Fully stocked kitchen, sleeps up to 6, pool and golf course view. \n*PET OWNERS: pets are allowed with a pet fee but must be pre-approved, please contact me for details.","space":"2 bedrooms, 2 bathrooms, Very spacious condo. 2 Queen beds, 1 pullout sofa in the living room. Washer and dryer available in the unit.\nKitchen is fully equipped with all basics. Dining area open to living room.\nLarge balcony with beautiful pool view.\nSheets and linens provided.  Free WiFi and cable TV available.\n*Pets are allowed with a pet fee. please don't forget to mention if you're bringing any pets with you.\n*Beach items are not included due to damage/loss of these items.\n*Towels are provided for showers only.","access":"The condo is rented in full. Guests have access to the entire place. Owners are not on the premises while guests are staying. \n*Access the pool with pool key ( placed in the kitchen drawer) Pool key must be kept and returned before checking out. There is a $100 charge for each pool key\n*Washer/dryer available in the unit. \n*Parking is free.\n* motorcycles and trailers are not allowed on premises.","interactionWithGuests":"Please communicate through the website or app only. Downloading the Airbnb app is recommended for more convenient communication.  You can call or text to the private number only in case of any urgency.","neighborhood":"Beautiful quiet neighborhood, just a mile inland near the heart of Myrtle Beach, positioned around the golf course of Myrtlewood golf club. This location featured with BBQ areas, walking trails, beautiful landscaping. 10 minutes from airport, 5 minutes from Broadway at the beach, 5 minutes from the beach, 15 minutes from Market Commons, 1 minuet From golf course.","transit":"Car, taxi, Uber","notes":"*Pool wristbands are counted after each stay.\n*Please review my house rules.\n*Due to the fact that some guests have allergies, Pets are not allowed on beds and furniture and must be caged when you're not home. In case of finding any evidence that pets were on the beds, blankets or furniture, the guests will be charged for additional cleaning fee.\n*Only initial amount of toiletries, paper towel and toilet paper provided, guests should bring their own extras.\n*Bed sheets are provided (one set per bed)\n*Bath towels are included (one per guest, must not leave unit)\n*Bring your own beach towels (do not use bath towels)\n*condo is inspected prior to your arrival to make sure all is clean and working properly. please contact me immediately for any questions or concerns.","houseRules":"Please review the rules prior to booking. \n\n*Guests must report on any issue immediately so that the host can try to resolve it quickly and efficiently. \n\n*YOU MUST BE 25 years old or older to book and check in. \n\n*SMOKING IS FORBIDDEN in the apartment or balcony at any time. in case of any evidence of smoking or smoking odor in the condo, damage fee will be charged in full.\n*If determined that a guest was smoking they will be fined an automatic fee of $500.\n\n*Please KEEP the QUIET TIME between 10pm-9am\n\n*NO hanging towels in the balcony.\n\n*Only initial amount of SOAPS and toiletries are provided. guests must bring their own extras if needed.\n\n*TOWELS provided for showering only, not for makeup remover, pool or beach use, or any other use.  Damage fee will be activated for stained or damaged towels, same goes for linens. If you need to wash them please do so, and please remember we are not a hotel and our supply is limited.\n\n*PET OWNERS: Please inform the host prior to your arrival if you’re bringing any pets. there is an additional pet fee $75 for each pet for the entire stay. This charge will be separately from your reservation payment since Airbnb does not have this feature automatic yet. Please contact me for pet fee details. If evidence of a pet is found that was not approved a pet fee and an additional cleaning fee could be incurred.\nwe love your dogs but please do NOT ALLOW your pets on or in the beds, sofas or any furniture. if evidence of pet hair found on linens or furniture an additional cleaning fee could be incurred.  untrained pets are not allowed, any damage caused by a pet an additional damage fee will incurred.\n*Unauthorized and untrained pets will be a $500 automatic fee.\n\n*Please be sure to throw out the TRASH before you check out.\n\n*Please keep and RETURN ALL 6 pool wristbands prior to departure. (There is a $25 charge for each lost/broken wrist band)\n*MOTORCYCLES  and TRAILERS are not allowed on premises.\n~~~~~~~~~~~~~~~~~~~~~~~~~\nWE APPRECIATE YOUR COOPERATION AND HOPE YOUR STAY WILL BE MEMORABLE!"},"privateDescription":{"directions":""},"type":"SINGLE","tags":["Pets","2ndfloor","Magnolia","MB","no bikes","+elevator","*MB*","2BR","Brenda"],"owners":["6553d4286847b8002d2477d6"],"amenities":["Pets allowed","Suitable for children (2-12 years)","Suitable for infants (under 2 years)","Long term stays allowed","Coffee maker","Kitchen","Swimming pool","Elevator","Refrigerator","Air conditioning","Iron","Dishwasher","Essentials","Dryer","Carbon monoxide detector","Bed linens","Cookware","Free parking on premises","Hot water","Dishes and silverware","BBQ grill","TV","Cable TV","Shampoo","Stove","Extra pillows and blankets","Smoke detector","Oven","Hair dryer","Patio or balcony","Microwave","Heating","Wireless Internet","Washer","Hangers"],"amenitiesNotIncluded":[],"useAccountRevenueShare":true,"netIncomeFormula":"host_payout","commissionFormula":"net_income","ownerRevenueFormula":"net_income - pm_commission","useAccountAdditionalFees":true,"taxes":[],"useAccountTaxes":true,"useAccountMarkups":true,"active":true,"preBooking":[],"_id":"6566109da55360001fa7ddcf","nickname":"F🐕","title":"Feel like home away from home","propertyType":"Apartment","roomType":"Entire home/apt","bedrooms":2,"bathrooms":2,"beds":3,"isListed":true,"defaultCheckInTime":"16:00","defaultCheckInEndTime":"23:00","defaultCheckOutTime":"11:00","integrations":[{"bookingCom":{"acceptedCreditCards":[],"errors":[],"initialComplexListing":false,"publishCompanyLogo":false,"isPublishedCompanyLogo":false,"publishCompanyInfo":false,"isPublishedCompanyInfo":false,"taxInfo":[]},"airbnb2":{"daysOfWeekMinimumNights":[],"promotions":[],"id":"9271901","instantBookingAllowedCategory":"everyone","bookingLeadTime":{"hours":2,"allowRequestToBook":true},"maxDaysNotice":{"days":365,"allowRequestToBook":false},"turnoverDays":0,"tier":"marketplace","syncCategory":"sync_all","syncCategoryUpdatedAt":"2023-11-28T16:08:51.032Z","cancellationPolicy":"strict_14_with_grace_period","cancellationPenaltyEnabled":false,"permits":{"regulations":[],"lastUpdatedOn":"2023-11-28T16:09:06.473Z"},"status":"COMPLETED","approvalStatus":{"status":"approved"}},"platform":"airbnb2","externalUrl":"https://www.airbnb.com/rooms/9271901","_id":"6565fb00529ed7000ea9ecb6"},{"homeaway2":{"status":"COMPLETED","cancellationPolicy":"MODERATE","bookingPolicy":"INSTANT","pricingPolicy":"GUARANTEED","advertiserId":"T3ivKF","currency":"USD","financials":{"petFee":{"channelSyncStatus":"IN_PROGRESS","value":{"_id":"65a9e0ba8c019b000f089a53","multiplier":"PER_PET_PER_STAY","formula":75,"valueType":"FIXED"}},"_id":"657cbb5e33404100132e8876"}},"bookingCom":{"acceptedCreditCards":[],"errors":[],"initialComplexListing":false,"publishCompanyLogo":false,"isPublishedCompanyLogo":false,"publishCompanyInfo":false,"isPublishedCompanyInfo":false,"taxInfo":[]},"airbnb2":{"daysOfWeekMinimumNights":[],"promotions":[]},"platform":"homeaway2","_id":"65674f36ae20600012134740"}],"accommodates":6,"timezone":"America/New_York","createdAt":"2023-11-28T16:09:01.991Z","lastUpdatedAt":"2024-08-12T18:36:46.228Z","listingRooms":[{"_id":"66c34034dfc268cc55f28dba","roomNumber":0,"beds":[{"type":"SOFA_BED","quantity":1}],"id":219790706},{"_id":"66c34034dfc268cc55f28dbb","roomNumber":1,"beds":[{"type":"QUEEN_BED","quantity":1}],"id":16741023},{"_id":"66c34034dfc268cc55f28dbc","roomNumber":2,"beds":[{"type":"QUEEN_BED","quantity":1}],"id":16741022}],"customFields":[{"_id":"66ba563e9bd19f00727335c9","fieldId":"654d3f1771529200347b9abf","value":"*Please send an update about your arrival time so I can know that you’ve checked in easily. \n*Upon a...","fullText":"*Please send an update about your arrival time so I can know that you’ve checked in easily. \n*Upon arrival please report immediately on any issue or malfunction so that I can repair it asap. \n*Smoking in the apartment and balcony is strictly prohibited. Any evidence of smoking will be accompanied by full damage fee charge. \n*Keep the quiet time after 10p.m. \n*Only an initial amount of soaps and paper products will be provided for you to get started and you’ll need to bring your own extras. \n*Kitchen is equipped with all basics. please report if any necessities are missing. \n*Towels are for bathing only, one towel for each guest. towels must not leave the apartment. Please use only special wipes for removing makeup. towels can be washed if needed. \n*Pool entry with pool key only. The pool key is  in the kitchen drawer.  Any missing pool key will be accompanied by $100 fee.\n*We love pets but please do not let pets get on the beds and furniture. Any evidence of pet hair on furniture and beds will be accompanied by extra cleaning fee. \n*The garbage bins located in the parking lot. \n*Parking available Only at a designated spot or vehicles will be towed. motorcycle and trailers are not allowed on premises.\n *Anytime after 4pm and before midnight is good for arrival. \n*The cleaners work very hard on cleanliness but mistakes happen so please report immediately if any correction required. Their busy schedule and overlapping guest arrivals requires guests checking out at 11am, every minute beyond 11am will be accompanied with $1 charge.*Before checking out, Please take out the trash if you can and check if you have all your belongings. there is a service fee of $10+shipping cost to retrieve the items and mail them back to you.\n*The apartment is treated by pest control company every month. If you notice any kind of insects please report immediately so we can repeat the treatment. Insects are common and cannot be 100% prevented, we do everything possible to prevent insects from penetrating the apartment.\n"},{"_id":"66ba563e9bd19f00727335ca","fieldId":"654d3f4718bea0003a98f85c","value":"Wifi info: MySpectrumWifi63-2G\nPassword: studiodesert640"},{"_id":"66ba563e9bd19f00727335cb","fieldId":"654d3f22df3140002b1757f4","value":"Before you leave please take the trash out if you can and make sure all is in order. Return pool key to dining table or kitchen drawer and lock the door behind you. No need for any laundry but please leave the condo in decent condition, the cleaning crew will be there by then and they will take care of it.Please check you have all your belongings, there is a minimum charge of $10+Shipping to retrieve the items and mail them back to you. If items are not requested within 2 weeks, they would be discarded"},{"_id":"66ba563e9bd19f00727335cc","fieldId":"654d3fae7a8de10045c3d2f0","value":"5920"}],"importedAt":"2023-11-28T16:09:01.991Z","occupancyStats":[],"yieldManagement":{"rateStrategy":{"_id":"65724404ae3dcf0013400e99","name":"2bdrm"}},"hostName":"","houseManual":"","parkingInstructions":"","trashCollectedOn":"","wifiName":"MySpectrumWifi63-2G","wifiPassword":"studiodesert640","businessModel":{"id":"66ecacc830a6524c06ec1dac","name":"STD-00","activationDate":"2024-01-01T17:00:00.000Z","version":8},"lastActivityAt":"2024-09-24T20:22:49.108Z"},"__v":0,"id":"66f418dfa52e2d0013ea2e88"}
-
-
-const url = 'https://open-api.guesty.com/v1/reservations/66f418dfa52e2d0013ea2e88/payments';
-const options = {
-  method: 'POST',
-  headers: {
-    accept: 'application/json',
-    'content-type': 'application/json',
-    authorization: 'Bearer eyJraWQiOiI0YlF6LVdac1BCVHY2bWJudnhmQWxBVHBBUGE1ejlBSEotNGhpeWpPUVZVIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULndnUmZYUEJIVDlTQnFEYWxVamw5dXJoeVV5WFVzQkZIbE1YYVAzVlpBaDgiLCJpc3MiOiJodHRwczovL2xvZ2luLmd1ZXN0eS5jb20vb2F1dGgyL2F1czFwOHFyaDUzQ2NRVEk5NWQ3IiwiYXVkIjoiaHR0cHM6Ly9vcGVuLWFwaS5ndWVzdHkuY29tIiwiaWF0IjoxNzI2NzgwMjY0LCJleHAiOjE3MjY4NjY2NjQsImNpZCI6IjBvYWlxdjlqczUwRFlOcWNwNWQ3Iiwic2NwIjpbIm9wZW4tYXBpIl0sInJlcXVlc3RlciI6IkVYVEVSTkFMIiwiYWNjb3VudElkIjoiNjUzYjBmOGQ3ZTg5ODJkZWZhZmFhZjViIiwic3ViIjoiMG9haXF2OWpzNTBEWU5xY3A1ZDciLCJ1c2VyUm9sZXMiOlt7InJvbGVJZCI6eyJwZXJtaXNzaW9ucyI6WyJhZG1pbiJdfX1dLCJyb2xlIjoidXNlciIsImNsaWVudFR5cGUiOiJvcGVuYXBpIiwiaWFtIjoidjMiLCJhY2NvdW50TmFtZSI6IkxpbmUgcHJvcGVydGllcyBJbmMiLCJuYW1lIjoiTFBfV2ViIn0.t4B_tkYiRu2MJz9huKeDokbcqHqErhBhdrUbUB588-ococEIFUfFNEucUnVd5usISOaIMsy9vPRmZEd89SnAhMU0NNBLXqe95CVaPOJGjKqHsB9flJ-Z2bHnAahAEOCotniMe2xs5hADHk2b_NAaAt3upOTe8wm3LFPnuHvqe2fH9tDghPaEz4vnDseY-kBHyrQfHEje-iqLd7V_44Fefoayejp50FB2fbpjwgm7KtBSFziprPgmyNChBM8DDGRI5xSSw0j8y8IuJ3vCSgnJxYGyPyYyXpNfLs4GrOXlYLMDXdkvPmCbMf4d-Be_ln571JaenGY6Cao6GFKDXjfLAg'
+Request from ::1: POST /.netlify/functions/createReservations
+Parsed guest info: {
+  "firstName": "Adam",
+  "lastName": "Noah",
+  "phone": "+19548264318",
+  "email": "adam@exacttransport.com"
+}
+Parsed payment method: {
+  "_id": "66faf6568a562ab8631d5d9c"
+}
+Guest Request Body: {
+  "firstName": "Adam",
+  "lastName": "Noah",
+  "phone": "+19548264318",
+  "email": "adam@exacttransport.com"
+}
+Guest Request URL: https://open-api.guesty.com/v1/guests-crud
+Guest Request Headers: {
+  "accept": "application/json",
+  "content-type": "application/json",
+  "authorization": "Bearer eyJraWQiOiI0YlF6LVdac1BCVHY2bWJudnhmQWxBVHBBUGE1ejlBSEotNGhpeWpPUVZVIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmdHdmpyREd2MHNVNXVEemhaaUhmOW50Vno1OHBxUS1tX21xNGN4SFlVaWciLCJpc3MiOiJodHRwczovL2xvZ2luLmd1ZXN0eS5jb20vb2F1dGgyL2F1czFwOHFyaDUzQ2NRVEk5NWQ3IiwiYXVkIjoiaHR0cHM6Ly9vcGVuLWFwaS5ndWVzdHkuY29tIiwiaWF0IjoxNzI3NzE0NjM2LCJleHAiOjE3Mjc4MDEwMzYsImNpZCI6IjBvYWlxdjlqczUwRFlOcWNwNWQ3Iiwic2NwIjpbIm9wZW4tYXBpIl0sInJlcXVlc3RlciI6IkVYVEVSTkFMIiwiYWNjb3VudElkIjoiNjUzYjBmOGQ3ZTg5ODJkZWZhZmFhZjViIiwic3ViIjoiMG9haXF2OWpzNTBEWU5xY3A1ZDciLCJ1c2VyUm9sZXMiOlt7InJvbGVJZCI6eyJwZXJtaXNzaW9ucyI6WyJhZG1pbiJdfX1dLCJyb2xlIjoidXNlciIsImNsaWVudFR5cGUiOiJvcGVuYXBpIiwiaWFtIjoidjMiLCJhY2NvdW50TmFtZSI6IkxpbmUgcHJvcGVydGllcyBJbmMiLCJuYW1lIjoiTFBfV2ViIn0.B-SKKIf4qzT9lyz4v96oM9jttyfyHbx2feb-14aIaVZCurvVTGcLpNaLniddNfSEynBN6-KylI2Y-1Dd035yFA7rm_6TPXOMGF-0EAqS3s5Y-JzTHIhyS-Zccj0mNa2F8_OFDk10STq2Lf75K-noWP4wGUAm57bYKepYoS0nTs_Gx1tuW5VijaxojLFBN83ZC6KYx_S9S62Abjc-W_x_qM_hcxj_tdm_lxu77MFZggZiIxAmcE90z_Jc01jRgo9whHWoTsbJ14Ibr0YuKFaPd5A24bgbzMTGVSPLzzPZTZif4DapZgsIRvNmfk2w-0FW5noe47mEm2RzSahaYZkIEA"
+}
+Guest Response text: {"_id":"66ba1bc2b75a05ac90bea709","createdAt":"2024-08-12T12:34:13.062Z","paymentProvidersCustomers":[],"paymentMethodIds":[],"communicationMethods":["email","sms"],"contactType":"guest","isOtaModified":false,"otaLinks":[],"interests":[],"allergies":[],"dietaryPreferences":[],"tags":[],"airbnb2":{"id":"3719638651207765"},"airbnb":{"id":"3719638651199880"},"phone":"19548264318","phones":["19548264318"],"email":"adam@exacttransport.com","emails":["anoah1225@gmail.com","adam@exacttransport.com"],"verifications":[],"hometown":"Hollywood","fullName":"Adam Noah","lastName":"Noah","firstName":"Adam","accountId":"653b0f8d7e8982defafaaf5b","pictures":[],"__v":0,"confirmed":true}
+Guest created: {
+  _id: '66ba1bc2b75a05ac90bea709',
+  createdAt: '2024-08-12T12:34:13.062Z',
+  paymentProvidersCustomers: [],
+  paymentMethodIds: [],
+  communicationMethods: [ 'email', 'sms' ],
+  contactType: 'guest',
+  isOtaModified: false,
+  otaLinks: [],
+  interests: [],
+  allergies: [],
+  dietaryPreferences: [],
+  tags: [],
+  airbnb2: { id: '3719638651207765' },
+  airbnb: { id: '3719638651199880' },
+  phone: '19548264318',
+  phones: [ '19548264318' ],
+  email: 'adam@exacttransport.com',
+  emails: [ 'anoah1225@gmail.com', 'adam@exacttransport.com' ],
+  verifications: [],
+  hometown: 'Hollywood',
+  fullName: 'Adam Noah',
+  lastName: 'Noah',
+  firstName: 'Adam',
+  accountId: '653b0f8d7e8982defafaaf5b',
+  pictures: [],
+  __v: 0,
+  confirmed: true
+}
+Reservation Request Body: {
+  "listingId": "656649dfa55360001faf6d53",
+  "checkInDateLocalized": "2024-11-25",
+  "checkOutDateLocalized": "2024-11-27",
+  "status": "inquiry",
+  "guestId": "66ba1bc2b75a05ac90bea709",
+  "paymentMethod": {
+    "_id": "66faf6568a562ab8631d5d9c"
+  }
+}
+Reservation Request URL: https://open-api.guesty.com/v1/reservations
+Reservation Request Headers: {
+  "accept": "application/json",
+  "content-type": "application/json",
+  "authorization": "Bearer eyJraWQiOiI0YlF6LVdac1BCVHY2bWJudnhmQWxBVHBBUGE1ejlBSEotNGhpeWpPUVZVIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmdHdmpyREd2MHNVNXVEemhaaUhmOW50Vno1OHBxUS1tX21xNGN4SFlVaWciLCJpc3MiOiJodHRwczovL2xvZ2luLmd1ZXN0eS5jb20vb2F1dGgyL2F1czFwOHFyaDUzQ2NRVEk5NWQ3IiwiYXVkIjoiaHR0cHM6Ly9vcGVuLWFwaS5ndWVzdHkuY29tIiwiaWF0IjoxNzI3NzE0NjM2LCJleHAiOjE3Mjc4MDEwMzYsImNpZCI6IjBvYWlxdjlqczUwRFlOcWNwNWQ3Iiwic2NwIjpbIm9wZW4tYXBpIl0sInJlcXVlc3RlciI6IkVYVEVSTkFMIiwiYWNjb3VudElkIjoiNjUzYjBmOGQ3ZTg5ODJkZWZhZmFhZjViIiwic3ViIjoiMG9haXF2OWpzNTBEWU5xY3A1ZDciLCJ1c2VyUm9sZXMiOlt7InJvbGVJZCI6eyJwZXJtaXNzaW9ucyI6WyJhZG1pbiJdfX1dLCJyb2xlIjoidXNlciIsImNsaWVudFR5cGUiOiJvcGVuYXBpIiwiaWFtIjoidjMiLCJhY2NvdW50TmFtZSI6IkxpbmUgcHJvcGVydGllcyBJbmMiLCJuYW1lIjoiTFBfV2ViIn0.B-SKKIf4qzT9lyz4v96oM9jttyfyHbx2feb-14aIaVZCurvVTGcLpNaLniddNfSEynBN6-KylI2Y-1Dd035yFA7rm_6TPXOMGF-0EAqS3s5Y-JzTHIhyS-Zccj0mNa2F8_OFDk10STq2Lf75K-noWP4wGUAm57bYKepYoS0nTs_Gx1tuW5VijaxojLFBN83ZC6KYx_S9S62Abjc-W_x_qM_hcxj_tdm_lxu77MFZggZiIxAmcE90z_Jc01jRgo9whHWoTsbJ14Ibr0YuKFaPd5A24bgbzMTGVSPLzzPZTZif4DapZgsIRvNmfk2w-0FW5noe47mEm2RzSahaYZkIEA"
+}
+Reservation Response text: {"integration":{"limitations":{"availableStatuses":[]},"bookingCom":{"invalidCreditCards":[],"reports":[]},"_id":"654d588b55b5bb003b0ecf37","platform":"manual","object":{"airbnb":{"ignored":{"listings":[],"reservations":[]},"importCalendars":true},"rentalsUnited":{"ignored":{"listings":[],"reservations":[]},"cleaningFeeIncludedInNightlyPrice":{"agoda":true,"bookingCom":false,"canadaStays":true,"despegar":true,"expedia":true,"homeAway":true,"hostelworld":true}},"bookingCom":{"ignored":{"listings":[],"reservations":[]}},"homeAway":{"ignored":{"listings":[],"reservations":[]}},"homeaway2":{"ignored":{"listings":[]}},"agoda":{"ignored":{"listings":[],"reservations":[]}},"tripAdvisor":{"ignored":{"listings":[],"reservations":[]}},"_id":"654d588b55b5bb003b0ecf37","platform":"manual","active":true,"incomingEmail":"LinepropertiesInc-75ad2@user.guesty.com","createdAt":"2023-11-09T22:09:15.429Z","createAt":"2023-11-09T22:09:15.429Z","package":"Pro"}},"review":{"shouldReview":true},"atTimeOfConfirmation":{"snapshotCreated":true,"monthlyPriceFactor":1,"weeklyPriceFactor":1,"taxes":[]},"earlyCheckIn":{"blockDay":false},"lateCheckOut":{"blockDay":false},"guestStay":{"status":"not_set","createdAt":"2024-09-30T19:04:55.855Z","updatedAt":"2024-09-30T19:04:55.855Z"},"flag":false,"accountingEnabled":true,"isBMApplied":true,"confirmedPreBookings":[],"sourceMeta":{"guestyUrl":null,"customUrl":null,"businessName":null},"pulledByDailySync":false,"manuallyCreated":false,"creationInfo":null,"_id":"66faf6574a9ae2003a2bb07e","listingId":"656649dfa55360001faf6d53","checkInDateLocalized":"2024-11-25","checkOutDateLocalized":"2024-11-27","status":"inquiry","guestId":"66ba1bc2b75a05ac90bea709","accountId":"653b0f8d7e8982defafaaf5b","guestsCount":1,"money":{"settingsSnapshot":{"currency":{"rate":1},"monthlyPriceFactor":1,"weeklyPriceFactor":1,"additionalFees":[{"automationSources":[],"automationPlatforms":[],"RUSources":[],"_id":"65ab0734d4325e000e9aac15","isPercentage":true,"isAutomated":true,"allPlatforms":false,"allRUSources":false,"allSources":true,"isSyncToSupportedChannelsEnabled":true,"type":"RESORT","name":"Credit card processing fee","value":3,"targetFee":"ACCOMMODATION_FARE","accountId":"653b0f8d7e8982defafaaf5b","isDeducted":false}],"taxes":[]},"channelCommissionRules":null,"paymentProviderIds":["65667fb19986e2000e99278f"],"altered":false,"_id":"66faf658b1c96b000e18be4c","invoiceItems":[{"_id":"66faf658b1c96b000e18be47","normalType":"AF","amount":158,"title":"Accommodation fare","currency":"USD","origin":"AUTOMATIC","isLocked":true,"type":"ACCOMMODATION_FARE","refId":"054b6e87-057f-44c6-992b-c783db4d9f4d"},{"_id":"66faf658b1c96b000e18be48","normalType":"CF","amount":119,"title":"Cleaning fee","currency":"USD","origin":"AUTOMATIC","isLocked":true,"type":"CLEANING_FEE","baseAmount":119,"refId":"7fbcf1ff-2b54-4859-b3f9-d84e5e6ac0e8"},{"_id":"66faf658b1c96b000e18be49","normalType":"AFE","amount":4.74,"title":"Credit card processing fee","currency":"USD","origin":"AUTOMATIC","secondIdentifier":"RESORT","type":"ADDITIONAL","isLocked":true,"isAutoAdditionalFee":true,"baseAmount":4.74,"refId":"ef0baa3b-58ee-431c-8f6a-bca27d384ccf"},{"_id":"66faf658b1c96b000e18be4a","normalType":"LT","amount":4.74,"title":"LOCAL_TAX","currency":"USD","origin":"AUTOMATIC","type":"TAX","isLocked":true,"isTax":true,"metadata":{"calculated":true},"refId":"f81e1bfb-1b08-4fdc-9142-45b6d41d8436","baseAmount":4.74},{"_id":"66faf658b1c96b000e18be4b","normalType":"CT","amount":15.8,"title":"CITY_TAX","currency":"USD","origin":"AUTOMATIC","type":"TAX","isLocked":true,"isTax":true,"metadata":{"calculated":true},"refId":"fe8da971-67ac-441f-91fe-5576c17ae699","baseAmount":15.8}],"currency":"USD","version":1,"fareAccommodation":158,"fareAccommodationBundleFeesApplied":0,"fareCleaning":119,"fareAccommodationAdjustment":0,"fareAccommodationDiscount":0,"fareAccommodationAdjusted":158,"hostServiceFee":0,"hostServiceFeeTax":0,"hostServiceFeeIncTax":0,"totalFees":123.74,"subTotalPrice":281.74,"hostPayout":302.28,"hostPayoutUsd":302.28,"totalTaxes":20.54,"useAccountRevenueShare":true,"netIncomeFormula":"host_payout","netIncome":302.28,"commissionFormula":"net_income","commission":302.28,"commissionTaxPercentage":0,"commissionTax":0,"commissionIncTax":302.28,"ownerRevenueFormula":"net_income - pm_commission","ownerRevenue":0,"nightlyRateInvoiceItems":[{"isCalculatedByGuesty":true,"_id":"66faf658b1c96b000e18be53","normalType":"AF","nightsBreakdown":[{"_id":"66faf658b1c96b000e18be54","date":"2024-11-25","basePrice":79},{"_id":"66faf658b1c96b000e18be55","date":"2024-11-26","basePrice":79}],"adjustments":[],"includedAdjustments":[],"totalPrice":158,"totalNightsPrice":158,"title":"Accommodation fare","refId":"054b6e87-057f-44c6-992b-c783db4d9f4d","origin":"AUTOMATIC"},{"isCalculatedByGuesty":true,"_id":"66faf658b1c96b000e18be56","normalType":"CF","nightsBreakdown":[{"_id":"66faf658b1c96b000e18be57","basePrice":59.5,"date":"2024-11-25"},{"_id":"66faf658b1c96b000e18be58","basePrice":59.5,"date":"2024-11-26"}],"adjustments":[],"includedAdjustments":[],"totalPrice":119,"totalNightsPrice":119,"title":"Cleaning fee","multiplier":"PER_STAY","refId":"7fbcf1ff-2b54-4859-b3f9-d84e5e6ac0e8","origin":"AUTOMATIC"},{"isCalculatedByGuesty":true,"_id":"66faf658b1c96b000e18be59","normalType":"AFE","nightsBreakdown":[{"_id":"66faf658b1c96b000e18be5a","basePrice":2.37,"date":"2024-11-25"},{"_id":"66faf658b1c96b000e18be5b","basePrice":2.37,"date":"2024-11-26"}],"adjustments":[],"includedAdjustments":[],"totalPrice":4.74,"totalNightsPrice":4.74,"title":"Credit card processing fee","secondIdentifier":"RESORT","multiplier":"PER_STAY","refId":"ef0baa3b-58ee-431c-8f6a-bca27d384ccf","origin":"AUTOMATIC"},{"isCalculatedByGuesty":true,"_id":"66faf658b1c96b000e18be5c","normalType":"LT","nightsBreakdown":[{"_id":"66faf658b1c96b000e18be5d","basePrice":2.37,"date":"2024-11-25"},{"_id":"66faf658b1c96b000e18be5e","basePrice":2.37,"date":"2024-11-26"}],"adjustments":[],"includedAdjustments":[],"totalPrice":4.74,"totalNightsPrice":4.74,"title":"LOCAL_TAX","multiplier":"PER_STAY","refId":"f81e1bfb-1b08-4fdc-9142-45b6d41d8436","origin":"AUTOMATIC"},{"isCalculatedByGuesty":true,"_id":"66faf658b1c96b000e18be5f","normalType":"CT","nightsBreakdown":[{"_id":"66faf658b1c96b000e18be60","basePrice":7.9,"date":"2024-11-25"},{"_id":"66faf658b1c96b000e18be61","basePrice":7.9,"date":"2024-11-26"}],"adjustments":[],"includedAdjustments":[],"totalPrice":15.8,"totalNightsPrice":15.8,"title":"CITY_TAX","multiplier":"PER_STAY","refId":"fe8da971-67ac-441f-91fe-5576c17ae699","origin":"AUTOMATIC"}],"platform":"manual","reservationId":"66faf6574a9ae2003a2bb07e","bundledFees":[],"createdAt":"2024-09-30T19:04:56.751Z","updatedAt":"2024-09-30T19:04:56.751Z","payments":[],"balanceDue":302.28,"isFullyPaid":false,"paymentsDue":0,"totalRefunded":0,"totalPaid":0,"autoPaymentsPolicy":[]},"source":"Manual","mtl":{"assigned":false,"_id":"66faf6584a9ae2003a2bb08c"},"isReturningGuest":false,"checkIn":"2024-11-25T21:00:00.000Z","checkOut":"2024-11-27T16:00:00.000Z","nightsCount":2,"additionalFeesAtCreation":[{"automationSources":[],"automationPlatforms":[],"RUSources":[],"_id":"65ab0734d4325e000e9aac15","isPercentage":true,"isAutomated":true,"allPlatforms":false,"allRUSources":false,"allSources":true,"isSyncToSupportedChannelsEnabled":true,"type":"RESORT","name":"Credit card processing fee","value":3,"targetFee":"ACCOMMODATION_FARE","accountId":"653b0f8d7e8982defafaaf5b","isDeducted":false}],"guestyFeeDetails":{"commission":3,"planItems":[{"_id":"653b0f8d7b73f40033459e61","name":"SOFTWARE","planType":"RESERVATION_COMMISSION","value":3,"isLocked":true,"id":"653b0f8d7b73f40033459e61"}],"feeMinimum":3,"fee":10,"feeUsd":10,"isMinimumFee":false,"isMaximumFee":false},"createdAt":"2024-09-30T19:04:56.937Z","pendingTasks":[],"customFields":[],"lastUpdatedAt":"2024-09-30T19:04:56.951Z","guest":{"airbnb":{"id":"3719638651199880"},"airbnb2":{"index":"index","id":"3719638651207765"},"policy":{"marketing":{"isAccepted":false},"termsAndConditions":{"isAccepted":false}},"verifications":[],"emails":["adam@exacttransport.com"],"phones":["19548264318"],"communicationMethods":["email","sms"],"interests":[],"allergies":[],"dietaryPreferences":[],"tags":[],"contactType":"guest","_id":"66ba1bc2b75a05ac90bea709","createdAt":"2024-08-12T12:34:13.062Z","paymentProvidersCustomers":[],"isOtaModified":false,"otaLinks":[],"phone":"19548264318","email":"adam@exacttransport.com","hometown":"Hollywood","fullName":"Adam Noah","lastName":"Noah","firstName":"Adam","confirmed":true},"listing":{"financials":{"cleaningFee":{"value":{"_id":"65a9c5832a57d800126bda13","multiplier":"PER_STAY","formula":119,"valueType":"FIXED"},"lastUpdated":"2024-01-19T00:42:43.168Z"},"petFee":{"value":{"_id":"65a9c5832a57d800126bda14","multiplier":"PER_PET_PER_STAY","formula":75,"valueType":"FIXED"},"lastUpdated":"2024-01-19T00:42:43.169Z"}},"address":{"street":"4787 Wild Iris Drive","city":"Myrtle Beach","state":"South Carolina","zipcode":"29577","country":"United States of America","lat":33.735626220703125,"lng":-78.863525390625,"apt":"#204","full":"4787 Wild Iris Drive #204, Myrtle Beach, South Carolina 29577, United States of America"},"cleaningStatus":{"value":"dirty","updatedBy":"Guesty automation","updatedAt":"2023-12-01T22:48:13.179Z"},"picture":{"caption":"","thumbnail":"https://res.cloudinary.com/guesty/image/upload/c_fit,h_200/me0nlujvjva9smbfpvd9?_a=BAMCcSGi0"},"terms":{"minNights":2,"maxNights":1125},"prices":{"monthlyPriceFactor":0.8,"weeklyPriceFactor":0.9,"currency":"USD","basePrice":79,"weekendDays":[5,6],"securityDepositFee":null,"guestsIncludedInRegularFee":null,"extraPersonFee":null,"cleaningFee":119,"petFee":75},"publicDescription":{"summary":"2nd floor (must climb stairs) Beautiful, Warm and cozy condo. Open space with a balcony. located in the heart of Myrtle Beach, built around the Myrtlewood Golf Club, just off the bypass, minuets from the beach and all main attractions! Kitchen is fully equipped with all basics. Condo sleeps up to 6 guests.\n*PET OWNERS: Only fully trained pets are allowed with a pet fee but must be pre-approved by host. Please contact me for details.","space":"2 bedrooms, 2 bathrooms, Very spacious condo. 1 King bed, 2 twin beds and 1 pullout sofa in the living room. Washer and dryer available in the unit.\nKitchen is fully equipped with all basics. Dining area open to living room.\nSheets and linens provided.  Free WiFi and cable TV available.\n*Pets are allowed with a pet fee. please don't forget to mention if you're bringing any pets with you.\n*Beach items are not included due to damage/loss of these items.\n*Towels are provided for showers only.","access":"The condo is rented in full. Guests have access to the entire place. Owners are not on the premises while guests are staying. \n*Access the pool with pool key only. 1 red pool key is placed in the kitchen drawer and must be kept and returned before checking out. There is a $100 charge for lost or broken key.\n*No mailbox for this location.\n*Washer/dryer available in the unit. \n*Parking is free.\n* motorcycles and trailers are not allowed on premises.","interactionWithGuests":"Please communicate through the website or app only. Downloading the Airbnb app is recommended for more convenient communication.  You can call or text to the private number only in case of any urgency.","neighborhood":"Beautiful quiet neighborhood, just a mile inland near the heart of Myrtle Beach, positioned around the golf course of Myrtlewood golf club. This location featured with BBQ areas, walking trails, beautiful landscaping. Only few minutes away from the beach, Broadway at the Beach, the mall, airport, convention center, wax museum, lots of restaurants, outlets and night clubs.\n10 minutes from airport, 5 minutes from Broadway at the beach, 5 minutes from the beach, 15 minutes from Market Commons, 1 minuet From golf course.","transit":"Car, taxi, Uber","notes":"*Must climb stairs.\n*Pool wristbands are counted after each stay.\n*Please review my house rules.\n*No mailbox for this location. \n*Due to the fact that some guests have allergies, Pets are not allowed on beds and furniture and must be caged when you're not home. In case of finding any evidence that pets were on the beds, blankets or furniture, the guests will be charged for additional cleaning fee.\n*Only initial amount of toiletries, paper towel and toilet paper provided, guests should bring their own extras.\n*Bed sheets are provided (one set per bed)\n*Bath towels are included (one per guest, must not leave unit)\n*Bring your own beach towels (do not use bath towels)\n*condo is inspected prior to your arrival to make sure all is clean and working properly. please contact me immediately for any questions or concerns.","houseRules":"Please review the rules carefully prior to check in. \n*YOU MUST BE 25 years old or older to book and check in.\n\n*No events are allowed on premises.\n\n*Early check in/late check out is unfortunately not available due to cleaning schedules. arrival and departure time cannot be changed. In case of any changes and if the property comes available prior to check in time we can check availability on the day of arrival.\n\n*Please perform an inspection of the Property upon check-in. Should you find any issues that need attention such as cleaning or maintenance, contact the host via the AIRBNB messaging app. \n\n*SMOKING IS FORBIDDEN in the apartment or balcony at any time. in case of any evidence of smoking or smoking odor in the condo $500 fine will automatically be charged.\n\n*$100 penalty for any damaged or unreturned keys, access cards, fobs or parking passes if provided.\n\n*NO MAILBOX available at this location. Host is not responsible for any mail or packages delivery. \n\n*We are located in a residential community and although this is a vacation destination, it's home to many people. As such we ask that you respect their privacy and their right to a peaceful existence! Please keep the quiet hours between the 11 PM and 7 AM. loud noise or loud music are not tolerated and may cause immediate eviction without financial reimbursement\n\n*NO hanging towels in the balcony.\n\n*This property is self catering. Consumable items such as toiletries, cleaning products, paper products and condiments are not included. However, toilet paper roll, paper towel, roll and hotel size soap and shampoo are provided as a courtesy, but guests will need to bring or purchase additional supplies.\n\n*No compensations will be given for non-working items outside the owner's control, including but not limited to power outages, cable TV outages, internet outages, etc. For items inside the owner's control, the owners will make every attempt to rectify problems that may occur while you are in the property. It is the guests responsibility to notify the owner immediately if there are any problems. No refunds or any other compensation will be given for the problems that the owner is able to rectify within a reasonable time frame. No refunds or compensations will be for hair or stain on fabric. Stains and hair can be caught in the fabric fibers during laundry and owner will replace them if needed within reasonable time.\n\n*TOWELS provided for showering only, not for makeup remover, pool or beach use, or any other use.  Guests will be responsible to cover the cost for stained or damaged towels, same goes for linens. If you need to wash them please do so, and please remember we are not a hotel and our supply is limited.\n\n*This is not a hotel. This is a home. This condominium is in a\ncommunity and sometimes maintenance issues in the area or construction on or around the property occur that are out of our control. We do not compensate or refund for such issues.\n\n*Pets are allowed. Only 1 pet up to 30lb with pet fee. Please contact for more information. Pet fee $75 per pet.\n\n*Unauthorized and untrained pets are not acceptable and you will be fined for $500 automatic fee.\n\n*Please be sure to throw out the TRASH before you check out.\n\n*MOTORCYCLES  and TRAILERS are not allowed on premises.\n\n*Please do not try to fix any maintenance issues. If needed we will send a professional to fix any emergency maintenance issues during work hours or it will be fixed the next day or upon your departure. There are no refunds for maintenance issues and if it’s determined that the issues were caused by you the guest, you may be charged accordingly. If there is an emergency, please contact 911 immediately and also send a message through the app.\n\n*We highly recommend trip insurance especially during hurricane season as we are unable to refund any money lost if your trip is canceled due to unforeseen circumstances like COVID, hurricanes, illness, etc.\n\n* Please note a Pesticide Tech may need to access the home to do pesticide spraying. Please ensure to let them into the house as these sprays are essential for managing critters. If you are not home, they will enter they will enter the home using their unique code. We try our best to time these sprays between guests, however, this is not always possible. \nproperties are treated regular basis. We take all preventative measures to prevent pests from spreading but can not be 100% prevented so please notify me if we need to repeat the process steps. No refund will be added if owner was able to resolve the issue.\n~~~~~~~~~\nWE APPRECIATE YOUR COOPERATION AND HOPE YOUR STAY WILL BE MEMORABLE!"},"privateDescription":{"directions":""},"type":"SINGLE","tags":["Pets","2ndfloor","Magnolia","MB","no bikes","*MB*","AviadRequest","2BR","Brenda"],"owners":["65e3d19e3acb700013400803"],"amenities":["Pets allowed","Suitable for children (2-12 years)","Suitable for infants (under 2 years)","Microwave","Dishwasher","Swimming pool","Heating","Kitchen","Dishes and silverware","Dryer","Hair dryer","Cookware","Air conditioning","Wireless Internet","Stove","Cable TV","TV","Oven","Patio or balcony","Carbon monoxide detector","Coffee maker","Essentials","BBQ grill","Smoke detector","Bed linens","Free parking on premises","Iron","Refrigerator","Hangers","Washer","Hot water"],"amenitiesNotIncluded":[],"useAccountRevenueShare":true,"netIncomeFormula":"host_payout","commissionFormula":"net_income","ownerRevenueFormula":"net_income - pm_commission","useAccountAdditionalFees":true,"taxes":[],"useAccountTaxes":true,"useAccountMarkups":true,"active":true,"preBooking":[],"_id":"656649dfa55360001faf6d53","nickname":"FA🐕","title":"Fantastic condo in the center of Myrtle Beach","propertyType":"Condominium","roomType":"Entire home/apt","bedrooms":2,"bathrooms":2,"beds":4,"isListed":true,"defaultCheckInTime":"16:00","defaultCheckInEndTime":"23:00","defaultCheckOutTime":"11:00","integrations":[{"bookingCom":{"acceptedCreditCards":[],"errors":[],"initialComplexListing":false,"publishCompanyLogo":false,"isPublishedCompanyLogo":false,"publishCompanyInfo":false,"isPublishedCompanyInfo":false,"taxInfo":[]},"airbnb2":{"daysOfWeekMinimumNights":[],"promotions":[],"id":"34670693","instantBookingAllowedCategory":"everyone","bookingLeadTime":{"hours":4,"allowRequestToBook":false},"maxDaysNotice":{"days":365,"allowRequestToBook":false},"turnoverDays":0,"tier":"marketplace","syncCategory":"sync_all","syncCategoryUpdatedAt":"2023-11-28T20:12:37.817Z","cancellationPolicy":"strict_14_with_grace_period","cancellationPenaltyEnabled":false,"permits":{"regulations":[],"lastUpdatedOn":"2023-11-28T20:13:53.405Z"},"status":"COMPLETED","approvalStatus":{"status":"approved"}},"platform":"airbnb2","externalUrl":"https://www.airbnb.com/rooms/34670693","_id":"6565fb00529ed7000ea9ecb6"},{"homeaway2":{"status":"COMPLETED","cancellationPolicy":"MODERATE","bookingPolicy":"INSTANT","pricingPolicy":"GUARANTEED","advertiserId":"T3ivKF","currency":"USD","financials":{"petFee":{"channelSyncStatus":"IN_PROGRESS","value":{"_id":"65a9c5832a57d800126bda16","multiplier":"PER_PET_PER_STAY","formula":75,"valueType":"FIXED"}},"_id":"657cbb3933404100132e8342"}},"bookingCom":{"acceptedCreditCards":[],"errors":[],"initialComplexListing":false,"publishCompanyLogo":false,"isPublishedCompanyLogo":false,"publishCompanyInfo":false,"isPublishedCompanyInfo":false,"taxInfo":[]},"airbnb2":{"daysOfWeekMinimumNights":[],"promotions":[]},"platform":"homeaway2","_id":"65674f36ae20600012134740","externalUrl":"https://www.vrbo.com/2797954?referrerId=HOT.HIS.Share.Landed.Copy_Link"}],"accommodates":6,"timezone":"America/New_York","createdAt":"2023-11-28T20:13:19.210Z","lastUpdatedAt":"2024-09-26T19:29:43.254Z","listingRooms":[{"_id":"66c340b2dfc268cc55f2957b","roomNumber":0,"beds":[{"_id":"66f5b5ae8437f900119e89f2","type":"SOFA_BED","quantity":1}],"id":43072121},{"_id":"66c340b2dfc268cc55f2957c","roomNumber":1,"beds":[{"_id":"66f5b5ae8437f900119e89f3","type":"SINGLE_BED","quantity":2}],"id":43072120},{"_id":"66c340b2dfc268cc55f2957d","roomNumber":2,"beds":[{"_id":"66f5b5ae8437f900119e89f4","type":"KING_BED","quantity":1}],"id":43072122}],"customFields":[{"_id":"6696c8217860670011865f05","fieldId":"654d3f1771529200347b9abf","value":"*Please send an update about your arrival time so I can know that you’ve checked in easily. \n*Upon a...","fullText":"*Please send an update about your arrival time so I can know that you’ve checked in easily. \n*Upon arrival please report immediately on any issue or malfunction so that I can repair it asap. \n*Smoking in the apartment and balcony is strictly prohibited. Any evidence of smoking will be accompanied by full damage fee charge. \n*Keep the quiet time after 10p.m. \n*Only an initial amount of soaps and paper products will be provided for you to get started and you’ll need to bring your own extras. \n*Kitchen is equipped with all basics. please report if any necessities are missing. *Towels are for bathing only, one towel for each guest. towels must not leave the apartment. Please use only special wipes for removing makeup. towels can be washed if needed. \n*We love pets but please do not let pets get on the beds and furniture. Any evidence of pet hair on furniture and beds will be accompanied by extra cleaning fee. \n*The garbage bins located in the parking lot. \n*Pool entry with pool key only. The pool key is  in the kitchen drawer.  Any missing pool key will be accompanied by $100 fee.\n*Parking available Only at a designated spot or vehicles will be towed. motorcycle and trailers are not allowed on premises. \n*Anytime after 4pm and before midnight is good for arrival. \n*The cleaners work very hard on cleanliness but mistakes happen so please report immediately if any correction required. Their busy schedule and overlapping guest arrivals requires guests checking out at 11am, every minute beyond 11am will be accompanied with $1 charge.*Before checking out, Please check you have all your belongings, there is a service fee of $10+shipping cost to retrieve the items and mail them back to you.\n*The apartment is treated by pest control company every month. If you notice any kind of insects please report immediately so we can repeat the treatment. Insects are common and cannot be 100% prevented, we do everything possible to prevent insects from penetrating the apartment."},{"_id":"6696c8217860670011865f06","fieldId":"654d3f4718bea0003a98f85c","value":"Internet:  Wildiris204\nPassword: beachvacation"},{"_id":"6696c8217860670011865f07","fieldId":"654d3f22df3140002b1757f4","value":"Before you leave please take the trash out if you can and make sure all is in order. Return pool key to dining table or kitchen drawer and lock the door behind you. No need for any laundry but please leave the condo in decent condition, the cleaning crew will be there by then and they will take care of it.Please check you have all your belongings, there is a minimum charge of $10+Shipping to retrieve the items and mail them back to you. If items are not requested within 2 weeks, they would be discarded"},{"_id":"6696c8217860670011865f08","fieldId":"654d3fae7a8de10045c3d2f0","value":"3271"}],"importedAt":"2023-11-28T20:13:19.210Z","occupancyStats":[],"yieldManagement":{"rateStrategy":{"_id":"65724404ae3dcf0013400e99","name":"2bdrm"}},"minimumAge":25,"hostName":"","houseManual":"","parkingInstructions":"","trashCollectedOn":"","wifiName":"Wildiris204","wifiPassword":"beachvacation","businessModel":{"id":"66ecacc830a6524c06ec207b","name":"Monthly Rent","activationDate":"2024-01-01T17:00:00.000Z","version":8},"lastActivityAt":"2024-09-21T10:57:16.084Z"},"__v":0,"conversationId":"66ecb2624e5ff20010523eee","id":"66faf6574a9ae2003a2bb07e"}
+Reservation created: {
+  integration: {
+    limitations: { availableStatuses: [] },
+    bookingCom: { invalidCreditCards: [], reports: [] },
+    _id: '654d588b55b5bb003b0ecf37',
+    platform: 'manual',
+    object: {
+      airbnb: [Object],
+      rentalsUnited: [Object],
+      bookingCom: [Object],
+      homeAway: [Object],
+      homeaway2: [Object],
+      agoda: [Object],
+      tripAdvisor: [Object],
+      _id: '654d588b55b5bb003b0ecf37',
+      platform: 'manual',
+      active: true,
+      incomingEmail: 'LinepropertiesInc-75ad2@user.guesty.com',
+      createdAt: '2023-11-09T22:09:15.429Z',
+      createAt: '2023-11-09T22:09:15.429Z',
+      package: 'Pro'
+    }
   },
-  body: JSON.stringify({
-    paymentMethod: {method: 'CREDIT', id: '66f418dfa52e2d0013ea2e88'},
-    amount: 335.61
-  })
-};
-
-fetch(url, options)
-  .then(res => res.json())
-  .then(json => console.log(json))
-  .catch(err => console.error('error:' + err));
+  review: { shouldReview: true },
+  atTimeOfConfirmation: {
+    snapshotCreated: true,
+    monthlyPriceFactor: 1,
+    weeklyPriceFactor: 1,
+    taxes: []
+  },
+  earlyCheckIn: { blockDay: false },
+  lateCheckOut: { blockDay: false },
+  guestStay: {
+    status: 'not_set',
+    createdAt: '2024-09-30T19:04:55.855Z',
+    updatedAt: '2024-09-30T19:04:55.855Z'
+  },
+  flag: false,
+  accountingEnabled: true,
+  isBMApplied: true,
+  confirmedPreBookings: [],
+  sourceMeta: { guestyUrl: null, customUrl: null, businessName: null },
+  pulledByDailySync: false,
+  manuallyCreated: false,
+  creationInfo: null,
+  _id: '66faf6574a9ae2003a2bb07e',
+  listingId: '656649dfa55360001faf6d53',
+  checkInDateLocalized: '2024-11-25',
+  checkOutDateLocalized: '2024-11-27',
+  status: 'inquiry',
+  guestId: '66ba1bc2b75a05ac90bea709',
+  accountId: '653b0f8d7e8982defafaaf5b',
+  guestsCount: 1,
+  money: {
+    settingsSnapshot: {
+      currency: [Object],
+      monthlyPriceFactor: 1,
+      weeklyPriceFactor: 1,
+      additionalFees: [Array],
+      taxes: []
+    },
+    channelCommissionRules: null,
+    paymentProviderIds: [ '65667fb19986e2000e99278f' ],
+    altered: false,
+    _id: '66faf658b1c96b000e18be4c',
+    invoiceItems: [ [Object], [Object], [Object], [Object], [Object] ],
+    currency: 'USD',
+    version: 1,
+    fareAccommodation: 158,
+    fareAccommodationBundleFeesApplied: 0,
+    fareCleaning: 119,
+    fareAccommodationAdjustment: 0,
+    fareAccommodationDiscount: 0,
+    fareAccommodationAdjusted: 158,
+    hostServiceFee: 0,
+    hostServiceFeeTax: 0,
+    hostServiceFeeIncTax: 0,
+    totalFees: 123.74,
+    subTotalPrice: 281.74,
+    hostPayout: 302.28,
+    hostPayoutUsd: 302.28,
+    totalTaxes: 20.54,
+    useAccountRevenueShare: true,
+    netIncomeFormula: 'host_payout',
+    netIncome: 302.28,
+    commissionFormula: 'net_income',
+    commission: 302.28,
+    commissionTaxPercentage: 0,
+    commissionTax: 0,
+    commissionIncTax: 302.28,
+    ownerRevenueFormula: 'net_income - pm_commission',
+    ownerRevenue: 0,
+    nightlyRateInvoiceItems: [ [Object], [Object], [Object], [Object], [Object] ],
+    platform: 'manual',
+    reservationId: '66faf6574a9ae2003a2bb07e',
+    bundledFees: [],
+    createdAt: '2024-09-30T19:04:56.751Z',
+    updatedAt: '2024-09-30T19:04:56.751Z',
+    payments: [],
+    balanceDue: 302.28,
+    isFullyPaid: false,
+    paymentsDue: 0,
+    totalRefunded: 0,
+    totalPaid: 0,
+    autoPaymentsPolicy: []
+  },
+  source: 'Manual',
+  mtl: { assigned: false, _id: '66faf6584a9ae2003a2bb08c' },
+  isReturningGuest: false,
+  checkIn: '2024-11-25T21:00:00.000Z',
+  checkOut: '2024-11-27T16:00:00.000Z',
+  nightsCount: 2,
+  additionalFeesAtCreation: [
+    {
+      automationSources: [],
+      automationPlatforms: [],
+      RUSources: [],
+      _id: '65ab0734d4325e000e9aac15',
+      isPercentage: true,
+      isAutomated: true,
+      allPlatforms: false,
+      allRUSources: false,
+      allSources: true,
+      isSyncToSupportedChannelsEnabled: true,
+      type: 'RESORT',
+      name: 'Credit card processing fee',
+      value: 3,
+      targetFee: 'ACCOMMODATION_FARE',
+      accountId: '653b0f8d7e8982defafaaf5b',
+      isDeducted: false
+    }
+  ],
+  guestyFeeDetails: {
+    commission: 3,
+    planItems: [ [Object] ],
+    feeMinimum: 3,
+    fee: 10,
+    feeUsd: 10,
+    isMinimumFee: false,
+    isMaximumFee: false
+  },
+  createdAt: '2024-09-30T19:04:56.937Z',
+  pendingTasks: [],
+  customFields: [],
+  lastUpdatedAt: '2024-09-30T19:04:56.951Z',
+  guest: {
+    airbnb: { id: '3719638651199880' },
+    airbnb2: { index: 'index', id: '3719638651207765' },
+    policy: { marketing: [Object], termsAndConditions: [Object] },
+    verifications: [],
+    emails: [ 'adam@exacttransport.com' ],
+    phones: [ '19548264318' ],
+    communicationMethods: [ 'email', 'sms' ],
+    interests: [],
+    allergies: [],
+    dietaryPreferences: [],
+    tags: [],
+    contactType: 'guest',
+    _id: '66ba1bc2b75a05ac90bea709',
+    createdAt: '2024-08-12T12:34:13.062Z',
+    paymentProvidersCustomers: [],
+    isOtaModified: false,
+    otaLinks: [],
+    phone: '19548264318',
+    email: 'adam@exacttransport.com',
+    hometown: 'Hollywood',
+    fullName: 'Adam Noah',
+    lastName: 'Noah',
+    firstName: 'Adam',
+    confirmed: true
+  },
+  listing: {
+    financials: { cleaningFee: [Object], petFee: [Object] },
+    address: {
+      street: '4787 Wild Iris Drive',
+      city: 'Myrtle Beach',
+      state: 'South Carolina',
+      zipcode: '29577',
+      country: 'United States of America',
+      lat: 33.735626220703125,
+      lng: -78.863525390625,
+      apt: '#204',
+      full: '4787 Wild Iris Drive #204, Myrtle Beach, South Carolina 29577, United States of America'
+    },
+    cleaningStatus: {
+      value: 'dirty',
+      updatedBy: 'Guesty automation',
+      updatedAt: '2023-12-01T22:48:13.179Z'
+    },
+    picture: {
+      caption: '',
+      thumbnail: 'https://res.cloudinary.com/guesty/image/upload/c_fit,h_200/me0nlujvjva9smbfpvd9?_a=BAMCcSGi0'
+    },
+    terms: { minNights: 2, maxNights: 1125 },
+    prices: {
+      monthlyPriceFactor: 0.8,
+      weeklyPriceFactor: 0.9,
+      currency: 'USD',
+      basePrice: 79,
+      weekendDays: [Array],
+      securityDepositFee: null,
+      guestsIncludedInRegularFee: null,
+      extraPersonFee: null,
+      cleaningFee: 119,
+      petFee: 75
+    },
+    publicDescription: {
+      summary: '2nd floor (must climb stairs) Beautiful, Warm and cozy condo. Open space with a balcony. located in the heart of Myrtle Beach, built around the Myrtlewood Golf Club, just off the bypass, minuets from the beach and all main attractions! Kitchen is fully equipped with all basics. Condo sleeps up to 6 guests.\n' +
+        '*PET OWNERS: Only fully trained pets are allowed with a pet fee but must be pre-approved by host. Please contact me for details.',
+      space: '2 bedrooms, 2 bathrooms, Very spacious condo. 1 King bed, 2 twin beds and 1 pullout sofa in the living room. Washer and dryer available in the unit.\n' +
+        'Kitchen is fully equipped with all basics. Dining area open to living room.\n' +
+        'Sheets and linens provided.  Free WiFi and cable TV available.\n' +
+        "*Pets are allowed with a pet fee. please don't forget to mention if you're bringing any pets with you.\n" +
+        '*Beach items are not included due to damage/loss of these items.\n' +
+        '*Towels are provided for showers only.',
+      access: 'The condo is rented in full. Guests have access to the entire place. Owners are not on the premises while guests are staying. \n' +
+        '*Access the pool with pool key only. 1 red pool key is placed in the kitchen drawer and must be kept and returned before checking out. There is a $100 charge for lost or broken key.\n' +
+        '*No mailbox for this location.\n' +
+        '*Washer/dryer available in the unit. \n' +
+        '*Parking is free.\n' +
+        '* motorcycles and trailers are not allowed on premises.',
+      interactionWithGuests: 'Please communicate through the website or app only. Downloading the Airbnb app is recommended for more convenient communication.  You can call or text to the private number only in case of any urgency.',
+      neighborhood: 'Beautiful quiet neighborhood, just a mile inland near the heart of Myrtle Beach, positioned around the golf course of Myrtlewood golf club. This location featured with BBQ areas, walking trails, beautiful landscaping. Only few minutes away from the beach, Broadway at the Beach, the mall, airport, convention center, wax museum, lots of restaurants, outlets and night clubs.\n' +
+        '10 minutes from airport, 5 minutes from Broadway at the beach, 5 minutes from the beach, 15 minutes from Market Commons, 1 minuet From golf course.',
+      transit: 'Car, taxi, Uber',
+      notes: '*Must climb stairs.\n' +
+        '*Pool wristbands are counted after each stay.\n' +
+        '*Please review my house rules.\n' +
+        '*No mailbox for this location. \n' +
+        "*Due to the fact that some guests have allergies, Pets are not allowed on beds and furniture and must be caged when you're not home. In case of finding any evidence that pets were on the beds, blankets or furniture, the guests will be charged for additional cleaning fee.\n" +
+        '*Only initial amount of toiletries, paper towel and toilet paper provided, guests should bring their own extras.\n' +
+        '*Bed sheets are provided (one set per bed)\n' +
+        '*Bath towels are included (one per guest, must not leave unit)\n' +
+        '*Bring your own beach towels (do not use bath towels)\n' +
+        '*condo is inspected prior to your arrival to make sure all is clean and working properly. please contact me immediately for any questions or concerns.',
+      houseRules: 'Please review the rules carefully prior to check in. \n' +
+        '*YOU MUST BE 25 years old or older to book and check in.\n' +
+        '\n' +
+        '*No events are allowed on premises.\n' +
+        '\n' +
+        '*Early check in/late check out is unfortunately not available due to cleaning schedules. arrival and departure time cannot be changed. In case of any changes and if the property comes available prior to check in time we can check availability on the day of arrival.\n' +
+        '\n' +
+        '*Please perform an inspection of the Property upon check-in. Should you find any issues that need attention such as cleaning or maintenance, contact the host via the AIRBNB messaging app. \n' +
+        '\n' +
+        '*SMOKING IS FORBIDDEN in the apartment or balcony at any time. in case of any evidence of smoking or smoking odor in the condo $500 fine will automatically be charged.\n' +
+        '\n' +
+        '*$100 penalty for any damaged or unreturned keys, access cards, fobs or parking passes if provided.\n' +
+        '\n' +
+        '*NO MAILBOX available at this location. Host is not responsible for any mail or packages delivery. \n' +
+        '\n' +
+        "*We are located in a residential community and although this is a vacation destination, it's home to many people. As such we ask that you respect their privacy and their right to a peaceful existence! Please keep the quiet hours between the 11 PM and 7 AM. loud noise or loud music are not tolerated and may cause immediate eviction without financial reimbursement\n" +
+        '\n' +
+        '*NO hanging towels in the balcony.\n' +
+        '\n' +
+        '*This property is self catering. Consumable items such as toiletries, cleaning products, paper products and condiments are not included. However, toilet paper roll, paper towel, roll and hotel size soap and shampoo are provided as a courtesy, but guests will need to bring or purchase additional supplies.\n' +
+        '\n' +
+        "*No compensations will be given for non-working items outside the owner's control, including but not limited to power outages, cable TV outages, internet outages, etc. For items inside the owner's control, the owners will make every attempt to rectify problems that may occur while you are in the property. It is the guests responsibility to notify the owner immediately if there are any problems. No refunds or any other compensation will be given for the problems that the owner is able to rectify within a reasonable time frame. No refunds or compensations will be for hair or stain on fabric. Stains and hair can be caught in the fabric fibers during laundry and owner will replace them if needed within reasonable time.\n" +
+        '\n' +
+        '*TOWELS provided for showering only, not for makeup remover, pool or beach use, or any other use.  Guests will be responsible to cover the cost for stained or damaged towels, same goes for linens. If you need to wash them please do so, and please remember we are not a hotel and our supply is limited.\n' +
+        '\n' +
+        '*This is not a hotel. This is a home. This condominium is in a\n' +
+        'community and sometimes maintenance issues in the area or construction on or around the property occur that are out of our control. We do not compensate or refund for such issues.\n' +
+        '\n' +
+        '*Pets are allowed. Only 1 pet up to 30lb with pet fee. Please contact for more information. Pet fee $75 per pet.\n' +
+        '\n' +
+        '*Unauthorized and untrained pets are not acceptable and you will be fined for $500 automatic fee.\n' +
+        '\n' +
+        '*Please be sure to throw out the TRASH before you check out.\n' +
+        '\n' +
+        '*MOTORCYCLES  and TRAILERS are not allowed on premises.\n' +
+        '\n' +
+        '*Please do not try to fix any maintenance issues. If needed we will send a professional to fix any emergency maintenance issues during work hours or it will be fixed the next day or upon your departure. There are no refunds for maintenance issues and if it’s determined that the issues were caused by you the guest, you may be charged accordingly. If there is an emergency, please contact 911 immediately and also send a message through the app.\n' +
+        '\n' +
+        '*We highly recommend trip insurance especially during hurricane season as we are unable to refund any money lost if your trip is canceled due to unforeseen circumstances like COVID, hurricanes, illness, etc.\n' +
+        '\n' +
+        '* Please note a Pesticide Tech may need to access the home to do pesticide spraying. Please ensure to let them into the house as these sprays are essential for managing critters. If you are not home, they will enter they will enter the home using their unique code. We try our best to time these sprays between guests, however, this is not always possible. \n' +
+        'properties are treated regular basis. We take all preventative measures to prevent pests from spreading but can not be 100% prevented so please notify me if we need to repeat the process steps. No refund will be added if owner was able to resolve the issue.\n' +
+        '~~~~~~~~~\n' +
+        'WE APPRECIATE YOUR COOPERATION AND HOPE YOUR STAY WILL BE MEMORABLE!'
+    },
+    privateDescription: { directions: '' },
+    type: 'SINGLE',
+    tags: [
+      'Pets',
+      '2ndfloor',
+      'Magnolia',
+      'MB',
+      'no bikes',
+      '*MB*',
+      'AviadRequest',
+      '2BR',
+      'Brenda'
+    ],
+    owners: [ '65e3d19e3acb700013400803' ],
+    amenities: [
+      'Pets allowed',
+      'Suitable for children (2-12 years)',
+      'Suitable for infants (under 2 years)',
+      'Microwave',
+      'Dishwasher',
+      'Swimming pool',
+      'Heating',
+      'Kitchen',
+      'Dishes and silverware',
+      'Dryer',
+      'Hair dryer',
+      'Cookware',
+      'Air conditioning',
+      'Wireless Internet',
+      'Stove',
+      'Cable TV',
+      'TV',
+      'Oven',
+      'Patio or balcony',
+      'Carbon monoxide detector',
+      'Coffee maker',
+      'Essentials',
+      'BBQ grill',
+      'Smoke detector',
+      'Bed linens',
+      'Free parking on premises',
+      'Iron',
+      'Refrigerator',
+      'Hangers',
+      'Washer',
+      'Hot water'
+    ],
+    amenitiesNotIncluded: [],
+    useAccountRevenueShare: true,
+    netIncomeFormula: 'host_payout',
+    commissionFormula: 'net_income',
+    ownerRevenueFormula: 'net_income - pm_commission',
+    useAccountAdditionalFees: true,
+    taxes: [],
+    useAccountTaxes: true,
+    useAccountMarkups: true,
+    active: true,
+    preBooking: [],
+    _id: '656649dfa55360001faf6d53',
+    nickname: 'FA🐕',
+    title: 'Fantastic condo in the center of Myrtle Beach',
+    propertyType: 'Condominium',
+    roomType: 'Entire home/apt',
+    bedrooms: 2,
+    bathrooms: 2,
+    beds: 4,
+    isListed: true,
+    defaultCheckInTime: '16:00',
+    defaultCheckInEndTime: '23:00',
+    defaultCheckOutTime: '11:00',
+    integrations: [ [Object], [Object] ],
+    accommodates: 6,
+    timezone: 'America/New_York',
+    createdAt: '2023-11-28T20:13:19.210Z',
+    lastUpdatedAt: '2024-09-26T19:29:43.254Z',
+    listingRooms: [ [Object], [Object], [Object] ],
+    customFields: [ [Object], [Object], [Object], [Object] ],
+    importedAt: '2023-11-28T20:13:19.210Z',
+    occupancyStats: [],
+    yieldManagement: { rateStrategy: [Object] },
+    minimumAge: 25,
+    hostName: '',
+    houseManual: '',
+    parkingInstructions: '',
+    trashCollectedOn: '',
+    wifiName: 'Wildiris204',
+    wifiPassword: 'beachvacation',
+    businessModel: {
+      id: '66ecacc830a6524c06ec207b',
+      name: 'Monthly Rent',
+      activationDate: '2024-01-01T17:00:00.000Z',
+      version: 8
+    },
+    lastActivityAt: '2024-09-21T10:57:16.084Z'
+  },
+  __v: 0,
+  conversationId: '66ecb2624e5ff20010523eee',
+  id: '66faf6574a9ae2003a2bb07e'
+}
+Response with status 200 in 3081 ms.
