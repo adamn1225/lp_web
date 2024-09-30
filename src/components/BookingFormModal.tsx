@@ -212,12 +212,23 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       const paymentMethod = await guestyTokenization.submit();
       console.log('Payment Method:', paymentMethod);
 
+      // Log the paymentMethod object to inspect its structure
+      console.log('Payment Method Object:', JSON.stringify(paymentMethod, null, 2));
+
+      // Check if paymentMethod contains the necessary properties
+      if (!paymentMethod || !paymentMethod._id) {
+        throw new Error('Payment method tokenization failed or missing required information');
+      }
+
+      // Include providerId directly in the request body
+      const providerId = '65667fb19986e2000e99278f'; // Replace with actual provider ID
+
       const response = await fetch('/.netlify/functions/createReservations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ guestInfo, paymentMethod, ...reservationDetails })
+        body: JSON.stringify({ guestInfo, paymentMethod: { ...paymentMethod, providerId }, ...reservationDetails })
       });
 
       const responseText = await response.text();

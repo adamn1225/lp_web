@@ -53,7 +53,7 @@ export const handler = async (event) => {
       listingId,
       checkInDateLocalized: checkInDate,
       checkOutDateLocalized: checkOutDate,
-      status: 'inquiry',
+      status: 'confirmed',
       guestId: guestData._id,
       paymentMethod,
     };
@@ -87,7 +87,7 @@ export const handler = async (event) => {
     // Attach payment method to reservation
     const paymentMethodUrl = `https://open-api.guesty.com/v1/guests/${guestData._id}/payment-methods`;
     const paymentMethodRequestBody = {
-      _id: paymentMethod.id, // Assuming paymentMethod contains the tokenized payment method ID
+      _id: paymentMethod._id, // Assuming paymentMethod contains the tokenized payment method ID
       paymentProviderId: paymentMethod.providerId, // Assuming paymentMethod contains the provider ID
       reservationId: reservationData._id,
     };
