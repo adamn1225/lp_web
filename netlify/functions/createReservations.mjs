@@ -52,7 +52,7 @@ export const handler = async (event) => {
       listingId,
       checkInDateLocalized: checkInDate,
       checkOutDateLocalized: checkOutDate,
-      status: 'inquiry',
+      status: 'confirmed',
       guestId: guestData._id,
       paymentMethod,
     };
