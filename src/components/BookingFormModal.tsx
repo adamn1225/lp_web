@@ -4,7 +4,6 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { loadScript } from '@guestyorg/tokenization-js';
 import type { GuestyTokenizationNamespace, GuestyTokenizationRenderOptions } from '@guestyorg/tokenization-js';
-import Alert from './Alert';
 
 interface BookingFormModalProps {
   isModalOpen: boolean;
@@ -55,7 +54,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [reservationId, setReservationId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [guestyTokenization, setGuestyTokenization] = useState<GuestyTokenizationNamespace | null>(null);
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -137,162 +137,111 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     }
   }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, pets, cityTax, localTax, beforeTax, maintenanceFee]);
 
-  const handleGuestsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
-    if (value <= accommodates) {
-      setGuests(value);
-    } else {
-      alert(`The maximum number of guests allowed is ${accommodates}.`);
-    }
-  };
-
-  const createReservation = async () => {
-    try {
-      setLoading(true);
-      const reservationInfo = {
-        listingId,
-        checkInDateLocalized: dateRange[0].startDate?.toISOString().slice(0, 10),
-        checkOutDateLocalized: dateRange[0].endDate?.toISOString().slice(0, 10),
-        guestsCount: guests,
-        firstName,
-        lastName,
-        phone,
-        email
+  useEffect(() => {
+    const initializeGuestyTokenization = async () => {
+      const options: GuestyTokenizationRenderOptions = {
+        containerId: 'payment-container',
+        providerId: '65667fb19986e2000e99278f', // Replace with your actual valid provider ID
+        amount: calculatedPrice, // Replace with the actual amount
+        currency: 'USD', // Replace with the actual currency
+        onStatusChange: (isValid) => {
+          setIsFormValid(isValid);
+          console.log('Form validity changed:', isValid);
+        },
+        initialValues: {
+          firstName,
+          lastName,
+        },
       };
 
-      console.log('Creating reservation with info:', reservationInfo); // Log the reservation info
+      console.log('Loading Guesty Tokenization JS SDK...');
+      loadScript()
+        .then((guestyTokenization) => {
+          console.log('Guesty Tokenization JS SDK loaded:', guestyTokenization);
 
-      const response = await fetch('/.netlify/functions/createReservations', {
+          const container = document.getElementById(options.containerId);
+          if (!container) {
+            console.error(`Container with id ${options.containerId} not found.`);
+            return;
+          }
+
+          guestyTokenization.render(options);
+          setGuestyTokenization(guestyTokenization);
+          console.log('Guesty Tokenization JS SDK initialized with options:', options);
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error('Error response:', error.response);
+          } else if (error.request) {
+            console.error('Error request:', error.request);
+          }
+          console.error('Error message:', error.message);
+          console.error('Failed to load the Guesty Tokenization JS SDK script', error);
+        });
+    };
+
+    if (currentStep === 2 && calculatedPrice !== null) {
+      initializeGuestyTokenization();
+    }
+  }, [currentStep, calculatedPrice, firstName, lastName]);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const guestInfo = {
+      firstName,
+      lastName,
+      phone,
+      email,
+    };
+
+    console.log('Parsed guest info:', JSON.stringify(guestInfo, null, 2));
+
+    try {
+      // Tokenize payment
+      const paymentMethod = await guestyTokenization?.submit();
+      console.log('Payment Method:', paymentMethod);
+
+      const response = await fetch('/.netlify/functions/createReservationAndTokenizePayment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(reservationInfo)
+        body: JSON.stringify({ guestInfo, paymentMethod })
       });
 
-      const responseText = await response.text(); // Get the response text
-      console.log('Response text:', responseText); // Log the response text
+      const responseText = await response.text();
+      console.log('Response text:', responseText);
 
       if (!response.ok) {
-        let errorMessage = responseText;
-        try {
-          const errorData = JSON.parse(responseText); // Parse the response text as JSON
-          errorMessage = errorData.message || `Error: ${response.statusText}`;
-        } catch (e) {
-          console.error('Failed to parse error response as JSON:', e);
-        }
-        throw new Error(errorMessage);
+        throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
       }
 
-      const data = JSON.parse(responseText); // Parse the response text as JSON
-      return { status: response.status, data };
+      const data = JSON.parse(responseText);
+      console.log('Success:', data);
+
+      // Proceed to next step
+      setCurrentStep(3);
     } catch (error) {
-      console.error('Error creating reservation:', error);
-      return { status: 500, error: error.message || 'An error occurred while creating the reservation.' };
+      console.error('Error creating guest or tokenizing payment:', error);
+      // Handle error (e.g., show an error message to the user)
     } finally {
       setLoading(false);
     }
   };
-
-  const GuestyPayment = ({ calculatedPrice }) => {
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [guestyTokenization, setGuestyTokenization] = useState<GuestyTokenizationNamespace | null>(null);
-
-    useEffect(() => {
-      const initializeGuestyTokenization = async () => {
-        try {
-          const guestyTokenization = await loadScript();
-          setGuestyTokenization(guestyTokenization);
-
-          const options: GuestyTokenizationRenderOptions = {
-            containerId: 'guesty-tokenization-container',
-            providerId: '65667fb19986e2000e99278f', // Replace with your actual valid provider ID
-            amount: calculatedPrice, // Replace with the actual amount
-            currency: 'USD', // Replace with the actual currency
-            onStatusChange: (isValid) => {
-              setIsFormValid(isValid);
-              console.log('Form validity changed:', isValid);
-            },
-          };
-
-          console.log('Loading Guesty Tokenization JS SDK...');
-          await guestyTokenization.render(options);
-          console.log('Guesty Tokenization JS SDK initialized with options:', options);
-        } catch (error) {
-          console.error('Failed to load the Guesty Tokenization JS SDK script', error);
-        }
-      };
-
-      initializeGuestyTokenization();
-    }, [calculatedPrice]);
-
-    const handleSubmit = async () => {
-      if (guestyTokenization) {
-        try {
-          const paymentMethod = await guestyTokenization.submit();
-          console.log('Payment method:', paymentMethod);
-          // Process payment method via Guesty's API
-        } catch (error) {
-          console.error('Failed to submit the Guesty Tokenization form', error);
-        }
-      }
-    };
-
-    return (
-      <div className="h-full w-full md:px-2">
-        <div id="guesty-tokenization-container"></div>
-        <div className="flex justify-between mt-4">
-          <p><strong>Total Price:</strong></p>
-          <p className="text-cyan-950 font-bold">${calculatedPrice !== null ? calculatedPrice.toFixed(2) : '0.00'}</p>
-        </div>
-        <button
-          className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
-          type="button"
-          onClick={handleSubmit}
-          disabled={!isFormValid}
-        >
-          Submit Payment
-        </button>
-      </div>
-    );
-  };
-
-  const handleProceedToPayment = async () => {
-    try {
-      const response = await createReservation();
-      if (response.status >= 400 && response.status < 600) {
-        console.error('Reservation creation failed:', response);
-        setErrorMessage(response.error);
-        return;
-      }
-      setCurrentStep(2);
-    } catch (error) {
-      console.error('Error creating reservation:', error);
-      setErrorMessage(error.responseText || 'An error occurred while creating the reservation.');
-    }
-  };
-
-
 
   return (
     <Modal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Booking Form"
-      className="bg-white px-4 rounded-lg drop-shadow-2xl shadow-lg w-full max-w-lg"
+      className="bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg w-5/6 h-6/6 my-12"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       appElement={document.getElementById('Top')!}
     >
-      <div className="relative py-8 flex flex-col h-full text-slate-800 font-semibold text-lg">
-        <button
-          className="absolute right-1 text-slate-500 hover:text-slate-800 text-3xl"
-          onClick={closeModal}
-        >
-          &times;
-        </button>
+      <div className="relative flex flex-col justify-center items-center max-h-full overflow-y-auto">
         {currentStep === 1 && (
           <>
-            <form onSubmit={(e) => { e.preventDefault(); createReservation(); }} className="flex flex-col justify-center items-center">
+            <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(2); }} className="flex flex-col justify-center items-center">
               <div>
                 <h2 className="text-slate-800 text-3xl mb-4 underline">Book Instantly</h2>
                 <h2 className="text-slate-800 text-xl mb-4 underline">Fill out the form below and reserve the date</h2>
@@ -302,7 +251,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     type="number"
                     id="guests"
                     value={guests}
-                    onChange={handleGuestsChange}
+                    onChange={(e) => setGuests(Number(e.target.value))}
                     className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
                     min="1"
                   />
@@ -366,50 +315,63 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                   </label>
                 </div>
               </div>
+              <button
+                className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+                type="submit"
+                disabled={loading}
+              >
+                Proceed to Payment
+              </button>
             </form>
-            {calculatedPrice !== null && (
-              <div className="flex flex-col mx-10 justify-between mt-3">
-                <div className='text-justify'>
-                  {pets > 0 && petFee > 0 && (
-                    <div className="flex justify-between">
-                      <p><strong>Pet Price:</strong></p>
-                      <p>${petFee}</p>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <p><strong>Cleaning Fee:</strong></p>
-                    <p>${cleaningFee.toFixed(2)}</p>
-                  </div>
-                  <div className="flex justify-between">
-                    <p><strong>Taxes:</strong></p>
-                    <p>${beforeTax.toFixed(2)}</p>
-                  </div>
-                  <div className="flex justify-between">
-                    <p><strong>Maintenance Fee:</strong></p>
-                    <p>${maintenanceFee.toFixed(2)}</p>
-                  </div>
-                  <div className='border border-x-0 border-y-1 border-slate-800 my-2'> </div>
-                  <div className="flex justify-between">
-                    <p><strong>Total Price:</strong></p>
-                    <p className="text-cyan-950 font-bold">${calculatedPrice !== null ? calculatedPrice.toFixed(2) : '0.00'}</p>
-                  </div>
-                </div>
-                <button
-                  className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
-                  type="button"
-                  onClick={handleProceedToPayment} disabled={loading} // Combine createReservation and move to the next step
-                >
-                  Proceed to Payment
-                </button>
-              </div>
-            )}
           </>
         )}
-        {currentStep === 2 && <GuestyPayment calculatedPrice={calculatedPrice} />}
+        {currentStep === 2 && (
+          <div className='w-full justify-center items-center max-h-5/6'>
+            <div id="payment-container" className="mx-12 my-0"></div>
+            <div className="flex flex-col gap-4 mt-3">
+              <div className='text-justify mx-12'>
+                {pets > 0 && petFee > 0 && (
+                  <div className="flex justify-between">
+                    <p><strong>Pet Price:</strong></p>
+                    <p>${petFee}</p>
+                  </div>
+                )}
+                <div className="flex justify-between">
+                  <p><strong>Cleaning Fee:</strong></p>
+                  <p>${cleaningFee.toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p><strong>Taxes:</strong></p>
+                  <p>${beforeTax.toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p><strong>Maintenance Fee:</strong></p>
+                  <p>${maintenanceFee.toFixed(2)}</p>
+                </div>
+                <div className='border border-x-0 border-y-1 border-slate-800 my-2'> </div>
+                <div className="flex justify-between">
+                  <p><strong>Total Price:</strong></p>
+                  <p className="text-cyan-950 font-bold">${calculatedPrice !== null ? calculatedPrice.toFixed(2) : '0.00'}</p>
+                </div>
+              </div>
+              <button
+                className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+                type="button"
+                onClick={handleSubmit}
+                disabled={loading || !isFormValid}
+              >
+                Complete Payment
+              </button>
+            </div>
+          </div>
+        )}
+        {currentStep === 3 && (
+          <div>
+            <h2 className="text-slate-800 text-3xl mb-4 underline">Booking Complete</h2>
+            <p className="text-slate-800 text-xl mb-4">Thank you for your booking!</p>
+          </div>
+        )}
       </div>
-      {errorMessage && (
-        <Alert message={errorMessage} onClose={() => setErrorMessage(null)} />
-      )}
     </Modal>
   );
 };

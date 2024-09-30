@@ -28,8 +28,8 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const [state, setState] = useState<any[]>([
     {
-      startDate: null,
-      endDate: null,
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
       key: 'selection'
     }
   ]);
@@ -50,7 +50,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
     const fetchUnavailableDates = async () => {
       try {
         const startDate = new Date().toISOString().slice(0, 10);
-        const endDate = '2028-08-24'; // Set end date to 2025-08-24
+        const endDate = '2028-08-24'; // Set end date to 2028-08-24
         const apiUrl = isLocal
           ? `http://localhost:8888/.netlify/functions/fetchPricingData?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`
           : `/.netlify/functions/fetchPricingData?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`;
