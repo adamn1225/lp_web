@@ -6,6 +6,7 @@ export const handler = async (event) => {
 
     console.log('Parsed guest info:', JSON.stringify(guestInfo, null, 2));
     console.log('Parsed payment method:', JSON.stringify(paymentMethod, null, 2));
+    console.log('Parsed reservation details:', JSON.stringify({ listingId, checkInDate, checkOutDate }, null, 2));
 
     if (!process.env.VITE_API_TOKEN) {
       throw new Error('VITE_API_TOKEN environment variable is not set');
@@ -52,7 +53,7 @@ export const handler = async (event) => {
       listingId,
       checkInDateLocalized: checkInDate,
       checkOutDateLocalized: checkOutDate,
-      status: 'confirmed',
+      status: 'inquiry',
       guestId: guestData._id,
       paymentMethod,
     };
@@ -83,9 +84,42 @@ export const handler = async (event) => {
     const reservationData = JSON.parse(reservationResponseText);
     console.log('Reservation created:', reservationData);
 
+    // Attach payment method to reservation
+    const paymentMethodUrl = `https://open-api.guesty.com/v1/guests/${guestData._id}/payment-methods`;
+    const paymentMethodRequestBody = {
+      _id: paymentMethod.id, // Assuming paymentMethod contains the tokenized payment method ID
+      paymentProviderId: paymentMethod.providerId, // Assuming paymentMethod contains the provider ID
+      reservationId: reservationData._id,
+    };
+
+    console.log('Payment Method Request Body:', JSON.stringify(paymentMethodRequestBody, null, 2));
+
+    const paymentMethodOptions = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${process.env.VITE_API_TOKEN}`
+      },
+      body: JSON.stringify(paymentMethodRequestBody)
+    };
+
+    console.log('Payment Method Request URL:', paymentMethodUrl);
+    console.log('Payment Method Request Headers:', JSON.stringify(paymentMethodOptions.headers, null, 2));
+
+    const paymentMethodResponse = await fetch(paymentMethodUrl, paymentMethodOptions);
+    const paymentMethodResponseText = await paymentMethodResponse.text();
+    console.log('Payment Method Response text:', paymentMethodResponseText);
+
+    if (!paymentMethodResponse.ok) {
+      throw new Error(`Error: ${paymentMethodResponse.status} ${paymentMethodResponse.statusText} - ${paymentMethodResponseText}`);
+    }
+
+    const paymentMethodData = JSON.parse(paymentMethodResponseText);
+    console.log('Payment method attached:', paymentMethodData);
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ guestData, reservationData })
+      body: JSON.stringify({ guestData, reservationData, paymentMethodData })
     };
   } catch (error) {
     console.error('Error creating guest or reservation:', error);

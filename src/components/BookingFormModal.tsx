@@ -142,7 +142,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       const options: GuestyTokenizationRenderOptions = {
         containerId: 'payment-container',
         providerId: '65667fb19986e2000e99278f', // Replace with your actual valid provider ID
-        amount: calculatedPrice, // Replace with the actual amount
+        amount: calculatedPrice || 0, // Ensure calculatedPrice is a valid number
         currency: 'USD', // Replace with the actual currency
         onStatusChange: (isValid) => {
           setIsFormValid(isValid);
@@ -205,7 +205,11 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
 
     try {
       // Tokenize payment
-      const paymentMethod = await guestyTokenization?.submit();
+      if (!guestyTokenization) {
+        throw new Error('Guesty Tokenization is not initialized');
+      }
+
+      const paymentMethod = await guestyTokenization.submit();
       console.log('Payment Method:', paymentMethod);
 
       const response = await fetch('/.netlify/functions/createReservations', {
@@ -231,11 +235,12 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     } catch (error) {
       console.error('Error creating guest or tokenizing payment:', error);
       // Handle error (e.g., show an error message to the user)
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <Modal
       isOpen={isModalOpen}
