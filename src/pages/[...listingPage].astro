@@ -1,20 +1,20 @@
 ---
 export const prerender = true;
-import { Icon } from 'astro-icon/components'
-import Layout from '@layouts/Default.astro'
-import Section from '@components/Section.astro'
-import ReservationForm from '@components/ReservationForm'
-import GuestyListings from '@components/GuestyListings.astro'
-import InstantBooking from '@components/InstantBooking.tsx'
-import { fetchAllListings } from './api/dataFetcher';
-import fetchReviews from './api/listingReviews';
+import { Icon } from "astro-icon/components";
+import Layout from "@layouts/Default.astro";
+import Section from "@components/Section.astro";
+import ReservationForm from "@components/ReservationForm";
+import GuestyListings from "@components/GuestyListings.astro";
+import InstantBooking from "@components/InstantBooking.tsx";
+import { fetchAllListings } from "./api/dataFetcher";
+import fetchReviews from "./api/listingReviews";
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
   const reviews = await fetchReviews();
   const paths = listings.map((listing: any) => ({
     params: {
-      listingPage: listing._id // Ensure this matches the requested path
+      listingPage: listing._id, // Ensure this matches the requested path
     },
     props: {
       title: listing.title,
@@ -26,8 +26,10 @@ export async function getStaticPaths() {
       listingId: listing._id,
       checkIn: listing.defaultCheckInTime,
       checkOut: listing.defaultCheckOutTime,
-      reviews: Array.isArray(reviews) ? reviews.filter((review: any) => review.listingId === listing._id) : [] // Filter reviews for the listing
-    }
+      reviews: Array.isArray(reviews)
+        ? reviews.filter((review: any) => review.listingId === listing._id)
+        : [], // Filter reviews for the listing
+    },
   }));
 
   return paths; // Return the array of paths directly
@@ -35,19 +37,25 @@ export async function getStaticPaths() {
 
 export async function get({ params }) {
   const listings = await fetchAllListings();
-  const listing = listings.find((listing: any) => listing._id === params.listingPage);
+  const listing = listings.find(
+    (listing: any) => listing._id === params.listingPage,
+  );
 
   if (!listing) {
     return {
       status: 404,
-      body: 'Not Found'
+      body: "Not Found",
     };
   }
 
   // Set Cache-Control headers
-  Astro.response.headers.set("Cache-Control", "public, max-age=3600, s-maxage=3600");
   Astro.response.headers.set(
-    "Netlify-CDN-Cache-Control", "public, durable, s-maxage=3600, stale-while-revalidate=86400"
+    "Cache-Control",
+    "public, max-age=3600, s-maxage=3600",
+  );
+  Astro.response.headers.set(
+    "Netlify-CDN-Cache-Control",
+    "public, durable, s-maxage=3600, stale-while-revalidate=86400",
   );
 
   return {
@@ -62,17 +70,28 @@ export async function get({ params }) {
     listingId: listing._id,
     checkIn: listing.defaultCheckInTime,
     checkOut: listing.defaultCheckOutTime,
-    reviews: Array.isArray(reviews) ? reviews.filter((review: any) => review.listingId === listing._id) : [] // Filter reviews for the listing
+    reviews: Array.isArray(reviews)
+      ? reviews.filter((review: any) => review.listingId === listing._id)
+      : [], // Filter reviews for the listing
   };
 }
 
-const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, checkIn, checkOut, reviews } = Astro.props;
-
+const {
+  title,
+  pictures,
+  Description,
+  beds,
+  bathrooms,
+  listingId,
+  PropertyType,
+  checkIn,
+  checkOut,
+  reviews,
+} = Astro.props;
 ---
 
-<Layout title="Property Details"> 
-
-  <main id="PropertyDetails"> 
+<Layout title="Property Details">
+  <main id="PropertyDetails">
     <Section>
       <div class="w-full mx-auto max-w-full mt-12 px-8 xs:px-4">
         <div class="pb-12 mb-12">
@@ -81,34 +100,67 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
             <nav class="mt-28 mb-6" aria-label="breadcrumbs">
               <ul class="flex items-center xs:justify-center">
                 <li class="flex items-center">
-                  <a href="/" class="hover:text-primary-500 pe-3 text-muted-400">
+                  <a
+                    href="/"
+                    class="hover:text-primary-500 pe-3 text-muted-400"
+                  >
                     <Icon name="lucide:home" />
                   </a>
                 </li>
-                <li class="flex items-center before:content-['/'] before:text-muted-400">
-                  <a href="/" class="hover:text-primary-500 px-3 text-muted-400">Properties</a>
+                <li
+                  class="flex items-center before:content-['/'] before:text-muted-400"
+                >
+                  <a href="/" class="hover:text-primary-500 px-3 text-muted-400"
+                    >Properties</a
+                  >
                 </li>
-                <li class="is-active flex items-center before:content-['/'] before:text-muted-400">
-                  <a href="#" class="px-3 text-muted-400" href="#" aria-current="page">Details</a>
+                <li
+                  class="is-active flex items-center before:content-['/'] before:text-muted-400"
+                >
+                  <a
+                    href="#"
+                    class="px-3 text-muted-400"
+                    href="#"
+                    aria-current="page">Details</a
+                  >
                 </li>
               </ul>
             </nav>
             <!-- property details title -->
-            <div class="flex flex-col md:flex-row items-end justify-between mb-6">
+            <div
+              class="flex flex-col md:flex-row items-end justify-between mb-6"
+            >
               <!-- left -->
               <div class="left mb-8 md:m-0">
-                <h2 class="leading-9 text-3xl font-light font-sans text-muted-900 mb-2 xs:text-center">{title}</h2>
-                <div class="flex xs:justify-center gap-4 text-base text-muted-900">
-                  <a href="#" class="flex items-center font-medium relative underline-offset-4 hover:underline"></a>
+                <h2
+                  class="leading-9 text-3xl font-light font-sans text-muted-900 mb-2 xs:text-center"
+                >
+                  {title}
+                </h2>
+                <div
+                  class="flex xs:justify-center gap-4 text-base text-muted-900"
+                >
+                  <a
+                    href="#"
+                    class="flex items-center font-medium relative underline-offset-4 hover:underline"
+                  ></a>
                 </div>
               </div>
               <!-- right -->
-              <div class="right flex xs:justify-center xs:items-center xs:w-full gap-4">
-                <a href="#" class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline">
+              <div
+                class="right flex xs:justify-center xs:items-center xs:w-full gap-4"
+              >
+                <a
+                  href="#"
+                  class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline"
+                >
                   <Icon name="h-4 aspect-square" name="lucide:share-2" />
                   <span class="relative">Share</span>
                 </a>
-                <a href="#" class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline">
+                <a
+                  href="#"
+                  class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline"
+                >
                   <Icon name="h-4 aspect-square" name="lucide:heart" />
                   <span class="relative">Save</span>
                 </a>
@@ -122,66 +174,140 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
 
                 <!-- Start Carousel -->
 
-                
-
                 <!-- End Carousel -->
 
                 <div class="flex flex-col md:flex-row items-stretch gap-4 mb-4">
                   <div class="main-image md:flex-grow-[2]">
-                    <img class="block object-cover min-h-[450px]" src={pictures[0].original} alt="Main image" width={2000} height={1333} data-zoom loading="lazy" />
+                    <img
+                      class="block object-cover min-h-[450px]"
+                      src={pictures[0].original}
+                      alt="Main image"
+                      width={2000}
+                      height={1333}
+                      data-zoom
+                      loading="lazy"
+                    />
                   </div>
-                  <div class="flex flex-row md:flex-col xs:flex-wrap gap-4 max-w-full md:max-w-[180px] md:w-full">
-                    <img class="object-cover md:w-auto flex-1" src={pictures[1].original} alt="Sub image" width={2000} height={1333} data-zoom loading="lazy" />
-                    <img class="object-cover md:w-auto flex-1" src={pictures[2].original} alt="Sub image" width={2000} height={1333} data-zoom loading="lazy" />
-                    <img class="object-cover md:w-auto flex-1" src={pictures[3].original} alt="Sub image" width={2000} height={1333} data-zoom loading="lazy" />
+                  <div
+                    class="flex flex-row md:flex-col xs:flex-wrap gap-4 max-w-full md:max-w-[180px] md:w-full"
+                  >
+                    <img
+                      class="object-cover md:w-auto flex-1"
+                      src={pictures[1].original}
+                      alt="Sub image"
+                      width={2000}
+                      height={1333}
+                      data-zoom
+                      loading="lazy"
+                    />
+                    <img
+                      class="object-cover md:w-auto flex-1"
+                      src={pictures[2].original}
+                      alt="Sub image"
+                      width={2000}
+                      height={1333}
+                      data-zoom
+                      loading="lazy"
+                    />
+                    <img
+                      class="object-cover md:w-auto flex-1"
+                      src={pictures[3].original}
+                      alt="Sub image"
+                      width={2000}
+                      height={1333}
+                      data-zoom
+                      loading="lazy"
+                    />
                   </div>
                 </div>
-                
 
                 <!-- property content -->
                 <div class="relative" x-data="{ activeTab: 'tab-1' }">
-                  <div class="tabs mb-6 flex text-base justify-between overflow-hidden overflow-x-auto">
-                    <ul class="flex items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none">
-                      <li :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
-                        <a @click.prevent="activeTab = 'tab-1'" class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                  <div
+                    class="tabs mb-6 flex text-base justify-between overflow-hidden overflow-x-auto"
+                  >
+                    <ul
+                      class="flex items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none"
+                    >
+                      <li
+                        :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
+                      >
+                        <a
+                          @click.prevent="activeTab = 'tab-1'"
+                          class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
                           >Description</a
                         >
                       </li>
-                      <li :class="activeTab === 'tab-2' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
-                        <a @click.prevent="activeTab = 'tab-2'" class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                      <li
+                        :class="activeTab === 'tab-2' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
+                      >
+                        <a
+                          @click.prevent="activeTab = 'tab-2'"
+                          class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
                           >Amenities</a
                         >
                       </li>
-                      <li :class="activeTab === 'tab-3' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'">
-                        <a @click.prevent="activeTab = 'tab-3'" class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                      <li
+                        :class="activeTab === 'tab-3' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
+                      >
+                        <a
+                          @click.prevent="activeTab = 'tab-3'"
+                          class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
                           >Comments</a
                         >
                       </li>
                     </ul>
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
+                    {
+                      Description?.summary && (
+                        <>
+                          <>
+                            <p class="text-muted-500 text-base xs:text-center">
+                              {Description.summary}
+                            </p>
+                            <br />
+                          </>
+                        </>
+                      )
+                    }
 
-                    <p class="text-muted-500 text-base xs:text-center">
-                      {Description.summary}
-                     </p><br />
+                    {
+                      Description?.notes && (
+                        <>
+                          <>
+                            <p class="text-muted-500 text-base xs:text-center">
+                              {Description.notes}
+                            </p>
+                            <br />
+                          </>
+                        </>
+                      )
+                    }
+                    <br />
 
-                     <p class="text-muted-500 text-base xs:text-center">
-                      {Description.notes}
-                     </p><br />
-                     <br />
-
-                     <p class="text-muted-500 text-base xs:text-center">
-                      {Description.access}
-                     </p><br />
-                     <br />
-
-
+                    {
+                      Description?.access && (
+                        <>
+                          <p class="text-muted-500 text-base xs:text-center">
+                            {Description.access}
+                          </p>
+                        </>
+                      )
+                    }<br />
+                    <br />
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
-                    <div class="boxed-amenities flex flex-wrap justify-start gap-3">
+                    <div
+                      class="boxed-amenities flex flex-wrap justify-start gap-3"
+                    >
                       <!-- Amenity -->
-                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-                        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
+                      <div
+                        class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
+                      >
+                        <div
+                          class="font-bold gap-2 flex justify-center items-center text-muted-900"
+                        >
                           <svg
                             class="h-6"
                             xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +319,11 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                             stroke-linejoin="round"
                             style="--darkreader-inline-stroke: currentColor;"
                             data-darkreader-inline-stroke=""
-                            ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
+                            ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"
+                            ></path><path
+                              d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"
+                            ></path><path d="M12 4v6"></path><path d="M2 18h20"
+                            ></path>
                           </svg>
                           <span>{PropertyType}</span>
                         </div>
@@ -201,10 +331,14 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                           <p class="text-sm text-muted-400">Property Type</p>
                         </div>
                       </div>
-                    
+
                       <!-- Amenity -->
-                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-                        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
+                      <div
+                        class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
+                      >
+                        <div
+                          class="font-bold gap-2 flex justify-center items-center text-muted-900"
+                        >
                           <svg
                             class="h-6"
                             xmlns="http://www.w3.org/2000/svg"
@@ -216,11 +350,13 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                             stroke-linejoin="round"
                             style="--darkreader-inline-stroke: currentColor;"
                             data-darkreader-inline-stroke=""
-                            ><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path><line x1="10" y1="5" x2="8" y2="7"></line><line
-                              x1="2"
-                              y1="12"
-                              x2="22"
-                              y2="12"></line><line x1="7" y1="19" x2="7" y2="21"></line><line x1="17" y1="19" x2="17" y2="21"></line>
+                            ><path
+                              d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                            ></path><line x1="10" y1="5" x2="8" y2="7"
+                            ></line><line x1="2" y1="12" x2="22" y2="12"
+                            ></line><line x1="7" y1="19" x2="7" y2="21"
+                            ></line><line x1="17" y1="19" x2="17" y2="21"
+                            ></line>
                           </svg>
                           <span>{bathrooms}</span>
                         </div>
@@ -230,8 +366,12 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                       </div>
 
                       <!-- Amenity -->
-                      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-                        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
+                      <div
+                        class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
+                      >
+                        <div
+                          class="font-bold gap-2 flex justify-center items-center text-muted-900"
+                        >
                           <Icon class="text-2xl h-6" name="lucide:webcam" />
                           <span></span>
                         </div>
@@ -241,65 +381,76 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                       </div>
                     </div>
                   </div>
-<div x-cloak x-show="activeTab === 'tab-3'" class="relative">
-  {reviews && reviews.length > 0 ? (
-    reviews.map((review: any) => (
-      <div class="relative">
-        <div class="grid grid-cols-2 gap-6 max-w-xl">
-          {review.rawReview.category_ratings && review.rawReview.category_ratings.length > 0 ? (
-            review.rawReview.category_ratings.map((rating: any, index: number) => (
-              <div class="relative">
-                <div class="flex items-center justify-between max-w-xl">
-                  <div class="text-base text-muted-700 dark:text-muted-200">
-                    <span>{rating.category}</span>
-                  </div>
-                  <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                    <progress
-                      class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                      value={rating.rating}
-                      max="5"
-                    >
-                      {rating.rating}
-                    </progress>
-                    <span class="ms-3 font-medium text-base text-muted-900">{rating.rating}</span>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No category ratings available</p>
-          )}
-        </div>
+                  <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
+                    {
+                      reviews && reviews.length > 0 ? (
+                        reviews.map((review: any) => (
+                          <div class="relative">
+                            <div class="grid grid-cols-2 gap-6 max-w-xl">
+                              {review.rawReview.category_ratings &&
+                              review.rawReview.category_ratings.length > 0 ? (
+                                review.rawReview.category_ratings.map(
+                                  (rating: any, index: number) => (
+                                    <div class="relative">
+                                      <div class="flex items-center justify-between max-w-xl">
+                                        <div class="text-base text-muted-700 dark:text-muted-200">
+                                          <span>{rating.category}</span>
+                                        </div>
+                                        <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                                          <progress
+                                            class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                                            value={rating.rating}
+                                            max="5"
+                                          >
+                                            {rating.rating}
+                                          </progress>
+                                          <span class="ms-3 font-medium text-base text-muted-900">
+                                            {rating.rating}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ),
+                                )
+                              ) : (
+                                <p>No category ratings available</p>
+                              )}
+                            </div>
 
-        <div class="pt-16">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
-            <div class="relative">
-              <div class="gap-4 mb-6 flex items-center">
-                <div class="meta">
-                  <div>
-                    <h4 class="text-base font-semibold font-sans text-slate-950">{review.rawReview.public_review}</h4>
+                            <div class="pt-16">
+                              <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
+                                <div class="relative">
+                                  <div class="gap-4 mb-6 flex items-center">
+                                    <div class="meta">
+                                      <div>
+                                        <h4 class="text-base font-semibold font-sans text-slate-950">
+                                          {review.rawReview.public_review}
+                                        </h4>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="relatives-action mt-8">
+                                <button class="h-11 transition-all duration-300 text-sm rounded text-slate-100 bg-cyan-600 dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center dark:text-muted-400">
+                                  See all comments
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p>No reviews available</p>
+                      )
+                    }
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="relatives-action mt-8">
-            <button class="h-11 transition-all duration-300 text-sm rounded text-slate-100 bg-cyan-600 dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center dark:text-muted-400">
-              See all comments
-            </button>
-          </div>
-        </div>
-      </div>
-    ))
-  ) : (
-    <p>No reviews available</p>
-  )}
-</div>
-                </div>
-              </div>
-              
+
               <!-- right -->
-              <div class="xs:min-w-full md:w-1/4 xs:flex flex-col items-center px-7">
+              <div
+                class="xs:min-w-full md:w-1/4 xs:flex flex-col items-center px-7"
+              >
                 <!-- <ChatBox conversationId={conversationId} client:load={true} /> -->
                 <!-- <button
                 class="bg-cyan-600 mb-6 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
@@ -307,22 +458,29 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
               <span class="pl-2">Send Message</span> 
               </button> -->
-              
-              <ReservationForm listingId={listingId} client:load />
-              <div id="main" class="xs:px-6">                
-                <div class="flex gap-2 justify-center items-center" >
-                  <p><span class="font-bold">Check in: </span>{checkIn}</p>
-                  <p><span class="font-bold">Check Out: </span>{checkOut}</p>
-                  
+
+                <ReservationForm listingId={listingId} client:load />
+                <div id="main" class="xs:px-6">
+                  <div class="flex gap-2 justify-center items-center">
+                    <p><span class="font-bold">Check in: </span>{checkIn}</p>
+                    <p><span class="font-bold">Check Out: </span>{checkOut}</p>
+                  </div>
+                  <span
+                    class="text-sm font-light flex justify-center items-center gap-1"
+                    ><span class="font-bold">Note: </span> Checkin and Checkout times
+                    are in UTC.</span
+                  >
+                  <InstantBooking listingId={listingId} client:only="react" />
                 </div>
-                <span class="text-sm font-light flex justify-center items-center gap-1"><span class="font-bold">Note: </span> Checkin and Checkout times are in UTC.</span>
-                <InstantBooking listingId={listingId} client:only="react" />
-              </div>
-                <h4 class="text-xl mt-6 font-light font-sans text-muted-900">Amenities</h4>
+                <h4 class="text-xl mt-6 font-light font-sans text-muted-900">
+                  Amenities
+                </h4>
                 <div class="mb-6 grid grid-cols-2 justify-items-center">
                   <!-- bedroom -->
                   <div class="flex flex-col">
-                    <div class="flex items-center gap-2 text-muted-900 dark:text-white">
+                    <div
+                      class="flex items-center gap-2 text-muted-900 dark:text-white"
+                    >
                       <svg
                         class="size-4"
                         xmlns="http://www.w3.org/2000/svg"
@@ -336,7 +494,11 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                         stroke-linejoin="round"
                         style="--darkreader-inline-stroke: currentColor;"
                         data-darkreader-inline-stroke=""
-                        ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
+                        ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"
+                        ></path><path
+                          d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"
+                        ></path><path d="M12 4v6"></path><path d="M2 18h20"
+                        ></path>
                       </svg>
                       <p class="text-lg font-bold">{PropertyType}</p>
                     </div>
@@ -344,7 +506,9 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                   </div>
                   <!-- bathroom -->
                   <div class="flex flex-col">
-                    <div class="flex items-center gap-2 text-muted-900 dark:text-white">
+                    <div
+                      class="flex items-center gap-2 text-muted-900 dark:text-white"
+                    >
                       <svg
                         class="size-4"
                         xmlns="http://www.w3.org/2000/svg"
@@ -358,27 +522,48 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                         stroke-linejoin="round"
                         style="--darkreader-inline-stroke: currentColor;"
                         data-darkreader-inline-stroke=""
-                        ><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path><line x1="10" y1="5" x2="8" y2="7"></line><line
+                        ><path
+                          d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                        ></path><line x1="10" y1="5" x2="8" y2="7"></line><line
                           x1="2"
                           y1="12"
                           x2="22"
-                          y2="12"></line><line x1="7" y1="19" x2="7" y2="21"></line><line x1="17" y1="19" x2="17" y2="21"></line>
+                          y2="12"></line><line x1="7" y1="19" x2="7" y2="21"
+                        ></line><line x1="17" y1="19" x2="17" y2="21"></line>
                       </svg>
                       <p class="text-lg font-bold">3</p>
                     </div>
                     <p class="text-sm text-muted-400">Bathrooms</p>
                   </div>
-                
                 </div>
-                <div class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap">
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Guest toilet</span>
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Open kitchen</span>
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Swimming Pool</span>
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Garden sharing</span>
-                  <span class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900">Kids playground</span>
+                <div
+                  class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap"
+                >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Guest toilet</span
+                  >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Open kitchen</span
+                  >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Swimming Pool</span
+                  >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Garden sharing</span
+                  >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Kids playground</span
+                  >
                 </div>
-                
-                <div class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800">
+
+                <div
+                  class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
+                >
                   <div class="flex items-center justify-between text-sm">
                     <p class="text-muted-400">Type</p>
                     <p class="text-muted-900">{PropertyType}</p>
@@ -392,28 +577,31 @@ const { title, pictures, Description, beds, bathrooms, listingId, PropertyType, 
                     <p class="text-muted-900">Available</p>
                   </div>
                 </div>
-
-             
-
-                  
-                  
-
-              
               </div>
             </div>
           </section>
           <!-- cards -->
           <div class="mt-12">
             <div class="flex flex-col">
-              <h2 class="font-sans text-2xl text-muted-900 text-center dark:text-white xs:text-center">You might also like</h2>
-              <p class="text-muted-500 dark:text-muted-400  text-center leading-6 xs:text-center">Based on your previous matches</p>
-              <div class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                  
+              <h2
+                class="font-sans text-2xl text-muted-900 text-center dark:text-white xs:text-center"
+              >
+                You might also like
+              </h2>
+              <p
+                class="text-muted-500 dark:text-muted-400 text-center leading-6 xs:text-center"
+              >
+                Based on your previous matches
+              </p>
+              <div
+                class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
+              >
                 <!-- <GuestyListings /> -->
-                
               </div>
             </div>
-            <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
               <!-- {properties.slice(0, 3).map((property) => <PropertyCard {...property} />)} -->
             </div>
           </div>
