@@ -66,14 +66,19 @@ export const handler = async (event, context) => {
             .filter(day => day.status === 'booked')
             .map(day => day.date);
 
+        // Extract available dates
+        const availableDates = data2.data.days
+            .filter(day => day.status === 'available')
+            .map(day => day.date);
+
         const accommodates = data1.accommodates || 2;
 
         const accountTaxes = data1.accountTaxes || [];
         const localTax = accountTaxes.length > 0 ? accountTaxes[0].amount : 0;
         const cityTax = accountTaxes.length > 1 ? accountTaxes[1].amount : 0;
-        
+
         const { prices } = data1;
-        const { basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, } = prices;
+        const { basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee } = prices;
 
         // Extract date-specific prices
         const datePrices = data2.data.days.reduce((acc, day) => {
@@ -90,6 +95,7 @@ export const handler = async (event, context) => {
             body: JSON.stringify({
                 unavailableDates,
                 bookedDates,
+                availableDates,
                 basePrice,
                 weeklyPriceFactor,
                 monthlyPriceFactor,

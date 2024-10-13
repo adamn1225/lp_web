@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';  // Import the custom PhoneInput component
+import { CreditCard, Headset } from 'lucide-react';
 
 interface ReservationFormProps {
   listingId: string;
+  buttonText: string;
 }
 
-const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
+const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -16,7 +18,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
     checkIn: '2050-01-01',
     checkOut: '2050-01-06',
     listingId: listingId,
-    status: ''
+    status: '',
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -69,14 +71,14 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
 
   return (
     <div className="flex justify-center items-center">
-      <button 
-        onClick={() => setModalIsOpen(true)} 
-        className="lp-button mb-6 text-white px-4 py-2 rounded-lg drop-shadow-lg"
+      <button
+        onClick={() => setModalIsOpen(true)}
+        className="lp-button flex gap-2 mb-6 text-white px-4 py-2 rounded-lg drop-shadow-lg"
       >
-        Inquire about this listing
+        <Headset />  {buttonText}
       </button>
-      <Modal 
-        isOpen={modalIsOpen} 
+      <Modal
+        isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
         className="flex justify-center items-center h-screen"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
@@ -85,20 +87,20 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
           <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Let us know about who you are and when you're planning stay and your host will respond instantly!</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex gap-1">
-              <input 
-                type="text" 
-                name="firstName" 
-                value={formData.firstName} 
-                onChange={handleChange} 
-                placeholder="First Name" 
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder="First Name"
                 className="w-full px-4 py-2 border rounded"
               />
-              <input 
-                type="text" 
-                name="lastName" 
-                value={formData.lastName} 
-                onChange={handleChange} 
-                placeholder="Last Name" 
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Last Name"
                 className="w-full px-4 py-2 border rounded"
               />
             </div>
@@ -108,7 +110,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               defaultCountry="US"
               placeholder="(---) --- ----"
             />
-            <input 
+            <input
               type="email"
               name="email"
               value={formData.email}
@@ -116,7 +118,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               placeholder="Email"
               className="hidden w-full px-4 py-2 border rounded"
             />
-            <input 
+            <input
               type="date"
               name="checkIn"
               value={formData.checkIn}
@@ -124,7 +126,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               placeholder="Check-In Date"
               className="hidden w-full px-4 py-2 border rounded"
             />
-            <input 
+            <input
               type="date"
               name="checkOut"
               value={formData.checkOut}
@@ -132,25 +134,25 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
               placeholder="Check-Out Date"
               className="hidden w-full px-4 py-2 border rounded"
             />
-            <input 
-              type="text" 
-              name="listingId" 
-              value={formData.listingId} 
-              onChange={handleChange} 
-              placeholder="Listing ID" 
+            <input
+              type="text"
+              name="listingId"
+              value={formData.listingId}
+              onChange={handleChange}
+              placeholder="Listing ID"
               className="hidden w-full px-4 py-2 border rounded"
             />
             <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Get a Verification Code</h2>
-            <button 
-              type="submit" 
-              onClick={handleButtonClick} 
+            <button
+              type="submit"
+              onClick={handleButtonClick}
               className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
             >
               Submit
             </button>
           </form>
-          <button 
-            onClick={() => setModalIsOpen(false)} 
+          <button
+            onClick={() => setModalIsOpen(false)}
             className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full"
           >
             Close
@@ -161,4 +163,4 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ listingId }) => {
   );
 };
 
-export default ReservationForm;
+export default InquireForm;

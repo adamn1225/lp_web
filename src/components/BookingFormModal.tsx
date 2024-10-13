@@ -4,6 +4,8 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { loadScript } from '@guestyorg/tokenization-js';
 import type { GuestyTokenizationNamespace, GuestyTokenizationRenderOptions } from '@guestyorg/tokenization-js';
+import InquireForm from "./InquireForm";
+import { CreditCard } from 'lucide-react';
 
 interface BookingFormModalProps {
   isModalOpen: boolean;
@@ -56,6 +58,14 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [error, setError] = useState<string>('');
   const [isFormValid, setIsFormValid] = useState(false);
   const [guestyTokenization, setGuestyTokenization] = useState<GuestyTokenizationNamespace | null>(null);
+  const [isInquireModalOpen, setIsInquireModalOpen] = useState(false); // State for new modal
+
+  useEffect(() => {
+    console.log("BookingFormModal dateRange:", dateRange);
+    if (dateRange[0]?.startDate) {
+      setSelectedStartDate(dateRange[0].startDate);
+    }
+  }, [dateRange]);
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -110,7 +120,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     };
 
     fetchPricingData();
-  }, [listingId, dateRange, pets, petFee, cityTax, localTax, accommodates]);
+  }, [listingId, dateRange, pets, petFee, cityTax, localTax, accommodates, taxes]);
 
   useEffect(() => {
     const { startDate, endDate } = dateRange[0];
@@ -135,7 +145,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       setCalculatedPrice(afterTax);
       setMaintenanceFee(maintenanceFee);
     }
-  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, pets, cityTax, localTax, beforeTax, maintenanceFee]);
+  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, taxes, cityTax, localTax, beforeTax, maintenanceFee]);
 
   useEffect(() => {
     const initializeGuestyTokenization = async () => {
@@ -251,23 +261,36 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       setLoading(false);
     }
   };
+
   
   return (
     <Modal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Booking Form"
-      className="bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg w-5/6 h-6/6 my-12"
+      className="xs:max-h-screen bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg md:w-2/6 h-6/6 my-12"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       appElement={document.getElementById('Top')!}
     >
-      <div className="relative flex flex-col justify-center items-center max-h-full overflow-y-auto">
+      <div className="relative flex flex-col justify-center items-center max-h-full">
         {currentStep === 1 && (
           <>
             <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(2); }} className="flex flex-col justify-center items-center">
+              <button
+                type="button"
+                onClick={() => {
+                  closeModal();
+                  setIsInquireModalOpen(true); // Open new modal
+                }}
+                className="absolute top-0 right-0 md:mt-4 md:mr-4 bg-cyan-600 text-muted-50 px-4 py-2 font-medium"
+              >
+                Close
+              </button>
+
               <div>
                 <h2 className="text-slate-800 text-3xl mb-4 underline">Book Instantly</h2>
                 <h2 className="text-slate-800 text-xl mb-4 underline">Fill out the form below and reserve the date</h2>
+                <div className='flex justify-normal'><InquireForm listingId={listingId} buttonText='Chat with an agent' /></div>
                 <div className="mb-4">
                   <label htmlFor="guests" className="block text-slate-800">Number of Guests</label>
                   <input
@@ -275,7 +298,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     id="guests"
                     value={guests}
                     onChange={(e) => setGuests(Number(e.target.value))}
-                    className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
+                    className="mt-1 block w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
                     min="1"
                   />
                 </div>
@@ -286,70 +309,115 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     id="pets"
                     value={pets}
                     onChange={(e) => setPets(Number(e.target.value))}
-                    className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
+                    className="mt-1 block w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
                     min="0"
                   />
                 </div>
                 <div className="mb-4 flex gap-4 w-full">
-                  <label htmlFor="firstName" className="text-slate-800">First Name
-                    <input
-                      type="text"
-                      id="firstName"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      className="mt-1 w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
-                      placeholder="Enter your first name"
-                    />
-                  </label>
-
-                  <label htmlFor="lastName" className="text-slate-800">Last Name
-                    <input
-                      type="text"
-                      id="lastName"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      className="mt-1 w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
-                      placeholder="Enter your last name"
-                    />
-                  </label>
+                  <div className="flex-1">
+                    <label htmlFor="firstName" className="text-slate-800">First Name
+                      <input
+                        type="text"
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
+                        placeholder="Enter your first name"
+                      />
+                    </label>
+                  </div>
+                  <div className="flex-1">
+                    <label htmlFor="lastName" className="text-slate-800">Last Name
+                      <input
+                        type="text"
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
+                        placeholder="Enter your last name"
+                      />
+                    </label>
+                  </div>
                 </div>
-                <div className="mb-4 flex gap-4">
-                  <label htmlFor="email" className="block text-slate-800">Email
-                    <input
-                      type="email"
-                      id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
-                      placeholder="email@address.com"
-                    />
-                  </label>
-
-                  <label htmlFor="phone" className="block text-slate-800">
-                    Phone
-                    <PhoneInput
-                      id="phone"
-                      value={phone}
-                      onChange={setPhone}
-                      className="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
-                      defaultCountry="US"
-                      placeholder="(---) --- ----"
-                    />
-                  </label>
+                <div className="mb-4 md:flex gap-4 w-full">
+                  <div className="flex-1">
+                    <label htmlFor="email" className="block text-slate-800">Email
+                      <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="xs:mb-4 mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
+                        placeholder="email@address.com"
+                      />
+                    </label>
+                  </div>
+                  <div className="flex-1">
+                    <label htmlFor="phone" className="block text-slate-800">Phone
+                      <PhoneInput
+                        id="phone"
+                        value={phone}
+                        onChange={setPhone}
+                        className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800"
+                        defaultCountry="US"
+                        placeholder="(---) --- ----"
+                      />
+                    </label>
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <h3 className="text-slate-800 font-bold underline text-xl text-center pb-2 pt-4">Selected Dates</h3>
+                  {/* <div className='flex justify-between items-center'>
+                <p className='text-slate-800 text-lg'>
+                  <strong>Check-in:</strong> {startDate} at 4:00 PM
+                </p>
+                <p className='text-slate-800 text-3xl'>-</p>
+                <p className='text-slate-800 text-lg'>
+                  <strong>Check-out:</strong> {endDate} at 11:00 AM
+                </p>
+              </div> */}
+                </div>
+              </div>
+              <div className="mt-4 w-full">
+                {pets > 0 && (
+                  <div className="flex justify-between pb-2">
+                    <span>Pet Fee:</span>
+                    <span>${petFee}</span>
+                  </div>
+                )}
+                <div className="text-lg flex justify-between pb-2">
+                  <span>Base Price:</span>
+                  <span>${basePrice} Per Night</span>
+                </div>
+                <div className="text-lg flex justify-between pb-2">
+                  <span>Maintenance Fee:</span>
+                  <span>${maintenanceFee}</span>
+                </div>
+                <div className="text-lg flex justify-between pb-2">
+                  <span>Cleaning Fee:</span>
+                  <span>${cleaningFee}</span>
+                </div>
+                <div className="text-lg flex justify-between pb-2">
+                  <span>Tax:</span>
+                  <span>${beforeTax.toFixed(2)}</span>
+                </div>
+                <div className="text-xl flex justify-between pt-2 font-bold border-t border-cyan-950">
+                  <span>Total Amount:</span>
+                  <span>${calculatedPrice}</span>
                 </div>
               </div>
               <button
-                className="lp-button drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+                className="lp-button flex gap-2 text-xl font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
                 type="submit"
                 disabled={loading}
               >
-                Proceed to Payment
+                <CreditCard />  Proceed to Payment
               </button>
             </form>
           </>
         )}
         {currentStep === 2 && (
-          <div className='w-full justify-center items-center max-h-5/6'>
+          <div className='w-full justify-center items-center max-h-5/6 overflow-y-auto'>
             <div id="payment-container" className="mx-12 my-0"></div>
             <div className="flex flex-col gap-4 mt-3">
               <div className='text-justify mx-12'>
@@ -395,6 +463,27 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
           </div>
         )}
       </div>
+      <Modal
+        isOpen={isInquireModalOpen}
+        onRequestClose={() => setIsInquireModalOpen(false)}
+        contentLabel="Inquire Form"
+        className="bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg w-2/6 h-6/6 my-12"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+        appElement={document.getElementById('Top')!}
+      >
+        <div className="relative flex flex-col justify-center items-center max-h-full overflow-y-auto">
+          <h2 className="text-slate-800 text-2xl mb-4">Have more questions about this listing?</h2>
+          <div className='flex justify-normal'>
+            <InquireForm listingId={listingId} buttonText='Chat with an agent' />
+          </div>
+          <button
+            onClick={() => setIsInquireModalOpen(false)}
+            className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full"
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
     </Modal>
   );
 };
