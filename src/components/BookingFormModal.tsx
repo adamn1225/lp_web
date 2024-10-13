@@ -6,6 +6,7 @@ import { loadScript } from '@guestyorg/tokenization-js';
 import type { GuestyTokenizationNamespace, GuestyTokenizationRenderOptions } from '@guestyorg/tokenization-js';
 import InquireForm from "./InquireForm";
 import { CreditCard } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 
 interface BookingFormModalProps {
   isModalOpen: boolean;
@@ -54,6 +55,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [phone, setPhone] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [reservationId, setReservationId] = useState<string | null>(null);
+  const [confirmationCode, setConfirmationCode] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [isFormValid, setIsFormValid] = useState(false);
@@ -66,6 +68,11 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       setSelectedStartDate(dateRange[0].startDate);
     }
   }, [dateRange]);
+
+  if (!isModalOpen) return null;
+
+  const displayStartDate = dateRange[0]?.startDate ? dateRange[0].startDate.toLocaleDateString() : "N/A";
+  const displayEndDate = dateRange[0]?.endDate ? dateRange[0].endDate.toLocaleDateString() : "N/A";
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -251,6 +258,10 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       const data = JSON.parse(responseText);
       console.log('Success:', data);
 
+      // Store reservation details
+      setReservationId(data._id);
+      setConfirmationCode(data.confirmationCode);
+
       // Proceed to next step
       setCurrentStep(3);
     } catch (error) {
@@ -262,13 +273,23 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     }
   };
 
+  const handlePrint = () => {
+    const doc = new jsPDF();
+    doc.text(`Reservation ID: ${reservationId}`, 10, 10);
+    doc.text(`Check-in Date: ${displayStartDate}`, 10, 20);
+    doc.text(`Check-out Date: ${displayEndDate}`, 10, 30);
+    doc.text(`Confirmation Code: ${confirmationCode}`, 10, 40);
+    doc.save('reservation-details.pdf');
+  };
+
+
   
   return (
     <Modal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Booking Form"
-      className="xs:max-h-screen bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg md:w-2/6 h-6/6 my-12"
+      className="xs:max-h-screen bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg md:w-2/3 lg:w-1/2 h-6/6 my-12"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       appElement={document.getElementById('Top')!}
     >
@@ -460,6 +481,19 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
           <div>
             <h2 className="text-slate-800 text-3xl mb-4 underline">Booking Complete</h2>
             <p className="text-slate-800 text-xl mb-4">Thank you for your booking!</p>
+            <div className="text-slate-800 text-lg mb-4">
+              <p><strong>Reservation Number:</strong> {reservationId}</p>
+              <p><strong>Check-in Date:</strong> {dateRange[0].startDate.toLocaleDateString()}</p>
+              <p><strong>Check-out Date:</strong> {dateRange[0].endDate.toLocaleDateString()}</p>
+              <p><strong>Payment Confirmation Code:</strong> {confirmationCode}</p>
+            </div>
+            <button
+              className="bg-slate-500 drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+              type="button"
+              onClick={handlePrint}
+            >
+              Print Confirmation
+            </button>
           </div>
         )}
       </div>

@@ -181,6 +181,10 @@ article {
   display: none !important;
 }
 
+.rdrMonths, .rdrMonthsVertical {
+  @apply flex flex-col justify-center items-center;
+}
+
 .custom-date-input:focus {
   outline: none;
   box-shadow: 0 0 0 2px #06b6d4;

@@ -21,10 +21,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "types": ["astro/client", "express"],
+    "types": ["astro/client", "express", "node"],
     "jsx": "react-jsx",
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.astro", "middelware.ts", "middelware.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.astro", "middelware.ts"],
   "exclude": ["node_modules"]
 }
