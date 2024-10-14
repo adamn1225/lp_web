@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';  // Import the custom PhoneInput component
-import { CreditCard, Headset } from 'lucide-react';
+import 'react-phone-number-input/style.css';
+import { Headset } from 'lucide-react';
+import axios from 'axios';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
 interface ReservationFormProps {
   listingId: string;
@@ -14,7 +16,7 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
     firstName: '',
     lastName: '',
     phone: '',
-    email: '', // Assuming you need an email field
+    email: '',
     checkIn: '2050-01-01',
     checkOut: '2050-01-06',
     listingId: listingId,
@@ -22,6 +24,9 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [isVerified, setIsVerified] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,8 +43,44 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
     });
   };
 
+  const formatPhoneNumber = (phoneNumber: string) => {
+    const parsedNumber = parsePhoneNumberFromString(phoneNumber);
+    return parsedNumber ? parsedNumber.format('E.164') : phoneNumber;
+  };
+
+  const sendVerificationCode = async () => {
+    const formattedPhone = formatPhoneNumber(formData.phone);
+    try {
+      await axios.post('/.netlify/functions/sendVerificationCode', { phoneNumber: formattedPhone });
+      setVerificationSent(true);
+    } catch (error) {
+      console.error('Error sending verification code:', error);
+      alert('Error sending verification code. Please check the phone number and try again.');
+    }
+  };
+
+  const verifyCode = async () => {
+    const formattedPhone = formatPhoneNumber(formData.phone);
+    try {
+      const response = await axios.post('/.netlify/functions/verifyCode', { phoneNumber: formattedPhone, code: verificationCode });
+      if (response.data.status === 'approved') {
+        setIsVerified(true);
+      } else {
+        alert('Verification failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error verifying code:', error);
+      alert('Error verifying code. Please try again.');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!isVerified) {
+      alert('Please verify your phone number first.');
+      return;
+    }
+
     const formattedData = {
       ...formData,
       status: 'inquiry'
@@ -59,14 +100,8 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
       setModalIsOpen(false); // Close the modal on successful submission
     } catch (error) {
       console.error('Error:', error);
+      alert('Error submitting form. Please try again.');
     }
-  };
-
-  const handleButtonClick = () => {
-    setFormData(prevState => ({
-      ...prevState,
-      status: 'inquiry'
-    }));
   };
 
   return (
@@ -110,6 +145,31 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
               defaultCountry="US"
               placeholder="(---) --- ----"
             />
+            <button
+              type="button"
+              onClick={sendVerificationCode}
+              className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
+            >
+              Send Verification Code
+            </button>
+            {verificationSent && (
+              <div>
+                <input
+                  type="text"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  placeholder="Enter verification code"
+                  className="w-full px-4 py-2 border rounded"
+                />
+                <button
+                  type="button"
+                  onClick={verifyCode}
+                  className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
+                >
+                  Verify Code
+                </button>
+              </div>
+            )}
             <input
               type="email"
               name="email"
@@ -142,10 +202,8 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
               placeholder="Listing ID"
               className="hidden w-full px-4 py-2 border rounded"
             />
-            <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Get a Verification Code</h2>
             <button
               type="submit"
-              onClick={handleButtonClick}
               className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
             >
               Submit
