@@ -39,12 +39,12 @@ module.exports = {
       },
       colors: {
         primary: colors.blue,
+        secondary: '#d86c6c',
         muted: colors.gray,
         info: colors.sky,
         success: colors.green,
         warning: colors.amber,
         danger: colors.rose,
-        secondary: '#d86c6c',
       },
       animation: {
         gelatine: 'gelatine 600ms both',

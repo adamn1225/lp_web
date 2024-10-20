@@ -18,6 +18,12 @@ export async function getStaticPaths() {
       listingPage: listing._id, // Ensure this matches the requested path
     },
     props: {
+      street: listing.address.street,
+      apt: listing.address.apt,
+      city: listing.address.city,
+      state: listing.address.state,
+      zip: listing.address.zip,
+      country: listing.address.country,
       title: listing.title,
       PropertyType: listing.propertyType,
       bathrooms: listing.bathrooms,
@@ -62,8 +68,12 @@ export async function get({ params }) {
 
   return {
     title: listing.title,
+    apt: listing.address.apt,
     city: listing.address.city,
     state: listing.address.state,
+    street: listing.address.street,      
+    zip: listing.address.zip,
+    country: listing.address.country,
     Description: listing.publicDescription,
     PropertyType: listing.propertyType,
     bathrooms: listing.bathrooms,
@@ -82,7 +92,13 @@ export async function get({ params }) {
 const {
   title,
   pictures,
+  city,
+  state,
+  street,
+  country,
+  zip,
   Description,
+  apt,
   beds,
   bathrooms,
   listingId,
@@ -104,17 +120,16 @@ const {
             <nav class="mt-28 mb-6" aria-label="breadcrumbs">
               <ul class="flex items-center xs:justify-center">
                 <li class="flex items-center">
-                  <a
-                    href="/"
-                    class="hover:text-cyan-600 pe-3 text-muted-400"
-                  >
+                  <a href="/" class="hover:text-cyan-600 pe-3 text-muted-400">
                     <Icon name="lucide:home" />
                   </a>
                 </li>
                 <li
                   class="flex items-center before:content-['/'] before:text-muted-400"
                 >
-                  <a href="/properties" class="hover:text-cyan-600 px-3 text-muted-400"
+                  <a
+                    href="/properties"
+                    class="hover:text-cyan-600 px-3 text-muted-400"
                     >Properties</a
                   >
                 </li>
@@ -144,6 +159,12 @@ const {
                 <div
                   class="flex xs:justify-center gap-4 text-base text-muted-900"
                 >
+                  <h2
+                    class="leading-9 text-xl font-light font-sans text-muted-900 mb-2 xs:text-center"
+                  >
+                    {street}
+                    {apt}, {city}, {state} {zip}, {country}
+                  </h2>
                   <a
                     href="#"
                     class="flex items-center font-medium relative underline-offset-4 hover:underline"
@@ -159,7 +180,7 @@ const {
                   class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline"
                 >
                   <Icon name="h-4 aspect-square" name="lucide:share-2" />
-                  <span class="relative ">Share</span>
+                  <span class="relative">Share</span>
                 </a>
                 <a
                   href="#"
@@ -365,7 +386,7 @@ const {
                           <span>{bedrooms}</span>
                         </div>
                         <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">bedrooms </p>
+                          <p class="text-sm text-muted-400">bedrooms</p>
                         </div>
                       </div>
 
@@ -524,14 +545,14 @@ const {
                   </span>
 
                   <InstantBooking listingId={listingId} client:only="react" />
-                  <!-- <BookingFormWrapper
+                  <BookingFormWrapper
                     listingId={listingId}
                     client:only="react"
-                  /> -->
-
+                  />
                   <h4 class="text-2xl mt-6 font-bold font-sans text-slate-900">
                     Amenities
                   </h4>
+
                   <div class="mb-6 grid grid-cols-3 gap-2 justify-items-center">
                     <!-- bedroom -->
                     <div class="flex flex-col">
@@ -591,7 +612,7 @@ const {
                       <p class="text-sm text-muted-400">Bathrooms</p>
                     </div>
 
-                                        <div class="flex flex-col">
+                    <div class="flex flex-col">
                       <div
                         class="flex items-center gap-2 text-muted-900 dark:text-white"
                       >
