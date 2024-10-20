@@ -56,20 +56,28 @@ export const handler = async (event, context) => {
             };
         }
 
+        // Helper function to add a day to a date
+        const addDays = (date, days) => {
+            const result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result.toISOString().split('T')[0]; // Return date in YYYY-MM-DD format
+        };
+
         // Extract unavailable dates
         const unavailableDates = data2.data.days
             .filter(day => day.status === 'unavailable')
             .map(day => day.date);
 
-        // Extract booked dates
+        // Extract booked dates and include the day before the check-out date
         const bookedDates = data2.data.days
             .filter(day => day.status === 'booked')
             .map(day => day.date);
 
-        // Extract available dates
-        const availableDates = data2.data.days
-            .filter(day => day.status === 'available')
-            .map(day => day.date);
+        // Include the day before the check-out date as unavailable
+        const adjustedUnavailableDates = bookedDates.map(date => addDays(date, -1));
+
+        // Combine unavailable dates and adjusted unavailable dates
+        const allUnavailableDates = [...new Set([...unavailableDates, ...adjustedUnavailableDates])];
 
         const accommodates = data1.accommodates || 2;
 
@@ -93,9 +101,8 @@ export const handler = async (event, context) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                unavailableDates,
+                unavailableDates: allUnavailableDates, // Use allUnavailableDates here
                 bookedDates,
-                availableDates,
                 basePrice,
                 weeklyPriceFactor,
                 monthlyPriceFactor,

@@ -1,77 +1,84 @@
 ---
-import { APP } from '@data/config'
-import { Icon } from 'astro-icon/components'
-import Logo from './ui/Logo.astro'
-import MegaMenu from './ui/MegaMenu.astro'
-import AccountMenu from './ui/AccountMenu.astro'
-
+import { APP } from "@data/config";
+import { Icon } from "astro-icon/components";
+import Logo from "./ui/Logo.astro";
+import MegaMenu from "./ui/MegaMenu.astro";
+import AccountMenu from "./ui/AccountMenu.astro";
 ---
 
-<div id="HeaderWrapper" x-data="navbar" x-on:scroll.window="scroll()" x-on:mouseleave="megamenuOpened = false" role="navigation" aria-label="main navigation" class="fixed top-0 start-0 w-full bg-slate-50 border-slate-100">
-
-  <header id="MainHeader" class=" min-h-[70px] w-full max-w-full px-3 mx-auto flex flex-col md:flex-row md:justify-start justify-evenly shadow lg:shadow-md lg:px-8">
-    <div class="flex justify-evenly md:justify-start items-start w-full lg:w-auto min-h-[3.25rem]">
+<div
+  id="HeaderWrapper"
+  x-data="navbar"
+  x-on:scroll.window="scroll()"
+  x-on:mouseleave="megamenuOpened = false"
+  role="navigation"
+  aria-label="main navigation"
+  class="fixed top-0 start-0 z-50 w-full bg-white border-slate-100"
+>
+  <header
+    id="MainHeader"
+    class="min-h-[70px] w-full max-w-full px-3 mx-auto flex flex-col md:flex-row bg-white z-50 md:justify-start justify-evenly shadow lg:shadow-md lg:px-8"
+  >
+    <div
+      class="flex justify-evenly bg-white md:justify-start items-start w-full lg:w-auto min-h-[3.25rem]"
+    >
       <a href="/" class="flex gap-4 items-start py-2">
         <img src="/images/lp-temp.svg" alt="logo" class="h-auto w-44" />
       </a>
-      </div>
+    </div>
 
-      <nav>
-        <ul id="LeftLinks" class="flex flex-col md:flex-row [&>li>a]:h-full">
-        </ul>
-
-
-      </nav>
-    </header>
-  </div>
-  <MegaMenu />
-
+    <nav>
+      <ul id="LeftLinks" class="flex flex-col bg-slate-50 md:flex-row [&>li>a]:h-full"></ul>
+    </nav>
+  </header>
 </div>
-
+<MegaMenu />
 
 <script>
-  document.addEventListener('alpine:init', () => {
+  document.addEventListener("alpine:init", () => {
     //@ts-ignore
-    Alpine.data('navbar', () => ({
+    Alpine.data("navbar", () => ({
       scrolled: false,
       height: 60,
       mobileOpen: false,
       megamenuOpened: false,
-      openedMegamenu: 'megamenu-1',
+      openedMegamenu: "megamenu-1",
 
       scroll() {
-        let scrollValue = window.scrollY
+        let scrollValue = window.scrollY;
         if (scrollValue >= this.height) {
-          this.scrolled = true
+          this.scrolled = true;
         } else {
-          this.scrolled = false
+          this.scrolled = false;
         }
         //@ts-ignore
-        this.searchExpanded = false
+        this.searchExpanded = false;
       },
       openMobileMenu() {
-        this.mobileOpen = !this.mobileOpen
+        this.mobileOpen = !this.mobileOpen;
       },
       init() {
-        document.querySelectorAll('.scroll-link[href^="#"]').forEach((trigger) => {
-          //@ts-ignore
-          trigger.onclick = function (e: any) {
-            e.preventDefault()
-            let hash = this.getAttribute('href')
+        document
+          .querySelectorAll('.scroll-link[href^="#"]')
+          .forEach((trigger) => {
             //@ts-ignore
-            let target = document.querySelector(hash)
-            let headerOffset = 100
-            //@ts-ignore
-            let elementPosition = target.offsetTop
-            let offsetPosition = elementPosition - headerOffset
+            trigger.onclick = function (e: any) {
+              e.preventDefault();
+              let hash = this.getAttribute("href");
+              //@ts-ignore
+              let target = document.querySelector(hash);
+              let headerOffset = 100;
+              //@ts-ignore
+              let elementPosition = target.offsetTop;
+              let offsetPosition = elementPosition - headerOffset;
 
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth',
-            })
-          }
-        })
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth",
+              });
+            };
+          });
       },
-    }))
-  })
+    }));
+  });
 </script>

@@ -1,8 +1,7 @@
 ---
-import { GoogleFontsOptimizer } from 'astro-google-fonts-optimizer'
-import ScrollTop from '@components/ui/ScrollTop.astro'
-import '@/styles/global.scss'
-
+import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
+import ScrollTop from "@components/ui/ScrollTop.astro";
+import "@/styles/global.scss";
 ---
 
 <!doctype html>
@@ -12,12 +11,15 @@ import '@/styles/global.scss'
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/images/logo/logo.svg" />
     <meta name="generator" content={Astro.generator} />
-
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
 
     <GoogleFontsOptimizer
       url={[
-        'https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600',
-        'https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap',
+        "https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600",
+        "https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap",
       ]}
     />
 
@@ -28,6 +30,5 @@ import '@/styles/global.scss'
 
     <slot />
     <ScrollTop />
-
   </body>
 </html>

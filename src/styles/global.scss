@@ -7,7 +7,6 @@ html {
   overflow-x: hidden;
 }
 
-
 p,
 h1,
 h2,
@@ -22,150 +21,94 @@ li {
 }
 
 body {
-  @apply bg-slate-100;
   font-family: "Roboto Flex", sans-serif;
   max-width: 100% !important;
   overflow-x: hidden;
 }
 
-.door-shape {
-  border-radius: 1.5rem 1.5rem 0 0;
-  /* Rounded top corners */
-  height: 300px;
-  /* Adjust height as needed */
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 100px;
-  transform-origin: left;
-    /* Set the origin of the transformation to the left side */
-  transition: transform 0.3s ease-out;
-}
-
 .door-text {
-  margin-bottom: auto;
-  margin-right: 20px;
-  margin-left: 4px;
-  text-align: justify;
-  /* Push the text upwards */
+  display: inline-block;
+  transition: none;
 }
 
-        .swiper-button-next,
-        .swiper-button-prev {
-          color: #d86c6c;
-          /* Change this to the desired color */
-          font-weight: 900;
-          width: 55px;
-          height: 55px;
-          /* Optional: Add background for better visibility */
-          border-radius: 50%;
-          /* Optional: Make the buttons circular */
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: absolute;
-          top: 25%;
-          transform: translateY(-50%);
-          z-index: 10;
-        }
-    
-        .swiper-button-next {
-          right: 10px;
-        }
-    
-        .swiper-button-prev {
-          left: 10px;
-        }
-    
-        .swiper-pagination {
-          position: absolute;
-          top: 33%;
-          /* Adjust this value to position the dots correctly */
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 10;
-        }
-    
-        .swiper-container .swiper-pagination .swiper-pagination-bullet {
-          background: #d86c6c !important;
-          /* Change this to the desired color */
-        }
-    
-        .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
-          background: #d86c6c !important;
-          /* Change this to the desired color */
-        }
+.swiper-button-next,
+.swiper-button-prev {
+  color: #d86c6c;
+  font-weight: 900;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 25%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.swiper-button-next {
+  right: 10px;
+}
+
+.swiper-button-prev {
+  left: 10px;
+}
+
+.swiper-pagination {
+  position: absolute;
+  top: 33%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.swiper-container .swiper-pagination .swiper-pagination-bullet {
+  background: #d86c6c !important;
+}
+
+.swiper-container .swiper-pagination .swiper-pagination-bullet-active {
+  background: #d86c6c !important;
+}
 
 article {
   border-radius: 1.5rem;
-  /* Equivalent to rounded-3xl */
   overflow: hidden;
-  /* Ensure child elements respect the border-radius */
 }
 
 .hover\:pop-out-right:hover {
   transform: scaleX(1) skewY(2deg);
-  /* Scale and skew the button on hover */
 }
 
 .opened {
-  transform: scaleX(1) skewY(2deg);
-  /* Keep the button transformed when clicked */
+  transform: none;
+  /* Remove the skew transformation */
 }
-
-// @keyframes pop-in-right {
-//   0% {
-//     transform: translateX(100%);
-//     opacity: 0;
-//   }
-
-//   100% {
-//     transform: translateX(0);
-//     opacity: 1;
-//   }
-// }
-
-// .animate-pop-in-right {
-//   animation: pop-in-right 0.5s ease-out forwards;
-// }
 
 .welcome-mat {
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #d86c6c;
-  /* Tailwind's bg-gray-100 */
   border-radius: 0 0 1rem 1rem;
-  /* Rounded bottom corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* Subtle shadow */
   width: 80%;
-  /* Make the mat wider */
   max-width: 280px;
-  /* Limit the maximum width */
   height: auto;
   margin-left: auto;
   margin-right: auto;
   transform: skew(-10deg);
-  /* Skew the mat */
 }
 
 .welcome-mat__content {
   text-align: center;
   transform: skew(10deg);
-  /* Unskew the content */
 }
-
-
 
 .welcome-mat__content__inner__text {
   color: #1e293b;
-  /* Tailwind's text-slate-900 */
 }
 
-/* global.scss */
 [x-cloak] {
   display: none !important;
 }
@@ -173,22 +116,6 @@ article {
 .custom-date-input:focus {
   outline: none;
   box-shadow: 0 0 0 2px #06b6d4;
-  /* cyan-600 */
-}
-
-/* global.scss */
-[x-cloak] {
-  display: none !important;
-}
-
-.rdrMonths, .rdrMonthsVertical {
-  @apply flex flex-col justify-center items-center;
-}
-
-.custom-date-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #06b6d4;
-  /* cyan-600 */
 }
 
 .custom-date-input::-webkit-calendar-picker-indicator {
@@ -197,17 +124,14 @@ article {
 
 .custom-date-input::selection {
   background: #06b6d4;
-  /* cyan-600 */
   color: white;
 }
 
-/* Custom styles for react-datepicker */
 .react-datepicker__day--selected,
 .react-datepicker__day--in-selecting-range,
 .react-datepicker__day--in-range,
 .react-datepicker__day--keyboard-selected {
   background-color: #06b6d4 !important;
-  /* cyan-600 */
   color: white !important;
 }
 
@@ -223,18 +147,15 @@ article {
 
 .custom-number-input {
   -moz-appearance: textfield;
-  /* Firefox */
 }
 
-/* customDateRange.css */
 .rdrCalendarWrapper .rdrDay span.rdrStartEdge,
 .rdrCalendarWrapper .rdrDay span.rdrEndEdge,
 .rdrCalendarWrapper .rdrDay span.rdrInRange {
-  background-color: #0e7490; /* slate-700 */
+  background-color: #0e7490;
   color: white;
 }
 
 .lp-button {
-  @apply bg-cyan-600 /* slate-700 */
-  text-white rounded-lg px-4 py-2;
+  @apply bg-cyan-600 text-white rounded-lg px-4 py-2;
 }

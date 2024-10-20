@@ -13,16 +13,24 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set time to midnight to avoid timezone issues
 
+  const initialRange = [{ startDate: null, endDate: null, key: 'selection' }];
+
+  // Ensure disabledDates are in the correct format
+  const formattedDisabledDates = disabledDates.map(date => {
+    const newDate = new Date(date);
+    newDate.setHours(0, 0, 0, 0); // Set time to midnight to avoid timezone issues
+    return newDate;
+  });
+
+  console.log('Formatted disabled dates:', formattedDisabledDates);
+
   return (
     <DateRange
       editableDateInputs={true}
-      onChange={item => {
-        console.log("DateRange onChange:", item);
-        setState([item.selection]);
-      }}
+      onChange={item => setState([item.selection])}
       moveRangeOnFirstSelection={false}
-      ranges={state}
-      disabledDates={disabledDates}
+      ranges={state.length ? state : initialRange}
+      disabledDates={formattedDisabledDates}
       minDate={today} // Prevent selection of past dates
     />
   );

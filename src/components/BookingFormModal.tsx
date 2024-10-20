@@ -62,17 +62,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [guestyTokenization, setGuestyTokenization] = useState<GuestyTokenizationNamespace | null>(null);
   const [isInquireModalOpen, setIsInquireModalOpen] = useState(false); // State for new modal
 
-  useEffect(() => {
-    console.log("BookingFormModal dateRange:", dateRange);
-    if (dateRange[0]?.startDate) {
-      setSelectedStartDate(dateRange[0].startDate);
-    }
-  }, [dateRange]);
 
-  if (!isModalOpen) return null;
 
-  const displayStartDate = dateRange[0]?.startDate ? dateRange[0].startDate.toLocaleDateString() : "N/A";
-  const displayEndDate = dateRange[0]?.endDate ? dateRange[0].endDate.toLocaleDateString() : "N/A";
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -153,6 +144,35 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       setMaintenanceFee(maintenanceFee);
     }
   }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, taxes, cityTax, localTax, beforeTax, maintenanceFee]);
+
+
+
+  useEffect(() => {
+    const { startDate, endDate } = dateRange[0];
+    if (startDate && endDate) {
+      const timeDiff = endDate.getTime() - startDate.getTime();
+      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      let stayPrice = daysDiff * basePrice;
+
+      if (daysDiff >= 30) {
+        stayPrice *= monthlyPriceFactor;
+      } else if (daysDiff >= 7) {
+        stayPrice *= weeklyPriceFactor;
+      }
+
+      const guestPrice = 0;
+      const petPrice = pets > 0 ? petFee : 0;
+      const maintenanceFee = 20;
+      const totalPrice = stayPrice + cleaningFee + petPrice + maintenanceFee;
+      const taxes = (cityTax + localTax) * 0.01;
+      const afterTax = totalPrice + (totalPrice * taxes);
+      console.log('Calculated afterTax in second useEffect:', afterTax);
+      setCalculatedPrice(afterTax);
+      setMaintenanceFee(maintenanceFee);
+    }
+  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, taxes, cityTax, localTax, beforeTax, maintenanceFee]);
+
+
 
   useEffect(() => {
     const initializeGuestyTokenization = async () => {
@@ -273,6 +293,19 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     }
   };
 
+
+  useEffect(() => {
+    console.log("BookingFormModal dateRange:", dateRange);
+    if (dateRange[0]?.startDate) {
+      setSelectedStartDate(dateRange[0].startDate);
+    }
+  }, [dateRange]);
+
+  if (!isModalOpen) return null;
+
+  const displayStartDate = dateRange[0]?.startDate ? dateRange[0].startDate.toLocaleDateString() : "N/A";
+  const displayEndDate = dateRange[0]?.endDate ? dateRange[0].endDate.toLocaleDateString() : "N/A";
+
   const handlePrint = () => {
     const doc = new jsPDF();
     doc.text(`Reservation ID: ${reservationId}`, 10, 10);
@@ -282,8 +315,6 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     doc.save('reservation-details.pdf');
   };
 
-
-  
   return (
     <Modal
       isOpen={isModalOpen}
@@ -388,15 +419,15 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 </div>
                 <div className="mb-4">
                   <h3 className="text-slate-800 font-bold underline text-xl text-center pb-2 pt-4">Selected Dates</h3>
-                  {/* <div className='flex justify-between items-center'>
-                <p className='text-slate-800 text-lg'>
-                  <strong>Check-in:</strong> {startDate} at 4:00 PM
-                </p>
-                <p className='text-slate-800 text-3xl'>-</p>
-                <p className='text-slate-800 text-lg'>
-                  <strong>Check-out:</strong> {endDate} at 11:00 AM
-                </p>
-              </div> */}
+                  <div className='flex justify-between items-center'>
+                    <p className='text-slate-800 text-lg'>
+                      <strong>Check-in:</strong>  at 4:00 PM
+                    </p>
+                    <p className='text-slate-800 text-3xl'>-</p>
+                    <p className='text-slate-800 text-lg'>
+                      <strong>Check-out:</strong>  at 11:00 AM
+                    </p>
+                  </div>
                 </div>
               </div>
               <div className="mt-4 w-full">
@@ -496,28 +527,28 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
             </button>
           </div>
         )}
-      </div>
-      <Modal
-        isOpen={isInquireModalOpen}
-        onRequestClose={() => setIsInquireModalOpen(false)}
-        contentLabel="Inquire Form"
-        className="bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg w-2/6 h-6/6 my-12"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-        appElement={document.getElementById('Top')!}
-      >
-        <div className="relative flex flex-col justify-center items-center max-h-full overflow-y-auto">
-          <h2 className="text-slate-800 text-2xl mb-4">Have more questions about this listing?</h2>
-          <div className='flex justify-normal'>
-            <InquireForm listingId={listingId} buttonText='Chat with an agent' />
+        <Modal
+          isOpen={isInquireModalOpen}
+          onRequestClose={() => setIsInquireModalOpen(false)}
+          contentLabel="Inquire Form"
+          className="bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg w-2/6 h-6/6 my-12"
+          overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+          appElement={document.getElementById('Top')!}
+        >
+          <div className="relative flex flex-col justify-center items-center max-h-full overflow-y-auto">
+            <h2 className="text-slate-800 text-2xl mb-4">Have more questions about this listing?</h2>
+            <div className='flex justify-normal'>
+              <InquireForm listingId={listingId} buttonText='Chat with an agent' />
+            </div>
+            <button
+              onClick={() => setIsInquireModalOpen(false)}
+              className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full"
+            >
+              Close
+            </button>
           </div>
-          <button
-            onClick={() => setIsInquireModalOpen(false)}
-            className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full"
-          >
-            Close
-          </button>
-        </div>
-      </Modal>
+        </Modal>
+      </div>
     </Modal>
   );
 };

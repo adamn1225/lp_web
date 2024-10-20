@@ -17,7 +17,7 @@ interface BookingFormModalProps {
     taxes: number;
 }
 
-const BookingFormModal: React.FC<BookingFormModalProps> = ({
+const MockBookingFormModal: React.FC<BookingFormModalProps> = ({
     isModalOpen,
     closeModal,
     guests,
@@ -117,4 +117,4 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     );
 };
 
-export default BookingFormModal;
+export default MockBookingFormModal;

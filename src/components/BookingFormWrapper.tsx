@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BookingFormModal from './MockBookingFormModal';
+import MockBookingFormModal from './MockBookingFormModal';
 
 const BookingFormWrapper: React.FC<{ listingId: string }> = ({ listingId }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,7 +15,7 @@ const BookingFormWrapper: React.FC<{ listingId: string }> = ({ listingId }) => {
     return (
         <>
             <button onClick={openModal}>Open Booking Form</button>
-            <BookingFormModal
+            <MockBookingFormModal
                 isModalOpen={isModalOpen}
                 closeModal={closeModal}
                 guests={guests}

@@ -23,6 +23,8 @@ interface Listing {
     basePrice: number;
     currency: string;
   };
+  bedrooms: number;
+  bathrooms: number;
   // Add other properties as needed
 }
 
@@ -119,7 +121,7 @@ const AvailabilitySearch: React.FC = () => {
       <h2 className="text-center text-slate-50 font-bold pb-2 text-xl md:text-3xl text-wrap md:w-1/2">Book your next vacation rental with us. We offer a wide selection of vacation rentals in the most popular destinations.</h2>
         <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full md:mb-16">
 
-          <form onSubmit={handleSubmit} className="w-full z-50 xs:py-5 flex flex-col justify-center max-w-6xl min-h-72 bg-slate-100 px-6 rounded-3xl shadow-2xl">
+          <form onSubmit={handleSubmit} className="w-full z-10 xs:py-5 flex flex-col justify-center max-w-6xl min-h-72 bg-slate-100 px-6 rounded-3xl shadow-2xl">
 
 
             <div className="flex flex-col gap-3 items-center justify-center w-full">
@@ -203,7 +205,7 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           </form>
         </div>
-      <div className="bg-stone-50 w-full h-full overflow-auto">
+      <div className="bg-stone-50 mb-36 w-full h-full overflow-auto">
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
         {available.length > 0 && (
@@ -214,18 +216,70 @@ const AvailabilitySearch: React.FC = () => {
             </button>
           </div>
         )}
-        <div className="search-results grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8 md:px-12 px-4">
+        <div className="search-results grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8 md:px-12 px-4">
           {available.map((property) => (
             <a href={property._id} key={property._id}>
               <article className="flex flex-col bg-white shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md">
-                <div className="p-1 result-item">
+                <div className="result-item">
                   <img className="w-full object-cover h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
                   <div className="px-10 py-4 text-center flex flex-col gap-4">
                     <h3 className="text-xl font-medium">{property.title}</h3>
                     <div className="border border-stone-300"> </div>
                     <p className="text-lg font-light">{property.address.city}, {property.address.state}</p>
-                    {/* <p className="font-bold">${property.prices.basePrice} {property.prices.currency}</p> */}
+                    <div className="h-max grid grid-cols-2 flex-row justify-center items-center">
+                      <div className="flex flex-col items-center">
+                        <div className="flex items-center gap-2 text-muted-900 dark:text-white">
+                          <svg
+                            className="size-8"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style={{ stroke: "currentColor" }}
+                            data-darkreader-inline-stroke=""
+                          ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
+                          </svg>
+
+                          <p className="text-xl font-bold">{property.bedrooms}</p>
+                        </div>
+
+                        <p className="text-md text-muted-400">Bedrooms</p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="flex items-center gap-2 text-muted-900 dark:text-white">
+                          <svg
+                            className="size-8"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style={{ stroke: "currentColor" }}
+                            data-darkreader-inline-stroke=""
+                          ><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path><line x1="10" y1="5" x2="8" y2="7"></line><line
+                            x1="2"
+                            y1="12"
+                            x2="22"
+                            y2="12"></line><line x1="7" y1="19" x2="7" y2="21"></line><line x1="17" y1="19" x2="17" y2="21"></line>
+                          </svg>
+
+                          <p className="text-xl font-bold">{property.bathrooms}</p>
+                        </div>
+
+                        <p className="text-md text-muted-400">Bathroom</p>
+                      </div>
                   </div>
+                  <div className="flex min-h-min flex-row justify-center align-bottom"><button className="lp-button mt-4 ">View Details</button></div>
+                </div>
                 </div>
               </article>
             </a>

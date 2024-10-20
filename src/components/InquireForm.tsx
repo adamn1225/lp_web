@@ -108,7 +108,7 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
     <div className="flex justify-center items-center">
       <button
         onClick={() => setModalIsOpen(true)}
-        className="lp-button flex gap-2 mb-6 text-white px-4 py-2 rounded-lg drop-shadow-lg"
+        className="lp-button shadow-lg shadow-secondary/40 flex gap-2 mb-6 text-white px-4 py-2 rounded-lg drop-shadow-lg"
       >
         <Headset />  {buttonText}
       </button>
