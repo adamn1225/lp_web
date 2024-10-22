@@ -6,7 +6,7 @@ import { loadScript } from '@guestyorg/tokenization-js';
 import type { GuestyTokenizationNamespace, GuestyTokenizationRenderOptions } from '@guestyorg/tokenization-js';
 import InquireForm from "./InquireForm";
 import { CreditCard } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import html2pdf from 'html2pdf.js';
 
 interface BookingFormModalProps {
   isModalOpen: boolean;
@@ -60,10 +60,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [error, setError] = useState<string>('');
   const [isFormValid, setIsFormValid] = useState(false);
   const [guestyTokenization, setGuestyTokenization] = useState<GuestyTokenizationNamespace | null>(null);
-  const [isInquireModalOpen, setIsInquireModalOpen] = useState(false); // State for new modal
-
-
-
+  const [isInquireModalOpen, setIsInquireModalOpen] = useState(false);
+  const [paymentDateTime, setPaymentDateTime] = useState<Date | null>(null);
 
   useEffect(() => {
     const fetchPricingData = async () => {
@@ -307,12 +305,24 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const displayEndDate = dateRange[0]?.endDate ? dateRange[0].endDate.toLocaleDateString() : "N/A";
 
   const handlePrint = () => {
-    const doc = new jsPDF();
-    doc.text(`Reservation ID: ${reservationId}`, 10, 10);
-    doc.text(`Check-in Date: ${displayStartDate}`, 10, 20);
-    doc.text(`Check-out Date: ${displayEndDate}`, 10, 30);
-    doc.text(`Confirmation Code: ${confirmationCode}`, 10, 40);
-    doc.save('reservation-details.pdf');
+    const button = document.querySelector('#printableArea button') as HTMLElement;
+    if (button) button.style.display = 'none'; // Hide the button
+
+    const element = document.getElementById('printableArea');
+    html2pdf()
+      .from(element)
+      .save()
+      .then(() => {
+        if (button) button.style.display = 'block'; // Show the button again
+      });
+  };
+
+  const simulatePaymentCompletion = () => {
+    setCurrentStep(3);
+    setReservationId('66fb0b7b9181120100a8066f');
+    setConfirmationCode('nRXxlqj3D');
+    setDateRange([{ startDate: new Date(), endDate: new Date(new Date().setDate(new Date().getDate() + 7)) }]);
+    setPaymentDateTime(new Date()); // Set the current date and time
   };
 
   return (
@@ -509,22 +519,30 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
           </div>
         )}
         {currentStep === 3 && (
-          <div>
-            <h2 className="text-slate-800 text-3xl mb-4 underline">Booking Complete</h2>
-            <p className="text-slate-800 text-xl mb-4">Thank you for your booking!</p>
-            <div className="text-slate-800 text-lg mb-4">
-              <p><strong>Reservation Number:</strong> {reservationId}</p>
-              <p><strong>Check-in Date:</strong> {dateRange[0].startDate.toLocaleDateString()}</p>
-              <p><strong>Check-out Date:</strong> {dateRange[0].endDate.toLocaleDateString()}</p>
-              <p><strong>Payment Confirmation Code:</strong> {confirmationCode}</p>
+          <div id="printableArea">
+            <div className="text-center mb-4 mt-12">
+              <img src="/images/lp-temp.svg" alt="Logo" className="mx-auto" style={{ maxWidth: '200px' }} />
             </div>
-            <button
-              className="bg-slate-500 drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
-              type="button"
-              onClick={handlePrint}
-            >
-              Print Confirmation
-            </button>
+            <div className='flex flex-col items-center justify-center'>
+              <h2 className="text-slate-800 text-3xl mb-4 underline">Booking Complete</h2>
+              <p className="text-slate-800 text-xl mb-4 underline">Thank you for your booking!</p>
+              <div className="text-slate-800 flex flex-col gap-3 justify-center text-lg mb-4 mt-6">
+                <div className='flex gap-6 justify-between '><p><strong>Check-in Date:</strong></p> <span>{dateRange[0].startDate.toLocaleDateString()}</span></div>
+                <div className='flex gap-6 justify-between '><p><strong>Check-out Date:</strong></p> <span>{dateRange[0].endDate.toLocaleDateString()} </span></div>
+                <div className='flex gap-6 justify-between '><p><strong>Confirmation Code:</strong></p><span> {confirmationCode}</span></div>
+                <div className='flex gap-6 justify-between '><span><strong>Reservation Number:</strong></span> <span>{reservationId}</span></div>
+                {paymentDateTime && (
+                  <div className='flex gap-6 justify-between '><span><strong>Payment Date and Time:</strong></span> <span>{paymentDateTime.toLocaleString()}</span></div>
+                )}
+              </div>
+              <button
+                className="bg-slate-500 drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+                type="button"
+                onClick={handlePrint}
+              >
+                Print Confirmation
+              </button>
+            </div>
           </div>
         )}
         <Modal
