@@ -125,8 +125,7 @@ const faqs = [
         display: grid;
         grid-template-columns: 1fr 1fr;
         column-gap: 1rem; /* Increased column gap */
-        row-gap: 1rem;
-        justify-items: normal;
+        row-gap: 2rem;
         
     }
     .faq-question {
@@ -158,13 +157,13 @@ const faqs = [
     });
 </script>
 
-<section class="w-full p-4 flex flex-col items-center justify-center">
+<section class="w-full p-4 flex flex-col items-center">
     <h2 class="text-2xl font-bold mb-12">Frequently Asked Questions</h2>
     <div class="faq-container">
         {
             faqs.map((faq, index) => (
                 <div class="mb-4">
-                    <div class="m-0 faq-question justify-center border-b w-full h-full p-0">
+                    <div class="m-0 faq-question justify-center border-b w-full p-0">
                         <a
                             href="javascript:void(0);"
                             class="text-lg font-semibold text-cyan-600 hover:underline question-link"
@@ -174,7 +173,7 @@ const faqs = [
                             {faq.question}
                         </a>
                     </div>
-                    <div id={`answer-${index}`} class="faq-answer mt-2">
+                    <div id={`answer-${index}`} class="faq-answer my-2 text-center">
                         <HtmlContent html={faq.answer} />
                     </div>
                 </div>
