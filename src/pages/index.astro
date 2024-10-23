@@ -1,16 +1,17 @@
 ---
-import Layout from '@layouts/Split.astro'
-import Section from '@components/Section.astro'
-import Page2 from '@components/Page2.astro'
+import Layout from "@layouts/Split.astro";
+import Section from "@components/Section.astro";
+import Page2 from "@components/Page2.astro";
 import { contentfulClient } from "../lib/contentful";
 import type { BlogPost } from "../lib/contentful";
-import AvailabilitySearch from '../components/AvailabilitySearch'
-import GuestyListings from '../components/GuestyListings.astro'
-import Testimonials from '@components/sections/Testimonials.astro';
-import Process from '@components/sections/Process.astro';
-import SideFeatureOne from '@components/sections/SideFeatureOne.astro';
-import SideFeatureTwo from '@components/sections/SideFeatureTwo.astro';
-import SideIllustrations from '@components/sections/SideIllustrations.astro';
+import AvailabilitySearch from "../components/AvailabilitySearch";
+import GuestyListings from "../components/GuestyListings.astro";
+import Testimonials from "@components/sections/Testimonials.astro";
+import Process from "@components/sections/Process.astro";
+import SideFeatureOne from "@components/sections/SideFeatureOne.astro";
+import SideFeatureTwo from "@components/sections/SideFeatureTwo.astro";
+import SideIllustrations from "@components/sections/SideIllustrations.astro";
+import Faq from "@components/Faq.astro";
 
 const entries = await contentfulClient.getEntries<BlogPost>({
   content_type: "landingPageblog",
@@ -29,41 +30,57 @@ const posts = entries.items.map((item) => {
 ---
 
 <Layout title="Properties">
-<main>
-  <Section>
-    <!--Properties-->
+  <main>
+    <Section>
+      <!--Properties-->
 
-<div class="relative flex flex-col justify-center items-center bg-[url('https://assets.guesty.com/image/upload/v1713834676/kop5uviux1z7u9ywluaj.jpg')] bg-blend-overlay h-full md:h-2/3 w-full bg-cover bg-neutral-950/50 xs:pt-36 md:min-h-[1100px] bg-center bg-no-repeat md:px-24 px-3">
+      <div
+        class="relative flex flex-col justify-center items-center bg-[url('https://assets.guesty.com/image/upload/v1713834676/kop5uviux1z7u9ywluaj.jpg')] bg-blend-overlay h-full md:h-2/3 w-full bg-cover bg-neutral-950/50 xs:pt-36 md:min-h-[1100px] bg-center bg-no-repeat md:px-24 px-3"
+      >
+        <div class="h-full w-full">
+          <AvailabilitySearch client:only />
+        </div>
 
-  <div class="h-full w-full">
-      <AvailabilitySearch client:only />
-  </div>
+        <div
+          class="absolute mt-8 bottom-0 left-0 w-full h-0 border-t-[50px] border-t-transparent border-l-[50vw] border-l-transparent border-r-[50vw] border-r-transparent border-b-[100px] md:border-b-[200px] border-b-slate-200"
+        >
+        </div>
+      </div>
 
-  <div class="absolute mt-8 bottom-0 left-0 w-full h-0 border-t-[50px] border-t-transparent border-l-[50vw] border-l-transparent border-r-[50vw] border-r-transparent border-b-[100px] md:border-b-[200px] border-b-slate-200"></div>
-</div>
-
-        
-
-
-<div class="bg-slate-200 ">
-  <div class="bg-white">
-    <h2 class="font-bold text-cyan-900 m-0 bg-slate-200 text-5xl pb-12 text-center">Featured Listings</h2>
-    <div class="pb-3 px-4 md:px-24  grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 mx-2  md:mx-16 my-0 bg-slate-200  gap-6">
-      <GuestyListings />
-    </div>
-      <span class="flex bg-slate-200 xs:px-16 md:mx-16 justify-center  h-full py-8 align-center">
-  <!-- <button id="showHide" class="relative w-64 ml-8 top-0 text-2xl font-extrabold bg-secondary pb-2 drop-shadow-2xl shadow-black text-slate-100 door-shape border border-slate-900">
+      <div class="bg-slate-200">
+        <div class="bg-white">
+          <h2
+            class="font-bold text-cyan-900 m-0 bg-slate-200 text-5xl pb-12 text-center"
+          >
+            Featured Listings
+          </h2>
+          <div
+            class="pb-3 px-4 md:px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 mx-2 md:mx-16 my-0 bg-slate-200 gap-6"
+          >
+            <GuestyListings />
+          </div>
+          <span
+            class="flex bg-slate-200 xs:px-16 md:mx-16 justify-center h-full py-8 align-center"
+          >
+            <!-- <button id="showHide" class="relative w-64 ml-8 top-0 text-2xl font-extrabold bg-secondary pb-2 drop-shadow-2xl shadow-black text-slate-100 door-shape border border-slate-900">
     <span class="door-text">More Listings Here</span>
     <div class="absolute top-1/2 right-2 transform -translate-y-1/2 w-6 h-6 bg-cyan-900 shadow-md shadow-stone-950 rounded-full"></div>
   </button> -->
-  <button id="showHide" class="bg-secondary text-2xl font-bold py-2 px-4 rounded-md text-slate-100 ml-8"><span class="door-text">More Listings Here</span></button>
-      </span>
-    <div class="pt-7 w-full bg-white">
-      <span id="listing2" class="hidden py-7 px-6 md:px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        <Page2 />
-      </span>
+            <button
+              id="showHide"
+              class="bg-secondary text-2xl font-bold py-2 px-4 rounded-md text-slate-100 ml-8"
+              ><span class="door-text">More Listings Here</span></button
+            >
+          </span>
+          <div class="pt-7 w-full bg-white">
+            <span
+              id="listing2"
+              class="hidden py-7 px-6 md:px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
+            >
+              <Page2 />
+            </span>
 
-      <!-- <div class="welcome-mat">
+            <!-- <div class="welcome-mat">
         <div class="welcome-mat__content">
           <div class="welcome-mat__content__inner">
             <div class="welcome-mat__content__inner__text">
@@ -72,22 +89,26 @@ const posts = entries.items.map((item) => {
           </div>
         </div>
       </div> -->
-    </div>
-  </div>
-</div>
+          </div>
+        </div>
+      </div>
 
-        <div class="md:mb-12 mt-20">
-          <SideIllustrations />
-        </div>
-        <div class="md:my-12"><Testimonials /></div>
-        <div class=" md:my-12"><SideFeatureOne /></div>
-        
-        <div class="md:my-12"> 
-          <Process />
-        </div>
+      <div class="md:mb-12 mt-20">
+        <SideIllustrations />
+      </div>
+      <div class="md:my-12"><Testimonials /></div>
+      <div class="md:my-12"><SideFeatureOne /></div>
+
+      <div class="md:my-12">
+        <Process />
+      </div>
+
+      <div class="md:my-12">
         <SideFeatureTwo />
-
-         
+      </div>
+      <div class="md:my-12">
+        <Faq />
+      </div>
     </Section>
     <!-- <div class="flex justify-center align-center mb-4 mt-12 pt-12 border-t border-slate-200/30">
       <h2 class="font-bold text-cyan-900 mb-4 px-2 text-center md:text-3xl text-2xl">Check out our recent blogs</h2>

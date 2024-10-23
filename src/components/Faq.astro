@@ -1,0 +1,184 @@
+---
+import HtmlContent from "./ui/HtmlContent";
+
+const faqs = [
+    {
+        question: "What days of the week can I check-in?",
+        answer: "Our properties rent from Saturday to Saturday only in the summer. <br /> Most other dates, we require a 3 night minimum.",
+    },
+    {
+        question: "Are Linens included in our rental?",
+        answer:
+            "Linens are optional. <br /> If you opt for the linen package your property will have the following set up for you upon arrival:<br />" +
+            "4 Large bath Towels per Bathroom<br />" +
+            "4 Wash Clothes per Bathroom<br />" +
+            "1 Bath Mat per Bathroom<br />" +
+            "Flat and fitted sheets for beds<br />" +
+            "Pillows with pillow cases<br />" +
+            "Comforter<br />" +
+            "Starter kit of paper towels (one per kitchen), One roll of toilet paper per bathroom, Starter supply of dish detergent, and a kitchen towel.<br />" +
+            "We DO NOT supply: Beach or Pool Towels, and blankets for beds. Some units may have blankets in the closet, but we do not guarantee that your property will have those.",
+    },
+    {
+        question: "Do your Properties have Telephones?",
+        answer: "Some properties do have telephones, but not all. <br /> We do not advertise or include this in your rental.",
+    },
+    {
+        question: "Is there free parking available?",
+        answer: "Yes, we offer free parking for all guests., <br /> Campers, trailers, boats and Motorcycles are NOT allowed at most locations. Parking is limited. Please ask about your property prior to arrival. ALP is NOT responsible for guests that have their cars towed.",
+    },
+    {
+        question: "Are pets allowed?",
+        answer: "For most of our properties Yes. Although we're pet lovers, we have some properties where pets aren't allowed. Each listing will have a list of accomodations so you'll be able to know if the property is pet friendly before booking a property",
+    },
+    {
+        question: "Are grills available",
+        answer: "Most properties have grilling areas. Please ask about your specific property. We do NOT allow grilling on porches, decks, balconies, or under houses.",
+    },
+    {
+        question: "Do I need to pick up a key to my property?",
+        answer:
+            "No. All of ALP’s units have keyless entry. <br /> We will provide you with a code that is unique to your property and will only work during your stay. <br />" +
+            "Please do not give out your key code to anyone that is not in your group. Key codes are emailed one week prior to arrival <br />" +
+            "after all documents and monies have been received. Please be aware that your door code will only work between preset dates/times. <br />" +
+            "Check your arrival code information for more information.",
+    },
+    {
+        question:
+            "Who do I call if I have any questions or concerns once I have checked in?",
+        answer:
+            "We are available during your entire stay to help make your vacation great! <br />" +
+            "Please call 1-800-621-5575 EXT 726, and someone in the office will be happy to assist.",
+    },
+    {
+        question: "What if I leave something in a property after I check-out?",
+        answer:
+            "Affordable Large Properties is not responsible for items left in units. <br /> If you notify us or ALP finds an item, <br />" +
+            "we will return it to you via mail. Standard fee for return of lost goods is $25.00, <br /> but may be higher depending on shipping weight.",
+    },
+    {
+        question:
+            "What do we do if we have a maintenance issue at the property?",
+        answer:
+            "Please inspect your property upon arrival and let us know immediately of any concerns. <br />" +
+            "If anything breaks during your stay, please notify us immediately so that we may fix the issue. <br />" +
+            "Call 1-800-621-5575 EXT. 727 for assistance.",
+    },
+    {
+        question: "What items do we need to bring?",
+        answer:
+            "Some suggested items to bring for your stay: <br /> Special cooking supplies, Personal Toiletries, Beach/ Pool Towels, <br />" +
+            "Laundry Detergent, Paper Towels/ Toilet Paper, Beach Equipment, Hairdryer, Trash Bags, Sunscreen.",
+    },
+    {
+        question: "Do you offer Daily Maid Service?",
+        answer: "If you would like Maid service during your stay, we can arrange that for you.",
+    },
+    {
+        question: "What items are available in the Property?",
+        answer:
+            "Our properties are equipped with full size kitchens that include: <br /> dishwashers, refrigerators, stoves, microwaves, basic cooking utensils, <br />" +
+            "pots and pans, bakeware, plates, cups, toasters, coffee makers. <br /> If you require something special to cook with, we recommend you bring it. <br />" +
+            "Our properties have washers and dryers inside each unit, as well as irons and ironing boards.<br />" +
+            "We provide a starter kit with: one trash bag per can, one trial size dishwasher packet, kitchen towels, <br />" +
+            "one roll of toilet paper per bathroom, and one roll of paper towels for the kitchen. <br />" +
+            "We do not provide beach chairs, beach umbrellas, or baby items like cribs or highchairs. <br />" +
+            "We can assist with securing these items for your stay. Please ask for details.",
+    },
+    {
+        question: "Are your properties non-smoking?",
+        answer:
+            "Yes. We DO NOT allow any smoking inside the unit. <br /> Guests may smoke outside as long as it does not conflict with property rules. <br />" +
+            "If you smoke inside, you will be charged a $500 fee.",
+    },
+    {
+        question: "Are your properties handicap accessible?",
+        answer: "Most properties are wheelchair accessible. <br /> We do have a few that are not. Please ask before making your reservation.",
+    },
+    {
+        question: "Are your properties pet friendly?",
+        answer: "Although we at ALP are pet lovers, we do not allow pets in any of our properties.",
+    },
+    {
+        question: "Do you have Wi-Fi in your properties?",
+        answer: "Yes, Wi-Fi is included in your property. <br /> Information about the internet can be found in your property.",
+    },
+    {
+        question: "Parking?",
+        answer:
+            "Campers, trailers, boats, and motorcycles are NOT allowed at most locations. <br /> Parking is limited. <br />" +
+            "Most 4-bedroom condos receive 2-3 parking passes. <br /> Most 6-bedroom condos receive 3-4 parking passes. <br />" +
+            "Most 8-bedroom properties can park 4-5 cars depending on vehicle size.",
+    },
+];
+---
+
+<style is:global>
+    .faq-answer {
+        @apply hidden;
+    }
+    .faq-answer.active {
+        @apply block;
+    }
+    .faq-container {
+        @apply border border-gray-300 rounded-lg p-4 shadow-md;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 1rem; /* Increased column gap */
+        row-gap: 1rem;
+        justify-items: normal;
+        
+    }
+    .faq-question {
+        grid-column: span 2;
+        display: flex;
+        width: 100%;
+        text-wrap: nowrap; /* Added text-wrap */
+
+    }
+</style>
+
+<script>
+    function toggleAnswer(index) {
+        const answerElement = document.getElementById(`answer-${index}`);
+        if (answerElement) {
+            answerElement.classList.toggle("active");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const questionLinks = document.querySelectorAll(".question-link");
+        questionLinks.forEach((link) => {
+            link.addEventListener("click", (event) => {
+                const target = event.target as HTMLElement;
+                const index = target.getAttribute("data-index");
+                toggleAnswer(index);
+            });
+        });
+    });
+</script>
+
+<section class="w-full p-4 flex flex-col items-center justify-center">
+    <h2 class="text-2xl font-bold mb-12">Frequently Asked Questions</h2>
+    <div class="faq-container">
+        {
+            faqs.map((faq, index) => (
+                <div class="mb-4">
+                    <div class="m-0 faq-question justify-center border-b w-full h-full p-0">
+                        <a
+                            href="javascript:void(0);"
+                            class="text-lg font-semibold text-cyan-600 hover:underline question-link"
+                            id={`question-${index}`}
+                            data-index={index}
+                        >
+                            {faq.question}
+                        </a>
+                    </div>
+                    <div id={`answer-${index}`} class="faq-answer mt-2">
+                        <HtmlContent html={faq.answer} />
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</section>
