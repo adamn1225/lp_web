@@ -311,7 +311,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Booking Form"
-      className="xs:max-h-screen md:max-h-full bg-white z-50 px-4 py-6 rounded-lg drop-shadow-2xl shadow-lg md:w-4/5 lg:w-5/6 mt-24"
+      className="xs:max-h-full md:max-h-full bg-white z-50 px-4 py-6 rounded-lg drop-shadow-2xl shadow-lg md:w-4/5 lg:w-5/6 md:mt-18 overflow-y-auto"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       appElement={document.getElementById('Top')!}
     >
@@ -320,21 +320,24 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
           <>
             <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(2); }} className="flex flex-col justify-center items-center w-full">
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    closeModal();
-                    setIsInquireModalOpen(true); // Open new modal
-                  }}
-                  className="absolute top-0 right-0 md:mt-4 md:mr-4 bg-cyan-600 text-muted-50 px-4 py-2 font-medium"
-                >
-                  Close
-                </button>
 
-              <div className="w-full px-4">
+
+              <div className="w-full xs:px-1 md:px-4">
                 <div className='flex  flex-col items-center justify-around'>
-                  <div className='flex justify-normal'><InquireForm listingId={listingId} buttonText='Chat with an agent' /></div>
-                  <h2 className="text-slate-800 text-xl mb-4 underline self-center">Fill out the form below and reserve the date</h2>
+                  <div className='flex justify-between gap-4 w-full'>
+                    <InquireForm listingId={listingId} buttonText='Chat with an agent' />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        closeModal();
+                        setIsInquireModalOpen(true); // Open new modal
+                      }}
+                      className="absolute top-0 right-0 md:mt-4 md:mr-4 bg-cyan-600 text-muted-50 px-4 py-2 font-medium"
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <h2 className="xs:text-center xs:text-md text-slate-800 text-xl mb-4 underline self-center">Fill out the form below and reserve the date</h2>
                 </div>
                 <div className='flex gap-4 w-full'>
                   <div className="flex-1">
@@ -364,28 +367,26 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 </div>
                 <div className="mb-1 flex gap-4 w-full">
                   <div className="flex-1">
-                    <label htmlFor="firstName" className="text-slate-800">First Name
+                  
                       <input
                         type="text"
                         id="firstName"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
-                        className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
-                        placeholder="Enter your first name"
+                        className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
+                        placeholder="First Name"
                       />
-                    </label>
                   </div>
                   <div className="flex-1">
-                    <label htmlFor="lastName" className="text-slate-800">Last Name
+                  
                       <input
                         type="text"
                         id="lastName"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
-                        className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
-                        placeholder="Enter your last name"
+                        className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
+                        placeholder="Last name"
                       />
-                    </label>
                   </div>
                 </div>
                 <div className="mb-1 md:flex gap-4 w-full">
@@ -394,10 +395,11 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                       <input
                         type="email"
                         id="email"
+                        placeholder="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="xs:mb-4 mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60"
-                        placeholder="email@address.com"
+                        className="xs:mb-4 mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60 placeholder:text-slate-500"
+                      
                       />
                     </label>
                   </div>
@@ -415,7 +417,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                   </div>
                 </div>
               </div>
-              <div className='flex flex-col gap-0 w-3/4'>
+              <div className='xs:w-full flex flex-col gap-0 w-3/4'>
                 <div className="mt-4 w-full">
                   {pets > 0 && (
                     <div className="flex justify-between pb-2">
@@ -446,7 +448,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 </div>
                 <TextArea />
                 <button
-                  className="lp-button flex gap-2 text-xl font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+                  className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
                   type="submit"
                   disabled={loading}
                 >
@@ -457,10 +459,12 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
           </>
         )}
         {currentStep === 2 && (
-          <div className='w-full justify-center items-center max-h-5/6 overflow-y-auto'>
-            <div id="payment-container" className="mx-12 my-0"></div>
-            <div className="flex flex-col gap-4 mt-3">
-              <div className='text-justify mx-12'>
+          <div className='w-full justify-center items-center max-h-5/6 overflow-y-scroll'>
+            <div id="payment-container" className="my-0 pb-2">
+              {/* The payment fields will be fetched and inserted here */}
+            </div>
+            <div className="flex flex-col md:gap-4 md:mt-3">
+              <div className='text-justify md:mx-12'>
                 {pets > 0 && petFee > 0 && (
                   <div className="flex justify-between">
                     <p><strong>Pet Price:</strong></p>

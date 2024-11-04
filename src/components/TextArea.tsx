@@ -22,7 +22,7 @@ const TextArea: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="text-slate-800 text-sm mb-4 max-h-36 overflow-y-auto">
+        <form onSubmit={handleSubmit} className="px-4 w-full text-slate-800 text-sm mb-4 max-h-36 overflow-y-auto my-4 border border-gray-500/50">
             <strong><h2 className='text-lg mb-2'>Rental Agreement</h2></strong>
             <strong><p>Agreement between User and line-properties.com</p></strong>
 

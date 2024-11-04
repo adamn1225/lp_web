@@ -71,7 +71,7 @@ export async function get({ params }) {
     apt: listing.address.apt,
     city: listing.address.city,
     state: listing.address.state,
-    street: listing.address.street,      
+    street: listing.address.street,
     zip: listing.address.zip,
     country: listing.address.country,
     Description: listing.publicDescription,
@@ -113,7 +113,7 @@ const {
 <Layout title="Property Details">
   <main id="PropertyDetails">
     <Section>
-      <div class="w-full mx-auto max-w-full mt-12 px-8 xs:px-4">
+      <div class="xs:px-1 sm:px-1 w-full mx-auto max-w-full mt-12 md:px-8">
         <div class="pb-12 mb-12">
           <section class="relative border-b border-muted-200 pb-12">
             <!-- breadcrumb -->
@@ -163,7 +163,8 @@ const {
                     class="leading-9 text-xl font-light font-sans text-muted-900 mb-2 xs:text-center"
                   >
                     {street}
-                    {apt}, {city}, {state} {zip}, {country}
+                    {apt}, {city}, {state}
+                    {zip}, {country}
                   </h2>
                   <a
                     href="#"
@@ -246,13 +247,212 @@ const {
                   </div>
                 </div>
 
+                <!-- mobile -->
+                <div
+                  class="md:hidden flex w-full flex-col justify-start items-center px-7 md:px-2"
+                >
+                  <!-- <ChatBox conversationId={conversationId} client:load={true} /> -->
+                  <!-- <button
+                class="bg-cyan-600 mb-6 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
+              <span class="pl-2">Send Message</span> 
+              </button> -->
+                  <span class="xs:hidden">
+                    <InquireForm
+                      listingId={listingId}
+                      buttonText="Chat with a property Agent"
+                      client:load
+                    />
+                  </span>
+                  <div
+                    id="main"
+                    class="flex flex-col justify-center items-center md:w-full"
+                  >
+                    <div class="flex gap-2 w-full justify-center items-center">
+                      <p>
+                        <span class="font-bold w-full">Check in: </span>{
+                          checkIn
+                        }
+                      </p>
+                      <p>
+                        <span class="font-bold w-full">Check Out: </span>{
+                          checkOut
+                        }
+                      </p>
+                    </div>
+                    <span
+                      class="text-sm font-light flex justify-center items-center gap-1"
+                    >
+                      <span class="font-bold">Note: </span> Checkin and Checkout
+                      times are in UTC.
+                    </span>
+
+                    <InstantBooking listingId={listingId} client:only="react" />
+                    <!-- <BookingFormWrapper
+                    listingId={listingId}
+                    client:only="react"
+                  /> -->
+                    <h4
+                      class="text-2xl mt-6 font-bold font-sans text-slate-900"
+                    >
+                      Amenities
+                    </h4>
+
+                    <div
+                      class="mb-6 grid grid-cols-3 gap-2 justify-items-center"
+                    >
+                      <!-- bedroom -->
+                      <div class="flex flex-col">
+                        <div
+                          class="flex items-center gap-2 text-muted-900 dark:text-white"
+                        >
+                          <svg
+                            class="size-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style="--darkreader-inline-stroke: currentColor;"
+                            data-darkreader-inline-stroke=""
+                            ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"
+                            ></path><path
+                              d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"
+                            ></path><path d="M12 4v6"></path><path d="M2 18h20"
+                            ></path>
+                          </svg>
+                          <p class="text-lg font-bold">{PropertyType}</p>
+                        </div>
+                        <p class="text-sm text-muted-400">Property Type</p>
+                      </div>
+                      <!-- bathroom -->
+                      <div class="flex flex-col">
+                        <div
+                          class="flex items-center gap-2 text-muted-900 dark:text-white"
+                        >
+                          <svg
+                            class="size-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style="--darkreader-inline-stroke: currentColor;"
+                            data-darkreader-inline-stroke=""
+                            ><path
+                              d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                            ></path><line x1="10" y1="5" x2="8" y2="7"
+                            ></line><line x1="2" y1="12" x2="22" y2="12"
+                            ></line><line x1="7" y1="19" x2="7" y2="21"
+                            ></line><line x1="17" y1="19" x2="17" y2="21"
+                            ></line>
+                          </svg>
+                          <p class="text-lg font-bold">{bathrooms}</p>
+                        </div>
+                        <p class="text-sm text-muted-400">Bathrooms</p>
+                      </div>
+
+                      <div class="flex flex-col">
+                        <div
+                          class="flex items-center gap-2 text-muted-900 dark:text-white"
+                        >
+                          <svg
+                            class="size-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style="--darkreader-inline-stroke: currentColor;"
+                            data-darkreader-inline-stroke=""
+                            ><path
+                              d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                            ></path><line x1="10" y1="5" x2="8" y2="7"
+                            ></line><line x1="2" y1="12" x2="22" y2="12"
+                            ></line><line x1="7" y1="19" x2="7" y2="21"
+                            ></line><line x1="17" y1="19" x2="17" y2="21"
+                            ></line>
+                          </svg>
+                          <p class="text-lg font-bold">{bedrooms}</p>
+                        </div>
+                        <p class="text-sm text-muted-400">Bedrooms</p>
+                      </div>
+                    </div>
+                    <div
+                      class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap"
+                    >
+                      <span
+                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                        >Guest toilet</span
+                      >
+                      <span
+                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                        >Open kitchen</span
+                      >
+                      <span
+                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                        >Swimming Pool</span
+                      >
+                      <span
+                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                        >Garden sharing</span
+                      >
+                      <span
+                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                        >Kids playground</span
+                      >
+                    </div>
+
+                    <div
+                      class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
+                    >
+                      <div
+                        class="flex items-center gap-2 justify-between text-sm"
+                      >
+                        <p class="text-muted-400">Type</p>
+                        <p class="text-muted-900">{PropertyType}</p>
+                      </div>
+                      <div
+                        class="flex items-center gap-2 justify-between text-sm"
+                      >
+                        <p class="text-muted-400">Status</p>
+                        <p class="text-muted-900">Available</p>
+                      </div>
+                      <div class="flex items-center justify-between text-sm">
+                        <p class="text-muted-400">Price</p>
+                        <p class="text-muted-900">Available</p>
+                      </div>
+                      <span class="sm:hidden mt-12">
+                        <InquireForm
+                          listingId={listingId}
+                          buttonText="Chat with a property Agent"
+                          client:load
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
                 <!-- property content -->
                 <div class="relative" x-data="{ activeTab: 'tab-1' }">
                   <div
-                    class="tabs mb-6 flex text-base justify-between overflow-hidden overflow-x-auto"
+                    class="tabs mb-6 max-w-fit flex flex-wrap text-base justify-between"
                   >
                     <ul
-                      class="flex items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none"
+                      class="flex max-w-fit items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none"
                     >
                       <li
                         :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
@@ -507,7 +707,7 @@ const {
 
               <!-- right -->
               <div
-                class="flex w-full max-w-min flex-col justify-start items-center px-7 md:px-2"
+                class="xs:hidden sm:hidden md:flex flex w-full max-w-max flex-col md:px-2 md:justify-center lg:justify-start items-center px-7"
               >
                 <!-- <ChatBox conversationId={conversationId} client:load={true} /> -->
                 <!-- <button
@@ -696,10 +896,494 @@ const {
                 </div>
               </div>
             </div>
+
+            <div class="my-6 flex flex-wrap gap-1 justify-center items-center">
+              {
+                pictures[4] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[4].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[5] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[5].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[6] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[6].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[7] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[7].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[8] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[8].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[9] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[9].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[10] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[10].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[11] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[11].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[12] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[12].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[13] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[13].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[14] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[14].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[15] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[15].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[16] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[16].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[17] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[17].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[18] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[18].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[19] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[19].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[20] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[20].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[21] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[21].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[22] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[22].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[23] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[23].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[24] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[24].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[25] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[25].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[26] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[26].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[27] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[27].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[28] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[28].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[29] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[29].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[30] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[30].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[31] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[31].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[32] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[32].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[33] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[33].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[34] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[34].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+              {
+                pictures[35] && (
+                  <div class="">
+                    <img
+                      class="object-contain"
+                      src={pictures[35].original}
+                      alt="Sub image"
+                      width={600}
+                      height={420}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+            </div>
+
             <!-- cards -->
             <div class="mt-12">
               <div class="flex flex-col">
-                <h2
+                <!-- <h2
                   class="font-sans text-2xl text-muted-900 text-center dark:text-white xs:text-center"
                 >
                   You might also like
@@ -708,12 +1392,12 @@ const {
                   class="text-muted-500 dark:text-muted-400 text-center leading-6 xs:text-center"
                 >
                   Based on your previous matches
-                </p>
-                <div
+                </p> -->
+                <!-- <div
                   class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
                 >
                   <GuestyListings />
-                </div>
+                </div> -->
               </div>
               <div
                 class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
