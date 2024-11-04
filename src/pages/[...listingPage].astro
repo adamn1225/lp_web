@@ -7,7 +7,7 @@ import InquireForm from "@components/InquireForm";
 import GuestyListings from "@components/GuestyListings.astro";
 import InstantBooking from "@components/InstantBooking.tsx";
 import { fetchAllListings } from "./api/dataFetcher";
-import fetchReviews from "./api/listingReviews";
+import { fetchReviews } from "./api/listingReviews";
 import BookingFormWrapper from "../components/BookingFormWrapper";
 
 export async function getStaticPaths() {
@@ -108,6 +108,30 @@ const {
   reviews,
   bedrooms,
 } = Astro.props;
+
+function calculateAverageRatings(reviews) {
+  const categoryRatings = {};
+
+  reviews.forEach((review) => {
+    review.rawReview.category_ratings.forEach((rating) => {
+      if (!categoryRatings[rating.category]) {
+        categoryRatings[rating.category] = [];
+      }
+      categoryRatings[rating.category].push(rating.rating);
+    });
+  });
+
+  const averageRatings = Object.keys(categoryRatings).map((category) => {
+    const ratings = categoryRatings[category];
+    const averageRating =
+      ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+    return { category, rating: averageRating };
+  });
+
+  return averageRatings;
+}
+
+const averageRatings = calculateAverageRatings(reviews);
 ---
 
 <Layout title="Property Details">
@@ -640,67 +664,55 @@ const {
                     </div>
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
-                    {
-                      reviews && reviews.length > 0 ? (
-                        reviews.map((review: any) => (
-                          <div class="relative">
-                            <div class="grid grid-cols-2 gap-6 max-w-xl">
-                              {review.rawReview.category_ratings &&
-                              review.rawReview.category_ratings.length > 0 ? (
-                                review.rawReview.category_ratings.map(
-                                  (rating: any, index: number) => (
-                                    <div class="relative">
-                                      <div class="flex items-center justify-between max-w-xl">
-                                        <div class="text-base text-muted-700 dark:text-muted-200">
-                                          <span>{rating.category}</span>
-                                        </div>
-                                        <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                                          <progress
-                                            class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                            value={rating.rating}
-                                            max="5"
-                                          >
-                                            {rating.rating}
-                                          </progress>
-                                          <span class="ms-3 font-medium text-base text-muted-900">
-                                            {rating.rating}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ),
-                                )
-                              ) : (
-                                <p>No category ratings available</p>
-                              )}
-                            </div>
+                        {reviews && reviews.length > 0 ? (
+        <>
+          <!-- Display the average rating progress bar -->
+          <div class="grid grid-cols-2 gap-6 max-w-xl mb-8">
+            {averageRatings.map((rating, index) => (
+              <div class="relative" key={index}>
+                <div class="flex items-center justify-between max-w-xl">
+                  <div class="text-base text-muted-700 dark:text-muted-200">
+                    <span>{rating.category}</span>
+                  </div>
+                  <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                    <progress
+                      class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                      value={rating.rating}
+                      max="5"
+                    >
+                      {rating.rating}
+                    </progress>
+                    <span class="ms-3 font-medium text-base text-muted-900">
+                      {rating.rating.toFixed(1)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
 
-                            <div class="pt-16">
-                              <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
-                                <div class="relative">
-                                  <div class="gap-4 mb-6 flex items-center">
-                                    <div class="meta">
-                                      <div>
-                                        <h4 class="text-base font-semibold font-sans text-slate-950">
-                                          {review.rawReview.public_review}
-                                        </h4>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="relatives-action mt-8">
-                                <button class="h-11 transition-all duration-300 text-sm rounded text-slate-100 bg-cyan-600 dark:bg-muted-950 border border-muted-200 dark:border-muted-800 px-4 py-2 flex justify-center items-center dark:text-muted-400">
-                                  See all comments
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <p>No reviews available</p>
-                      )
-                    }
+          <!-- Display the review comments in two columns -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
+            {reviews.map((review, index) => (
+              <div class="relative" key={index}>
+                <div class="gap-4 mb-6 flex items-center">
+                  <div class="meta">
+                    <div>
+                      <h3 class="text-lg font-semibold font-sans text-slate-950">
+                        {review.rawReview.reviewer_role}:</h3>
+                      <h4 class="text-base font-semibold font-sans text-slate-950">
+                        {review.rawReview.public_review}
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <p>No reviews available</p>
+      )}
                   </div>
                 </div>
               </div>
@@ -902,7 +914,7 @@ const {
                 pictures[4] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[4].original}
                       alt="Sub image"
                       width={600}
@@ -917,11 +929,9 @@ const {
                 pictures[5] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[5].original}
                       alt="Sub image"
-                      width={600}
-                      height={420}
                       data-zoom
                       loading="lazy"
                     />
@@ -932,7 +942,7 @@ const {
                 pictures[6] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[6].original}
                       alt="Sub image"
                       width={600}
@@ -947,7 +957,7 @@ const {
                 pictures[7] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[7].original}
                       alt="Sub image"
                       width={600}
@@ -962,7 +972,7 @@ const {
                 pictures[8] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[8].original}
                       alt="Sub image"
                       width={600}
@@ -977,7 +987,7 @@ const {
                 pictures[9] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[9].original}
                       alt="Sub image"
                       width={600}
@@ -992,7 +1002,7 @@ const {
                 pictures[10] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[10].original}
                       alt="Sub image"
                       width={600}
@@ -1007,7 +1017,7 @@ const {
                 pictures[11] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[11].original}
                       alt="Sub image"
                       width={600}
@@ -1022,7 +1032,7 @@ const {
                 pictures[12] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[12].original}
                       alt="Sub image"
                       width={600}
@@ -1037,7 +1047,7 @@ const {
                 pictures[13] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[13].original}
                       alt="Sub image"
                       width={600}
@@ -1052,7 +1062,7 @@ const {
                 pictures[14] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[14].original}
                       alt="Sub image"
                       width={600}
@@ -1067,7 +1077,7 @@ const {
                 pictures[15] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[15].original}
                       alt="Sub image"
                       width={600}
@@ -1082,7 +1092,7 @@ const {
                 pictures[16] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[16].original}
                       alt="Sub image"
                       width={600}
@@ -1097,7 +1107,7 @@ const {
                 pictures[17] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[17].original}
                       alt="Sub image"
                       width={600}
@@ -1112,7 +1122,7 @@ const {
                 pictures[18] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[18].original}
                       alt="Sub image"
                       width={600}
@@ -1127,7 +1137,7 @@ const {
                 pictures[19] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[19].original}
                       alt="Sub image"
                       width={600}
@@ -1142,7 +1152,7 @@ const {
                 pictures[20] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[20].original}
                       alt="Sub image"
                       width={600}
@@ -1157,7 +1167,7 @@ const {
                 pictures[21] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[21].original}
                       alt="Sub image"
                       width={600}
@@ -1172,7 +1182,7 @@ const {
                 pictures[22] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[22].original}
                       alt="Sub image"
                       width={600}
@@ -1187,7 +1197,7 @@ const {
                 pictures[23] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[23].original}
                       alt="Sub image"
                       width={600}
@@ -1202,7 +1212,7 @@ const {
                 pictures[24] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[24].original}
                       alt="Sub image"
                       width={600}
@@ -1217,7 +1227,7 @@ const {
                 pictures[25] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[25].original}
                       alt="Sub image"
                       width={600}
@@ -1232,7 +1242,7 @@ const {
                 pictures[26] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[26].original}
                       alt="Sub image"
                       width={600}
@@ -1247,7 +1257,7 @@ const {
                 pictures[27] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[27].original}
                       alt="Sub image"
                       width={600}
@@ -1262,7 +1272,7 @@ const {
                 pictures[28] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[28].original}
                       alt="Sub image"
                       width={600}
@@ -1277,7 +1287,7 @@ const {
                 pictures[29] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[29].original}
                       alt="Sub image"
                       width={600}
@@ -1292,7 +1302,7 @@ const {
                 pictures[30] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[30].original}
                       alt="Sub image"
                       width={600}
@@ -1307,7 +1317,7 @@ const {
                 pictures[31] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[31].original}
                       alt="Sub image"
                       width={600}
@@ -1322,7 +1332,7 @@ const {
                 pictures[32] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[32].original}
                       alt="Sub image"
                       width={600}
@@ -1337,7 +1347,7 @@ const {
                 pictures[33] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[33].original}
                       alt="Sub image"
                       width={600}
@@ -1352,7 +1362,7 @@ const {
                 pictures[34] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[34].original}
                       alt="Sub image"
                       width={600}
@@ -1367,7 +1377,7 @@ const {
                 pictures[35] && (
                   <div class="">
                     <img
-                      class="object-contain"
+                      class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[35].original}
                       alt="Sub image"
                       width={600}
