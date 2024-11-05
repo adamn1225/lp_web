@@ -105,20 +105,26 @@ const {
   PropertyType,
   checkIn,
   checkOut,
-  reviews,
   bedrooms,
+  reviews,
 } = Astro.props;
 
 function calculateAverageRatings(reviews) {
+  if (!reviews || reviews.length === 0) {
+    return [];
+  }
+
   const categoryRatings = {};
 
   reviews.forEach((review) => {
-    review.rawReview.category_ratings.forEach((rating) => {
-      if (!categoryRatings[rating.category]) {
-        categoryRatings[rating.category] = [];
-      }
-      categoryRatings[rating.category].push(rating.rating);
-    });
+    if (review.rawReview && Array.isArray(review.rawReview.category_ratings)) {
+      review.rawReview.category_ratings.forEach((rating) => {
+        if (!categoryRatings[rating.category]) {
+          categoryRatings[rating.category] = [];
+        }
+        categoryRatings[rating.category].push(rating.rating);
+      });
+    }
   });
 
   const averageRatings = Object.keys(categoryRatings).map((category) => {
@@ -132,6 +138,7 @@ function calculateAverageRatings(reviews) {
 }
 
 const averageRatings = calculateAverageRatings(reviews);
+
 ---
 
 <Layout title="Property Details">
@@ -664,55 +671,52 @@ const averageRatings = calculateAverageRatings(reviews);
                     </div>
                   </div>
                   <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
-                        {reviews && reviews.length > 0 ? (
-        <>
-          <!-- Display the average rating progress bar -->
-          <div class="grid grid-cols-2 gap-6 max-w-xl mb-8">
-            {averageRatings.map((rating, index) => (
-              <div class="relative">
-                <div class="flex items-center justify-between max-w-xl">
-                  <div class="text-base text-muted-700 dark:text-muted-200">
-                    <span>{rating.category}</span>
-                  </div>
-                  <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                    <progress
-                      class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                      value={rating.rating}
-                      max="5"
-                    >
-                      {rating.rating}
-                    </progress>
-                    <span class="ms-3 font-medium text-base text-muted-900">
-                      {rating.rating.toFixed(1)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <!-- Display the review comments in two columns -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
-            {reviews.map((review, index) => (
-              <div class="relative">
-                <div class="gap-4 mb-6 flex items-center">
-                  <div class="meta">
-                    <div>
-                      <h3 class="text-lg font-semibold font-sans text-slate-950">
-                        {review.rawReview.reviewer_role}:</h3>
-                      <h4 class="text-base font-semibold font-sans text-slate-950">
-                        {review.rawReview.public_review}
-                      </h4>
+ {reviews && reviews.length > 0 ? (
+                  <>
+                    <div class="grid grid-cols-2 gap-6 max-w-xl mb-8">
+                      {averageRatings.map((rating, index) => (
+                        <div class="relative rating-{index}">
+                          <div class="flex items-center justify-between max-w-xl">
+                            <div class="text-base text-muted-700 dark:text-muted-200">
+                              <span>{rating.category}</span>
+                            </div>
+                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                              <progress
+                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                                value={rating.rating}
+                                max="5"
+                              >
+                                {rating.rating}
+                              </progress>
+                              <span class="ms-3 font-medium text-base text-muted-900">
+                                {rating.rating.toFixed(1)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      ) : (
-        <p>No reviews available</p>
-      )}
+
+                    <!-- Display the review comments in two columns -->
+                    <div class="flex flex-wrap items-start justify-start gap-y-8 gap-x-6">
+                      {reviews.map((review, index) => (
+                        <div class="relative review-{index}">
+                          <div class="gap-4 mb-6 flex items-center">
+                            <div class="meta">
+                              <div class="flex gap-4 justify-start flex-wrap w-1/2">
+                                <h4 class="text-base font-semibold font-sans text-slate-950">
+                                  {review.rawReview.public_review}
+                                </h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p>No reviews available</p>
+                )}
                   </div>
                 </div>
               </div>
