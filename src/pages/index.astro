@@ -12,6 +12,7 @@ import SideFeatureOne from "@components/sections/SideFeatureOne.astro";
 import SideFeatureTwo from "@components/sections/SideFeatureTwo.astro";
 import SideIllustrations from "@components/sections/SideIllustrations.astro";
 import Faq from "@components/Faq.astro";
+import HeroAbout from "@components/sections/HeroAbout.astro";
 
 const entries = await contentfulClient.getEntries<BlogPost>({
   content_type: "landingPageblog",
@@ -94,12 +95,16 @@ const posts = entries.items.map((item) => {
       </div>
 
       <div class="md:mb-12 mt-20">
+        <HeroAbout />
+      </div>
+      
+      <div class="md:mb-12 mt-20">
         <SideIllustrations />
       </div>
       <div class="md:my-12"><Testimonials /></div>
       <div class="md:my-12"><SideFeatureOne /></div>
 
-      <div class="md:my-12">
+      <div class="overflow-hidden">
         <Process />
       </div>
 

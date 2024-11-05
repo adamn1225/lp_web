@@ -1,76 +1,131 @@
 ---
-import { Icon } from 'astro-icon/components'
-import Section from '@components/Section.astro'
-import Container from '@components/Container.astro'
+import { Icon } from "astro-icon/components";
+import Section from "@components/Section.astro";
+import Container from "@components/Container.astro";
 ---
 
 <Section>
   <Container>
-    <h3 class="font-sans text-3xl leading-9 text-muted-900 dark:text-white">What we can do to help you</h3>
+    <h3 class="font-sans text-3xl leading-9 text-muted-900 dark:text-white p-8">
+      What we can do to help you
+    </h3>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-8 border-b border-muted-200 dark:border-muted-800">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8 border-b border-muted-200 dark:border-muted-800"
+    >
       <!--Feature 1-->
       <div
-        class="p-9 flex flex-col cursor-pointer group hover:shadow-lg hover:shadow-muted-300/30 dark:hover:shadow-muted-800/20 border border-transparent hover:border-muted-200 dark:hover:border-muted-800 hover:bg-white dark:hover:bg-muted-950 transition-all"
+        class="p-9 flex flex-col group hover:shadow-lg hover:shadow-muted-300/30 dark:hover:shadow-muted-800/20 border border-transparent hover:border-muted-200 dark:hover:border-muted-800 hover:bg-white dark:hover:bg-muted-950 transition-all"
       >
-        <span class="size-14 grid place-items-center group-hover:[&>svg]:scale-75 group-hover:[&>span]:scale-100 relative group">
-          <Icon name="ph:handshake-duotone" class="size-8 text-primary-500 transition-all duration-200 relative z-10" />
-          <span class="bg-primary-500/10 absolute inset-0 z-0 scale-0 transition-all duration-300 rounded-full"></span>
-        </span>
-        <h4 class="font-sans font-semibold text-xl text-muted-900 dark:text-white mt-6 mb-2">Investing</h4>
-        <p class="mb-6 text-sm leading-6 text-muted-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Summum ením bonum exposuit vacuitatem.</p>
-        <a href="#" class="text-primary-500 text-sm font-medium flex items-center gap-1 underline-offset-4 hover:underline group/link">
-          <span>Learn more </span>
-          <Icon name="lucide:arrow-right" class="size-4 text-primary-500 group-hover/link:translate-x-1 transition-all duration-300" />
-        </a>
-      </div>
-      <!--Feature 2-->
-      <div
-        class="p-9 flex flex-col cursor-pointer group hover:shadow-lg hover:shadow-muted-300/30 dark:hover:shadow-muted-800/20 border border-transparent hover:border-muted-200 dark:hover:border-muted-800 hover:bg-white dark:hover:bg-muted-950 transition-all"
-      >
-        <span class="size-14 grid place-items-center group-hover:[&>svg]:scale-75 group-hover:[&>span]:scale-100 relative group">
-          <Icon name="ph:house-line-duotone" class="size-8 text-primary-500 transition-all duration-200 relative z-10" />
+        <span
+          class="size-14 grid place-items-center group-hover:[&>svg]:scale-75 group-hover:[&>span]:scale-100 relative group"
+        >
+          <Icon
+            name="ph:house-line-duotone"
+            class="size-8 text-primary-500 transition-all duration-200 relative z-10"
+          />
 
-          <span class="bg-primary-500/10 absolute inset-0 z-0 scale-0 transition-all duration-300 rounded-full"></span>
+          <span
+            class="bg-primary-500/10 absolute inset-0 z-0 scale-0 transition-all duration-300 rounded-full"
+          ></span>
         </span>
-        <h4 class="font-sans font-semibold text-xl text-muted-900 dark:text-white mt-6 mb-2">Property Management</h4>
-        <p class="mb-6 text-sm leading-6 text-muted-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Summum ením bonum exposuit vacuitatem.</p>
-        <a href="#" class="text-primary-500 text-sm font-medium flex items-center gap-1 underline-offset-4 hover:underline group/link">
+        <h4
+          class="font-sans font-semibold text-xl text-muted-900 dark:text-white mt-6 mb-2"
+        >
+          Property Management
+        </h4>
+        <p class="mb-6 text-sm leading-6 text-muted-400">
+          Our dedicated property management services provide peace of mind,
+          ensuring your investment is well taken care of. We handle everything
+          from guest communication to routine inspections, ensuring your
+          property remains in pristine condition and generating optimal income.
+        </p>
+        <!-- <a
+          href="#"
+          class="text-primary-500 text-sm font-medium flex items-center gap-1 underline-offset-4 hover:underline group/link"
+        >
           <span>Learn more </span>
-          <Icon name="lucide:arrow-right" class="size-4 text-primary-500 group-hover/link:translate-x-1 transition-all duration-300" />
-        </a>
+          <Icon
+            name="lucide:arrow-right"
+            class="size-4 text-primary-500 group-hover/link:translate-x-1 transition-all duration-300"
+          />
+        </a> -->
       </div>
       <!--Feature 3-->
       <div
-        class="p-9 flex flex-col cursor-pointer group hover:shadow-lg hover:shadow-muted-300/30 dark:hover:shadow-muted-800/20 border border-transparent hover:border-muted-200 dark:hover:border-muted-800 hover:bg-white dark:hover:bg-muted-950 transition-all"
+        class="p-9 flex flex-col group hover:shadow-lg hover:shadow-muted-300/30 dark:hover:shadow-muted-800/20 border border-transparent hover:border-muted-200 dark:hover:border-muted-800 hover:bg-white dark:hover:bg-muted-950 transition-all"
       >
-        <span class="size-14 grid place-items-center group-hover:[&>svg]:scale-75 group-hover:[&>span]:scale-100 relative group">
-          <Icon name="ph:armchair-duotone" class="size-8 text-primary-500 transition-all duration-200 relative z-10" />
+        <span
+          class="size-14 grid place-items-center group-hover:[&>svg]:scale-75 group-hover:[&>span]:scale-100 relative group"
+        >
+          <Icon
+            name="ph:armchair-duotone"
+            class="size-8 text-primary-500 transition-all duration-200 relative z-10"
+          />
 
-          <span class="bg-primary-500/10 absolute inset-0 z-0 scale-0 transition-all duration-300 rounded-full"></span>
+          <span
+            class="bg-primary-500/10 absolute inset-0 z-0 scale-0 transition-all duration-300 rounded-full"
+          ></span>
         </span>
-        <h4 class="font-sans font-semibold text-xl text-muted-900 dark:text-white mt-6 mb-2">Valuation</h4>
-        <p class="mb-6 text-sm leading-6 text-muted-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Summum ením bonum exposuit vacuitatem.</p>
-        <a href="#" class="text-primary-500 text-sm font-medium flex items-center gap-1 underline-offset-4 hover:underline group/link">
+        <h4
+          class="font-sans font-semibold text-xl text-muted-900 dark:text-white mt-6 mb-2"
+        >
+          Valuation
+        </h4>
+        <p class="mb-6 text-sm leading-6 text-muted-400">
+          We provide comprehensive market assessments to help you understand the
+          true value of your property. Using in-depth market analysis and our
+          local expertise, we make sure your property is competitively priced to
+          maximize profitability and occupancy rates.
+        </p>
+        <!-- <a
+          href="#"
+          class="text-primary-500 text-sm font-medium flex items-center gap-1 underline-offset-4 hover:underline group/link"
+        >
           <span>Learn more </span>
-          <Icon name="lucide:arrow-right" class="size-4 text-primary-500 group-hover/link:translate-x-1 transition-all duration-300" />
-        </a>
+          <Icon
+            name="lucide:arrow-right"
+            class="size-4 text-primary-500 group-hover/link:translate-x-1 transition-all duration-300"
+          />
+        </a> -->
       </div>
       <!--Feature 4-->
       <div
-        class="p-9 flex flex-col cursor-pointer group hover:shadow-lg hover:shadow-muted-300/30 dark:hover:shadow-muted-800/20 border border-transparent hover:border-muted-200 dark:hover:border-muted-800 hover:bg-white dark:hover:bg-muted-950 transition-all"
+        class="p-9 flex flex-col group hover:shadow-lg hover:shadow-muted-300/30 dark:hover:shadow-muted-800/20 border border-transparent hover:border-muted-200 dark:hover:border-muted-800 hover:bg-white dark:hover:bg-muted-950 transition-all"
       >
-        <span class="size-14 grid place-items-center group-hover:[&>svg]:scale-75 group-hover:[&>span]:scale-100 relative group">
-          <Icon name="ph:gear-six-duotone" class="size-8 text-primary-500 transition-all duration-200 relative z-10" />
+        <span
+          class="size-14 grid place-items-center group-hover:[&>svg]:scale-75 group-hover:[&>span]:scale-100 relative group"
+        >
+          <Icon
+            name="ph:gear-six-duotone"
+            class="size-8 text-primary-500 transition-all duration-200 relative z-10"
+          />
 
-          <span class="bg-primary-500/10 absolute inset-0 z-0 scale-0 transition-all duration-300 rounded-full"></span>
+          <span
+            class="bg-primary-500/10 absolute inset-0 z-0 scale-0 transition-all duration-300 rounded-full"
+          ></span>
         </span>
-        <h4 class="font-sans font-semibold text-xl text-muted-900 dark:text-white mt-6 mb-2">Maintenance</h4>
-        <p class="mb-6 text-sm leading-6 text-muted-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Summum ením bonum exposuit vacuitatem.</p>
-        <a href="#" class="text-primary-500 text-sm font-medium flex items-center gap-1 underline-offset-4 hover:underline group/link">
+        <h4
+          class="font-sans font-semibold text-xl text-muted-900 dark:text-white mt-6 mb-2"
+        >
+          Maintenance
+        </h4>
+        <p class="mb-6 text-sm leading-6 text-muted-400">
+          Our proactive maintenance services keep your property in top shape.
+          From preventive maintenance schedules to emergency repairs, our team
+          ensures issues are resolved quickly and efficiently, protecting your
+          investment and delivering a superior guest experience.
+        </p>
+        <!-- <a
+          href="#"
+          class="text-primary-500 text-sm font-medium flex items-center gap-1 underline-offset-4 hover:underline group/link"
+        >
           <span>Learn more </span>
-          <Icon name="lucide:arrow-right" class="size-4 text-primary-500 group-hover/link:translate-x-1 transition-all duration-300" />
-        </a>
+          <Icon
+            name="lucide:arrow-right"
+            class="size-4 text-primary-500 group-hover/link:translate-x-1 transition-all duration-300"
+          />
+        </a> -->
       </div>
     </div>
   </Container>

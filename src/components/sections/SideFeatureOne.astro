@@ -1,45 +1,87 @@
 ---
-import { Icon } from 'astro-icon/components'
-import Section from '@components/Section.astro'
-import Container from '@components/Container.astro'
+import { Icon } from "astro-icon/components";
+import Section from "@components/Section.astro";
+import Container from "@components/Container.astro";
 ---
 
 <Section>
   <Container>
     <div class="w-full flex flex-col md:flex-row items-center gap-6 mb-4">
       <div class="md:w-1/2 p-3 md:ps-[5%] lg:ps-[98px]">
-        <h3 class="dark:text-white font-sans text-slate-600 text-3xl leading-9 font-semibold">Line About Standards</h3>
+        <h3
+          class="dark:text-white font-sans text-slate-600 text-3xl leading-9 font-semibold"
+        >
+          Line About Standards
+        </h3>
         <p class="text-slate-500 dark:text-muted-400 text-base py-2">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Illud non continuo, ut aeque incontentae. Duo Reges: constructio interrete. Si qua in iis corrigere voluit, deteriora fecit. Sit enim
-          idem caecus, debilis.
+          At Line Properties Inc., we hold ourselves to the highest standards to
+          ensure every guest feels at home. Our commitment to quality is evident
+          in every aspect of our service:
         </p>
         <ul class="py-4 ps-6">
           <li class="flex items-center gap-2 py-2">
-            <Icon name="lucide:check" class="size-4 text-success aspect-square" />
-            <span class="text-slate-600 dark:text-muted-400">Certified "something" <span class="text-zinc-400 font-thin">(Replacement Text)</span></span>
+            <Icon
+              name="lucide:check"
+              class="size-4 text-success aspect-square"
+            />
+            <span class="text-slate-600 dark:text-muted-400"
+              >Pristine Cleanliness: <span class="text-zinc-400 font-thin"
+                >Each property is thoroughly cleaned and sanitized before your
+                arrival, with meticulous attention to detail.</span
+              ></span
+            >
           </li>
           <li class="flex items-center gap-2 py-2">
-            <Icon name="lucide:check" class="size-4 text-success aspect-square" />
-            <span class="text-slate-600 dark:text-muted-400">Some kind of guarentee <span class="text-zinc-400 font-thin">(Replacement Text)</span></span>
+            <Icon
+              name="lucide:check"
+              class="size-4 text-success aspect-square"
+            />
+            <span class="text-slate-600 dark:text-muted-400"
+              >Expert Maintenance: <span class="text-zinc-400 font-thin"
+                >Our maintenance team is always on hand to handle any issues
+                swiftly, ensuring everything is in perfect working order.</span
+              ></span
+            >
           </li>
           <li class="flex items-center gap-2 py-2">
-            <Icon name="lucide:check" class="size-4 text-success aspect-square" />
-            <span class="text-slate-600 dark:text-muted-400">Ran out of ideas <span class="text-zinc-400 font-thin">(Replacement Text)</span></span>
+            <Icon
+              name="lucide:check"
+              class="size-4 text-success aspect-square"
+            />
+            <span class="text-slate-600 dark:text-muted-400"
+              >Customer Support: <span class="text-zinc-400 font-thin"
+                >We’re here for you 24/7, ready to assist with anything you
+                need, so your vacation is worry-free from start to finish.</span
+              ></span
+            >
           </li>
         </ul>
       </div>
       <div class="md:w-1/2 flex justify-center">
         <div class="max-w-[340px] relative">
-          <img class="h-full relative z-0 drop-shadow-md" alt="Highest ranking standards" src="https://assets.guesty.com/image/upload/v1713835847/skrq3mzdw6ejo9laq3fx.jpg" />
+          <img
+            class="h-full relative z-0 drop-shadow-md"
+            alt="Highest ranking standards"
+            src="https://assets.guesty.com/image/upload/v1713835847/skrq3mzdw6ejo9laq3fx.jpg"
+          />
           <!-- composition -->
           <div
             class="absolute z-[2] border border-muted-200 dark:border-muted-800 -start-8 -bottom-8 py-10 px-5 drop-shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20 w-[200px] bg-white dark:bg-muted-950"
           >
-            <div class="bg-cyan-500 w-10 aspect-square mx-auto rounded-full grid place-items-center">
+            <div
+              class="bg-cyan-500 w-10 aspect-square mx-auto rounded-full grid place-items-center"
+            >
               <Icon name="ion:flash" class="size-5 text-white aspect-square" />
             </div>
-            <p class="text-center my-2 text-slate-600 font-sans text-base dark:text-white font-semibold">A+ Certified</p>
-            <p class="text-center text-slate-600 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p
+              class="text-center my-2 text-slate-600 font-sans text-base dark:text-white font-semibold"
+            >
+              Quality & Satisfaction Guarantee:
+            </p>
+            <p class="text-center text-slate-600 text-sm">
+              We are proud to be a certified leader in vacation property
+              management, and we stand by our promise of exceptional service.
+            </p>
           </div>
         </div>
       </div>

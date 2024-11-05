@@ -1,24 +1,26 @@
 ---
-import { Icon } from 'astro-icon/components'
+import { Icon } from "astro-icon/components";
 
 interface Props {
-  number: string
-  title: string
-  text?: string
+  number: string;
+  title: string;
+  text?: string;
 }
 
-const sampleText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sic, et quidem
-      diligentius saepiusque ista loquemur inter nos agemusque communiter. Quid
-      enim necesse est, tamquam meretricem .`
+const sampleText = `Browse our diverse selection of vacation homes, using filters to narrow down your options. Whether you're looking for a romantic getaway, a family-friendly house, or a luxury estate, we make the search process seamless.`;
 
-const { number, title, text = sampleText } = Astro.props
+const { number, title, text = sampleText } = Astro.props;
 ---
 
-<div class="bg-white dark:bg-muted-950 dark:border-muted-800 border border-muted-200 relative flex flex-col z-10 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20">
+<div
+  class="bg-white dark:bg-muted-950 dark:border-muted-800 border border-muted-200 relative flex flex-col z-10 shadow-lg max-h-[325px] min-h-[300px] shadow-muted-300/30 dark:shadow-muted-800/20 overflow-x-hidden"
+>
   <div class="p-8 pb-3">
     <span class="text-lg text-muted-700 dark:text-muted-500">{number}</span>
   </div>
-  <div class="px-8 before:absolute before:w-[5px] before:bg-primary-500 before:h-full relative before:start-0 before:top-0">
+  <div
+    class="px-8 before:absolute before:w-[5px] before:bg-primary-500 before:h-full relative before:start-0 before:top-0"
+  >
     <h3 class="dark:text-white font-sans text-muted-900 font-semibold text-2xl">
       {title}
     </h3>
@@ -32,7 +34,10 @@ const { number, title, text = sampleText } = Astro.props
       class="inline-flex group items-center text-primary-500 relative after:content-[''] after:absolute after:h-[2px] after:bg-primary-500 after:transition-['width'] after:duration-300 after:w-0 after:hover:w-full after:-bottom-[0.15rem] after:start-0"
     >
       <span class="whitespace-nowrap me-1">Learn More</span>
-      <Icon name="lucide:arrow-right" class="group-hover:translate-x-1 transition-transform duration-300 h-5 aspect-auto text-primary-500 fill-primary" />
+      <Icon
+        name="lucide:arrow-right"
+        class="group-hover:translate-x-1 transition-transform duration-300 h-5 aspect-auto text-primary-500 fill-primary"
+      />
     </a>
   </div>
 </div>
