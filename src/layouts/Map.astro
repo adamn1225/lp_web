@@ -1,9 +1,7 @@
 ---
-
-import { GoogleFontsOptimizer } from 'astro-google-fonts-optimizer'
-import ScrollTop from '@components/ui/ScrollTop.astro'
-import '@/styles/global.scss'
-
+import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
+import ScrollTop from "@components/ui/ScrollTop.astro";
+import "@/styles/global.scss";
 ---
 
 <!doctype html>
@@ -11,13 +9,13 @@ import '@/styles/global.scss'
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/images/logo/logo.svg" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
     <meta name="generator" content={Astro.generator} />
 
     <GoogleFontsOptimizer
       url={[
-        'https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600',
-        'https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap',
+        "https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600",
+        "https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap",
       ]}
     />
 
@@ -31,32 +29,38 @@ import '@/styles/global.scss'
     <ScrollTop />
 
     <script>
-      import { MASONRY_THEME, MASONRY_LOGGEDIN } from '@/constants'
+      import { MASONRY_THEME, MASONRY_LOGGEDIN } from "@/constants";
 
-      document.addEventListener('alpine:init', () => {
+      document.addEventListener("alpine:init", () => {
         //@ts-ignore
-        Alpine.store('app', {
+        Alpine.store("app", {
           init() {
-            this.isDark = MASONRY_THEME in localStorage ? localStorage.getItem(MASONRY_THEME) === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
+            this.isDark =
+              MASONRY_THEME in localStorage
+                ? localStorage.getItem(MASONRY_THEME) === "dark"
+                : window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-            this.isLoggedIn = MASONRY_LOGGEDIN in localStorage ? localStorage.getItem(MASONRY_LOGGEDIN) === 'true' : false
+            this.isLoggedIn =
+              MASONRY_LOGGEDIN in localStorage
+                ? localStorage.getItem(MASONRY_LOGGEDIN) === "true"
+                : false;
           },
           toggleTheme() {
-            this.isDark = !this.isDark
-            localStorage.setItem(MASONRY_THEME, this.isDark ? 'dark' : 'light')
+            this.isDark = !this.isDark;
+            localStorage.setItem(MASONRY_THEME, this.isDark ? "dark" : "light");
           },
           login() {
-            this.isLoggedIn = true
-            localStorage.setItem(MASONRY_LOGGEDIN, 'true')
+            this.isLoggedIn = true;
+            localStorage.setItem(MASONRY_LOGGEDIN, "true");
           },
           logout() {
-            this.isLoggedIn = false
-            localStorage.setItem(MASONRY_LOGGEDIN, 'false')
+            this.isLoggedIn = false;
+            localStorage.setItem(MASONRY_LOGGEDIN, "false");
           },
           isDark: false,
           isLoggedIn: false,
-        })
-      })
+        });
+      });
     </script>
   </body>
 </html>

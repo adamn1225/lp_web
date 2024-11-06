@@ -9,7 +9,7 @@ import "@/styles/global.scss";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/images/logo/logo.svg" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
     <meta name="generator" content={Astro.generator} />
     <link
       rel="stylesheet"
@@ -30,5 +30,38 @@ import "@/styles/global.scss";
 
     <slot />
     <ScrollTop />
-  </body>
+  </body><script>
+    import { MASONRY_THEME, MASONRY_LOGGEDIN } from "@/constants";
+
+    document.addEventListener("alpine:init", () => {
+      //@ts-ignore
+      Alpine.store("app", {
+        init() {
+          this.isDark =
+            MASONRY_THEME in localStorage
+              ? localStorage.getItem(MASONRY_THEME) === "dark"
+              : window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+          this.isLoggedIn =
+            MASONRY_LOGGEDIN in localStorage
+              ? localStorage.getItem(MASONRY_LOGGEDIN) === "true"
+              : false;
+        },
+        toggleTheme() {
+          this.isDark = !this.isDark;
+          localStorage.setItem(MASONRY_THEME, this.isDark ? "dark" : "light");
+        },
+        login() {
+          this.isLoggedIn = true;
+          localStorage.setItem(MASONRY_LOGGEDIN, "true");
+        },
+        logout() {
+          this.isLoggedIn = false;
+          localStorage.setItem(MASONRY_LOGGEDIN, "false");
+        },
+        isDark: false,
+        isLoggedIn: false,
+      });
+    });
+  </script>
 </html>
