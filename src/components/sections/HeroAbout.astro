@@ -5,7 +5,7 @@ import Container from "@components/Container.astro";
 <section
   class="min-h-screen bg-muted-50 dark:bg-muted-900 relative flex flex-col justify-between items-stretch"
 >
-  <div class="flex items-center px-6 py-12 md:px-12 flex-grow flex-shrink-0">
+  <div class="flex items-center px-6 md:py-12 md:px-12 flex-grow flex-shrink-0">
     <Container>
       <div class="flex flex-col md:flex-row md:items-center">
         <div class="md:w-1/3 md:p-3">
@@ -29,7 +29,7 @@ import Container from "@components/Container.astro";
 
             <!-- buttons -->
             <div
-              class="flex justify-center md:justify-start items-center gap-2 mb-2"
+              class="flex flex-col xs:gap-4 md:flex-row justify-center md:justify-start items-center gap-2 mb-2"
             >
               <a
                 href="/about"
@@ -38,7 +38,7 @@ import Container from "@components/Container.astro";
               >
               <a
                 href="/properties"
-                class="h-11 border border-muted-200 dark:border-muted-800 text-muted-900 dark:text-white rounded-sm bg-white dark:bg-muted-950 transition-all duration-300 px-4 py-2 text-center whitespace-nowrap flex justify-center items-center is-solid min-w-32"
+                class="h-11 border border-muted-200 dark:border-muted-800 text-muted-900 dark:text-white rounded-sm bg-white dark:bg-muted-950 transition-all duration-300 px-4 py-2 text-center whitespace-nowrap flex justify-center items-center is-solid min-w-40 max-w-max"
                 >Search for Properties</a
               >
             </div>
