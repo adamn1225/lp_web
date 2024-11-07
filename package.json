@@ -5,12 +5,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/cache-images.mjs",
+    "build": "astro build",
     "dev": "NODE_ENV=development astro dev",
     "start": "node server.js",
-    "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "test": "pnpm exec jest"
+    "astro": "astro"
   },
   "dependencies": {
     "@apollo/client": "^3.11.4",

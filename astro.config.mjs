@@ -8,11 +8,13 @@ import markdoc from "@astrojs/markdoc";
 
 export default defineConfig({
   output: 'server',
-  adapter: netlify(),
+  adapter: netlify({
+    edgeFunctions: true, // Enable edge functions for ISR
+  }),
   integrations: [tailwind(), alpinejs(), icon(), react(), markdoc()],
   vite: {
     server: {
-      middlewareMode: false, // Ensure this is set correctly
+      middlewareMode: false,
     },
   },
 });

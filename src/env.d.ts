@@ -10,7 +10,6 @@ interface ImportMetaEnv {
   readonly CONTENTFUL_PREVIEW_TOKEN: string;
   readonly CONTENTFUL_ACCESS_TOKEN: string;
   readonly VITE_API_TOKEN: string;
-  readonly GUESTY_BOOKING_API: string;
   // readonly SECRET_OPEN_PASSWORD: string;
   // readonly FIREBASE_PRIVATE_KEY_ID: string;
   // readonly FIREBASE_PRIVATE_KEY: string;
@@ -29,5 +28,4 @@ interface ImportMeta {
 
 interface ImportMetaEnv {
   VITE_API_TOKEN: string;
-  GUESTY_BOOKING_API: string;
 }

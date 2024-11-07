@@ -9,9 +9,12 @@ import InstantBooking from "@components/InstantBooking.tsx";
 import { fetchAllListings } from "./api/dataFetcher";
 import { fetchReviews } from "./api/listingReviews";
 import BookingFormWrapper from "../components/BookingFormWrapper";
+import { Image } from 'astro:assets';
+import fs from 'fs';
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
+  const listingImages = JSON.parse(fs.readFileSync('src/data/listings.json', 'utf-8'));
   const reviews = await fetchReviews();
   const paths = listings.map((listing: any) => ({
     params: {
@@ -27,7 +30,7 @@ export async function getStaticPaths() {
       title: listing.title,
       PropertyType: listing.propertyType,
       bathrooms: listing.bathrooms,
-      pictures: listing.pictures,
+      pictures: listingImages.pictures,
       beds: listing.beds,
       Description: listing.publicDescription,
       listingId: listing._id,
@@ -44,6 +47,7 @@ export async function getStaticPaths() {
 }
 
 export async function get({ params }) {
+  const listingImages = JSON.parse(fs.readFileSync('src/data/listings.json', 'utf-8'));
   const listings = await fetchAllListings();
   const listing = listings.find(
     (listing: any) => listing._id === params.listingPage,
@@ -77,7 +81,7 @@ export async function get({ params }) {
     Description: listing.publicDescription,
     PropertyType: listing.propertyType,
     bathrooms: listing.bathrooms,
-    pictures: listing.pictures,
+    pictures: listingImages.pictures,
     beds: listing.beds,
     listingId: listing._id,
     bedrooms: listing.bedrooms,
@@ -141,7 +145,7 @@ const averageRatings = calculateAverageRatings(reviews);
 
 ---
 
-<Layout title="Property Details">
+<Layout title="listings">
   <main id="PropertyDetails">
     <Section>
       <div class="xs:px-1 sm:px-1 w-full mx-auto max-w-full mt-12 md:px-8">
@@ -235,7 +239,7 @@ const averageRatings = calculateAverageRatings(reviews);
 
                 <div class="flex flex-col md:flex-row items-stretch gap-4 mb-4">
                   <div class="main-image md:flex-grow-[2]">
-                    <img
+                    <Image
                       class="block object-cover min-h-[450px]"
                       src={pictures[0].original}
                       alt="Main image"
@@ -248,7 +252,7 @@ const averageRatings = calculateAverageRatings(reviews);
                   <div
                     class="flex flex-row md:flex-col xs:flex-wrap gap-4 max-w-full md:max-w-[180px] md:w-full"
                   >
-                    <img
+                    <Image
                       class="object-cover md:w-auto flex-1"
                       src={pictures[1].original}
                       alt="Sub image"
@@ -257,7 +261,7 @@ const averageRatings = calculateAverageRatings(reviews);
                       data-zoom
                       loading="lazy"
                     />
-                    <img
+                    <Image
                       class="object-cover md:w-auto flex-1"
                       src={pictures[2].original}
                       alt="Sub image"
@@ -266,7 +270,7 @@ const averageRatings = calculateAverageRatings(reviews);
                       data-zoom
                       loading="lazy"
                     />
-                    <img
+                    <Image
                       class="object-cover md:w-auto flex-1"
                       src={pictures[3].original}
                       alt="Sub image"
@@ -919,7 +923,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[4] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[4].original}
                       alt="Sub image"
@@ -932,7 +936,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[5] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[5].original}
                       alt="Sub image"
@@ -945,7 +949,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[6] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[6].original}
                       alt="Sub image"
@@ -958,7 +962,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[7] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[7].original}
                       alt="Sub image"
@@ -971,7 +975,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[8] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[8].original}
                       alt="Sub image"
@@ -984,7 +988,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[9] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[9].original}
                       alt="Sub image"
@@ -997,7 +1001,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[10] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[10].original}
                       alt="Sub image"
@@ -1011,7 +1015,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[11] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[11].original}
                       alt="Sub image"
@@ -1025,7 +1029,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[12] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[12].original}
                       alt="Sub image"
@@ -1039,7 +1043,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[13] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[13].original}
                       alt="Sub image"
@@ -1053,7 +1057,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[14] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[14].original}
                       alt="Sub image"
@@ -1067,7 +1071,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[15] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[15].original}
                       alt="Sub image"
@@ -1081,7 +1085,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[16] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[16].original}
                       alt="Sub image"
@@ -1095,7 +1099,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[17] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[17].original}
                       alt="Sub image"
@@ -1109,7 +1113,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[18] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[18].original}
                       alt="Sub image"
@@ -1123,7 +1127,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[19] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[19].original}
                       alt="Sub image"
@@ -1137,7 +1141,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[20] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[20].original}
                       alt="Sub image"
@@ -1151,7 +1155,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[21] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[21].original}
                       alt="Sub image"
@@ -1165,7 +1169,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[22] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[22].original}
                       alt="Sub image"
@@ -1179,7 +1183,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[23] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[23].original}
                       alt="Sub image"
@@ -1193,7 +1197,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[24] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[24].original}
                       alt="Sub image"
@@ -1207,7 +1211,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[25] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[25].original}
                       alt="Sub image"
@@ -1221,7 +1225,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[26] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[26].original}
                       alt="Sub image"
@@ -1235,7 +1239,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[27] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[27].original}
                       alt="Sub image"
@@ -1249,7 +1253,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[28] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[28].original}
                       alt="Sub image"
@@ -1263,7 +1267,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[29] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[29].original}
                       alt="Sub image"
@@ -1277,7 +1281,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[30] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[30].original}
                       alt="Sub image"
@@ -1291,7 +1295,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[31] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[31].original}
                       alt="Sub image"
@@ -1305,7 +1309,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[32] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[32].original}
                       alt="Sub image"
@@ -1319,7 +1323,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[33] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[33].original}
                       alt="Sub image"
@@ -1333,7 +1337,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[34] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[34].original}
                       alt="Sub image"
@@ -1347,7 +1351,7 @@ const averageRatings = calculateAverageRatings(reviews);
               {
                 pictures[35] && (
                   <div class="">
-                    <img
+                    <Image
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[35].original}
                       alt="Sub image"

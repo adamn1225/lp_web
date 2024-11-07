@@ -7,7 +7,11 @@
 
 [[scheduled_functions]]
   name = "refreshToken"
-  schedule = "0 */12 * * *"  # Updates the schedule to every 12 hours
+  schedule = "0 */12 * * *"
+
+[[scheduled_functions]]
+  name = "cache-listings"
+  schedule = "0 */12 * * *"
 
 [build.processing]
   skip_processing = true
