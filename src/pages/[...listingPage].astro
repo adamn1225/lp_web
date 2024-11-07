@@ -84,9 +84,45 @@ export async function get({ params }) {
     checkOut: listing.defaultCheckOutTime,
     reviews: Array.isArray(reviews)
       ? reviews.filter((review: any) => review.listingId === listing._id)
-      : [], // Filter reviews for the listing
+      : [] // Filter reviews for the listing
   };
 }
+let reviews = [];
+try {
+  reviews = await fetchReviews();
+} catch (error) {
+  console.error('Error fetching reviews:', error);
+}
+
+function calculateAverageRatings(reviews) {
+  if (!reviews || reviews.length === 0) {
+    return [];
+  }
+
+  const categoryRatings = {};
+
+  reviews.forEach((review) => {
+    if (review.rawReview && Array.isArray(review.rawReview.category_ratings)) {
+      review.rawReview.category_ratings.forEach((rating) => {
+        if (!categoryRatings[rating.category]) {
+          categoryRatings[rating.category] = [];
+        }
+        categoryRatings[rating.category].push(rating.rating);
+      });
+    }
+  });
+
+  const averageRatings = Object.keys(categoryRatings).map((category) => {
+    const ratings = categoryRatings[category];
+    const averageRating =
+      ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+    return { category, rating: averageRating };
+  });
+
+  return averageRatings;
+}
+
+const averageRatings = calculateAverageRatings(reviews);
 
 const {
   title,
@@ -105,56 +141,25 @@ const {
   checkIn,
   checkOut,
   bedrooms,
-  reviews,
 } = Astro.props;
 
-interface Rating {
-  category: string;
-  rating: number;
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-interface Review {
-  rawReview: {
-    category_ratings: Rating[];
-  };
-}
-
-interface AverageRating {
-  category: string;
-  rating: number;
-}
-
-function calculateAverageRatings(reviews: any[]) {
-  if (!reviews || reviews.length === 0) {
-    return [];
-  }
-
-  const categoryRatings = {};
-
-  reviews.forEach((review: { rawReview: { category_ratings: any[]; }; }) => {
-    if (review.rawReview && Array.isArray(review.rawReview.category_ratings)) {
-      review.rawReview.category_ratings.forEach((rating: { category: string | number; rating: any; }) => {
-        if (!categoryRatings[rating.category]) {
-          categoryRatings[rating.category] = [];
-        }
-        categoryRatings[rating.category].push(rating.rating);
-      });
-    }
-  });
-
-  const averageRatings = Object.keys(categoryRatings).map((category) => {
-    const ratings = categoryRatings[category];
-    const averageRating =
-      ratings.reduce((sum: any, rating: any) => sum + rating, 0) / ratings.length;
-    return { category, rating: averageRating };
-  });
-
-  return averageRatings;
-}
-
-const averageRatings = calculateAverageRatings(reviews);
 const proxyUrl = (url: string | number | boolean) => `/.netlify/functions/proxy?url=${encodeURIComponent(url)}`;
 ---
+
+<style>
+  .image-gallery {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+}
+
+.image-gallery img {
+  @apply w-full h-auto object-cover;
+}
+</style>
 
 <Layout title="Property Details">
   <main id="PropertyDetails">
@@ -717,21 +722,25 @@ const proxyUrl = (url: string | number | boolean) => `/.netlify/functions/proxy?
                     </div>
 
                     <!-- Display the review comments in two columns -->
-                    <div class="flex flex-wrap items-start justify-start gap-y-8 gap-x-6">
-                      {reviews.map((review, index) => (
-                        <div class="relative review-{index}">
-                          <div class="gap-4 mb-6 flex items-center">
-                            <div class="meta">
-                              <div class="flex gap-4 justify-start flex-wrap w-1/2">
-                                <h4 class="text-base font-semibold font-sans text-slate-950">
-                                  {review.rawReview.public_review}
-                                </h4>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+<div class="grid md:grid-cols-2 gap-4">
+  {reviews
+    .filter((review) => review.rawReview.public_review && review.rawReview.public_review.length >= 400)
+    .filter((review) => review.rawReview.overall_rating >= 4.5)
+    .map((review, index) => (
+      <div class="relative review-{index}">
+        <div class="flex items-center">
+          <div class="meta">
+            <div class="flex flex-col gap-4 justify-start border border-slate-700/50 shadow-md min-h-[300px] w-auto p-6">
+              <h3 class=" text-lg font-semibold font-sans text-slate-950 underline underline-offset-4">{capitalizeFirstLetter(review.rawReview.reviewer_role)} Review</h3>
+              <h4 class="text-base font-medium font-sans text-slate-950">
+                {review.rawReview.public_review}
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+</div>
                   </>
                 ) : (
                   <p>No reviews available</p>
@@ -935,6 +944,22 @@ const proxyUrl = (url: string | number | boolean) => `/.netlify/functions/proxy?
             </div>
 
             <div class="my-6 flex flex-wrap gap-1 justify-center items-center">
+              <div class="my-6 image-gallery">
+  {pictures.slice(4, 36).map((picture, index) => (
+    <div class="relative review-{index}">
+      <Image
+        class="w-full h-auto"
+        src={proxyUrl(picture.original)}
+        alt={`Sub image ${index + 1}`}
+        decoding="async"
+        width={picture.width}
+        height={picture.height}
+        data-zoom
+        loading="lazy"
+      />
+    </div>
+  ))}
+</div>
                 {
     pictures[4] && (
       <div class="">

@@ -161,3 +161,10 @@ article {
 }
 
 /* Add this CSS to your global styles or BookingFormModal.css */
+                .image-gallery {
+                  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+                }
+        
+                .image-gallery img {
+                  @apply w-full h-auto object-cover;
+                }
