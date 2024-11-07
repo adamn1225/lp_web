@@ -13,6 +13,17 @@ export default defineConfig({
   }),
   integrations: [tailwind(), alpinejs(), icon(), react(), markdoc()],
   vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'instant-booking': ['./src/components/InstantBooking.tsx'],
+            // Add other chunks as needed
+          }
+        }
+      },
+      chunkSizeWarningLimit: 1000 // Adjust the limit as needed
+    },
     server: {
       middlewareMode: false,
     },

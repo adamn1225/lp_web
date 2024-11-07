@@ -4,17 +4,14 @@ import { Icon } from "astro-icon/components";
 import Layout from "@layouts/Default.astro";
 import Section from "@components/Section.astro";
 import InquireForm from "@components/InquireForm";
-import GuestyListings from "@components/GuestyListings.astro";
 import InstantBooking from "@components/InstantBooking.tsx";
 import { fetchAllListings } from "./api/dataFetcher";
 import { fetchReviews } from "./api/listingReviews";
-import BookingFormWrapper from "../components/BookingFormWrapper";
 import { Image } from 'astro:assets';
-import fs from 'fs';
+
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
-  const listingImages = JSON.parse(fs.readFileSync('src/data/listings.json', 'utf-8'));
   const reviews = await fetchReviews();
   const paths = listings.map((listing: any) => ({
     params: {
@@ -30,7 +27,7 @@ export async function getStaticPaths() {
       title: listing.title,
       PropertyType: listing.propertyType,
       bathrooms: listing.bathrooms,
-      pictures: listingImages.pictures,
+      pictures: listing.pictures,
       beds: listing.beds,
       Description: listing.publicDescription,
       listingId: listing._id,
@@ -47,7 +44,6 @@ export async function getStaticPaths() {
 }
 
 export async function get({ params }) {
-  const listingImages = JSON.parse(fs.readFileSync('src/data/listings.json', 'utf-8'));
   const listings = await fetchAllListings();
   const listing = listings.find(
     (listing: any) => listing._id === params.listingPage,
@@ -81,7 +77,7 @@ export async function get({ params }) {
     Description: listing.publicDescription,
     PropertyType: listing.propertyType,
     bathrooms: listing.bathrooms,
-    pictures: listingImages.pictures,
+    pictures: listing.pictures,
     beds: listing.beds,
     listingId: listing._id,
     bedrooms: listing.bedrooms,
@@ -112,6 +108,22 @@ const {
   bedrooms,
   reviews,
 } = Astro.props;
+
+interface Rating {
+  category: string;
+  rating: number;
+}
+
+interface Review {
+  rawReview: {
+    category_ratings: Rating[];
+  };
+}
+
+interface AverageRating {
+  category: string;
+  rating: number;
+}
 
 function calculateAverageRatings(reviews) {
   if (!reviews || reviews.length === 0) {
@@ -145,7 +157,7 @@ const averageRatings = calculateAverageRatings(reviews);
 
 ---
 
-<Layout title="listings">
+<Layout title="Property Details">
   <main id="PropertyDetails">
     <Section>
       <div class="xs:px-1 sm:px-1 w-full mx-auto max-w-full mt-12 md:px-8">
@@ -927,6 +939,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[4].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}
                       data-zoom
                       loading="lazy"
                     />
@@ -940,6 +954,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[5].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}
                       data-zoom
                       loading="lazy"
                     />
@@ -953,6 +969,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[6].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}
                       data-zoom
                       loading="lazy"
                     />
@@ -966,6 +984,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[7].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}
                       data-zoom
                       loading="lazy"
                     />
@@ -979,6 +999,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[8].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}
                       data-zoom
                       loading="lazy"
                     />
@@ -992,6 +1014,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[9].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}                      
                       data-zoom
                       loading="lazy"
                     />
@@ -1005,7 +1029,10 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[10].original}
                       alt="Sub image"
-
+                      width={600}
+                      height={420}
+                      width={600}
+                      height={420}
                       data-zoom
                       loading="lazy"
                     />
@@ -1019,7 +1046,10 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[11].original}
                       alt="Sub image"
-
+                      width={600}
+                      height={420}
+                      width={600}
+                      height={420}
                       data-zoom
                       loading="lazy"
                     />
@@ -1033,6 +1063,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[12].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1047,6 +1079,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[13].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1061,6 +1095,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[14].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1075,6 +1111,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[15].original}
                       alt="Sub image"
+                      width={600}
+                      height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1089,6 +1127,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[16].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1103,6 +1143,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[17].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1117,6 +1159,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[18].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1131,6 +1175,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[19].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1145,6 +1191,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[20].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1159,6 +1207,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[21].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1173,6 +1223,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[22].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1187,6 +1239,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[23].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1201,6 +1255,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[24].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1215,6 +1271,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[25].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1229,6 +1287,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[26].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1243,6 +1303,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[27].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1257,6 +1319,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[28].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1271,6 +1335,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[29].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1285,6 +1351,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[30].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1299,6 +1367,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[31].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1313,6 +1383,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[32].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1327,6 +1399,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[33].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1341,6 +1415,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[34].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
@@ -1355,6 +1431,8 @@ const averageRatings = calculateAverageRatings(reviews);
                       class="w-[600px] h-[420px] max-h-[600px}"
                       src={pictures[35].original}
                       alt="Sub image"
+width={600}
+height={420}
 
                       data-zoom
                       loading="lazy"
