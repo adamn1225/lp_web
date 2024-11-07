@@ -9,7 +9,6 @@ import { fetchAllListings } from "./api/dataFetcher";
 import { fetchReviews } from "./api/listingReviews";
 import { Image } from 'astro:assets';
 
-
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
   const reviews = await fetchReviews();
@@ -125,16 +124,16 @@ interface AverageRating {
   rating: number;
 }
 
-function calculateAverageRatings(reviews) {
+function calculateAverageRatings(reviews: any[]) {
   if (!reviews || reviews.length === 0) {
     return [];
   }
 
   const categoryRatings = {};
 
-  reviews.forEach((review) => {
+  reviews.forEach((review: { rawReview: { category_ratings: any[]; }; }) => {
     if (review.rawReview && Array.isArray(review.rawReview.category_ratings)) {
-      review.rawReview.category_ratings.forEach((rating) => {
+      review.rawReview.category_ratings.forEach((rating: { category: string | number; rating: any; }) => {
         if (!categoryRatings[rating.category]) {
           categoryRatings[rating.category] = [];
         }
@@ -146,7 +145,7 @@ function calculateAverageRatings(reviews) {
   const averageRatings = Object.keys(categoryRatings).map((category) => {
     const ratings = categoryRatings[category];
     const averageRating =
-      ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+      ratings.reduce((sum: any, rating: any) => sum + rating, 0) / ratings.length;
     return { category, rating: averageRating };
   });
 
@@ -154,7 +153,7 @@ function calculateAverageRatings(reviews) {
 }
 
 const averageRatings = calculateAverageRatings(reviews);
-
+const proxyUrl = (url: string | number | boolean) => `/.netlify/functions/proxy?url=${encodeURIComponent(url)}`;
 ---
 
 <Layout title="Property Details">
@@ -253,8 +252,9 @@ const averageRatings = calculateAverageRatings(reviews);
                   <div class="main-image md:flex-grow-[2]">
                     <Image
                       class="block object-cover min-h-[450px]"
-                      src={pictures[0].original}
+                      src={proxyUrl(pictures[0].original)}
                       alt="Main image"
+                      decoding="async"
                       width={2000}
                       height={1333}
                       data-zoom
@@ -266,8 +266,9 @@ const averageRatings = calculateAverageRatings(reviews);
                   >
                     <Image
                       class="object-cover md:w-auto flex-1"
-                      src={pictures[1].original}
+                       src={proxyUrl(pictures[1].original)}
                       alt="Sub image"
+                      decoding="async"
                       width={2000}
                       height={1333}
                       data-zoom
@@ -275,8 +276,9 @@ const averageRatings = calculateAverageRatings(reviews);
                     />
                     <Image
                       class="object-cover md:w-auto flex-1"
-                      src={pictures[2].original}
+                      src={proxyUrl(pictures[2].original)}
                       alt="Sub image"
+                      decoding="async"
                       width={2000}
                       height={1333}
                       data-zoom
@@ -284,8 +286,9 @@ const averageRatings = calculateAverageRatings(reviews);
                     />
                     <Image
                       class="object-cover md:w-auto flex-1"
-                      src={pictures[3].original}
+                      src={proxyUrl(pictures[3].original)}
                       alt="Sub image"
+                      decoding="async"
                       width={2000}
                       height={1333}
                       data-zoom
@@ -932,514 +935,518 @@ const averageRatings = calculateAverageRatings(reviews);
             </div>
 
             <div class="my-6 flex flex-wrap gap-1 justify-center items-center">
-              {
-                pictures[4] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[4].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[5] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[5].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[6] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[6].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[7] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[7].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[8] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[8].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[9] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[9].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}                      
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[10] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[10].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-                      width={600}
-                      height={420}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[11] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[11].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-                      width={600}
-                      height={420}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[12] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[12].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[13] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[13].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[14] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[14].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[15] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[15].original}
-                      alt="Sub image"
-                      width={600}
-                      height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[16] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[16].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[17] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[17].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[18] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[18].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[19] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[19].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[20] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[20].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[21] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[21].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[22] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[22].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[23] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[23].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[24] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[24].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[25] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[25].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[26] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[26].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[27] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[27].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[28] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[28].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[29] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[29].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[30] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[30].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[31] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[31].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[32] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[32].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[33] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[33].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[34] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[34].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
-              {
-                pictures[35] && (
-                  <div class="">
-                    <Image
-                      class="w-[600px] h-[420px] max-h-[600px}"
-                      src={pictures[35].original}
-                      alt="Sub image"
-width={600}
-height={420}
-
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                )
-              }
+                {
+    pictures[4] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[4].original)}
+          alt="Sub image"
+          decoding="async"
+          width={600}
+          height={420}
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[5] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[5].original)}
+          alt="Sub image"
+          decoding="async"
+          width={600}
+          height={420}
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[6] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[6].original)}
+          alt="Sub image"
+          decoding="async"
+          width={600}
+          height={420}
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[7] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[7].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[8] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[8].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[9] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[9].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[10] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[10].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[11] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[11].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[12] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[12].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[13] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[13].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[14] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[14].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[15] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[15].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[16] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[16].original)}
+          alt="Sub image"
+          decoding="async"
+          width={600}
+          height={420}
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[17] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[17].original)}
+          alt="Sub image"
+          decoding="async"
+          width={600}
+          height={420}
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[18] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[18].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[19] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[19].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[20] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[20].original)}
+          alt="Sub image" 
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[21] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[21].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[22] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[22].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[23] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[23].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[24] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[24].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[25] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[25].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[26] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[26].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[27] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[27].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[28] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[28].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"  
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[29] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[29].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[30] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[30].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[31] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[31].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[32] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[32].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[33] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[33].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[34] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[34].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+  {
+    pictures[35] && (
+      <div class="">
+        <Image
+          class="w-[600px] h-[420px] max-h-[600px]"
+          src={proxyUrl(pictures[35].original)}
+          alt="Sub image"
+          width={600}
+          height={420}
+          decoding="async"
+          data-zoom
+          loading="lazy"
+        />
+      </div>
+    )
+  }
             </div>
 
             <!-- cards -->

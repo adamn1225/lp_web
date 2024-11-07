@@ -28,4 +28,13 @@ export default defineConfig({
       middlewareMode: false,
     },
   },
+  image: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'assets.guesty.com',
+        pathname: '/image/upload/**',
+      },
+    ],
+  },
 });
