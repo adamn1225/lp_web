@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 html {
   height: 100%;
   overflow-x: hidden;
@@ -33,7 +35,7 @@ body {
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: #d86c6c;
+  color: #0891B2;
   font-weight: 900;
   width: 55px;
   height: 55px;
@@ -64,11 +66,11 @@ body {
 }
 
 .swiper-container .swiper-pagination .swiper-pagination-bullet {
-  background: #d86c6c !important;
+  background: #0891B2 !important;
 }
 
 .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
-  background: #d86c6c !important;
+  background: #0891B2 !important;
 }
 
 article {
@@ -159,12 +161,3 @@ article {
 .lp-button {
   @apply bg-cyan-600 text-white rounded-lg px-4 py-2;
 }
-
-/* Add this CSS to your global styles or BookingFormModal.css */
-                .image-gallery {
-                  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
-                }
-        
-                .image-gallery img {
-                  @apply w-full h-auto object-cover;
-                }

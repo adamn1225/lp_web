@@ -8,6 +8,9 @@ import InstantBooking from "@components/InstantBooking.tsx";
 import { fetchAllListings } from "./api/dataFetcher";
 import { fetchReviews } from "./api/listingReviews";
 import { Image } from 'astro:assets';
+import Swiper, { Navigation, Pagination } from 'swiper';
+import 'swiper/swiper-bundle.min.css';
+
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
@@ -94,16 +97,16 @@ try {
   console.error('Error fetching reviews:', error);
 }
 
-function calculateAverageRatings(reviews) {
+function calculateAverageRatings(reviews: any[]) {
   if (!reviews || reviews.length === 0) {
     return [];
   }
 
   const categoryRatings = {};
 
-  reviews.forEach((review) => {
+  reviews.forEach((review: { rawReview: { category_ratings: any[]; }; }) => {
     if (review.rawReview && Array.isArray(review.rawReview.category_ratings)) {
-      review.rawReview.category_ratings.forEach((rating) => {
+      review.rawReview.category_ratings.forEach((rating: { category: string | number; rating: any; }) => {
         if (!categoryRatings[rating.category]) {
           categoryRatings[rating.category] = [];
         }
@@ -115,7 +118,7 @@ function calculateAverageRatings(reviews) {
   const averageRatings = Object.keys(categoryRatings).map((category) => {
     const ratings = categoryRatings[category];
     const averageRating =
-      ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+      ratings.reduce((sum: any, rating: any) => sum + rating, 0) / ratings.length;
     return { category, rating: averageRating };
   });
 
@@ -144,22 +147,12 @@ const {
 } = Astro.props;
 
 
-function capitalizeFirstLetter(string) {
+function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 const proxyUrl = (url: string | number | boolean) => `/.netlify/functions/proxy?url=${encodeURIComponent(url)}`;
 ---
-
-<style>
-  .image-gallery {
-  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
-}
-
-.image-gallery img {
-  @apply w-full h-auto object-cover;
-}
-</style>
 
 <Layout title="Property Details">
   <main id="PropertyDetails">
@@ -943,537 +936,34 @@ const proxyUrl = (url: string | number | boolean) => `/.netlify/functions/proxy?
               </div>
             </div>
 
-            <div class="my-6 flex flex-wrap gap-1 justify-center items-center">
-              <div class="my-6 image-gallery">
-  {pictures.slice(4, 36).map((picture, index) => (
-    <div class="relative review-{index}">
-      <Image
-        class="w-full h-auto"
-        src={proxyUrl(picture.original)}
-        alt={`Sub image ${index + 1}`}
-        decoding="async"
-        width={picture.width}
-        height={picture.height}
-        data-zoom
-        loading="lazy"
-      />
-    </div>
-  ))}
-</div>
-                {
-    pictures[4] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[4].original)}
-          alt="Sub image"
-          decoding="async"
-          width={600}
-          height={420}
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[5] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[5].original)}
-          alt="Sub image"
-          decoding="async"
-          width={600}
-          height={420}
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[6] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[6].original)}
-          alt="Sub image"
-          decoding="async"
-          width={600}
-          height={420}
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[7] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[7].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[8] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[8].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[9] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[9].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[10] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[10].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[11] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[11].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[12] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[12].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[13] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[13].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[14] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[14].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[15] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[15].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[16] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[16].original)}
-          alt="Sub image"
-          decoding="async"
-          width={600}
-          height={420}
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[17] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[17].original)}
-          alt="Sub image"
-          decoding="async"
-          width={600}
-          height={420}
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[18] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[18].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[19] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[19].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[20] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[20].original)}
-          alt="Sub image" 
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[21] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[21].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[22] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[22].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[23] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[23].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[24] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[24].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[25] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[25].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[26] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[26].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[27] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[27].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[28] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[28].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"  
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[29] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[29].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[30] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[30].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[31] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[31].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[32] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[32].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[33] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[33].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[34] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[34].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-  {
-    pictures[35] && (
-      <div class="">
-        <Image
-          class="w-[600px] h-[420px] max-h-[600px]"
-          src={proxyUrl(pictures[35].original)}
-          alt="Sub image"
-          width={600}
-          height={420}
-          decoding="async"
-          data-zoom
-          loading="lazy"
-        />
-      </div>
-    )
-  }
-            </div>
+<div class="relative">
+  <!-- Polka dots -->
 
+  <div class="relative z-[2] mx-20">
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-container overflow-hidden">
+      <div class="swiper-wrapper">
+        <!-- Slides -->
+        {pictures.map((picture, index) => (
+          <div class="swiper-slide">
+            <img
+              class="w-full h-auto"
+              src={picture.original}
+              alt={`Listing image ${index + 1}`}
+              decoding="async"
+              data-zoom
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+    <div class="swiper-button-next">
+      
+    </div>
+  </div>
+</div>
             <!-- cards -->
             <div class="mt-12">
               <div class="flex flex-col">
@@ -1505,3 +995,74 @@ const proxyUrl = (url: string | number | boolean) => `/.netlify/functions/proxy?
     </Section>
   </main>
 </Layout>
+<style>
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #0891B2; /* Change this to the desired color */
+    font-weight: 900;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%; /* Optional: Make the buttons circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+  }
+  .swiper-button-next {
+    right: -70px; /* Adjust this value to position the button outside the container */
+  }
+  .swiper-button-prev {
+    left: -70px; /* Adjust this value to position the button outside the container */
+  }
+
+  .swiper-pagination {
+    position: relative;
+    margin-top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #0891B2 !important; /* Change this to the desired color */
+    margin: 0 8px;
+  }
+
+  .swiper-container .swiper-pagination .swiper-pagination-bullet {
+    background: #0891B2 !important; /* Change this to the desired color */
+  }
+
+  .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
+    background: #0891B2 !important; /* Change this to the desired color */
+  }
+
+    .swiper-wrapper {
+    transform: translate3d(10px, 0px, 0px) !important; 
+  }
+</style>
+<script>
+  import Swiper, { Navigation, Pagination } from 'swiper';
+
+  Swiper.use([Navigation, Pagination]);
+
+  new Swiper('.swiper-container', {
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    slidesPerView: 5,
+    spaceBetween: 10,
+    centeredSlides: true,
+  });
+</script>

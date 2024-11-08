@@ -36,6 +36,24 @@ import WhatsAppButton from "@components/WhatsAppButton.tsx";
     <slot />
     <!-- <WhatsAppButton client:load /> -->
     <ScrollTop />
+    <script is:inline>
+      document.addEventListener("DOMContentLoaded", () => {
+        Swiper.use([Navigation, Pagination]);
+        new Swiper(".swiper-container", {
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          slidesPerView: 3,
+          spaceBetween: 10,
+          centeredSlides: true,
+        });
+      });
+    </script>
     <Footer />
 
     <script>

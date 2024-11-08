@@ -32,11 +32,30 @@ import "@/styles/global.scss";
       }
     </style>
   </head>
+
   <body>
     <div id="Top"></div>
     <NavbarSplit />
     <slot />
     <ScrollTop />
+    <script is:inline>
+      document.addEventListener("DOMContentLoaded", () => {
+        Swiper.use([Navigation, Pagination]);
+        new Swiper(".swiper-container", {
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          slidesPerView: 3,
+          spaceBetween: 10,
+          centeredSlides: true,
+        });
+      });
+    </script>
     <Footer />
     <script>
       import { MASONRY_THEME, MASONRY_LOGGEDIN } from "@/constants";

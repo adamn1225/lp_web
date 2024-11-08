@@ -8,7 +8,7 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
 const SITE_ID = '6ffffd4a-5a31-4652-a270-3e557c7970c3'; // Replace with your actual site ID
-const ACCOUNT_SLUG = 'adamn1225';
+const ACCOUNT_SLUG = 'adamn1225'; // Hard-coded account slug
 
 async function triggerRedeploy() {
   const redeployUrl = `https://api.netlify.com/api/v1/sites/${SITE_ID}/builds`;
@@ -98,3 +98,7 @@ export async function handler(event, context) {
     };
   }
 }
+
+export const config = {
+  schedule: '0 */12 * * *' // Every 12 hours
+};
