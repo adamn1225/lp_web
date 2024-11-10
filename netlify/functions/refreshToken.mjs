@@ -99,7 +99,3 @@ export async function handler(event, context) {
     };
   }
 }
-
-export const config = {
-  schedule: '0 */12 * * *' // Every 12 hours
-};
