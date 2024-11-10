@@ -8,11 +8,11 @@
 
 [[scheduled_functions]]
   path = "refreshToken"
-  schedule = "0 */12 * * *"
+  schedule = "@daily"
 
 [[scheduled_functions]]
   path = "cache-listings"
-  schedule = "0 */12 * * *"
+  schedule = "@daily"
 
 [build.processing]
   skip_processing = true

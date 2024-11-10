@@ -99,3 +99,7 @@ export async function handler(event, context) {
     };
   }
 }
+
+export const config = {
+  schedule: '@daily' // Runs once a day at midnight
+};
