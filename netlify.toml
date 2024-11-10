@@ -4,13 +4,14 @@
 
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
 
 [[scheduled_functions]]
-  name = "refreshToken"
+  path = "refreshToken"
   schedule = "0 */12 * * *"
 
 [[scheduled_functions]]
-  name = "cache-listings"
+  path = "cache-listings"
   schedule = "0 */12 * * *"
 
 [build.processing]
