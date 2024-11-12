@@ -12,6 +12,9 @@
     "preview": "astro preview",
     "astro": "astro"
   },
+    "engines": {
+    "node": "18.17.1"
+  },
   "dependencies": {
     "@apollo/client": "^3.11.4",
     "@astrojs/alpinejs": "^0.4.0",
