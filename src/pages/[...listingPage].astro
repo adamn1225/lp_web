@@ -8,9 +8,7 @@ import InstantBooking from "@components/InstantBooking.tsx";
 import { fetchAllListings } from "./api/dataFetcher";
 import { fetchReviews } from "./api/listingReviews";
 import { Image } from 'astro:assets';
-import Swiper, { Navigation, Pagination } from 'swiper';
-import 'swiper/swiper-bundle.min.css';
-
+import SwiperComponent from '@components/SwiperComponent.tsx';
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
@@ -145,7 +143,6 @@ const {
   checkOut,
   bedrooms,
 } = Astro.props;
-
 
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -936,34 +933,9 @@ const proxyUrl = (url: string | number | boolean) => `/.netlify/functions/proxy?
               </div>
             </div>
 
-<div class="relative">
-  <!-- Polka dots -->
-
-  <div class="relative z-[2] mx-20">
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-container overflow-hidden">
-      <div class="swiper-wrapper">
-        <!-- Slides -->
-        {pictures.map((picture, index) => (
-          <div class="swiper-slide">
-            <img
-              class="w-full h-auto"
-              src={picture.original}
-              alt={`Listing image ${index + 1}`}
-              decoding="async"
-              data-zoom
-              loading="lazy"
-            />
-          </div>
-        ))}
-      </div>
-      <div class="swiper-pagination"></div>
-    </div>
-    <div class="swiper-button-next">
-      
-    </div>
-  </div>
-</div>
+        <div class="relative z-[2] mx-20">
+          <SwiperComponent client:load pictures={pictures} />
+        </div>
             <!-- cards -->
             <div class="mt-12">
               <div class="flex flex-col">
@@ -995,74 +967,3 @@ const proxyUrl = (url: string | number | boolean) => `/.netlify/functions/proxy?
     </Section>
   </main>
 </Layout>
-<style>
-  .swiper-button-next,
-  .swiper-button-prev {
-    color: #0891B2; /* Change this to the desired color */
-    font-weight: 900;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%; /* Optional: Make the buttons circular */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 20;
-  }
-  .swiper-button-next {
-    right: -70px; /* Adjust this value to position the button outside the container */
-  }
-  .swiper-button-prev {
-    left: -70px; /* Adjust this value to position the button outside the container */
-  }
-
-  .swiper-pagination {
-    position: relative;
-    margin-top: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-  }
-
-  .swiper-pagination-bullet {
-    width: 10px;
-    height: 10px;
-    display: inline-block;
-    border-radius: 50%;
-    background: #0891B2 !important; /* Change this to the desired color */
-    margin: 0 8px;
-  }
-
-  .swiper-container .swiper-pagination .swiper-pagination-bullet {
-    background: #0891B2 !important; /* Change this to the desired color */
-  }
-
-  .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
-    background: #0891B2 !important; /* Change this to the desired color */
-  }
-
-    .swiper-wrapper {
-    transform: translate3d(10px, 0px, 0px) !important; 
-  }
-</style>
-<script>
-  import Swiper, { Navigation, Pagination } from 'swiper';
-
-  Swiper.use([Navigation, Pagination]);
-
-  new Swiper('.swiper-container', {
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    slidesPerView: 5,
-    spaceBetween: 10,
-    centeredSlides: true,
-  });
-</script>

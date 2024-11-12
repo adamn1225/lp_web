@@ -86,6 +86,7 @@
     "sass": "^1.77.8",
     "sharp": "^0.33.5",
     "slick-carousel": "^1.8.1",
+    "solid-js": "^1.9.3",
     "swiper": "^6.8.4",
     "tailwindcss": "^3.4.10",
     "ts-jest": "^29.2.4",
