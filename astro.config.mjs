@@ -8,33 +8,11 @@ import markdoc from "@astrojs/markdoc";
 
 export default defineConfig({
   output: 'server',
-  adapter: netlify({
-    edgeFunctions: true, // Enable edge functions for ISR
-  }),
+  adapter: netlify(),
   integrations: [tailwind(), alpinejs(), icon(), react(), markdoc()],
   vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            'instant-booking': ['./src/components/InstantBooking.tsx'],
-            // Add other chunks as needed
-          }
-        }
-      },
-      chunkSizeWarningLimit: 1000 // Adjust the limit as needed
-    },
     server: {
-      middlewareMode: false,
+      middlewareMode: false, // Ensure this is set correctly
     },
-  },
-  image: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'assets.guesty.com',
-        pathname: '/image/upload/**',
-      },
-    ],
   },
 });
