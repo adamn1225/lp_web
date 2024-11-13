@@ -36,7 +36,6 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   listingId,
   occupancy,
   setOccupancy,
-  taxes,
 }) => {
   const [basePrice, setBasePrice] = useState<number>(0);
   const [weeklyPriceFactor, setWeeklyPriceFactor] = useState<number>(1);
@@ -47,6 +46,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [cityTax, setCityTax] = useState<number>(0);
   const [localTax, setLocalTax] = useState<number>(0);
+  const [taxes, setTaxes] = useState<number>(0);
   const [accommodates, setAccommodates] = useState<number>(0);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [beforeTax, setBeforeTax] = useState<number>(0);
@@ -91,7 +91,6 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         const data = await response.json();
         console.log('Fetched pricing data:', data);
 
-        setBasePrice(data.basePrice || 0);
         setWeeklyPriceFactor(data.weeklyPriceFactor || 1);
         setMonthlyPriceFactor(data.monthlyPriceFactor || 1);
         setCleaningFee(data.cleaningFee || 0);
@@ -108,26 +107,28 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
           const currentDate = new Date(startDate);
           currentDate.setDate(currentDate.getDate() + i);
           const formattedDate = currentDate.toISOString().slice(0, 10);
-          stayPrice += data.datePrices[formattedDate] || data.basePrice;
+          stayPrice += data.datePrices[formattedDate] || 0;
         }
 
-        const guestPrice = 0;
+        const dayPrice = stayPrice / daysDiff; // Calculate the base price per night
+        setBasePrice(dayPrice);
+
         const petPrice = pets > 0 ? petFee : 0;
         const totalPrice = stayPrice + cleaningFee + petPrice;
-        const taxes = (cityTax + localTax) * 0.01;
-        const beforeTax = totalPrice * taxes;
-        const afterTax = totalPrice + (totalPrice * taxes);
+        const taxes = (data.cityTax + data.localTax) * 0.01;
+        const calculatedBeforeTax = totalPrice * taxes;
+        const afterTax = totalPrice + calculatedBeforeTax;
         console.log('Calculated afterTax:', afterTax);
         setCalculatedPrice(afterTax);
-        setBeforeTax(beforeTax);
+        setBeforeTax(calculatedBeforeTax);
       } catch (error) {
         console.error('Error fetching pricing data:', error);
       }
     };
 
     fetchPricingData();
-  }, [listingId, dateRange, pets, petFee, cityTax, localTax, accommodates, taxes]);
-
+  }, [listingId, dateRange, pets, petFee, cityTax, localTax, accommodates]);
+  
   useEffect(() => {
     const { startDate, endDate } = dateRange[0];
     if (startDate && endDate) {
@@ -141,17 +142,18 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         stayPrice *= weeklyPriceFactor;
       }
 
-      const guestPrice = 0;
       const petPrice = pets > 0 ? petFee : 0;
       const maintenanceFee = 20;
       const totalPrice = stayPrice + cleaningFee + petPrice + maintenanceFee;
       const taxes = (cityTax + localTax) * 0.01;
-      const afterTax = totalPrice + (totalPrice * taxes);
+      const calculatedBeforeTax = totalPrice * taxes;
+      const afterTax = totalPrice + calculatedBeforeTax;
       console.log('Calculated afterTax in second useEffect:', afterTax);
       setCalculatedPrice(afterTax);
       setMaintenanceFee(maintenanceFee);
+      setBeforeTax(calculatedBeforeTax);
     }
-  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, taxes, cityTax, localTax, beforeTax, maintenanceFee]);
+  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, cityTax, localTax, maintenanceFee]);
 
   useEffect(() => {
     const initializeGuestyTokenization = async () => {
@@ -304,7 +306,6 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     setDateRange([{ startDate: new Date(), endDate: new Date(new Date().setDate(new Date().getDate() + 7)) }]);
     setPaymentDateTime(new Date()); // Set the current date and time
   };
-
 
   return (
     <Modal

@@ -15,23 +15,37 @@ export const handler = async (event, context) => {
         };
     }
 
-    const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings/${listingId}?startDate=${startDate}&endDate=${endDate}`;
+    const apiUrl1 = `https://open-api.guesty.com/v1/listings/${listingId}`;
+    const apiUrl2 = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings/${listingId}?startDate=${startDate}&endDate=${endDate}`;
 
     try {
-        const response = await fetch(apiUrl, {
-            headers: {
-                'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
-                'Accept': 'application/json'
-            }
-        });
+        const [response1, response2] = await Promise.all([
+            fetch(apiUrl1, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+                    'Accept': 'application/json'
+                }
+            }),
+            fetch(apiUrl2, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+                    'Accept': 'application/json'
+                }
+            })
+        ]);
 
-        if (!response.ok) {
-            throw new Error(`Error fetching data from endpoint: ${response.status} ${response.statusText}`);
+        if (!response1.ok) {
+            throw new Error(`Error fetching data from first endpoint: ${response1.status} ${response1.statusText}`);
         }
 
-        const data = await response.json();
+        if (!response2.ok) {
+            throw new Error(`Error fetching data from second endpoint: ${response2.status} ${response2.statusText}`);
+        }
 
-        if (!data.data || !Array.isArray(data.data.days)) {
+        const data1 = await response1.json();
+        const data2 = await response2.json();
+
+        if (!data2.data || !Array.isArray(data2.data.days)) {
             return {
                 statusCode: 500,
                 headers: {
@@ -43,12 +57,12 @@ export const handler = async (event, context) => {
         }
 
         // Extract unavailable dates
-        const unavailableDates = data.data.days
+        const unavailableDates = data2.data.days
             .filter(day => day.status === 'unavailable')
             .map(day => day.date);
 
         // Extract booked dates and include the day before the check-out date
-        const bookedDates = data.data.days
+        const bookedDates = data2.data.days
             .filter(day => day.status === 'booked')
             .map(day => day.date);
 
@@ -66,10 +80,17 @@ export const handler = async (event, context) => {
         const allUnavailableDates = [...new Set([...unavailableDates, ...adjustedUnavailableDates])];
 
         // Extract date-specific prices
-        const datePrices = data.data.days.reduce((acc, day) => {
+        const datePrices = data2.data.days.reduce((acc, day) => {
             acc[day.date] = day.price;
             return acc;
         }, {});
+
+        const { prices, accountTaxes } = data1;
+        const { monthlyPriceFactor, weeklyPriceFactor, cleaningFee, petFee, securityDepositFee, guestsIncludedInRegularFee, extraPersonFee } = prices;
+
+        // Extract local and city taxes
+        const localTax = accountTaxes.find(tax => tax.type === 'LOCAL_TAX')?.amount || 0;
+        const cityTax = accountTaxes.find(tax => tax.type === 'CITY_TAX')?.amount || 0;
 
         return {
             statusCode: 200,
@@ -80,7 +101,16 @@ export const handler = async (event, context) => {
             body: JSON.stringify({
                 unavailableDates: allUnavailableDates,
                 bookedDates,
-                datePrices
+                datePrices,
+                monthlyPriceFactor,
+                weeklyPriceFactor,
+                cleaningFee,
+                petFee,
+                securityDepositFee,
+                guestsIncludedInRegularFee,
+                extraPersonFee,
+                localTax,
+                cityTax
             })
         };
     } catch (error) {
