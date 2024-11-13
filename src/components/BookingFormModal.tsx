@@ -447,13 +447,13 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                   </div>
                 </div>
                 <TextArea />
-                <button
+                {/* <button
                   className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
                   type="submit"
                   disabled={loading}
                 >
                   <CreditCard />  Proceed to Payment
-                </button>
+                </button> */}
               </div>
             </form>
           </>
