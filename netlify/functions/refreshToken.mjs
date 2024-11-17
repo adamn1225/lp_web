@@ -1,4 +1,3 @@
-// netlify/functions/refreshToken.mjs
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
@@ -8,11 +7,11 @@ dotenv.config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
-const SITE_ID = '6ffffd4a-5a31-4652-a270-3e557c7970c3'; // Replace with your actual site ID
+const NETLIFY_SITE_ID = process.env.NETLIFY_SITE_ID; // Replace with your actual site ID
 const ACCOUNT_SLUG = 'adamn1225'; // Hard-coded account slug
 
 async function triggerRedeploy() {
-  const redeployUrl = `https://api.netlify.com/api/v1/sites/${SITE_ID}/builds`;
+  const redeployUrl = `https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/builds`;
 
   const response = await fetch(redeployUrl, {
     method: 'POST',
@@ -60,7 +59,7 @@ export async function handler(event, context) {
     console.log('Fetched new token:', token);
 
     // Construct the URL for updating the environment variable
-    const updateUrl = `https://api.netlify.com/api/v1/accounts/${ACCOUNT_SLUG}/env/VITE_API_TOKEN?site_id=${SITE_ID}`;
+    const updateUrl = `https://api.netlify.com/api/v1/accounts/${ACCOUNT_SLUG}/env/VITE_API_TOKEN?site_id=${NETLIFY_SITE_ID}`;
 
     // Update environment variable in Netlify
     const updateResponse = await fetch(updateUrl, {
@@ -101,5 +100,5 @@ export async function handler(event, context) {
 }
 
 export const config = {
-  schedule: '@daily' // Runs once a day at midnight
+  schedule: '@daily' // Runs once a day at midnight UTC
 };

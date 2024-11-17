@@ -9,12 +9,10 @@
 [build.environment]
   NODE_VERSION = "18.17.1"  # Update to a valid Node.js version
 
-[[scheduled_functions]]
-  path = "refreshToken"
+[functions."refreshToken"]
   schedule = "@daily"
 
-[[scheduled_functions]]
-  path = "cache-listings"
+[functions."cache-listings"]
   schedule = "@daily"
 
 [build.processing]
