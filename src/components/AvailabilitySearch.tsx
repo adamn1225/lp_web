@@ -37,22 +37,33 @@ const AvailabilitySearch: React.FC = () => {
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(addDays(new Date(), 7));
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
+  const [tagsLoading, setTagsLoading] = useState<boolean>(false);
 
   const apiUrl = '/.netlify/functions/availability';
   const tagsApiUrl = '/.netlify/functions/tags'; // Netlify function endpoint for fetching tags
 
-  const allowedTags = ["ocean front", "Ocean view", "pool", "studio", "Pets"];
+  const allowedTags = ["Ocean_front", "Ocean_view", "web_featured", "Public_pool", "Pets"];
+
+  const formatTag = (tag: string): string => {
+    return tag
+      .split('_')
+      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
 
   useEffect(() => {
     const fetchTags = async () => {
+      setTagsLoading(true);
       try {
         const response = await fetch(tagsApiUrl);
-        const data = await response.json();
-        console.log('Fetched tags:', data); // Log the fetched tags
-        const filteredTags = data.filter((tag: string) => allowedTags.includes(tag));
-        setTags(filteredTags); // Set only the allowed tags
-      } catch (error) {
-        console.error('Error fetching tags:', error);
+        const data: string[] = await response.json();
+        const filteredTags = data.filter((tag) => allowedTags.includes(tag));
+        setTags(filteredTags);
+      } catch (err) {
+        console.error('Error fetching tags:', err);
+        setError('Failed to load tags');
+      } finally {
+        setTagsLoading(false);
       }
     };
 
@@ -73,44 +84,30 @@ const AvailabilitySearch: React.FC = () => {
     setError('');
 
     try {
-      const tagsQuery = selectedTags.map(tag => `tags=${encodeURIComponent(tag)}`).join('&');
-      const url = `${apiUrl}?checkIn=${encodeURIComponent(checkInDate?.toISOString().slice(0, 10) || '')}&checkOut=${encodeURIComponent(checkOutDate?.toISOString().slice(0, 10) || '')}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&${tagsQuery}`;
+      const tagsQuery = selectedTags.join(',');
+      const url = `${apiUrl}?checkIn=${encodeURIComponent(checkInDate?.toISOString().slice(0, 10) || '')}&checkOut=${encodeURIComponent(checkOutDate?.toISOString().slice(0, 10) || '')}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&tags=${encodeURIComponent(tagsQuery)}`;
       console.log('API URL:', url);
 
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const responseText = await response.text();
-      console.log('API Response Text:', responseText);
-
+      const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText} - ${responseText}`);
+        throw new Error(`Failed to fetch listings: ${response.statusText}`);
       }
 
-      let data;
-      try {
-        data = JSON.parse(responseText);
-      } catch (err) {
-        throw new Error('Invalid JSON response');
-      }
-
-      if (!Array.isArray(data.results)) {
-        throw new Error('Unexpected response format');
+      const data = await response.json();
+      if (!data.results) {
+        setError('No results found');
       }
 
       setListings(data.results);
     } catch (err) {
-      console.error('Error fetching listings:', err);
-      setError(err.message);
+      console.error(err);
+      setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
 
+  // Clear the search results
   const clearResults = () => {
     setListings([]);
   };
@@ -181,18 +178,23 @@ const AvailabilitySearch: React.FC = () => {
                   </div>
               </div>
             </div>
-              <div className="flex gap-4 pt-2 flex-wrap justify-center items-end">
-                {tags.map((tag) => (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {tagsLoading ? (
+                <p>Loading tags...</p>
+              ) : (
+                tags.map((tag) => (
                   <button
                     key={tag}
                     type="button"
                     onClick={() => handleTagClick(tag)}
-                    className={`text-grey-950 font-semibold py-1 px-4 rounded-3xl w-full max-w-min text-nowrap ${selectedTags.includes(tag) ? 'bg-cyan-600 text-slate-300 shadow-lg shadow-secondary/40' : 'bg-slate-300 drop-shadow'}`}
+                    className={`px-4 py-2 rounded ${selectedTags.includes(tag) ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                      }`}
                   >
-                    {tag}
+                    {formatTag(tag)}
                   </button>
-                ))}
-              </div>
+                ))
+              )}
+            </div>
               <div className="md:w-2/3 flex align-middle justify-center h-full mt-4 gap-4">
               {/* <button className="text-grey-950 shadow-lg shadow-secondary/40 bg-slate-300 font-semibold py-1 px-4 rounded-md w-full max-w-min text-nowrap">
                   Advanced Search

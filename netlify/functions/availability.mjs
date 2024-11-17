@@ -1,12 +1,9 @@
 import fetch from 'node-fetch';
 
 export const handler = async (event, context) => {
-  // console.log('Received event:', event);
-
   const { checkIn, checkOut, minOccupancy, tags } = event.queryStringParameters;
 
   if (!checkIn || !checkOut || !minOccupancy) {
-    console.error('Missing required query parameters:', { checkIn, checkOut, minOccupancy });
     return {
       statusCode: 400,
       headers: {
@@ -17,48 +14,43 @@ export const handler = async (event, context) => {
     };
   }
 
-  // Construct the API URL with the required parameters
-  let apiUrl = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
-
-  // Append tags to the API URL if they exist
-  if (tags) {
-    const tagsArray = Array.isArray(tags) ? tags : [tags];
-    const tagsQuery = tagsArray.map(tag => `tags=${encodeURIComponent(tag)}`).join('&');
-    apiUrl += `&${tagsQuery}`;
-  }
+  const tagsArray = tags ? tags.split(',') : [];
 
   try {
-    const startTime = Date.now();
-    const response = await fetch(apiUrl, {
-      headers: {
-        'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
-        'Accept': 'application/json'
-      }
-    });
-    const endTime = Date.now();
-    // console.log(`API request took ${endTime - startTime} ms`);
+    const fetchListings = async (tag) => {
+      const url = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}&tags=${encodeURIComponent(tag)}`;
+      console.log(`Fetching listings for tag: ${tag} from URL: ${url}`);
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Guesty API error: ${errorText}`);
-      return {
-        statusCode: response.status,
+      const response = await fetch(url, {
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ error: errorText })
-      };
-    }
+          'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+        }
+      });
 
-    const data = await response.json();
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Guesty API error: ${errorText}`);
+        throw new Error(`Guesty API error: ${errorText}`);
+      }
+
+      return response.json();
+    };
+
+    const allResults = await Promise.all(tagsArray.map(tag => fetchListings(tag)));
+
+    // Combine results to find listings that match all selected tags
+    const combinedResults = allResults.reduce((acc, result) => {
+      if (acc.length === 0) return result.results;
+      return acc.filter(listing => result.results.some(r => r._id === listing._id));
+    }, []);
+
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify({ results: combinedResults })
     };
   } catch (error) {
     console.error('Error fetching data:', error);
