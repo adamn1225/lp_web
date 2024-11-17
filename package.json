@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "prebuild": "node scripts/cache-images.mjs",
+    "prebuild": "node netlify/functions/cache-images.mjs",
     "build": "astro build",
     "dev": "NODE_ENV=development astro dev",
     "start": "node server.js",
