@@ -12,8 +12,14 @@
 [functions."refreshToken"]
   schedule = "@daily"
 
-[functions."cache-listings"]
+[functions."cache-images"]
   schedule = "@daily"
+
+[[plugins]]
+  package = "netlify-plugin-cache"
+
+  [plugins.inputs]
+    paths = ["dist/**/*"]  # Cache all generated pages
 
 [build.processing]
   skip_processing = true

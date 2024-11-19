@@ -327,6 +327,9 @@ importers:
       jest-fetch-mock:
         specifier: ^3.0.3
         version: 3.0.3
+      netlify-plugin-cache:
+        specifier: ^1.0.3
+        version: 1.0.3
       rollup-plugin-node-resolve:
         specifier: ^5.2.0
         version: 5.2.0(rollup@4.21.0)
@@ -6365,6 +6368,9 @@ packages:
   netlify-headers-parser@7.1.4:
     resolution: {integrity: sha512-fTVQf8u65vS4YTP2Qt1K6Np01q3yecRKXf6VMONMlWbfl5n3M/on7pZlZISNAXHNOtnVt+6Kpwfl+RIeALC8Kg==}
     engines: {node: ^14.16.0 || >=16.0.0}
+
+  netlify-plugin-cache@1.0.3:
+    resolution: {integrity: sha512-CTOwNWrTOP59T6y6unxQNnp1WX702v2R/faR5peSH94ebrYfyY4zT5IsRcIiHKq57jXeyCrhy0GLuTN8ktzuQg==}
 
   netlify-redirect-parser@14.3.0:
     resolution: {integrity: sha512-/Oqq+SrTXk8hZqjCBy0AkWf5qAhsgcsdxQA09uYFdSSNG5w9rhh17a7dp77o5Q5XoHCahm8u4Kig/lbXkl4j2g==}
@@ -16245,6 +16251,8 @@ snapshots:
       is-plain-obj: 4.1.0
       map-obj: 5.0.2
       path-exists: 5.0.0
+
+  netlify-plugin-cache@1.0.3: {}
 
   netlify-redirect-parser@14.3.0:
     dependencies:
