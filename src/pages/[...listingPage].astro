@@ -1,5 +1,7 @@
 ---
 export const prerender = true;
+import { amenitiesIcons } from "../lib/amenitiesIcons";
+import { loadIcon } from "../lib/iconLoader"; 
 import { Icon } from "astro-icon/components";
 import Layout from "@layouts/Default.astro";
 import Section from "@components/Section.astro";
@@ -27,6 +29,8 @@ export async function getStaticPaths() {
       country: listing.address.country,
       title: listing.title,
       PropertyType: listing.propertyType,
+      amenities: listing.amenities,
+      otherAmenities: listing.otherAmenities,
       bathrooms: listing.bathrooms,
       pictures: listing.pictures,
       beds: listing.beds,
@@ -44,6 +48,11 @@ export async function getStaticPaths() {
   return paths; // Return the array of paths directly
 }
 
+function filterAmenities(mergedAmenities: any[], allAmenities: any[]) {
+  // Implement the logic to filter amenities here
+  return mergedAmenities.filter(amenity => allAmenities.includes(amenity));
+}
+
 export async function get({ params }) {
   const listings = await fetchAllListings();
   const listing = listings.find(
@@ -56,6 +65,15 @@ export async function get({ params }) {
       body: "Not Found",
     };
   }
+
+  // Fetch the amenities data
+  const allAmenities = listing.amenities;
+
+  // Merge amenities and otherAmenities
+  const mergedAmenities = [...listing.amenities, ...listing.otherAmenities];
+
+  // Filter the amenities for the current listing
+  const filteredAmenities = filterAmenities(mergedAmenities, allAmenities);
 
   // Set Cache-Control headers
   Astro.response.headers.set(
@@ -76,6 +94,7 @@ export async function get({ params }) {
     zip: listing.address.zip,
     country: listing.address.country,
     Description: listing.publicDescription,
+    amenities: filteredAmenities,
     PropertyType: listing.propertyType,
     bathrooms: listing.bathrooms,
     pictures: listing.pictures,
@@ -137,6 +156,7 @@ const {
   Description,
   apt,
   beds,
+  amenities,
   bathrooms,
   listingId,
   PropertyType,
@@ -346,6 +366,8 @@ function capitalizeFirstLetter(string: string) {
                     <div
                       class="mb-6 grid grid-cols-3 gap-2 justify-items-center"
                     >
+
+
                       <!-- bedroom -->
                       <div class="flex flex-col">
                         <div
@@ -577,24 +599,22 @@ function capitalizeFirstLetter(string: string) {
                         <div
                           class="font-bold gap-2 flex justify-center items-center text-muted-900"
                         >
-                          <svg
-                            class="h-6"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style="--darkreader-inline-stroke: currentColor;"
-                            data-darkreader-inline-stroke=""
-                            ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"
-                            ></path><path
-                              d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"
-                            ></path><path d="M12 4v6"></path><path d="M2 18h20"
-                            ></path>
-                          </svg>
-                          <span>{PropertyType}</span>
+                          
+<div class="flex flex-wrap gap-4">
+  {amenities.map((amenity: string) => {
+    const iconName = amenitiesIcons[amenity];
+    const IconComponent = loadIcon(iconName);
+    console.log(`Loading icon for ${amenity}:`, iconName, IconComponent);
+    return (
+      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
+          {IconComponent ? <IconComponent class="text-2xl h-6" /> : null}
+          {amenity}
+        </div>
+      </div>
+    );
+  })}
+</div>
                         </div>
                         <div class="amenity-content text-center">
                           <p class="text-sm text-muted-400">Property Type</p>

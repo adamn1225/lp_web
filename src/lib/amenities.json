@@ -1,0 +1,1629 @@
+[
+  {
+    "name": "Accessible-height bed",
+    "group": "Accessibility",
+    "channels": {}
+  },
+  {
+    "name": "Accessible-height toilet",
+    "group": "Accessibility",
+    "channels": {
+      "bookingCom": "5151",
+      "rentalsUnited": "1201"
+    }
+  },
+  {
+    "name": "Disabled parking spot",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "disabled_parking_spot",
+      "rentalsUnited": "1209"
+    }
+  },
+  {
+    "name": "Grab-rails for shower and toilet",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "grab_rails_in_shower",
+      "bookingCom": "5148",
+      "rentalsUnited": "775"
+    }
+  },
+  {
+    "name": "Grab-rails in toilet",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "grab_rails_in_toilet",
+      "bookingCom": "5147",
+      "rentalsUnited": "775"
+    }
+  },
+  {
+    "name": "Path to entrance lit at night",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "path_to_entrance_lit_at_night",
+      "rentalsUnited": "1217"
+    }
+  },
+  {
+    "name": "Roll-in shower with shower bench or chair",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "rollin_shower",
+      "bookingCom": "5149",
+      "rentalsUnited": "1220"
+    }
+  },
+  {
+    "name": "Shower bench",
+    "group": "Accessibility",
+    "channels": {
+      "bookingCom": "5154"
+    }
+  },
+  {
+    "name": "Shower chair",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "shower_chair"
+    }
+  },
+  {
+    "name": "Single level home",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "single_level_home",
+      "bookingCom": "5131",
+      "rentalsUnited": "1000",
+      "marriott": "GROUND_FLOOR"
+    }
+  },
+  {
+    "name": "Step-free access",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "home_step_free_access",
+      "rentalsUnited": "1213"
+    }
+  },
+  {
+    "name": "Tub with shower bench",
+    "group": "Accessibility",
+    "channels": {
+      "rentalsUnited": "1222"
+    }
+  },
+  {
+    "name": "Wheelchair accessible",
+    "group": "Accessibility",
+    "channels": {
+      "bookingCom": "5134",
+      "homeaway2": "SUITABILITY_ACCESSIBILITY_WHEELCHAIR_ACCESSIBLE",
+      "rentalsUnited": "281",
+      "marriott": "WHEELCHAIR_ACCESS"
+    }
+  },
+  {
+    "name": "Wide clearance to bed",
+    "group": "Accessibility",
+    "channels": {}
+  },
+  {
+    "name": "Wide clearance to shower and toilet",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "wide_doorway",
+      "rentalsUnited": "1224"
+    }
+  },
+  {
+    "name": "Wide doorway",
+    "group": "Accessibility",
+    "channels": {
+      "airbnb2": "home_wide_doorway",
+      "rentalsUnited": "1214"
+    }
+  },
+  {
+    "name": "Wide hallway clearance",
+    "group": "Accessibility",
+    "channels": {
+      "rentalsUnited": "1225",
+      "marriott": "WIDE_HALLWAY_CLEARANCE"
+    }
+  },
+  {
+    "name": "Body soap",
+    "group": "Bathroom",
+    "channels": {
+      "airbnb2": "body_soap"
+    }
+  },
+  {
+    "name": "Cleaning products",
+    "group": "Bathroom",
+    "channels": {
+      "airbnb2": "cleaning_products"
+    }
+  },
+  {
+    "name": "Conditioner",
+    "group": "Bathroom",
+    "channels": {
+      "airbnb2": "conditioner"
+    }
+  },
+  {
+    "name": "Hot water",
+    "group": "Bathroom",
+    "channels": {
+      "airbnb2": "hot_water",
+      "rentalsUnited": "973"
+    }
+  },
+  {
+    "name": "Shampoo",
+    "group": "Bathroom",
+    "channels": {
+      "airbnb2": "shampoo",
+      "bookingCom": "5177",
+      "rentalsUnited": "446"
+    }
+  },
+  {
+    "name": "Shower gel",
+    "group": "Bathroom",
+    "channels": {
+      "airbnb2": "shower_gel"
+    }
+  },
+  {
+    "name": "Towels provided",
+    "group": "Bathroom",
+    "channels": {
+      "bookingCom": "5124",
+      "homeaway2": "AMENITIES_TOWELS",
+      "rentalsUnited": "395",
+      "tripAdvisor": "TOWELS_PROVIDED"
+    }
+  },
+  {
+    "name": "Clothing storage",
+    "group": "Bedroom & Laundry",
+    "channels": {
+      "airbnb2": "wardrobe_or_closet"
+    }
+  },
+  {
+    "name": "Coin Laundry",
+    "group": "Bedroom & Laundry",
+    "channels": {
+      "airbnb2": "laundromat_nearby",
+      "bookingCom": "168",
+      "homeaway2": "ATTRACTIONS_COIN_LAUNDRY"
+    }
+  },
+  {
+    "name": "Dryer in common space",
+    "group": "Bedroom & Laundry",
+    "channels": {
+      "rentalsUnited": "1822"
+    }
+  },
+  {
+    "name": "Mosquito net",
+    "group": "Bedroom & Laundry",
+    "channels": {
+      "airbnb2": "mosquito_net"
+    }
+  },
+  {
+    "name": "Washer in common space",
+    "group": "Bedroom & Laundry",
+    "channels": {
+      "rentalsUnited": "11"
+    }
+  },
+  {
+    "name": "Dvd player",
+    "group": "Entertainment",
+    "channels": {
+      "bookingCom": "163",
+      "homeaway2": "ENTERTAINMENT_DVD",
+      "rentalsUnited": "23",
+      "tripAdvisor": "DVD_PLAYER"
+    }
+  },
+  {
+    "name": "Foosball table",
+    "group": "Entertainment",
+    "channels": {
+      "homeaway2": "ENTERTAINMENT_FOOSBALL"
+    }
+  },
+  {
+    "name": "Game room",
+    "group": "Entertainment",
+    "channels": {
+      "bookingCom": "44",
+      "homeaway2": "AMENITIES_GAME_ROOM",
+      "marriott": "GAME_ROOM"
+    }
+  },
+  {
+    "name": "Piano",
+    "group": "Entertainment",
+    "channels": {
+      "airbnb2": "piano"
+    }
+  },
+  {
+    "name": "Ping pong table",
+    "group": "Entertainment",
+    "channels": {
+      "airbnb2": "ping_pong_table"
+    }
+  },
+  {
+    "name": "Pool table",
+    "group": "Entertainment",
+    "channels": {
+      "airbnb2": "pool_table",
+      "homeaway2": "ENTERTAINMENT_POOL_TABLE"
+    }
+  },
+  {
+    "name": "Sound system",
+    "group": "Entertainment",
+    "channels": {
+      "airbnb2": "sound_system"
+    }
+  },
+  {
+    "name": "Baby bath",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "baby_bath",
+      "rentalsUnited": "1321"
+    }
+  },
+  {
+    "name": "Baby monitor",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "baby_monitor",
+      "rentalsUnited": "640",
+      "homeaway2": "GENERAL_BABY_MONITOR"
+    }
+  },
+  {
+    "name": "Babysitter recommendations",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "babysitter_recommendations",
+      "rentalsUnited": "635"
+    }
+  },
+  {
+    "name": "Bathtub",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "bathtub",
+      "bookingCom": "13",
+      "homeaway2": "AMENITY_TUB",
+      "rentalsUnited": "315",
+      "marriott": "BATHTUB"
+    }
+  },
+  {
+    "name": "Board games",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "board_games",
+      "homeaway2": "ENTERTAINMENT_GAMES"
+    }
+  },
+  {
+    "name": "Changing table",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "changing_table",
+      "rentalsUnited": "1322"
+    }
+  },
+  {
+    "name": "Children’s books and toys",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "childrens_books_and_toys",
+      "bookingCom": "5144",
+      "homeaway2": "ENTERTAINMENT_TOYS",
+      "rentalsUnited": "1323",
+      "marriott": "CHLD_BKS_TOYS"
+    }
+  },
+  {
+    "name": "Children’s dinnerware",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "childrens_dinnerware",
+      "rentalsUnited": "1324",
+      "homeaway2": "KITCHEN_DINING_DISHES_AND_UTENSILS_FOR_KIDS"
+    }
+  },
+  {
+    "name": "Crib",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "crib",
+      "bookingCom": "5175",
+      "homeaway2": "BABY_BED",
+      "rentalsUnited": "674",
+      "marriott": "BABY_CRIB"
+    }
+  },
+  {
+    "name": "Family/kid friendly",
+    "group": "Family",
+    "channels": {
+      "rentalsUnited": "828",
+      "marriott": "KIDS_AMENITIES",
+      "homeaway2": "THEMES_FAMILY"
+    }
+  },
+  {
+    "name": "Fireplace guards",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "fireplace_guards",
+      "rentalsUnited": "1325"
+    }
+  },
+  {
+    "name": "Game console",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "game_console",
+      "bookingCom": "117",
+      "homeaway2": "ENTERTAINMENT_VIDEO_GAMES",
+      "rentalsUnited": "418",
+      "marriott": "GAMES"
+    }
+  },
+  {
+    "name": "High chair",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "high_chair",
+      "bookingCom": "5127",
+      "homeaway2": "KITCHEN_DINING_HIGHCHAIR*",
+      "marriott": "HIGH_CHAIR"
+    }
+  },
+  {
+    "name": "Outlet covers",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "outlet_covers",
+      "rentalsUnited": "1326"
+    }
+  },
+  {
+    "name": "Pack ’n Play/travel crib",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "pack_n_play_travel_crib",
+      "homeaway2": "GENERAL_TRAVEL_CRIB"
+    }
+  },
+  {
+    "name": "Room-darkening shades",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "room_darkening_shades",
+      "rentalsUnited": "1327"
+    }
+  },
+  {
+    "name": "Stair gates",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "stair_gates",
+      "bookingCom": "5145",
+      "rentalsUnited": "1328"
+    }
+  },
+  {
+    "name": "Table corner guards",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "table_corner_guards",
+      "rentalsUnited": "1329"
+    }
+  },
+  {
+    "name": "Window guards",
+    "group": "Family",
+    "channels": {
+      "airbnb2": "window_guards",
+      "rentalsUnited": "1251"
+    }
+  },
+  {
+    "name": "Portable fans",
+    "group": "Heating & cooling",
+    "channels": {
+      "airbnb2": "portable_fans"
+    }
+  },
+  {
+    "name": "Carbon monoxide detector",
+    "group": "Home Safety",
+    "channels": {
+      "airbnb2": "carbon_monoxide_detector",
+      "bookingCom": "5211",
+      "homeaway2": "CARBON_MONOXIDE_DETECTOR",
+      "rentalsUnited": "943",
+      "marriott": "CARBON_MONO_ALARM"
+    }
+  },
+  {
+    "name": "Emergency exit",
+    "group": "Home Safety",
+    "channels": {
+      "homeaway2": "EMERGENCY_EXIT_ROUTE"
+    }
+  },
+  {
+    "name": "Fire extinguisher",
+    "group": "Home Safety",
+    "channels": {
+      "airbnb2": "fire_extinguisher",
+      "bookingCom": "5202",
+      "homeaway2": "FIRE_EXTINGUISHER",
+      "rentalsUnited": "955",
+      "marriott": "FIRE_EXTINGUISH"
+    }
+  },
+  {
+    "name": "First aid kit",
+    "group": "Home Safety",
+    "channels": {
+      "airbnb2": "first_aid_kit",
+      "bookingCom": "5189",
+      "homeaway2": "FIRST_AID_KIT",
+      "rentalsUnited": "1211",
+      "marriott": "FIRST_AID"
+    }
+  },
+  {
+    "name": "Smoke detector",
+    "group": "Home Safety",
+    "channels": {
+      "airbnb2": "smoke_detector",
+      "bookingCom": "5201",
+      "homeaway2": "SMOKE_DETECTOR",
+      "rentalsUnited": "781",
+      "marriott": "SMOKE_ALARM"
+    }
+  },
+  {
+    "name": "Baking sheet",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "baking_sheet"
+    }
+  },
+  {
+    "name": "Barbeque utensils",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "barbeque_utensils"
+    }
+  },
+  {
+    "name": "Blender",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "blender"
+    }
+  },
+  {
+    "name": "Breakfast",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "breakfast",
+      "homeaway2": "ACCOMMODATIONS_BREAKFAST_BOOKING_POSSIBLE",
+      "rentalsUnited": "235",
+      "expedia": "ROOM_CLUB_EXEC_BREAKFAST",
+      "marriott": "MEAL_INCLUDED"
+    }
+  },
+  {
+    "name": "Coffee",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "coffee"
+    }
+  },
+  {
+    "name": "Coffee maker",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "coffee_maker",
+      "bookingCom": "19",
+      "homeaway2": "KITCHEN_DINING_COFFEEMAKER",
+      "rentalsUnited": "140",
+      "expedia": "ROOM_COFFEE_AND_TEA_MAKER",
+      "marriott": "COFFEE_TEA_MAKER"
+    }
+  },
+  {
+    "name": "Cookware",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "cooking_basics",
+      "bookingCom": "60",
+      "homeaway2": "KITCHEN_DINING_DISHES_UTENSILS",
+      "rentalsUnited": "2"
+    }
+  },
+  {
+    "name": "Dining table",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "dining_table",
+      "homeaway2": "KITCHEN_DINING_AREA"
+    }
+  },
+  {
+    "name": "Dishes and silverware",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "dishes_and_silverware",
+      "homeaway2": "KITCHEN_DINING_DISHES_UTENSILS",
+      "rentalsUnited": "3",
+      "expedia": "ROOM_DISHWARE"
+    }
+  },
+  {
+    "name": "Dishwasher",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "dishwasher",
+      "bookingCom": "32",
+      "homeaway2": "KITCHEN_DINING_DISHWASHER",
+      "rentalsUnited": "13",
+      "tripAdvisor": "DISHWASHER",
+      "expedia": "ROOM_DISHWASHER",
+      "marriott": "DISHWASHER"
+    }
+  },
+  {
+    "name": "Freezer",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "freezer",
+      "homeaway2": "KITCHEN_DINING_REFRIGERATOR"
+    }
+  },
+  {
+    "name": "Ice maker",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "bookingCom": "88",
+      "homeaway2": "KITCHEN_DINING_ICE_MAKER"
+    }
+  },
+  {
+    "name": "Kettle",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "hot_water_kettle",
+      "bookingCom": "5086",
+      "rentalsUnited": "17",
+      "tripAdvisor": "KETTLE"
+    }
+  },
+  {
+    "name": "Microwave",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "microwave",
+      "bookingCom": "68",
+      "homeaway2": "KITCHEN_DINING_MICROWAVE",
+      "rentalsUnited": "124",
+      "tripAdvisor": "MICROWAVE",
+      "expedia": "ROOM_MICROWAVE",
+      "marriott": "MICROWAVE"
+    }
+  },
+  {
+    "name": "Mini fridge",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "mini_fridge"
+    }
+  },
+  {
+    "name": "Oven",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "oven",
+      "bookingCom": "77",
+      "homeaway2": "KITCHEN_DINING_OVEN",
+      "rentalsUnited": "115",
+      "expedia": "ROOM_OVEN",
+      "marriott": "OVEN"
+    }
+  },
+  {
+    "name": "Refrigerator",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "refrigerator",
+      "bookingCom": "88",
+      "homeaway2": "KITCHEN_DINING_REFRIGERATOR",
+      "rentalsUnited": "798",
+      "tripAdvisor": "REFRIGERATOR",
+      "expedia": "ROOM_REFRIGERATOR",
+      "marriott": "REFRIGERATOR"
+    }
+  },
+  {
+    "name": "Rice maker",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "rice_maker"
+    }
+  },
+  {
+    "name": "Stove",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "stove",
+      "bookingCom": "105",
+      "homeaway2": "KITCHEN_DINING_STOVE",
+      "rentalsUnited": "258",
+      "tripAdvisor": "STOVE",
+      "expedia": "ROOM_STOVETOP",
+      "marriott": "STOVE"
+    }
+  },
+  {
+    "name": "Toaster",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "toaster",
+      "bookingCom": "5098",
+      "homeaway2": "KITCHEN_DINING_TOASTER",
+      "rentalsUnited": "125",
+      "tripAdvisor": "TOASTER",
+      "expedia": "ROOM_TOASTER"
+    }
+  },
+  {
+    "name": "Trash compactor",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "trash_compacter"
+    }
+  },
+  {
+    "name": "Wine glasses",
+    "group": "Kitchen & Dining",
+    "channels": {
+      "airbnb2": "wine_glasses"
+    }
+  },
+  {
+    "name": "Beach",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "beach_access",
+      "homeaway2": "LOCATION_TYPE_BEACH"
+    }
+  },
+  {
+    "name": "Beach Front",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_BEACH_FRONT",
+      "rentalsUnited": "1673",
+      "marriott": "BEACHFRONT"
+    }
+  },
+  {
+    "name": "Beach View",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_BEACH_VIEW",
+      "rentalsUnited": "1676"
+    }
+  },
+  {
+    "name": "Beach access",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "beach_access",
+      "homeaway2": "LOCATION_TYPE_BEACH"
+    }
+  },
+  {
+    "name": "City View",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "listing_views:CITY_VIEW",
+      "bookingCom": "5121",
+      "marriott": "CITY_VIEW"
+    }
+  },
+  {
+    "name": "Desert View",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "listing_views:DESERT_VIEW"
+    }
+  },
+  {
+    "name": "Downtown",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_DOWNTOWN"
+    }
+  },
+  {
+    "name": "Garden View",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "listing_views:GARDEN_VIEW",
+      "bookingCom": "5110",
+      "marriott": "GARDEN_VIEW"
+    }
+  },
+  {
+    "name": "Golf course front",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_GOLF_COURSE_FRONT"
+    }
+  },
+  {
+    "name": "Golf view",
+    "group": "Location",
+    "channels": {
+      "bookingCom": "220",
+      "homeaway2": "LOCATION_TYPE_GOLF_COURSE_VIEW",
+      "rentalsUnited": "1675"
+    }
+  },
+  {
+    "name": "Lake",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "lake_access",
+      "homeaway2": "LOCATION_TYPE_LAKE"
+    }
+  },
+  {
+    "name": "Lake Front",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_LAKE_FRONT"
+    }
+  },
+  {
+    "name": "Lake access",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "lake_access",
+      "homeaway2": "LOCATION_TYPE_LAKE_VIEW"
+    }
+  },
+  {
+    "name": "Laundromat nearby",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "laundromat_nearby"
+    }
+  },
+  {
+    "name": "Mountain",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_MOUNTAIN"
+    }
+  },
+  {
+    "name": "Mountain view",
+    "group": "Location",
+    "channels": {
+      "bookingCom": "223",
+      "homeaway2": "LOCATION_TYPE_MOUNTAIN_VIEW",
+      "rentalsUnited": "603",
+      "tripAdvisor": "MOUNTAIN_VIEWS",
+      "marriott": "MOUNTAIN_VIEW"
+    }
+  },
+  {
+    "name": "Near Ocean",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_NEAR_OCEAN"
+    }
+  },
+  {
+    "name": "Ocean Front",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_OCEAN_FRONT"
+    }
+  },
+  {
+    "name": "Resort",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "resort_access",
+      "homeaway2": "LOCATION_TYPE_RESORT"
+    }
+  },
+  {
+    "name": "Resort access",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "resort_access"
+    }
+  },
+  {
+    "name": "Rural",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_RURAL"
+    }
+  },
+  {
+    "name": "Sea view",
+    "group": "Location",
+    "channels": {
+      "bookingCom": "5108",
+      "homeaway2": "LOCATION_TYPE_OCEAN_VIEW        ",
+      "rentalsUnited": "1038",
+      "tripAdvisor": "OCEAN_VIEWS",
+      "marriott": "OCEAN_VIEW"
+    }
+  },
+  {
+    "name": "Ski In",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_SKI_IN"
+    }
+  },
+  {
+    "name": "Ski Out",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_SKI_OUT",
+      "marriott": "SKI_RENTAL"
+    }
+  },
+  {
+    "name": "Ski in/Ski out",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "ski_in_ski_out  ",
+      "homeaway2": "LOCATION_TYPE_SKI_IN_OUT",
+      "rentalsUnited": "623",
+      "marriott": "SKI_IN_OUT"
+    }
+  },
+  {
+    "name": "Town",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_TOWN"
+    }
+  },
+  {
+    "name": "Village",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_VILLAGE"
+    }
+  },
+  {
+    "name": "Water View",
+    "group": "Location",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_WATER_VIEW",
+      "marriott": "WATER_VIEW"
+    }
+  },
+  {
+    "name": "Waterfront",
+    "group": "Location",
+    "channels": {
+      "airbnb2": "waterfront",
+      "homeaway2": "LOCATION_TYPE_WATERFRONT",
+      "rentalsUnited": "623",
+      "marriott": "WATERFRONT"
+    }
+  },
+  {
+    "name": "Cleaning Disinfection",
+    "group": "Logistics",
+    "channels": {
+      "homeaway2": "CLEANING_DISINFECTION",
+      "rentalsUnited": "1755"
+    }
+  },
+  {
+    "name": "Cleaning before checkout",
+    "group": "Logistics",
+    "channels": {
+      "airbnb2": "cleaning_before_checkout",
+      "rentalsUnited": "1278"
+    }
+  },
+  {
+    "name": "Desk",
+    "group": "Logistics",
+    "channels": {
+      "homeaway2": "AMENITIES_DESK"
+    }
+  },
+  {
+    "name": "Enhanced cleaning practices",
+    "group": "Logistics",
+    "channels": {
+      "homeaway2": "ENHANCED_CLEANING_PRACTICES",
+      "rentalsUnited": "1753"
+    }
+  },
+  {
+    "name": "High touch surfaces disinfected",
+    "group": "Logistics",
+    "channels": {
+      "homeaway2": "COMMON_SURFACE_DISINFECTANT_CLEANED",
+      "rentalsUnited": "1769"
+    }
+  },
+  {
+    "name": "Laptop friendly workspace",
+    "group": "Logistics",
+    "channels": {
+      "airbnb2": "laptop_friendly_workspace",
+      "rentalsUnited": "829",
+      "homeaway2": "AMENITIES_OFFICE"
+    }
+  },
+  {
+    "name": "Long term stays allowed",
+    "group": "Logistics",
+    "channels": {
+      "airbnb2": "long_term_stays_allowed"
+    }
+  },
+  {
+    "name": "Luggage dropoff allowed",
+    "group": "Logistics",
+    "channels": {
+      "airbnb2": "luggage_dropoff_allowed",
+      "rentalsUnited": "497"
+    }
+  },
+  {
+    "name": "Casinos",
+    "group": "Nearby activities",
+    "channels": {
+      "bookingCom": "16",
+      "homeaway2": "LEISURE_GAMBLING"
+    }
+  },
+  {
+    "name": "Cycling",
+    "group": "Nearby activities",
+    "channels": {
+      "airbnb2": "bicycle",
+      "bookingCom": "5032",
+      "homeaway2": "SPORTS_CYCLING"
+    }
+  },
+  {
+    "name": "Fishing",
+    "group": "Nearby activities",
+    "channels": {
+      "bookingCom": "5018",
+      "homeaway2": "SPORTS_FISHING"
+    }
+  },
+  {
+    "name": "Golf - Optional",
+    "group": "Nearby activities",
+    "channels": {
+      "bookingCom": "236",
+      "homeaway2": "SPORTS_GOLF_OPTIONAL"
+    }
+  },
+  {
+    "name": "Horseback Riding",
+    "group": "Nearby activities",
+    "channels": {
+      "bookingCom": "237",
+      "homeaway2": "LEISURE_HORSEBACK_RIDING"
+    }
+  },
+  {
+    "name": "Mountain Climbing",
+    "group": "Nearby activities",
+    "channels": {
+      "homeaway2": "SPORTS_MOUNTAIN_CLIMBING"
+    }
+  },
+  {
+    "name": "Museums",
+    "group": "Nearby activities",
+    "channels": {
+      "homeaway2": "ATTRACTIONS_MUSEUMS"
+    }
+  },
+  {
+    "name": "Rock Climbing",
+    "group": "Nearby activities",
+    "channels": {
+      "homeaway2": "SPORTS_ROCK_CLIMBING"
+    }
+  },
+  {
+    "name": "Shopping",
+    "group": "Nearby activities",
+    "channels": {
+      "homeaway2": "LEISURE_SHOPPING"
+    }
+  },
+  {
+    "name": "Theme Parks",
+    "group": "Nearby activities",
+    "channels": {
+      "homeaway2": "ATTRACTIONS_THEME_PARKS"
+    }
+  },
+  {
+    "name": "Water Parks",
+    "group": "Nearby activities",
+    "channels": {
+      "bookingCom": "5056",
+      "homeaway2": "ATTRACTIONS_WATER_PARKS"
+    }
+  },
+  {
+    "name": "Water Sports",
+    "group": "Nearby activities",
+    "channels": {
+      "bookingCom": "234",
+      "homeaway2": "LEISURE_WATER_SPORTS",
+      "marriott": "WATER_SPORTS"
+    }
+  },
+  {
+    "name": "Zoo",
+    "group": "Nearby activities",
+    "channels": {
+      "homeaway2": "ATTRACTIONS_ZOO"
+    }
+  },
+  {
+    "name": "BBQ grill",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "bbq_area",
+      "bookingCom": "8",
+      "homeaway2": "OUTDOOR_GRILL",
+      "rentalsUnited": "408",
+      "tripAdvisor": "GRILL",
+      "marriott": "GRILL_CHARCOAL"
+    }
+  },
+  {
+    "name": "Beach essentials",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "beach_essentials",
+      "bookingCom": "5163",
+      "rentalsUnited": "977",
+      "marriott": "BEACH_ESSENTIALS"
+    }
+  },
+  {
+    "name": "Bicycles available",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "bicycle",
+      "bookingCom": "202",
+      "homeaway2": "OUTDOOR_BIKE",
+      "rentalsUnited": "645",
+      "tripAdvisor": "BICYCLES_AVAILABLE"
+    }
+  },
+  {
+    "name": "Bikes",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "bikes_for_rent",
+      "homeaway2": "OUTDOOR_BIKE"
+    }
+  },
+  {
+    "name": "Boat slip",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "boat_slip",
+      "homeaway2": "OUTDOOR_BOAT"
+    }
+  },
+  {
+    "name": "Doorman",
+    "group": "Outdoor",
+    "channels": {
+      "rentalsUnited": "601"
+    }
+  },
+  {
+    "name": "Fire Pit",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "fire_pit",
+      "homeaway2": "FIRE_PIT"
+    }
+  },
+  {
+    "name": "Garden or backyard",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "garden_or_backyard",
+      "homeaway2": "OUTDOOR_GARDEN",
+      "rentalsUnited": "346"
+    }
+  },
+  {
+    "name": "Hammock",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "Hammock"
+    }
+  },
+  {
+    "name": "Kayak",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "Kayak",
+      "homeaway2": "OUTDOOR_KAYAK_CANOE"
+    }
+  },
+  {
+    "name": "Outdoor kitchen",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "outdoor_kitchen"
+    }
+  },
+  {
+    "name": "Outdoor seating (furniture)",
+    "group": "Outdoor",
+    "channels": {
+      "airbnb2": "outdoor_seating"
+    }
+  },
+  {
+    "name": "River",
+    "group": "Outdoor",
+    "channels": {
+      "homeaway2": "LOCATION_TYPE_RIVER"
+    }
+  },
+  {
+    "name": "Free parking on premises",
+    "group": "Parking",
+    "channels": {
+      "airbnb2": "free_parking",
+      "rentalsUnited": "702",
+      "homeaway2": "AMENITIES_PARKING"
+    }
+  },
+  {
+    "name": "Free parking on street",
+    "group": "Parking",
+    "channels": {
+      "airbnb2": "street_parking",
+      "bookingCom": "186",
+      "rentalsUnited": "803",
+      "marriott": "FREE_PARKING_OFF_SITE"
+    }
+  },
+  {
+    "name": "Garage",
+    "group": "Parking",
+    "channels": {
+      "airbnb2": "free_parking (Metadata: residential_garage)",
+      "homeaway2": "AMENITIES_GARAGE"
+    }
+  },
+  {
+    "name": "Paid parking",
+    "group": "Parking",
+    "channels": {
+      "airbnb2": "paid_parking_on_premises",
+      "homeaway2": "AMENITIES_PARKING"
+    }
+  },
+  {
+    "name": "Paid parking off premises",
+    "group": "Parking",
+    "channels": {
+      "airbnb2": "paid_parking",
+      "rentalsUnited": "804",
+      "marriott": "PARKING_OFF_SITE_FEE"
+    }
+  },
+  {
+    "name": "Communal pool",
+    "group": "Pool",
+    "channels": {
+      "homeaway2": "POOL_SPA_COMMUNAL_POOL"
+    }
+  },
+  {
+    "name": "Indoor pool",
+    "group": "Pool",
+    "channels": {
+      "airbnb2": "pool",
+      "homeaway2": "POOL_SPA_INDOOR_POOL",
+      "rentalsUnited": "738",
+      "tripAdvisor": "INDOOR_POOL_SHARED"
+    }
+  },
+  {
+    "name": "Outdoor pool",
+    "group": "Pool",
+    "channels": {
+      "airbnb2": "pool",
+      "bookingCom": "66",
+      "homeaway2": "POOL_SPA_COMMUNAL_POOL",
+      "tripAdvisor": "UNHEATED_OUTDOOR_POOL_SHARED"
+    }
+  },
+  {
+    "name": "Private pool",
+    "group": "Pool",
+    "channels": {
+      "airbnb2": "pool",
+      "bookingCom": "245",
+      "homeaway2": "POOL_SPA_PRIVATE_POOL",
+      "tripAdvisor": "UNHEATED_OUTDOOR_POOL_PRIVATE",
+      "marriott": "POOL_PRIVATE"
+    }
+  },
+  {
+    "name": "Rooftop pool",
+    "group": "Pool",
+    "channels": {
+      "airbnb2": "pool",
+      "bookingCom": "5157",
+      "homeaway2": "POOL_SPA_INDOOR_POOL",
+      "rentalsUnited": "1090"
+    }
+  },
+  {
+    "name": "Swimming pool",
+    "group": "Pool",
+    "channels": {
+      "airbnb2": "pool",
+      "marriott": "POOL_COMMUNITY"
+    }
+  },
+  {
+    "name": "Air conditioning",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "ac",
+      "bookingCom": "2",
+      "homeaway2": "AMENITIES_AIR_CONDITIONING",
+      "rentalsUnited": "180",
+      "tripAdvisor": "AIR_CONDITIONING",
+      "expedia": "ROOM_AIR_CONDITIONING",
+      "marriott": "AIR_CONDITION"
+    }
+  },
+  {
+    "name": "Bed linens",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "bed_linens",
+      "bookingCom": "5125",
+      "homeaway2": "AMENITIES_LINENS",
+      "rentalsUnited": "589",
+      "tripAdvisor": "LINENS_PROVIDED",
+      "expedia": "ROOM_LINENS_PROVIDED"
+    }
+  },
+  {
+    "name": "Cable TV",
+    "group": "Popular Amenities",
+    "channels": {
+      "bookingCom": "18",
+      "homeaway2": "ENTERTAINMENT_SATELLITE_OR_CABLE",
+      "rentalsUnited": "19",
+      "tripAdvisor": "CABLE_SATELLITE_TV",
+      "expedia": "ROOM_TV_SERVICE: CABLE",
+      "marriott": "CABLE"
+    }
+  },
+  {
+    "name": "Dryer",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "dryer",
+      "bookingCom": "5094",
+      "homeaway2": "AMENITIES_DRYER",
+      "rentalsUnited": "600",
+      "tripAdvisor": "DRYER",
+      "expedia": "ROOM_DRYER",
+      "marriott": "DRYER_IN_HOME"
+    }
+  },
+  {
+    "name": "Elevator",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "elevator",
+      "bookingCom": "5132",
+      "homeaway2": "AMENITIES_ELEVATOR",
+      "rentalsUnited": "689",
+      "tripAdvisor": "ELEVATOR_IN_BUILDING",
+      "marriott": "ELEVATOR"
+    }
+  },
+  {
+    "name": "Essentials",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "essentials",
+      "bookingCom": "5124",
+      "rentalsUnited": "8",
+      "expedia": "ROOM_TOWELS"
+    }
+  },
+  {
+    "name": "Hair dryer",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "hair_dryer",
+      "bookingCom": "50",
+      "homeaway2": "AMENITIES_HAIR_DRYER",
+      "rentalsUnited": "6",
+      "expedia": "ROOM_HAIR_DRYER",
+      "marriott": "HAIR_DRYER"
+    }
+  },
+  {
+    "name": "Hangers",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "hangers",
+      "bookingCom": "5138",
+      "rentalsUnited": "499"
+    }
+  },
+  {
+    "name": "Heating",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "heating",
+      "bookingCom": "5040",
+      "homeaway2": "AMENITIES_HEATING",
+      "rentalsUnited": "187",
+      "tripAdvisor": "CENTRAL_HEATING",
+      "expedia": "ROOM_HEATING",
+      "marriott": "HEATING"
+    }
+  },
+  {
+    "name": "Indoor fireplace",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "fireplace",
+      "bookingCom": "41",
+      "homeaway2": "AMENITIES_FIREPLACE",
+      "rentalsUnited": "364",
+      "tripAdvisor": "ELEVATOR_IN_BUILDING",
+      "expedia": "ROOM_FIREPLACE",
+      "marriott": "FIREPLACE"
+    }
+  },
+  {
+    "name": "Internet",
+    "group": "Popular Amenities",
+    "channels": {
+      "bookingCom": "54",
+      "homeaway2": "AMENITIES_INTERNET",
+      "rentalsUnited": "174",
+      "tripAdvisor": "INTERNET_ACCESS",
+      "expedia": "ROOM_WIFI_INTERNET"
+    }
+  },
+  {
+    "name": "Iron",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "iron",
+      "bookingCom": "56",
+      "homeaway2": "AMENITIES_IRON_BOARD",
+      "rentalsUnited": "590",
+      "tripAdvisor": "IRON",
+      "expedia": "ROOM_IRON",
+      "marriott": "IRON"
+    }
+  },
+  {
+    "name": "Kitchen",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "kitchen",
+      "bookingCom": "59",
+      "homeaway2": "KITCHEN_DINING_KITCHEN",
+      "rentalsUnited": "101",
+      "tripAdvisor": "-",
+      "expedia": "ROOM_KITCHEN"
+    }
+  },
+  {
+    "name": "Patio or balcony",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "patio_or_belcony",
+      "bookingCom": "5037",
+      "homeaway2": "OUTDOOR_BALCONY",
+      "rentalsUnited": "346",
+      "tripAdvisor": "BALCONY_OR_TERRACE",
+      "expedia": "ROOM_BALCONY",
+      "marriott": "PATIO_BALCONY"
+    }
+  },
+  {
+    "name": "TV",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "tv",
+      "bookingCom": "251",
+      "homeaway2": "ENTERTAINMENT_TELEVISION",
+      "rentalsUnited": "74",
+      "tripAdvisor": "TV",
+      "expedia": "ROOM_TV"
+    }
+  },
+  {
+    "name": "Washer",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "washer",
+      "bookingCom": "5034",
+      "homeaway2": "AMENITIES_WASHER",
+      "rentalsUnited": "11",
+      "tripAdvisor": "WASHING_MACHINE",
+      "expedia": "ROOM_WASHER",
+      "marriott": "WASHER_IN_HOME"
+    }
+  },
+  {
+    "name": "Wireless Internet",
+    "group": "Popular Amenities",
+    "channels": {
+      "airbnb2": "wireless_internet",
+      "bookingCom": "123",
+      "homeaway2": "AMENITIES_WIRELESS_BROADBAND",
+      "rentalsUnited": "792",
+      "tripAdvisor": "WIFI",
+      "expedia": "ROOM_WIFI_INTERNET"
+    }
+  },
+  {
+    "name": "Ceiling fan",
+    "group": "Services & Extras",
+    "channels": {
+      "airbnb2": "ceiling_fan"
+    }
+  },
+  {
+    "name": "EV charger",
+    "group": "Services & Extras",
+    "channels": {
+      "airbnb2": "ev_charger",
+      "bookingCom": "5185",
+      "rentalsUnited": "834",
+      "homeaway2": "EV_CAR_CHARGER"
+    }
+  },
+  {
+    "name": "Extra pillows and blankets",
+    "group": "Services & Extras",
+    "channels": {
+      "airbnb2": "extra_pillows_and_blankets",
+      "rentalsUnited": "1437"
+    }
+  },
+  {
+    "name": "Pocket Wifi",
+    "group": "Services & Extras",
+    "channels": {
+      "airbnb2": "pocket_wifi"
+    }
+  },
+  {
+    "name": "Private entrance",
+    "group": "Services & Extras",
+    "channels": {
+      "airbnb2": "private_entrance",
+      "bookingCom": "5076",
+      "rentalsUnited": "1219"
+    }
+  },
+  {
+    "name": "Safe",
+    "group": "Services & Extras",
+    "channels": {
+      "airbnb2": "safe",
+      "bookingCom": "92",
+      "rentalsUnited": "601",
+      "tripAdvisor": "SAFE",
+      "marriott": "SAFE"
+    }
+  },
+  {
+    "name": "Stereo system",
+    "group": "Services & Extras",
+    "channels": {
+      "homeaway2": "ENTERTAINMENT_STEREO",
+      "rentalsUnited": "22",
+      "tripAdvisor": "STEREO_SYSTEM"
+    }
+  },
+  {
+    "name": "Gym",
+    "group": "Wellness",
+    "channels": {
+      "airbnb2": "gym",
+      "rentalsUnited": "834",
+      "tripAdvisor": "GYM",
+      "homeaway2": "AMENITIES_FITNESS_ROOM"
+    }
+  },
+  {
+    "name": "Hot tub",
+    "group": "Wellness",
+    "channels": {
+      "airbnb2": "jacuzzi",
+      "bookingCom": "9",
+      "homeaway2": "POOL_SPA_HOT_TUB",
+      "rentalsUnited": "391",
+      "tripAdvisor": "JACUZZI_OR_HOT_TUB",
+      "marriott": "HOT_TUB"
+    }
+  },
+  {
+    "name": "Sauna",
+    "group": "Wellness",
+    "channels": {
+      "airbnb2": "sauna",
+      "homeaway2": "POOL_SPA_SAUNA"
+    }
+  },
+  {
+    "name": "Spa",
+    "group": "Wellness",
+    "channels": {
+      "bookingCom": "5044",
+      "homeaway2": "ATTRACTIONS_HEALTH_BEAUTY_SPA"
+    }
+  }
+]
