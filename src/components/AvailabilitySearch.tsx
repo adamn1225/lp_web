@@ -38,9 +38,12 @@ const AvailabilitySearch: React.FC = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [tagsLoading, setTagsLoading] = useState<boolean>(false);
-
+  const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>('');
+  const [cities, setCities] = useState<string[]>([]);
+  
   const apiUrl = '/.netlify/functions/availability';
-  const tagsApiUrl = '/.netlify/functions/tags'; // Netlify function endpoint for fetching tags
+  const tagsApiUrl = '/.netlify/functions/tags';
 
   const allowedTags = ["Ocean_front", "Ocean_view", "web_featured", "Public_pool", "Pets"];
 
@@ -70,6 +73,21 @@ const AvailabilitySearch: React.FC = () => {
     fetchTags();
   }, []);
 
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const response = await fetch('/.netlify/functions/availability?fetchCities=true');
+        const data = await response.json();
+        setCities(data.results);
+      } catch (err) {
+        console.error('Error fetching cities:', err);
+        setError('Failed to load cities');
+      }
+    };
+
+    fetchCities();
+  }, []);
+
   const handleTagClick = (tag: string) => {
     setSelectedTags((prevSelected) =>
       prevSelected.includes(tag)
@@ -85,7 +103,7 @@ const AvailabilitySearch: React.FC = () => {
 
     try {
       const tagsQuery = selectedTags.join(',');
-      const url = `${apiUrl}?checkIn=${encodeURIComponent(checkInDate?.toISOString().slice(0, 10) || '')}&checkOut=${encodeURIComponent(checkOutDate?.toISOString().slice(0, 10) || '')}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&tags=${encodeURIComponent(tagsQuery)}`;
+      const url = `${apiUrl}?checkIn=${encodeURIComponent(checkInDate?.toISOString().slice(0, 10) || '')}&checkOut=${encodeURIComponent(checkOutDate?.toISOString().slice(0, 10) || '')}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&tags=${encodeURIComponent(tagsQuery)}&city=${encodeURIComponent(selectedLocation)}&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
       console.log('API URL:', url);
 
       const response = await fetch(url);
@@ -118,7 +136,7 @@ const AvailabilitySearch: React.FC = () => {
       <h2 className="text-center text-slate-50 font-bold pb-2 text-xl md:text-3xl text-wrap md:w-1/2">Book your next vacation rental with us. We offer a wide selection of vacation rentals in the most popular destinations.</h2>
         <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full md:mb-16">
 
-          <form onSubmit={handleSubmit} className="w-full z-10 xs:py-5 flex flex-col justify-center max-w-6xl min-h-72 bg-slate-100 px-6 rounded-3xl shadow-2xl">
+        <form onSubmit={handleSubmit} className="w-full  z-10 xs:py-5 p-4 flex flex-col justify-center max-w-6xl min-h-72 bg-white px-6 rounded-3xl shadow-2xl">
 
 
             <div className="flex flex-col gap-3 items-center justify-center w-full">
@@ -177,6 +195,7 @@ const AvailabilitySearch: React.FC = () => {
                     </button>
                   </div>
               </div>
+
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               {tagsLoading ? (
@@ -195,6 +214,41 @@ const AvailabilitySearch: React.FC = () => {
                 ))
               )}
             </div>
+            <div className="flex gap-12 items-center justify-center pt-8">
+              <div className="w-full flex flex-col">
+                <label htmlFor="location" className="text-slate-800 font-semibold">Search by City</label>
+                <select
+                  id="location"
+                  value={selectedLocation}
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  className="border border-slate-300 rounded-md p-2 w-full"
+                >
+                  <option value="">Select Location</option>
+                  {cities.map((city) => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-full flex flex-col">
+                <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
+                <select
+                  id="bedroomAmount"
+                  value={selectedBedroomAmount}
+                  onChange={(e) => setSelectedBedroomAmount(e.target.value)}
+                  className="border border-slate-300 rounded-md p-2 w-full"
+                >
+                  <option value="">Select Bedroom Amount</option>
+                  <option value="Studio">Studio</option>
+                  <option value="1BR">One Bedroom</option>
+                  <option value="2BR">Two Bedroom</option>
+                  <option value="3BR">Three Bedroom</option>
+                  <option value="4BR">Four Bedroom</option>
+                  <option value="5BR">Five Bedroom</option>
+                  <option value="6BR">Six Bedroom</option>
+                  <option value="7BR">Seven Bedroom</option>
+                </select>
+              </div>
+            </div>
               <div className="md:w-2/3 flex align-middle justify-center h-full mt-4 gap-4">
               {/* <button className="text-grey-950 shadow-lg shadow-secondary/40 bg-slate-300 font-semibold py-1 px-4 rounded-md w-full max-w-min text-nowrap">
                   Advanced Search
@@ -207,7 +261,7 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           </form>
         </div>
-      <div className="bg-stone-50 mb-36 w-full h-full overflow-auto">
+      <div className="bg-stone-50 w-screen mb-64 pb-12 z-20 h-full overflow-auto">
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
         {available.length > 0 && (
@@ -221,7 +275,7 @@ const AvailabilitySearch: React.FC = () => {
         <div className="search-results grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8 md:px-12 px-4">
           {available.map((property) => (
             <a href={property._id} key={property._id}>
-              <article className="flex flex-col bg-white shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md">
+              <article className="flex flex-col bg-white w shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md">
                 <div className="result-item">
                   <img className="w-full object-cover h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
                   <div className="px-10 py-4 text-center flex flex-col gap-4">
