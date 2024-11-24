@@ -39,7 +39,7 @@ module.exports = {
       },
       colors: {
         primary: colors.blue,
-        secondary: '#d86c6c',
+        secondary: '#f05252',
         muted: colors.gray,
         info: colors.sky,
         success: colors.green,

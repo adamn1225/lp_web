@@ -21,13 +21,13 @@ import "../styles/global.scss";
   >
     <header
       id="MainHeader"
-      class="min-h-[70px] w-full max-w-full xxs:px-3 mx-auto flex shadow lg:shadow-md lg:px-8"
+      class="min-h-[70px] w-full max-w-full xxs:px-3 flex items-center shadow lg:shadow-md lg:px-8"
     >
       <div
-        class="flex justify-between lg:justify-start w-full lg:w-auto min-h-[3.25rem]"
+        class="flex justify-evenly lg:justify-start w-full lg:w-auto min-h-[3.25rem]"
       >
         <a href="/" class="flex gap-4 py-2">
-          <img src="/images/lp-final-top.png" alt="logo" class="w-96" />
+          <img src="/images/lp-final-top.png" alt="logo" class="xs:w-44 xs:h-8 md:w-96" />
         </a>
 
         <div class="flex items-stretch gap-3">
@@ -40,13 +40,13 @@ import "../styles/global.scss";
               id="OpenIcon"
               x-show="!mobileOpen"
               name="lucide:menu"
-              class="pointer-events-none text-muted-500 dark:text-white size-6 aspect-auto"
+              class="pointer-events-none text-muted-500 dark:text-white size-8 aspect-auto"
             />
             <Icon
               id="CloseIcon"
               x-show="mobileOpen"
               name="lucide:x"
-              class="pointer-events-none text-muted-500 dark:text-white size-6 aspect-auto"
+              class="pointer-events-none text-muted-500 dark:text-white size-8 aspect-auto"
             />
           </button>
           <template x-if="$store.app.isLoggedIn">

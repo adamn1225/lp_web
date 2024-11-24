@@ -7,6 +7,7 @@ interface Picture {
 
 interface Listing {
   bedrooms: number;
+  propertyType: string;
   pictures: Picture[];
   title: string;
   address: {
@@ -30,47 +31,47 @@ const featured: Listing[] = await fetchFeaturedListings();
   <style>
     .swiper-button-next,
     .swiper-button-prev {
-      color: #d86c6c; /* Change this to the desired color */
+      color: #f05252; /* Change this to the desired color */
       font-weight: 900;
-      width: 55px;
-      height: 55px;/* Optional: Add background for better visibility */
+      width: 20px;
+      height: 20px;/* Optional: Add background for better visibility */
       border-radius: 50%; /* Optional: Make the buttons circular */
       display: flex;
       align-items: center;
       justify-content: center;
       position: absolute;
-      top: 25%;
+      top: 60%;
       transform: translateY(-50%);
       z-index: 10;
     }
     .swiper-button-next {
-      right: 10px;
+      right: 5px;
     }
     .swiper-button-prev {
-      left: 10px;
+      left: 5px;
     }
 
     .swiper-pagination {
       position: absolute;
-      top: 33%; /* Adjust this value to position the dots correctly */
+      bottom: 0%; /* Adjust this value to position the dots correctly */
       left: 50%;
       transform: translateX(-50%);
       z-index: 10;
     }
 
     .swiper-container .swiper-pagination .swiper-pagination-bullet {
-      background: #d86c6c !important; /* Change this to the desired color */
+      background: #f05252 !important; /* Change this to the desired color */
     }
 
     .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
-      background: #d86c6c !important; /* Change this to the desired color */
+      background: #f05252 !important; /* Change this to the desired color */
     }
   </style>
 </head>
 
-{featured.map(({ bedrooms, pictures, title, address, bathrooms, prices, _id }) => (
+{featured.map(({ bedrooms, pictures, title, address, bathrooms, prices, _id, propertyType }) => (
     <a href={_id}> 
-    <article class="flex flex-col bg-white xs:m-0 xs:w-full shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative">
+    <article class="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative">
       <div class="swiper-container">
         <div class="swiper-wrapper">
           {pictures.slice(0, 3).map((picture, index) => (
@@ -81,49 +82,26 @@ const featured: Listing[] = await fetchFeaturedListings();
               </div>
             </div>
           ))}
+          <div class="swiper-pagination"></div>
+          <div class="xxs:hidden xs:hidden">
+          <!-- Add Navigation -->
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+</div>
         </div>
         <!-- Add Pagination -->
-        <div class="swiper-pagination"></div>
-        <!-- Add Navigation -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+
       </div>
     
-      <div class="xs:p-4 w-full md:p-5 bg-white flex flex-col justify-start h-2/3">
-        <div class="min-h-[100px]">
+      <div class="p-2 w-full bg-white flex flex-col justify-start">
+      
           <h4 class="font-sans text-wrap font-medium text-xl text-slate-900">{title}</h4>
           <p class="text-sm text-muted-400">{address.city}, {address.state}</p>
-        </div>
-        <hr class="border-t border-muted-200 dark:border-muted-800 my-5" />
-        <div class="h-max grid grid-cols-2 flex-row justify-center items-center">
-          <div class="flex flex-col items-center">
-            <div class="flex items-center gap-2 text-slate-900 dark:text-white">
-              <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path>
-                <path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path>
-                <path d="M12 4v6"></path>
-                <path d="M2 18h20"></path>
-              </svg>
-              <p class="text-xl font-bold">{bedrooms}</p>
-            </div>
-            <p class="text-md text-muted-400">Bedrooms</p>
-          </div>
-          <div class="flex flex-col items-center">
-            <div class="flex items-center gap-2 text-slate-900 dark:text-white">
-              <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path>
-                <line x1="10" y1="5" x2="8" y2="7"></line>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <line x1="7" y1="19" x2="7" y2="21"></line>
-                <line x1="17" y1="19" x2="17" y2="21"></line>
-              </svg>
-              <p class="text-xl font-bold">{bathrooms}</p>
-            </div>
-            <p class="text-md text-muted-400">Bathrooms</p>
-          </div>
-        </div>
-        <div class="flex min-h-min flex-row justify-center align-bottom">
-     <button class="lp-button mt-4">  View Details</button>
+        
+        <hr class="border border-muted-200 dark:border-muted-800 my-2" />
+
+        <div class="flex min-h-min flex-row justify-start align-bottom">
+     <button class="text-slate-900 font-extrabold mb-4">${prices.basePrice} Night</button>
         </div>
       </div>
     </article>
@@ -147,3 +125,31 @@ const featured: Listing[] = await fetchFeaturedListings();
     });
   });
 </script>
+
+        {/* <div class="h-max grid grid-cols-2 flex-row justify-center items-center">
+          <div class="flex flex-col items-center">
+            <div class="flex items-center gap-2 text-slate-900 dark:text-white">
+              <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path>
+                <path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path>
+                <path d="M12 4v6"></path>
+                <path d="M2 18h20"></path>
+              </svg>
+              <p class="text-lg font-bold">{propertyType}</p>
+            </div>
+            <p class="text-md text-muted-400">Property Type</p>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="flex items-center gap-2 text-slate-900 dark:text-white">
+              <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path>
+                <line x1="10" y1="5" x2="8" y2="7"></line>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <line x1="7" y1="19" x2="7" y2="21"></line>
+                <line x1="17" y1="19" x2="17" y2="21"></line>
+              </svg>
+              <p class="text-xl font-bold">{bathrooms}</p>
+            </div>
+            <p class="text-md text-muted-400">Bathrooms</p>
+          </div>
+        </div> */}

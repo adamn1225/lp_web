@@ -6,6 +6,7 @@ import '../styles/global.scss';
 import { addDays } from "date-fns";
 import { ClipLoader } from 'react-spinners';
 
+
 interface Listing {
   _id: string;
   title: string;
@@ -139,22 +140,21 @@ const AvailabilitySearch: React.FC = () => {
 
         <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full">
 
-        <form onSubmit={handleSubmit} className="z-10 xs:py-5 px-12 py-4 flex flex-col justify-center bg-white rounded-md w-full">
+        <form onSubmit={handleSubmit} className="z-10 xs:py-5 md:px-12 py-4 flex flex-col justify-center bg-white rounded-md w-full">
           
             <h1
-              className="font-extrabold text-slate-700 pb-4 text-2xl md:text-5xl text-center"
+              className="xs:text-xl xs:tracking-tighter xs:text-nowrap font-extrabold text-slate-700 pb-4 text-2xl md:text-5xl text-center"
             >
-              Find your perfect vacation rental
+              Vacation rentals in Myrtle Beach
             </h1>
             <h2
-              className="text-center text-slate-700 font-bold text-lg text-wrap"
+              className="xs:text-base text-center text-slate-700 font-bold text-lg text-wrap"
             >
-              Book your next vacation rental with us. We offer a wide selection of
-              vacation rentals in the most popular destinations.
+              Book your next vacation rental in Myrtle Beach with us.
             </h2>
           <div className="border-b border-zinc-900/20 w-full my-3"></div>
 
-            <div className="flex flex-col items-center justify-center w-full">
+          <div className="flex flex-col items-center justify-center w-full px-6">
               <div className="flex xs:flex-col md:flex-row justify-center items-center gap-4 w-full">
                   <div className="w-full flex flex-col">
                     <label className="text-slate-800 font-semibold" htmlFor="checkInDate">Check-In Date:</label>
@@ -297,7 +297,7 @@ const AvailabilitySearch: React.FC = () => {
         {available.length > 0 && (
           <div className="flex flex-col justify-start items-center pt-8">
             <h2 className="font-sans font-light border-b-2 border-slate-700 text-3xl text-cyan-900 bb-4 text-center">Available for Instant Booking!</h2>
-            <button onClick={clearResults} className="bg-red-500 text-white w-1/5 py-3 px-1 my-6 rounded-md">
+            <button onClick={clearResults} className="bg-red-600 text-white w-1/5 py-3 px-1 my-6 rounded-md">
               X Clear Results
             </button>
           </div>
@@ -309,63 +309,11 @@ const AvailabilitySearch: React.FC = () => {
               <article className="flex flex-col bg-white w shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md">
                 <div className="result-item">
                   <img className="w-full object-cover h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
-                  <div className="px-10 py-4 text-center flex flex-col gap-4">
-                    <h3 className="text-xl font-medium">{property.title}</h3>
+                  <div className="p-4 text-normal flex flex-col gap-4">
+                    <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
+                    <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
                     <div className="border border-stone-300"> </div>
-                    <p className="text-lg font-light">{property.address.city}, {property.address.state}</p>
-                    <div className="h-max grid grid-cols-2 flex-row justify-center items-center">
-                      <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-2 text-muted-900 dark:text-white">
-                          <svg
-                            className="size-8"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style={{ stroke: "currentColor" }}
-                            data-darkreader-inline-stroke=""
-                          ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M12 4v6"></path><path d="M2 18h20"></path>
-                          </svg>
-
-                          <p className="text-xl font-bold">{property.bedrooms}</p>
-                        </div>
-
-                        <p className="text-md text-muted-400">Bedrooms</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-2 text-muted-900 dark:text-white">
-                          <svg
-                            className="size-8"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style={{ stroke: "currentColor" }}
-                            data-darkreader-inline-stroke=""
-                          ><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path><line x1="10" y1="5" x2="8" y2="7"></line><line
-                            x1="2"
-                            y1="12"
-                            x2="22"
-                            y2="12"></line><line x1="7" y1="19" x2="7" y2="21"></line><line x1="17" y1="19" x2="17" y2="21"></line>
-                          </svg>
-
-                          <p className="text-xl font-bold">{property.bathrooms}</p>
-                        </div>
-
-                        <p className="text-md text-muted-400">Bathroom</p>
-                      </div>
-                  </div>
-                  <div className="flex min-h-min flex-row justify-center align-bottom"><button className="lp-button mt-4 ">View Details</button></div>
+                    <div className="flex min-h-min flex-row justify-start align-bottom"><button className="text-slate-900 font-extrabold mb-4">${property.prices.basePrice} Night</button></div>
                 </div>
                 </div>
               </article>
