@@ -66,11 +66,11 @@ body {
 }
 
 .swiper-container .swiper-pagination .swiper-pagination-bullet {
-  background: #0891B2 !important;
+  background: #d86c6c !important;
 }
 
 .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
-  background: #0891B2 !important;
+  background: #d86c6c !important;
 }
 
 article {
@@ -108,7 +108,7 @@ article {
 }
 
 .welcome-mat__content__inner__text {
-  color: #1e293b;
+  color: #0f172a;
 }
 
 [x-cloak] {
@@ -117,7 +117,7 @@ article {
 
 .custom-date-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #06b6d4;
+  box-shadow: 0 0 0 2px #0f172a;
 }
 
 .custom-date-input::-webkit-calendar-picker-indicator {
@@ -125,7 +125,7 @@ article {
 }
 
 .custom-date-input::selection {
-  background: #06b6d4;
+  background: #0f172a;
   color: white;
 }
 
@@ -133,7 +133,7 @@ article {
 .react-datepicker__day--in-selecting-range,
 .react-datepicker__day--in-range,
 .react-datepicker__day--keyboard-selected {
-  background-color: #06b6d4 !important;
+  background-color: #0f172a !important;
   color: white !important;
 }
 
@@ -154,10 +154,10 @@ article {
 .rdrCalendarWrapper .rdrDay span.rdrStartEdge,
 .rdrCalendarWrapper .rdrDay span.rdrEndEdge,
 .rdrCalendarWrapper .rdrDay span.rdrInRange {
-  background-color: #0e7490;
+  background-color: #0f172a;
   color: white;
 }
 
 .lp-button {
-  @apply bg-cyan-600 text-white rounded-lg px-4 py-2;
+  @apply bg-slate-900 text-white rounded-lg px-4 py-2;
 }

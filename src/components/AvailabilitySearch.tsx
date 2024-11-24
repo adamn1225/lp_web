@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/global.scss';
 import { addDays } from "date-fns";
+import { ClipLoader } from 'react-spinners';
 
 interface Listing {
   _id: string;
@@ -41,7 +42,8 @@ const AvailabilitySearch: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>('');
   const [cities, setCities] = useState<string[]>([]);
-  
+  const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
+
   const apiUrl = '/.netlify/functions/availability';
   const tagsApiUrl = '/.netlify/functions/tags';
 
@@ -100,6 +102,7 @@ const AvailabilitySearch: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSearchAttempted(true);
 
     try {
       const tagsQuery = selectedTags.join(',');
@@ -128,25 +131,37 @@ const AvailabilitySearch: React.FC = () => {
   // Clear the search results
   const clearResults = () => {
     setListings([]);
+    setSearchAttempted(false);
   };
 
   return (
-    <div className="static w-full h-full flex flex-col justify-center items-center gap-2">
-        <h1 className="font-extrabold text-secondary mb-4 text-3xl md:text-5xl text-center">Find your perfect vacation rental</h1>
-      <h2 className="text-center text-slate-50 font-bold pb-2 text-xl md:text-3xl text-wrap md:w-1/2">Book your next vacation rental with us. We offer a wide selection of vacation rentals in the most popular destinations.</h2>
-        <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full md:mb-16">
+    <div className="w-full flex flex-col justify-center items-center">
 
-        <form onSubmit={handleSubmit} className="w-full  z-10 xs:py-5 p-4 flex flex-col justify-center max-w-6xl min-h-72 bg-white px-6 rounded-3xl shadow-2xl">
+        <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full">
 
+        <form onSubmit={handleSubmit} className="z-10 xs:py-5 px-12 py-4 flex flex-col justify-center bg-white rounded-md w-full">
+          
+            <h1
+              className="font-extrabold text-slate-700 pb-4 text-2xl md:text-5xl text-center"
+            >
+              Find your perfect vacation rental
+            </h1>
+            <h2
+              className="text-center text-slate-700 font-bold text-lg text-wrap"
+            >
+              Book your next vacation rental with us. We offer a wide selection of
+              vacation rentals in the most popular destinations.
+            </h2>
+          <div className="border-b border-zinc-900/20 w-full my-3"></div>
 
-            <div className="flex flex-col gap-3 items-center justify-center w-full">
+            <div className="flex flex-col items-center justify-center w-full">
               <div className="flex xs:flex-col md:flex-row justify-center items-center gap-4 w-full">
                   <div className="w-full flex flex-col">
                     <label className="text-slate-800 font-semibold" htmlFor="checkInDate">Check-In Date:</label>
                     <DatePicker
                       selected={checkInDate}
                       onChange={(date: Date | null) => setCheckInDate(date)}
-                  className="border border-slate-300 rounded-md p-2 w-full custom-date-input"
+                  className="border border-slate-400 rounded-md p-2 w-full custom-date-input"
                       id="checkInDate"
                     />
                   </div>
@@ -155,79 +170,45 @@ const AvailabilitySearch: React.FC = () => {
                     <DatePicker
                       selected={checkOutDate}
                       onChange={(date: Date | null) => setCheckOutDate(date)}
-                      className="border border-slate-300 rounded-md p-2 w-full custom-date-input"
+                  className="border border-slate-400 rounded-md p-2 w-full custom-date-input"
                       id="checkOutDate"
                     />
                   </div>
-                <div className="w-3/5 flex flex-col">
-                  <label htmlFor="minOccupancy" className="text-slate-800 font-semibold max-w-min text-nowrap">
-                    How many guests?
-                  </label>
-                  <div className="flex w-full">
-                    <button
-                      type="button"
-                      id="decrement-button"
-                      onClick={() => setMinOccupancy(minOccupancy > 0 ? minOccupancy - 1 : 0)}
-                      className="bg-cyan-600 border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
-                    >
-                      <svg className="w-3 h-3 text-slate-50" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
-                      </svg>
-                    </button>
-                    <input
-                      type="number"
-                      id="minOccupancy"
-                      value={minOccupancy}
-                      onChange={(e) => setMinOccupancy(parseInt(e.target.value))}
-                      className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2.5 custom-number-input"
-                      placeholder="0"
-                      required
-                    />
-                    <button
-                      type="button"
-                      id="increment-button"
-                      onClick={() => setMinOccupancy(minOccupancy + 1)}
-                      className="bg-cyan-600 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
-                    >
-                      <svg className="w-3 h-3 text-slate-50" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
-                      </svg>
-                    </button>
-                  </div>
-              </div>
-
-            </div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {tagsLoading ? (
-                <p>Loading tags...</p>
-              ) : (
-                tags.map((tag) => (
+              <div className="mx-4 flex flex-col">
+                <label htmlFor="minOccupancy" className="text-slate-800 text-center font-semibold max-w-min text-nowrap w-full">
+                  How many guests?
+                </label>
+                <div className="flex w-full">
                   <button
-                    key={tag}
                     type="button"
-                    onClick={() => handleTagClick(tag)}
-                    className={`px-4 py-2 rounded ${selectedTags.includes(tag) ? 'bg-blue-500 text-white' : 'bg-gray-200'
-                      }`}
+                    id="decrement-button"
+                    onClick={() => setMinOccupancy(minOccupancy > 0 ? minOccupancy - 1 : 0)}
+                    className="bg-secondary border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
                   >
-                    {formatTag(tag)}
+                    <svg className="w-3 h-3 text-slate-50" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
+                    </svg>
                   </button>
-                ))
-              )}
-            </div>
-            <div className="flex gap-12 items-center justify-center pt-8">
-              <div className="w-full flex flex-col">
-                <label htmlFor="location" className="text-slate-800 font-semibold">Search by City</label>
-                <select
-                  id="location"
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="border border-slate-300 rounded-md p-2 w-full"
-                >
-                  <option value="">Select Location</option>
-                  {cities.map((city) => (
-                    <option key={city} value={city}>{city}</option>
-                  ))}
-                </select>
+                  <input
+                    type="number"
+                    id="minOccupancy"
+                    value={minOccupancy}
+                    onChange={(e) => setMinOccupancy(parseInt(e.target.value))}
+                    className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-slate-800 focus:border-slate-800 block w-full py-2.5 custom-number-input"
+                    placeholder="0"
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="increment-button"
+                    onClick={() => setMinOccupancy(minOccupancy + 1)}
+                    className="bg-secondary border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
+                  >
+                    <svg className="w-3 h-3 text-slate-50" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div className="w-full flex flex-col">
                 <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
@@ -235,7 +216,7 @@ const AvailabilitySearch: React.FC = () => {
                   id="bedroomAmount"
                   value={selectedBedroomAmount}
                   onChange={(e) => setSelectedBedroomAmount(e.target.value)}
-                  className="border border-slate-300 rounded-md p-2 w-full"
+                  className="border border-slate-400 rounded-md p-2 w-full"
                 >
                   <option value="">Select Bedroom Amount</option>
                   <option value="Studio">Studio</option>
@@ -248,21 +229,70 @@ const AvailabilitySearch: React.FC = () => {
                   <option value="7BR">Seven Bedroom</option>
                 </select>
               </div>
+              <div className="w-full flex flex-col">
+                <label htmlFor="location" className="text-slate-800 font-semibold">Search by City</label>
+                <select
+                  id="location"
+                  value={selectedLocation}
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  className="border border-slate-400 rounded-md p-2 w-full"
+                >
+                  <option value="">Select Location</option>
+                  {cities.map((city) => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-              <div className="md:w-2/3 flex align-middle justify-center h-full mt-4 gap-4">
+
+            <div className="flex gap-12 items-center justify-center pb-3 w-full">
+
+
+
+            </div>
+            <div className="mt-1 flex flex-wrap justify-center mx-0 gap-2 md:gap-4 w-full">
+              {tagsLoading ? (
+                <p>Loading tags...</p>
+              ) : (
+                tags.map((tag) => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => handleTagClick(tag)}
+                    className={`px-3 py-1 rounded ${selectedTags.includes(tag) ? 'bg-slate-800 text-white' : 'bg-zinc-300'
+                      }`}
+                  >
+                    {formatTag(tag)}
+                  </button>
+                ))
+              )}
+            </div>
+
+              <div className="flex align-middle justify-center h-full mt-4 gap-4">
               {/* <button className="text-grey-950 shadow-lg shadow-secondary/40 bg-slate-300 font-semibold py-1 px-4 rounded-md w-full max-w-min text-nowrap">
                   Advanced Search
                   </button> */}
                 
-              <button type="submit" className="flex items-stretch shadow-lg shadow-secondary/40 justify-stretch text-nowrap md:justify-center h-full bg-cyan-600 m-0 w-full md:w-4/5  py-3 px-1 font-bold text-xl rounded-md text-slate-50">
-                  <Search size={24} /> <h3>Search properties</h3>
+              <button type="submit" className="flex items-center gap-1 shadow-lg justify-stretch text-nowrap md:justify-center h-full bg-secondary m-0 w-full py-3 px-3 font-bold text-base rounded-md text-slate-50">
+                  <Search size={20} /> <p>Search properties</p>
                 </button>
               </div>
+            {searchAttempted && available.length === 0 && !loading && !error && (
+              <div className="flex flex-col items-center justify-center h-full">
+                <p>Sorry, there were no listings available in the search results.</p>
+                <p>Try changing your search request by location, bedroom, or by removing any of the selected tags.</p>
+              </div>
+            )}
             </div>
           </form>
         </div>
-      <div className="bg-stone-50 w-screen mb-64 pb-12 z-20 h-full overflow-auto">
-        {loading && <p>Loading...</p>}
+      <div className="bg-white w-screen mb-0 z-20 h-full overflow-auto">
+        {loading && (
+          <div className="flex flex-col items-center justify-center h-full">
+            <ClipLoader size={50} color={"#123abc"} loading={loading} />
+            <p>One moment while we load your results...</p>
+          </div>
+        )}
         {error && <p>Error: {error}</p>}
         {available.length > 0 && (
           <div className="flex flex-col justify-start items-center pt-8">
@@ -272,6 +302,7 @@ const AvailabilitySearch: React.FC = () => {
             </button>
           </div>
         )}
+
         <div className="search-results grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8 md:px-12 px-4">
           {available.map((property) => (
             <a href={property._id} key={property._id}>
