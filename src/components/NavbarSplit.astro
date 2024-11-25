@@ -97,57 +97,67 @@ import "../styles/global.scss";
 
         <ul
           id="RightLinks"
-          class="flex gap-6 [&>li>a]:h-full [&>li>a]:grid [&>li>a]:place-items-center"
+          class="flex flex-col lg:flex-row items-stretch gap-3 [&>li>a]:h-full [&>li>a]:grid [&>li>a]:place-items-center"
         >
           <li>
             <a
               href="/about"
-              class="hover:text-secondary hover:underline group duration-300"
+              class="hover:text-slate-900 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
             >
-              <span class="text-lg hover:text-secondary">About</span>
+              <span class="text-lg text-slate-900 hover:text-secondary"
+                >About</span
+              >
             </a>
           </li>
 
           <li>
             <a
               href="/linelanding"
-              class="hover:text-secondary hover:underline group duration-300"
+              class="py-2 px-3 group text-base transition-all duration-300 flex items-center justify-center gap-1"
             >
-              <span class="text-lg">Our Services</span>
+              <span class="text-lg text-text-slate-900 hover:text-secondary"
+                >Our Services</span
+              >
             </a>
           </li>
 
           <li>
             <a
               href="/property-management"
-              class="hover:text-secondary hover:underline group duration-300"
+              class="hover:text-secondary py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
             >
-              <span class="text-lg">Property Management</span>
+              <span class="text-lg text-text-slate-900 hover:text-secondary"
+                >Property Management</span
+              >
             </a>
           </li>
 
           <li>
             <a
               href="/properties"
-              class="hover:text-secondary hover:underline group duration-300"
+              class="py-2 px-3 group text-base text-muted-500 transition-all duration-300 flex items-center justify-center gap-1"
             >
-              <span class="text-lg">All Properties</span>
+              <span class="text-lg text-slate-900 hover:text-secondary"
+                >All Properties</span
+              >
             </a>
           </li>
 
           <li>
             <a
               href="/contact"
-              class="hover:text-secondary hover:underline group duration-300"
+              class="hover:text-secondary py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
             >
-              <span class="text-lg">Contact Us</span>
+              <span class="text-lg text-text-slate-900 hover:text-secondary"
+                >Contact Us</span
+              >
             </a>
           </li>
 
           <li>
             <a
               href="tel:1-800-888-8888"
-              class="hover:text-slate-900 py-2 px-3 leading-6 group text-base text-slate-900 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+              class="hover:text-slate-900 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
             >
               <button
                 class="bg-secondary w-full min-w-[120px] font-medium text-lg leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 shadow-md shadow-slate-500/30 rounded-3xl text-white"
@@ -161,7 +171,7 @@ import "../styles/global.scss";
             <li>
               <a
                 href="#"
-                class="hover:text-cyan-600 py-2 leading-6 text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300"
+                class="hover:text-secondary py-2 leading-6 text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300"
               >
                 <span class="text-lg text-cyan-900 hover:text-secondary"
                   >Vacation Guides</span
@@ -179,7 +189,7 @@ import "../styles/global.scss";
           <!-- whishlist -->
           <!-- <li class="hidden lg:block">
             <a href="/wishlist" class="inline-block text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300">
-              <Icon name="lucide:heart" class="hover:text-cyan-600 size-4 aspect-auto" />
+              <Icon name="lucide:heart" class="hover:text-secondary size-4 aspect-auto" />
             </a>
           </li> -->
 
@@ -188,7 +198,7 @@ import "../styles/global.scss";
             <li class="w-full md:w-3/5 mx-auto lg:mx-0 lg:w-auto flex items-center justify-center">
               <a
                 href="/signup"
-                class="!h-[46px] bg-cyan-600 w-full lg:w-auto min-w-[120px] font-medium text-sm leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 shadow-md shadow-cyan-500/30 rounded-3xl text-white"
+                class="!h-[46px] bg-secondary w-full lg:w-auto min-w-[120px] font-medium text-sm leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 shadow-md shadow-cyan-500/30 rounded-3xl text-white"
                 :class="{'shadow-lg shadow-cyan-500/30': scrolled}">Register</a
               >
             </li>
@@ -207,10 +217,10 @@ import "../styles/global.scss";
   <!-- <div class="flex justify-center w-full mt-4"><PropertySearch /></div> -->
   <!-- <div class="py-6 border-b shadow border-muted-100 flex gap-6 flex justify-center flex-wrap">
     
-     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-cyan-600 hover:text-cyan-50 active:bg-cyan-600 active:text-cyan-50 focus:bg-cyan-600 focus:text-cyan-50">Pets Allowed</button>
-     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-cyan-600 hover:text-cyan-50 active:bg-cyan-600 active:text-cyan-50 focus:bg-cyan-600 focus:text-cyan-50">Gym</button>
-     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-cyan-600 hover:text-cyan-50 active:bg-cyan-600 active:text-cyan-50 focus:bg-cyan-600 focus:text-cyan-50">Swimming Pool</button>
-     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-cyan-600 hover:text-cyan-50 active:bg-cyan-600 active:text-cyan-50 focus:bg-cyan-600 focus:text-cyan-50">Beachfront</button>
+     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-secondary hover:text-cyan-50 active:bg-secondary active:text-cyan-50 focus:bg-secondary focus:text-cyan-50">Pets Allowed</button>
+     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-secondary hover:text-cyan-50 active:bg-secondary active:text-cyan-50 focus:bg-secondary focus:text-cyan-50">Gym</button>
+     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-secondary hover:text-cyan-50 active:bg-secondary active:text-cyan-50 focus:bg-secondary focus:text-cyan-50">Swimming Pool</button>
+     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-secondary hover:text-cyan-50 active:bg-secondary active:text-cyan-50 focus:bg-secondary focus:text-cyan-50">Beachfront</button>
 
 
   </div> -->
