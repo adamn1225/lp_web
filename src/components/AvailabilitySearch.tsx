@@ -298,7 +298,7 @@ const AvailabilitySearch: React.FC = () => {
           <div className="flex flex-col justify-start items-center pt-8">
             <h2 className="font-sans font-light border-b-2 border-slate-700 text-3xl text-cyan-900 bb-4 text-center">Available for Instant Booking!</h2>
             <button onClick={clearResults} className="bg-red-600 text-white w-1/5 py-3 px-1 my-6 rounded-md">
-              X Clear Results
+              Clear Search Dispay
             </button>
           </div>
         )}

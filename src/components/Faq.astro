@@ -133,6 +133,12 @@ const faqs = [
         width: 100%;
         text-wrap: nowrap; /* Added text-wrap */
     }
+    .question-link:hover {
+        @apply text-secondary underline;
+    }
+     .question-link.active {
+        @apply text-secondary underline;
+    }
 
     @media (max-width: 640px) {
         .faq-container {
@@ -150,8 +156,10 @@ const faqs = [
 <script>
     function toggleAnswer(index) {
         const answerElement = document.getElementById(`answer-${index}`);
-        if (answerElement) {
+        const questionLink = document.getElementById(`question-${index}`);
+        if (answerElement && questionLink) {
             answerElement.classList.toggle("active");
+            questionLink.classList.toggle("active");
         }
     }
 
@@ -161,14 +169,25 @@ const faqs = [
             link.addEventListener("click", (event) => {
                 const target = event.target as HTMLElement;
                 const index = target.getAttribute("data-index");
-                toggleAnswer(index);
+                if (index !== null) {
+                    toggleAnswer(index);
+                }
             });
         });
+
+        // Ensure the first FAQ remains open
+        const firstAnswerElement = document.getElementById("answer-0");
+        const firstQuestionLink = document.getElementById("question-0");
+        if (firstAnswerElement && firstQuestionLink) {
+            firstAnswerElement.classList.add("active");
+            firstQuestionLink.classList.add("active");
+        }
     });
 </script>
 
 <section class="w-full p-4 flex flex-col items-center">
-    <h2 class="text-2xl font-bold mb-12">Frequently Asked Questions</h2>
+    <h2 class="text-4xl font-bold mb-6">Frequently Asked Questions</h2>
+    <hr class="w-[100px] border-2 border-secondary mb-6" />
     <div class="faq-container">
         {
             faqs.map((faq, index) => (
@@ -176,7 +195,7 @@ const faqs = [
                     <div class="md:m-0 md:faq-question justify-center border-b md:w-full md:p-0">
                         <a
                             href="javascript:void(0);"
-                            class="text-lg font-semibold text-cyan-600 hover:underline question-link"
+                            class={`text-lg font-semibold text-slate-800 hover:underline question-link ${index === 0 ? "active" : ""}`}
                             id={`question-${index}`}
                             data-index={index}
                         >
@@ -185,7 +204,7 @@ const faqs = [
                     </div>
                     <div
                         id={`answer-${index}`}
-                        class="faq-answer my-2 text-center"
+                        class={`faq-answer my-2 text-start text-slate-800 font-semibold ${index === 0 ? "active" : ""}`}
                     >
                         <HtmlContent html={faq.answer} />
                     </div>

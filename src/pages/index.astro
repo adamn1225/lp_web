@@ -23,18 +23,22 @@ import HeroAbout from "@components/sections/HeroAbout.astro";
     <div
       class="xs:pt-20 md:pt-36 flex flex-col justify-center items-center bg-white w-full bg-neutral-950/50 bg-center bg-no-repeat"
     >
+      <AvailabilitySearch client:only />
     </div>
-    <AvailabilitySearch client:only />
   </Section>
   <div class="mt-[-10px]">
-    <h2 class="font-bold text-slate-800 m-0 bg-white text-4xl pt-12 pb-3 text-center">
+    <h2 class="font-bold text-slate-800 m-0 text-4xl pt-12 pb-3 text-center">
       Featured Listings
     </h2>
     <div
-      class="pb-3 md:px-24 grid grid-cols-1 md:grid-cols-5 my-0 bg-white gap-6"
+      class="py-8 flex flex-col lg:flex-row gap-6 bg-no-repeat"
+      style="background-image: url('/images/shapes/1.svg');"
     >
-      <GuestyListings />
+      <div class="pb-3 md:px-24 grid grid-cols-1 md:grid-cols-5 my-0 gap-6">
+        <GuestyListings />
+      </div>
     </div>
+    <div>
     <span
       class="flex bg-white xs:px-16 justify-center h-full py-8 align-center"
     >
