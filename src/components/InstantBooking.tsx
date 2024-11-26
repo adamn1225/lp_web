@@ -125,7 +125,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
       <div className="flex flex-col justify-center items-center">
         <button
           type="button"
-          className="h-full shadow-lg shadow-secondary/40 lp-button m-0 drop-shadow-lg w-5/6 py-1 xs:mx-2 text-lg rounded-lg text-white"
+          className="h-full shadow-lg shadow-zinc-100 lp-button m-0 drop-shadow-lg w-5/6 py-1 xs:mx-2 text-lg rounded-lg text-white"
           onClick={openModal}
         >
           Get Pricing Details

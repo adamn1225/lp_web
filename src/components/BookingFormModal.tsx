@@ -320,11 +320,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         {currentStep === 1 && (
           <>
             <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(2); }} className="flex flex-col justify-center items-center w-full">
-
-
-
               <div className="w-full xs:px-1 md:px-4">
-                <div className='flex  flex-col items-center justify-around'>
+                <div className='flex flex-col items-center justify-around'>
                   <div className='flex justify-between gap-4 w-full'>
                     <InquireForm listingId={listingId} buttonText='Chat with an agent' />
                     <button
@@ -368,26 +365,24 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 </div>
                 <div className="mb-1 flex gap-4 w-full">
                   <div className="flex-1">
-                  
-                      <input
-                        type="text"
-                        id="firstName"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
-                        placeholder="First Name"
-                      />
+                    <input
+                      type="text"
+                      id="firstName"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
+                      placeholder="First Name"
+                    />
                   </div>
                   <div className="flex-1">
-                  
-                      <input
-                        type="text"
-                        id="lastName"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
-                        placeholder="Last name"
-                      />
+                    <input
+                      type="text"
+                      id="lastName"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
+                      placeholder="Last name"
+                    />
                   </div>
                 </div>
                 <div className="mb-1 md:flex gap-4 w-full">
@@ -400,7 +395,6 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="xs:mb-4 mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60 placeholder:text-slate-500"
-                      
                       />
                     </label>
                   </div>
@@ -449,12 +443,12 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 </div>
                 <TextArea />
                 {/* <button
-                  className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
-                  type="submit"
-                  disabled={loading}
-                >
-                  <CreditCard />  Proceed to Payment
-                </button> */}
+                className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+                type="submit"
+                disabled={loading}
+              >
+                <CreditCard />  Proceed to Payment
+              </button> */}
               </div>
             </form>
           </>

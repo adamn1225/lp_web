@@ -11,7 +11,7 @@ import "@/styles/global.scss";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" href="/images/favicon.png" type="image/png" />
+    <link rel="icon" type="image/svg+xml" href="/images/logo/logo.svg" />
     <meta name="generator" content={Astro.generator} />
 
     <link
@@ -27,7 +27,6 @@ import "@/styles/global.scss";
     />
 
     <slot name="head" />
-    <style></style>
   </head>
   <body>
     <div id="Top"></div>
@@ -35,24 +34,6 @@ import "@/styles/global.scss";
     <slot />
     <!-- <WhatsAppButton client:load /> -->
     <ScrollTop />
-    <script is:inline>
-      document.addEventListener("DOMContentLoaded", () => {
-        Swiper.use([Navigation, Pagination]);
-        new Swiper(".swiper-container", {
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
-          slidesPerView: 3,
-          spaceBetween: 10,
-          centeredSlides: true,
-        });
-      });
-    </script>
     <Footer />
 
     <script>
@@ -151,6 +132,19 @@ import "@/styles/global.scss";
           lazyVideoObserver.observe(lazyVideo);
         });
       });
+    </script>
+    <script is:inline>
+      document.getElementById("showHide").onclick = function () {
+        var theDiv = document.getElementById("listing2");
+        var doorText = this.querySelector(".door-text");
+        if (theDiv.style.display == "none" || theDiv.style.display === "") {
+          theDiv.style.display = "grid";
+          doorText.innerHTML = "Show Less";
+        } else {
+          theDiv.style.display = "none";
+          doorText.innerHTML = "Enter through here to see more listings";
+        }
+      };
     </script>
 
     <script is:inline>

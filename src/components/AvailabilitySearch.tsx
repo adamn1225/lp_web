@@ -156,25 +156,27 @@ const AvailabilitySearch: React.FC = () => {
 
           <div className="flex flex-col items-center justify-center w-full px-6">
               <div className="flex xs:flex-col md:flex-row justify-center items-center gap-4 w-full">
+                  <div className="w-2/3 flex gap-2">
+                    <div className="w-full flex flex-col">
+                      <label className="text-slate-800 font-semibold" htmlFor="checkInDate">Check-In Date:</label>
+                      <DatePicker
+                        selected={checkInDate}
+                        onChange={(date: Date | null) => setCheckInDate(date)}
+                    className="border border-slate-400 rounded-md p-2 w-full custom-date-input"
+                        id="checkInDate"
+                      />
+                    </div>
                   <div className="w-full flex flex-col">
-                    <label className="text-slate-800 font-semibold" htmlFor="checkInDate">Check-In Date:</label>
-                    <DatePicker
-                      selected={checkInDate}
-                      onChange={(date: Date | null) => setCheckInDate(date)}
-                  className="border border-slate-400 rounded-md p-2 w-full custom-date-input"
-                      id="checkInDate"
-                    />
-                  </div>
-                <div className="w-full flex flex-col">
-                    <label className="text-slate-800 font-semibold" htmlFor="checkOutDate">Check-Out Date:</label>
-                    <DatePicker
-                      selected={checkOutDate}
-                      onChange={(date: Date | null) => setCheckOutDate(date)}
-                  className="border border-slate-400 rounded-md p-2 w-full custom-date-input"
-                      id="checkOutDate"
-                    />
-                  </div>
-              <div className="mx-4 flex flex-col">
+                      <label className="text-slate-800 font-semibold" htmlFor="checkOutDate">Check-Out Date:</label>
+                      <DatePicker
+                        selected={checkOutDate}
+                        onChange={(date: Date | null) => setCheckOutDate(date)}
+                    className="border border-slate-400 rounded-md p-2 w-full custom-date-input"
+                        id="checkOutDate"
+                      />
+                    </div>
+                  
+              <div className="mx-4 flex flex-col hidden">
                 <label htmlFor="minOccupancy" className="text-slate-800 text-center font-semibold max-w-min text-nowrap w-full">
                   How many guests?
                 </label>
@@ -244,7 +246,7 @@ const AvailabilitySearch: React.FC = () => {
                 </select>
               </div>
             </div>
-
+            </div>
             <div className="flex gap-12 items-center justify-center pb-3 w-full">
 
 

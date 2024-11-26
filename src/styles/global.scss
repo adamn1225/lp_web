@@ -148,6 +148,7 @@ article {
 }
 
 .custom-number-input {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 
@@ -160,4 +161,59 @@ article {
 
 .lp-button {
   @apply bg-slate-900 text-white rounded-lg px-4 py-2;
+}
+
+.share-options {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.share-options a,
+.share-options button {
+  margin-bottom: 0.5rem;
+  text-decoration: underline;
+  color: #1a202c;
+  /* Adjust color as needed */
+}
+
+.share-options a:hover,
+.share-options button:hover {
+  color: #3182ce;
+  /* Adjust hover color as needed */
+}
+
+.text-display {
+  overflow-y: auto;
+  /* Enable vertical scrolling */
+  max-height: 100%;
+  /* Maximum height */
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1000;
 }

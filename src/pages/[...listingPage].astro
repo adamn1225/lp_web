@@ -236,22 +236,17 @@ function capitalizeFirstLetter(string: string) {
               </div>
               <!-- right -->
               <div
-                class="right flex xs:justify-center xs:items-center xs:w-full gap-4"
+                class="right flex flex-col justify-center items-end xs:w-full"
               >
-                <a
-                  href="#"
-                  class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline"
-                >
-                  <Icon name="h-4 aspect-square" name="lucide:share-2" />
-                  <span class="relative">Share</span>
-                </a>
-                <a
-                  href="#"
-                  class="gap-1 flex items-center font-medium text-muted-900 hover:text-primary-500 underline-offset-4 hover:underline"
-                >
-                  <Icon name="h-4 aspect-square" name="lucide:heart" />
-                  <span class="relative">Save</span>
-                </a>
+<a
+  href="javascript:void(0);"
+  class="gap-1 flex items-start font-medium px-3 py-1 rounded bg-zinc-300"
+  onclick="shareListing()"
+>
+  <Icon name="h-4 aspect-square" name="lucide:share-2" />
+  <span class="relative">Share</span>
+</a>
+<div id="fallback-share" class="mt-4"></div>
               </div>
             </div>
             <!-- property details -->
@@ -370,30 +365,8 @@ function capitalizeFirstLetter(string: string) {
 
                       <!-- bedroom -->
                       <div class="flex flex-col">
-                        <div
-                          class="flex items-center gap-2 text-muted-900 dark:text-white"
-                        >
-                          <svg
-                            class="size-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style="--darkreader-inline-stroke: currentColor;"
-                            data-darkreader-inline-stroke=""
-                            ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"
-                            ></path><path
-                              d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"
-                            ></path><path d="M12 4v6"></path><path d="M2 18h20"
-                            ></path>
-                          </svg>
-                          <p class="text-lg font-bold">{PropertyType}</p>
-                        </div>
+                       <p class="text-lg font-bold">{PropertyType}</p>
+                       
                         <p class="text-sm text-muted-400">Property Type</p>
                       </div>
                       <!-- bathroom -->
@@ -485,22 +458,13 @@ function capitalizeFirstLetter(string: string) {
                     <div
                       class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
                     >
-                      <div
+                      <!-- <div
                         class="flex items-center gap-2 justify-between text-sm"
                       >
                         <p class="text-muted-400">Type</p>
                         <p class="text-muted-900">{PropertyType}</p>
-                      </div>
-                      <div
-                        class="flex items-center gap-2 justify-between text-sm"
-                      >
-                        <p class="text-muted-400">Status</p>
-                        <p class="text-muted-900">Available</p>
-                      </div>
-                      <div class="flex items-center justify-between text-sm">
-                        <p class="text-muted-400">Price</p>
-                        <p class="text-muted-900">Available</p>
-                      </div>
+                      </div> -->
+
                       <span class="sm:hidden mt-12">
                         <InquireForm
                           listingId={listingId}
@@ -616,94 +580,12 @@ function capitalizeFirstLetter(string: string) {
   })}
 </div>
                         </div>
-                        <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">Property Type</p>
-                        </div>
                       </div>
 
-                      <!-- Amenity -->
-                      <div
-                        class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
-                      >
-                        <div
-                          class="font-bold gap-2 flex justify-center items-center text-muted-900"
-                        >
-                          <svg
-                            class="h-6"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style="--darkreader-inline-stroke: currentColor;"
-                            data-darkreader-inline-stroke=""
-                            ><path
-                              d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
-                            ></path><line x1="10" y1="5" x2="8" y2="7"
-                            ></line><line x1="2" y1="12" x2="22" y2="12"
-                            ></line><line x1="7" y1="19" x2="7" y2="21"
-                            ></line><line x1="17" y1="19" x2="17" y2="21"
-                            ></line>
-                          </svg>
-                          <span>{bedrooms}</span>
-                        </div>
-                        <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">bedrooms</p>
-                        </div>
-                      </div>
-
-                      <!-- Amenity -->
-
-                      <div
-                        class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
-                      >
-                        <div
-                          class="font-bold gap-2 flex justify-center items-center text-muted-900"
-                        >
-                          <svg
-                            class="h-6"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style="--darkreader-inline-stroke: currentColor;"
-                            data-darkreader-inline-stroke=""
-                            ><path
-                              d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
-                            ></path><line x1="10" y1="5" x2="8" y2="7"
-                            ></line><line x1="2" y1="12" x2="22" y2="12"
-                            ></line><line x1="7" y1="19" x2="7" y2="21"
-                            ></line><line x1="17" y1="19" x2="17" y2="21"
-                            ></line>
-                          </svg>
-                          <span>{bedrooms}</span>
-                        </div>
-                        <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">bedrooms</p>
-                        </div>
-                      </div>
-
-                      <div
-                        class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
-                      >
-                        <div
-                          class="font-bold gap-2 flex justify-center items-center text-muted-900"
-                        >
-                          <Icon class="text-2xl h-6" name="lucide:webcam" />
-                          <span></span>
-                        </div>
-                        <div class="amenity-content text-center">
-                          <p class="text-sm text-muted-400">WiFi</p>
-                        </div>
-                      </div>
+              
                     </div>
                   </div>
-                  <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
+                <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
  {reviews && reviews.length > 0 ? (
                   <>
                     <div class="grid grid-cols-2 gap-6 max-w-xl mb-8">
@@ -808,25 +690,6 @@ function capitalizeFirstLetter(string: string) {
                       <div
                         class="flex items-center gap-2 text-muted-900 dark:text-white"
                       >
-                        <svg
-                          class="size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          style="--darkreader-inline-stroke: currentColor;"
-                          data-darkreader-inline-stroke=""
-                          ><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"
-                          ></path><path
-                            d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"
-                          ></path><path d="M12 4v6"></path><path d="M2 18h20"
-                          ></path>
-                        </svg>
                         <p class="text-lg font-bold">{PropertyType}</p>
                       </div>
                       <p class="text-sm text-muted-400">Property Type</p>
@@ -918,22 +781,6 @@ function capitalizeFirstLetter(string: string) {
                   <div
                     class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
                   >
-                    <div
-                      class="flex items-center gap-2 justify-between text-sm"
-                    >
-                      <p class="text-muted-400">Type</p>
-                      <p class="text-muted-900">{PropertyType}</p>
-                    </div>
-                    <div
-                      class="flex items-center gap-2 justify-between text-sm"
-                    >
-                      <p class="text-muted-400">Status</p>
-                      <p class="text-muted-900">Available</p>
-                    </div>
-                    <div class="flex items-center justify-between text-sm">
-                      <p class="text-muted-400">Price</p>
-                      <p class="text-muted-900">Available</p>
-                    </div>
                     <span class="sm:hidden mt-12">
                       <InquireForm
                         listingId={listingId}
@@ -977,4 +824,47 @@ function capitalizeFirstLetter(string: string) {
       </div>
     </Section>
   </main>
+    <script is:inline>
+    function shareListing() {
+      const shareData = {
+        title: document.title,
+        text: 'Check out this property!',
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData)
+          .then(() => console.log('Successful share'))
+          .catch((error) => console.log('Error sharing', error));
+      } else {
+        // Fallback for browsers that do not support navigator.share
+        const shareUrl = encodeURIComponent(window.location.href);
+        const shareText = encodeURIComponent('Check out this property!');
+        const emailLink = `mailto:?subject=${shareData.title}&body=${shareText}%20${shareUrl}`;
+        const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+        const twitterLink = `https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`;
+        const smsLink = `sms:?body=${shareText}%20${shareUrl}`;
+
+        // Display fallback share options
+        const fallbackShareOptions = `
+          <div class="share-options">
+            <a href="${emailLink}" target="_blank">Email</a>
+            <a href="${facebookLink}" target="_blank">Facebook</a>
+            <a href="${twitterLink}" target="_blank">Twitter</a>
+            <a href="${smsLink}" target="_blank">SMS</a>
+            <button onclick="copyToClipboard('${shareUrl}')">Copy Link</button>
+          </div>
+        `;
+        document.getElementById('fallback-share').innerHTML = fallbackShareOptions;
+      }
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Link copied to clipboard');
+      }).catch((error) => {
+        console.error('Error copying text: ', error);
+      });
+    }
+  </script>
 </Layout>
