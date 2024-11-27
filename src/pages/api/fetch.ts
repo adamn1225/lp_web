@@ -46,7 +46,17 @@ async function fetchFromApi(url: string, options: RequestInit = {}) {
 
 // Specific function to fetch listings
 async function fetchFeaturedListings() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=5&skip=80');
+  const data = await fetchFromApi('https://open-api.guesty.com/v1//listings?tags=web_featured&limit=100&skip=0');
+  return data.results; // Return the listings
+}
+
+async function fetchFeaturedListingsTwo() {
+  const data = await fetchFromApi('https://open-api.guesty.com/v1//listings?tags=web_featured&limit=100&skip=100');
+  return data.results; // Return the listings
+}
+
+async function fetchFeaturedListingsThree() {
+  const data = await fetchFromApi('https://open-api.guesty.com/v1//listings?tags=web_featured&limit=100&skip=200');
   return data.results; // Return the listings
 }
 
@@ -65,4 +75,4 @@ async function fetchThreeHundred() {
   return data.results; // Return the reservations
 }
 
-export { fetchFeaturedListings, fetchOneHundred, fetchTwoHundred, fetchThreeHundred };
+export { fetchFeaturedListings, fetchOneHundred, fetchTwoHundred, fetchThreeHundred, fetchFeaturedListingsTwo, fetchFeaturedListingsThree };

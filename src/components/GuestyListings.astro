@@ -1,5 +1,9 @@
 ---
-import { fetchFeaturedListings } from '../pages/api/fetch';
+import {
+  fetchFeaturedListings,
+  fetchFeaturedListingsTwo,
+  fetchFeaturedListingsThree,
+} from "../pages/api/fetch";
 
 interface Picture {
   original: string;
@@ -21,21 +25,25 @@ interface Listing {
   _id: string;
 }
 
-const featured: Listing[] = await fetchFeaturedListings();
+// Fetch all listings concurrently and combine the results
+const [listingsOne, listingsTwo, listingsThree] = await Promise.all([
+  fetchFeaturedListings(),
+  fetchFeaturedListingsTwo(),
+  fetchFeaturedListingsThree(),
+]);
+
+const featured: Listing[] = [...listingsOne, ...listingsTwo, ...listingsThree];
 ---
 
 <head>
-
-
-
   <style>
     .swiper-button-next,
     .swiper-button-prev {
-      color: #f05252; /* Change this to the desired color */
+      color: #f05252;
       font-weight: 900;
       width: 20px;
-      height: 20px;/* Optional: Add background for better visibility */
-      border-radius: 50%; /* Optional: Make the buttons circular */
+      height: 20px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -53,103 +61,92 @@ const featured: Listing[] = await fetchFeaturedListings();
 
     .swiper-pagination {
       position: absolute;
-      bottom: 0%; /* Adjust this value to position the dots correctly */
+      bottom: 0%;
       left: 50%;
       transform: translateX(-50%);
       z-index: 10;
     }
 
     .swiper-container .swiper-pagination .swiper-pagination-bullet {
-      background: #f05252 !important; /* Change this to the desired color */
+      background: #f05252 !important;
     }
 
     .swiper-container .swiper-pagination .swiper-pagination-bullet-active {
-      background: #f05252 !important; /* Change this to the desired color */
+      background: #f05252 !important;
     }
   </style>
 </head>
 
-{featured.map(({ bedrooms, pictures, title, address, bathrooms, prices, _id, propertyType }) => (
-    <a href={_id}> 
-    <article class="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative">
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          {pictures.slice(0, 3).map((picture, index) => (
-            <div class="swiper-slide" id={`${_id}-${index}`}>
-              <div class="relative w-full h-48">
-                <img class="absolute inset0 w-full h-full object-cover" src={picture.original} alt={`Slide ${index + 1}`} />
-                <div class="absolute inset-0 bg-neutral-950/50"></div>
+{
+  featured.map(
+    ({
+      bedrooms,
+      pictures,
+      title,
+      address,
+      bathrooms,
+      prices,
+      _id,
+      propertyType,
+    }) => (
+      <a href={_id}>
+        <article class="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative">
+          <div class="swiper-container">
+            <div class="swiper-wrapper">
+              {pictures.slice(0, 3).map((picture, index) => (
+                <div class="swiper-slide" id={`${_id}-${index}`}>
+                  <div class="relative w-full h-48">
+                    <img
+                      class="absolute inset0 w-full h-full object-cover"
+                      src={picture.original}
+                      alt={`Slide ${index + 1}`}
+                    />
+                    <div class="absolute inset-0 bg-neutral-950/50" />
+                  </div>
+                </div>
+              ))}
+              <div class="swiper-pagination" />
+              <div class="xxs:hidden xs:hidden">
+                <div class="swiper-button-next" />
+                <div class="swiper-button-prev" />
               </div>
             </div>
-          ))}
-          <div class="swiper-pagination"></div>
-          <div class="xxs:hidden xs:hidden">
-          <!-- Add Navigation -->
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
-</div>
-        </div>
-        <!-- Add Pagination -->
+          </div>
 
-      </div>
-    
-      <div class="p-2 w-full bg-white flex flex-col justify-start">
-      
-          <h4 class="font-sans text-wrap font-medium text-xl text-slate-900">{title}</h4>
-          <p class="text-sm text-muted-400">{address.city}, {address.state}</p>
-        
-        <hr class="border border-muted-200 dark:border-muted-800 my-2" />
-
-        <div class="flex min-h-min flex-row justify-start align-bottom">
-     <button class="text-slate-900 font-extrabold mb-4">${prices.basePrice} Night</button>
-        </div>
-      </div>
-    </article>
-  </a>
-))}
+          <div class="p-2 w-full bg-white flex flex-col justify-start">
+            <h4 class="font-sans text-wrap font-medium text-xl text-slate-900">
+              {title}
+            </h4>
+            <p class="text-sm text-muted-400">
+              {address.city}, {address.state}
+            </p>
+            <hr class="border border-muted-200 dark:border-muted-800 my-2" />
+            <div class="flex min-h-min flex-row justify-start align-bottom">
+              <button class="text-slate-900 font-extrabold mb-4">
+                ${prices.basePrice} Night
+              </button>
+            </div>
+          </div>
+        </article>
+      </a>
+    ),
+  )
+}
 
 <script is:inline type="module">
-  import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs';
+  import Swiper from "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs";
 
-  document.querySelectorAll('.swiper-container').forEach(container => {
+  document.querySelectorAll(".swiper-container").forEach((container) => {
     new Swiper(container, {
       slidesPerView: 1,
       navigation: {
-        nextEl: container.querySelector('.swiper-button-next'),
-        prevEl: container.querySelector('.swiper-button-prev'),
+        nextEl: container.querySelector(".swiper-button-next"),
+        prevEl: container.querySelector(".swiper-button-prev"),
       },
       pagination: {
-        el: container.querySelector('.swiper-pagination'),
+        el: container.querySelector(".swiper-pagination"),
         clickable: true,
       },
     });
   });
 </script>
-
-        {/* <div class="h-max grid grid-cols-2 flex-row justify-center items-center">
-          <div class="flex flex-col items-center">
-            <div class="flex items-center gap-2 text-slate-900 dark:text-white">
-              <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"></path>
-                <path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path>
-                <path d="M12 4v6"></path>
-                <path d="M2 18h20"></path>
-              </svg>
-              <p class="text-lg font-bold">{propertyType}</p>
-            </div>
-            <p class="text-md text-muted-400">Property Type</p>
-          </div>
-          <div class="flex flex-col items-center">
-            <div class="flex items-center gap-2 text-slate-900 dark:text-white">
-              <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path>
-                <line x1="10" y1="5" x2="8" y2="7"></line>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <line x1="7" y1="19" x2="7" y2="21"></line>
-                <line x1="17" y1="19" x2="17" y2="21"></line>
-              </svg>
-              <p class="text-xl font-bold">{bathrooms}</p>
-            </div>
-            <p class="text-md text-muted-400">Bathrooms</p>
-          </div>
-        </div> */}
