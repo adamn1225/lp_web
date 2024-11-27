@@ -221,7 +221,7 @@ const AvailabilitySearch: React.FC = () => {
                   className="border border-slate-400 rounded-md p-2 w-full"
                 >
                   <option value="">Select Bedroom Amount</option>
-                  <option value="Studio">Studio</option>
+                  <option value="studio">Studio</option>
                   <option value="1BR">One Bedroom</option>
                   <option value="2BR">Two Bedroom</option>
                   <option value="3BR">Three Bedroom</option>
