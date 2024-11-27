@@ -38,8 +38,9 @@ module.exports = {
         },
       },
       colors: {
-        primary: colors.blue,
-        secondary: '#f05252',
+        primary: '#F8F0E5',
+        secondary: '#102C57',
+        foreground: '#FEFAF6',
         muted: colors.gray,
         info: colors.sky,
         success: colors.green,

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/global.scss';
 import { addDays } from "date-fns";
 import { ClipLoader } from 'react-spinners';
-
+import DateRangePickerComponent from './ui/DateRangePickerComponent';
 
 interface Listing {
   _id: string;
@@ -35,8 +34,7 @@ const AvailabilitySearch: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
-  const [checkInDate, setCheckInDate] = useState<Date | null>(new Date());
-  const [checkOutDate, setCheckOutDate] = useState<Date | null>(addDays(new Date(), 7));
+  const [dateRange, setDateRange] = useState([{ startDate: new Date(), endDate: addDays(new Date(), 7), key: 'selection' }]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [tagsLoading, setTagsLoading] = useState<boolean>(false);
@@ -46,35 +44,6 @@ const AvailabilitySearch: React.FC = () => {
   const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
 
   const apiUrl = '/.netlify/functions/availability';
-  const tagsApiUrl = '/.netlify/functions/tags';
-
-  const allowedTags = ["Ocean_front", "Ocean_view", "web_featured", "Public_pool", "Pets"];
-
-  const formatTag = (tag: string): string => {
-    return tag
-      .split('_')
-      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-  };
-
-  useEffect(() => {
-    const fetchTags = async () => {
-      setTagsLoading(true);
-      try {
-        const response = await fetch(tagsApiUrl);
-        const data: string[] = await response.json();
-        const filteredTags = data.filter((tag) => allowedTags.includes(tag));
-        setTags(filteredTags);
-      } catch (err) {
-        console.error('Error fetching tags:', err);
-        setError('Failed to load tags');
-      } finally {
-        setTagsLoading(false);
-      }
-    };
-
-    fetchTags();
-  }, []);
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -91,14 +60,6 @@ const AvailabilitySearch: React.FC = () => {
     fetchCities();
   }, []);
 
-  const handleTagClick = (tag: string) => {
-    setSelectedTags((prevSelected) =>
-      prevSelected.includes(tag)
-        ? prevSelected.filter((t) => t !== tag)
-        : [...prevSelected, tag]
-    );
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -107,7 +68,7 @@ const AvailabilitySearch: React.FC = () => {
 
     try {
       const tagsQuery = selectedTags.join(',');
-      const url = `${apiUrl}?checkIn=${encodeURIComponent(checkInDate?.toISOString().slice(0, 10) || '')}&checkOut=${encodeURIComponent(checkOutDate?.toISOString().slice(0, 10) || '')}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&tags=${encodeURIComponent(tagsQuery)}&city=${encodeURIComponent(selectedLocation)}&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
+      const url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&tags=${encodeURIComponent(tagsQuery)}&city=${encodeURIComponent(selectedLocation)}&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
       console.log('API URL:', url);
 
       const response = await fetch(url);
@@ -137,80 +98,17 @@ const AvailabilitySearch: React.FC = () => {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
-
-        <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full">
-
-        <form onSubmit={handleSubmit} className="z-10 xs:py-5 md:px-12 py-4 flex flex-col justify-center bg-white rounded-md w-full">
-          
-            <h1
-              className="xs:text-xl xs:tracking-tighter xs:text-nowrap font-extrabold text-slate-700 pb-4 text-2xl md:text-5xl text-center"
-            >
-              Vacation rentals in Myrtle Beach
-            </h1>
-            <h2
-              className="xs:text-base text-center text-slate-700 font-bold text-lg text-wrap"
-            >
-              Book your next vacation rental in Myrtle Beach with us.
-            </h2>
-          <div className="border-b border-zinc-900/20 w-full my-3"></div>
-
+      <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full">
+        <form onSubmit={handleSubmit} className="z-10 xs:py-5 flex flex-col justify-center bg-white rounded-md">
           <div className="flex flex-col items-center justify-center w-full px-6">
-              <div className="flex xs:flex-col md:flex-row justify-center items-center gap-4 w-full">
-                  <div className="w-2/3 flex gap-2">
-                    <div className="w-full flex flex-col">
-                      <label className="text-slate-800 font-semibold" htmlFor="checkInDate">Check-In Date:</label>
-                      <DatePicker
-                        selected={checkInDate}
-                        onChange={(date: Date | null) => setCheckInDate(date)}
-                    className="border border-slate-400 rounded-md p-2 w-full custom-date-input"
-                        id="checkInDate"
-                      />
-                    </div>
-                  <div className="w-full flex flex-col">
-                      <label className="text-slate-800 font-semibold" htmlFor="checkOutDate">Check-Out Date:</label>
-                      <DatePicker
-                        selected={checkOutDate}
-                        onChange={(date: Date | null) => setCheckOutDate(date)}
-                    className="border border-slate-400 rounded-md p-2 w-full custom-date-input"
-                        id="checkOutDate"
-                      />
-                    </div>
-                  
-              <div className="mx-4 flex flex-col hidden">
-                <label htmlFor="minOccupancy" className="text-slate-800 text-center font-semibold max-w-min text-nowrap w-full">
-                  How many guests?
-                </label>
-                <div className="flex w-full">
-                  <button
-                    type="button"
-                    id="decrement-button"
-                    onClick={() => setMinOccupancy(minOccupancy > 0 ? minOccupancy - 1 : 0)}
-                    className="bg-secondary border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
-                  >
-                    <svg className="w-3 h-3 text-slate-50" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16" />
-                    </svg>
-                  </button>
-                  <input
-                    type="number"
-                    id="minOccupancy"
-                    value={minOccupancy}
-                    onChange={(e) => setMinOccupancy(parseInt(e.target.value))}
-                    className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-slate-800 focus:border-slate-800 block w-full py-2.5 custom-number-input"
-                    placeholder="0"
-                    required
-                  />
-                  <button
-                    type="button"
-                    id="increment-button"
-                    onClick={() => setMinOccupancy(minOccupancy + 1)}
-                    className="bg-secondary border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
-                  >
-                    <svg className="w-3 h-3 text-slate-50" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16" />
-                    </svg>
-                  </button>
-                </div>
+            <div className="flex xs:flex-col md:flex-row justify-center items-center gap-1 w-full">
+              <div className="w-full flex flex-col">
+                <label className="text-slate-800 font-semibold" htmlFor="dateRange">Select Dates:</label>
+                <DateRangePickerComponent
+                  state={dateRange}
+                  setState={setDateRange}
+                  disabledDates={[]} // Add any disabled dates here
+                />
               </div>
               <div className="w-full flex flex-col">
                 <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
@@ -218,17 +116,17 @@ const AvailabilitySearch: React.FC = () => {
                   id="bedroomAmount"
                   value={selectedBedroomAmount}
                   onChange={(e) => setSelectedBedroomAmount(e.target.value)}
-                  className="border border-slate-400 rounded-md p-2 w-full"
+                  className="border rounded-xl border-slate-400 p-2 w-full"
                 >
                   <option value="">Select Bedroom Amount</option>
                   <option value="studio">Studio</option>
-                  <option value="1BR">One Bedroom</option>
-                  <option value="2BR">Two Bedroom</option>
-                  <option value="3BR">Three Bedroom</option>
-                  <option value="4BR">Four Bedroom</option>
-                  <option value="5BR">Five Bedroom</option>
-                  <option value="6BR">Six Bedroom</option>
-                  <option value="7BR">Seven Bedroom</option>
+                  <option value="1BR">1 Bedroom</option>
+                  <option value="2BR">2 Bedroom</option>
+                  <option value="3BR">3 Bedroom</option>
+                  <option value="4BR">4 Bedroom</option>
+                  <option value="5BR">5 Bedroom</option>
+                  <option value="6BR">6 Bedroom</option>
+                  <option value="7BR">7 Bedroom</option>
                 </select>
               </div>
               <div className="w-full flex flex-col">
@@ -237,7 +135,7 @@ const AvailabilitySearch: React.FC = () => {
                   id="location"
                   value={selectedLocation}
                   onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="border border-slate-400 rounded-md p-2 w-full"
+                  className="border border-slate-400 rounded-xl p-2 w-full"
                 >
                   <option value="">Select Location</option>
                   {cities.map((city) => (
@@ -245,53 +143,27 @@ const AvailabilitySearch: React.FC = () => {
                   ))}
                 </select>
               </div>
-            </div>
-            </div>
-            <div className="flex gap-12 items-center justify-center pb-3 w-full">
-
-
-
-            </div>
-            <div className="mt-1 flex flex-wrap justify-center mx-0 gap-2 md:gap-4 w-full">
-              {tagsLoading ? (
-                <p>Loading tags...</p>
-              ) : (
-                tags.map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => handleTagClick(tag)}
-                    className={`px-3 py-1 rounded ${selectedTags.includes(tag) ? 'bg-slate-800 text-white' : 'bg-zinc-300'
-                      }`}
-                  >
-                    {formatTag(tag)}
-                  </button>
-                ))
-              )}
-            </div>
-
-              <div className="flex align-middle justify-center h-full mt-4 gap-4">
-              {/* <button className="text-grey-950 shadow-lg shadow-secondary/40 bg-slate-300 font-semibold py-1 px-4 rounded-md w-full max-w-min text-nowrap">
-                  Advanced Search
-                  </button> */}
-                
-              <button type="submit" className="flex items-center gap-1 shadow-lg justify-stretch text-nowrap md:justify-center h-full bg-secondary m-0 w-full py-3 px-3 font-bold text-base rounded-md text-slate-50">
-                  <Search size={20} /> <p>Search properties</p>
+              <div className="h-full flex items-end">
+                <button type="submit" className="w-fit h-fit flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center  bg-secondary m-0  pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
+                  <Search size={20} /> <p>Search</p>
                 </button>
               </div>
-            {searchAttempted && available.length === 0 && !loading && !error && (
-              <div className="flex flex-col items-center justify-center h-full">
-                <p>Sorry, there were no listings available in the search results.</p>
-                <p>Try changing your search request by location, bedroom, or by removing any of the selected tags.</p>
-              </div>
-            )}
             </div>
-          </form>
-        </div>
+          </div>
+          <div className="flex gap-12 items-center justify-center pb-3 w-full"></div>
+          {searchAttempted && available.length === 0 && !loading && !error && (
+            <div className="flex flex-col items-center justify-center h-full">
+              <p>Sorry, there were no listings available in the search results.</p>
+              <p>Try changing your search request by location, bedroom, or by removing any of the selected tags.</p>
+            </div>
+          )}
+        </form>
+      </div>
+      <div className="border-b border-zinc-900/20 w-full my-3"></div>
       <div className="bg-white w-screen mb-0 z-20 h-full overflow-auto">
         {loading && (
           <div className="flex flex-col items-center justify-center h-full">
-            <ClipLoader size={50} color={"#123abc"} loading={loading} />
+            <ClipLoader size={50} color={"#102C57"} loading={loading} />
             <p>One moment while we load your results...</p>
           </div>
         )}
@@ -300,11 +172,10 @@ const AvailabilitySearch: React.FC = () => {
           <div className="flex flex-col justify-start items-center pt-8">
             <h2 className="font-sans font-light border-b-2 border-slate-700 text-3xl text-cyan-900 bb-4 text-center">Available for Instant Booking!</h2>
             <button onClick={clearResults} className="bg-red-600 text-white w-1/5 py-3 px-1 my-6 rounded-md">
-              Clear Search Dispay
+              Clear Search Display
             </button>
           </div>
         )}
-
         <div className="search-results grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8 md:px-12 px-4">
           {available.map((property) => (
             <a href={property._id} key={property._id}>
@@ -316,7 +187,7 @@ const AvailabilitySearch: React.FC = () => {
                     <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
                     <div className="border border-stone-300"> </div>
                     <div className="flex min-h-min flex-row justify-start align-bottom"><button className="text-slate-900 font-extrabold mb-4">${property.prices.basePrice} Night</button></div>
-                </div>
+                  </div>
                 </div>
               </article>
             </a>

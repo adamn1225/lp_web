@@ -1,0 +1,37 @@
+---
+import Page2 from "@components/Page2.astro";
+import GuestyListings from "../components/GuestyListings.astro";
+---
+
+<div class="mt-[-10px]">
+    <h2 class="font-bold text-slate-800 m-0 text-4xl pt-12 pb-3 text-center">
+        Featured Listings
+    </h2>
+    <div
+        class="py-8 flex flex-col lg:flex-row gap-6 bg-no-repeat"
+        style="background-image: url('/images/shapes/1.svg');"
+    >
+        <div class="pb-3 md:px-24 grid grid-cols-1 md:grid-cols-5 my-0 gap-6">
+            <GuestyListings />
+        </div>
+    </div>
+    <div>
+        <span
+            class="flex bg-white xs:px-16 justify-center h-full py-8 align-center"
+        >
+            <button
+                id="showHide"
+                class="bg-secondary md:text-2xl font-bold py-2 px-4 rounded-md text-slate-100"
+                ><span class="door-text">More Listings Here</span></button
+            >
+        </span>
+        <div class="w-full bg-white">
+            <span
+                id="listing2"
+                class="hidden py-7 px-6 md:px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
+            >
+                <Page2 />
+            </span>
+        </div>
+    </div>
+</div>

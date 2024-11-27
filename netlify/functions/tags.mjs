@@ -1,10 +1,13 @@
 import fetch from 'node-fetch';
 
 export const handler = async (event, context) => {
-    const tagsApiUrl = 'https://open-api.guesty.com/v1/listings/tags';
+    const { tags } = event.queryStringParameters || {};
+    const apiUrl = tags
+        ? `https://open-api.guesty.com/v1/listings?tags=${tags}&limit=100&skip=0`
+        : 'https://open-api.guesty.com/v1/listings/tags';
 
     try {
-        const response = await fetch(tagsApiUrl, {
+        const response = await fetch(apiUrl, {
             headers: {
                 'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
                 'Accept': 'application/json'
@@ -34,7 +37,7 @@ export const handler = async (event, context) => {
             body: JSON.stringify(data)
         };
     } catch (error) {
-        console.error('Error fetching tags:', error);
+        console.error('Error fetching data:', error);
         return {
             statusCode: 500,
             headers: {

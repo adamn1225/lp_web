@@ -13,19 +13,17 @@ import "../styles/global.scss";
   x-on:mouseleave="megamenuOpened = false"
   role="navigation"
   aria-label="main navigation"
-  class="absolute top-0 start-0 w-full z-50 bg-slate-50 border-slate-100"
+  class="absolute top-0 start-0 w-full z-50 bg-white border-slate-100"
 >
   <div
     id="header"
-    :class="flex flex-row justify-center scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b w-full z-50 border-muted-200 shadow-muted-300/30 : 'lg:bg-transparent' "
+    :class="flex flex-row justify-between scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b w-full z-50 border-muted-200 shadow-muted-300/30' : 'lg:bg-transparent'"
   >
     <header
       id="MainHeader"
-      class="min-h-[70px] w-full max-w-full xxs:px-3 flex items-center shadow lg:shadow-md lg:px-8"
+      class="min-h-[70px] w-full max-w-full xxs:px-3 flex justify-between items-center shadow lg:shadow-md lg:px-8"
     >
-      <div
-        class="flex justify-evenly lg:justify-start w-full lg:w-auto min-h-[3.25rem]"
-      >
+      <div class="flex items-center gap-4">
         <a href="/" class="flex gap-4 py-2">
           <img
             src="/images/lp-final-top.png"
@@ -33,197 +31,118 @@ import "../styles/global.scss";
             class="xs:w-44 xs:h-8 md:w-96"
           />
         </a>
-
-        <div class="flex items-stretch gap-3">
-          <button
-            id="MenuToggle"
-            class="lg:hidden"
-            @click="mobileOpen = !mobileOpen"
-          >
-            <Icon
-              id="OpenIcon"
-              x-show="!mobileOpen"
-              name="lucide:menu"
-              class="pointer-events-none text-muted-500 dark:text-white size-8 aspect-auto"
-            />
-            <Icon
-              id="CloseIcon"
-              x-show="mobileOpen"
-              name="lucide:x"
-              class="pointer-events-none text-muted-500 dark:text-white size-8 aspect-auto"
-            />
-          </button>
-          <template x-if="$store.app.isLoggedIn">
-            <div class="lg:hidden flex justify-center">
-              <AccountMenu />
-            </div>
-          </template>
-        </div>
       </div>
-      <div class="xs:hidden sm:hidden md:hidden lg:flex items-center"></div>
-      <nav
-        aria-label="Main Navigation"
-        x-cloak
-        class="absolute top-full bg-white lg:bg-transparent start-0 lg:static px-3 lg:px-0 items-stretch justify-between w-full"
-        :class="mobileOpen ? 'block pt-5 pb-8 lg:p-0 -translate-y-px border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20': 'hidden lg:flex'"
-      >
-        <ul
-          id="LeftLinks"
-          class="flex flex-col lg:flex-row items-center [&>li>a]:h-full"
-        >
-          <!-- <li>
-            <a href="#" class="py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1">
-              <span>Rentals</span>
-              <Icon name="lucide:chevron-down" class="size-4 group-hover:rotate-180 transition-transform duration-300" />
-            </a>
-          </li>
 
-            <a
-              href="#"
-              x-on:mouseover="megamenuOpened = true, openedMegamenu = 'megamenu-2'"
-              @click="megamenuOpened = true, openedMegamenu = 'megamenu-2'"
-              class="py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
-            >
-              <span>Rentals</span>
-              <Icon name="lucide:chevron-down" class="size-4 group-hover:rotate-180 transition-transform duration-300" />
-            </a>
-         </li>
-          <li>
-            <a href="/about" class="py-2 px-3 leading-6 grid place-items-center text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300">
-              <span>About</span>
-            </a>
-          </li> -->
-        </ul>
-
-        <ul
-          id="RightLinks"
-          class="flex flex-col lg:flex-row items-stretch gap-3 [&>li>a]:h-full [&>li>a]:grid [&>li>a]:place-items-center"
-        >
-          <li>
-            <a
-              href="/about"
-              class="hover:text-slate-900 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
-            >
-              <span class="text-lg text-slate-900 hover:text-secondary"
-                >About</span
-              >
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="/linelanding"
-              class="py-2 px-3 group text-base transition-all duration-300 flex items-center justify-center gap-1"
-            >
-              <span class="text-lg text-text-slate-900 hover:text-secondary"
-                >Our Services</span
-              >
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="/property-management"
-              class="hover:text-secondary py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
-            >
-              <span class="text-lg text-text-slate-900 hover:text-secondary"
-                >Property Management</span
-              >
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="/properties"
-              class="py-2 px-3 group text-base text-muted-500 transition-all duration-300 flex items-center justify-center gap-1"
-            >
-              <span class="text-lg text-slate-900 hover:text-secondary"
-                >All Properties</span
-              >
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="/contact"
-              class="hover:text-secondary py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
-            >
-              <span class="text-lg text-text-slate-900 hover:text-secondary"
-                >Contact Us</span
-              >
-            </a>
-          </li>
-
-          <li>
-            <a
-              href="tel:1-800-888-8888"
-              class="hover:text-slate-900 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
-            >
-              <button
-                class="bg-secondary w-full min-w-[120px] font-medium text-lg leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 shadow-md shadow-slate-500/30 rounded-3xl text-white"
-              >
-                1-800-888-8888</button
-              >
-            </a>
-          </li>
-
-          <!-- <template x-if="$store.app.isLoggedIn === false">
-            <li>
-              <a
-                href="#"
-                class="hover:text-secondary py-2 leading-6 text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300"
-              >
-                <span class="text-lg text-cyan-900 hover:text-secondary"
-                  >Vacation Guides</span
-                >
-              </a>
-            </li>
-          </template> -->
-          <!-- search -->
-          <!-- <li class="search lg:ps-6 hidden lg:block" :class="scrolled  ||  megamenuOpened ? 'border-muted-200 dark:border-muted-800': 'border-transparent',{'lg:border-l':!$store.app.isLoggedIn}">
-            <a href="#" class="inline-block text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300">
-              <Icon name="lucide:search" class="size-4" />
-            </a>
-          </li> -->
-
-          <!-- whishlist -->
-          <!-- <li class="hidden lg:block">
-            <a href="/wishlist" class="inline-block text-base text-muted-500 dark:text-muted-400 hover:text-muted-600 dark:hover:text-white transition-all duration-300">
-              <Icon name="lucide:heart" class="hover:text-secondary size-4 aspect-auto" />
-            </a>
-          </li> -->
-
-          <!-- register -->
-          <!-- <template x-if="$store.app.isLoggedIn === false">
-            <li class="w-full md:w-3/5 mx-auto lg:mx-0 lg:w-auto flex items-center justify-center">
-              <a
-                href="/signup"
-                class="!h-[46px] bg-secondary w-full lg:w-auto min-w-[120px] font-medium text-sm leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 shadow-md shadow-cyan-500/30 rounded-3xl text-white"
-                :class="{'shadow-lg shadow-cyan-500/30': scrolled}">Register</a
-              >
-            </li>
-          </template>
-
-          <template x-if="$store.app.isLoggedIn">
-            <div class="hidden lg:flex items-center justify-center">
-              <AccountMenu />
-            </div>
-          </template> -->
-        </ul>
-      </nav>
+      <div class="flex items-center gap-3">
+        <button id="MenuToggle" @click="mobileOpen = !mobileOpen">
+          <Icon
+            id="OpenIcon"
+            x-show="!mobileOpen"
+            name="lucide:menu"
+            class="pointer-events-none text-muted-500 dark:text-white size-8 aspect-auto"
+          />
+          <Icon
+            id="CloseIcon"
+            x-show="mobileOpen"
+            name="lucide:x"
+            class="pointer-events-none text-muted-500 dark:text-white size-8 aspect-auto"
+          />
+        </button>
+        <template x-if="$store.app.isLoggedIn">
+          <div class="flex justify-center">
+            <AccountMenu />
+          </div>
+        </template>
+      </div>
     </header>
+    <nav
+      aria-label="Main Navigation"
+      x-cloak
+      class="absolute top-full right-0 bg-white lg:bg-transparent lg:static px-3 lg:px-0"
+      :class="mobileOpen ? 'block pt-5 pb-8 lg:p-0 right-0 -translate-y-px border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20' : 'hidden'"
+    >
+      <ul
+        id="LeftLinks"
+        class="flex flex-col lg:flex-col justify-center items-center [&>li>a]:h-full"
+      >
+        <!-- Add your navigation links here -->
+      </ul>
+
+      <ul
+        id="RightLinks"
+        class="flex flex-col lg:flex-col justify-center items-stretch gap-3 [&>li>a]:h-full [&>li>a]:grid [&>li>a]:place-items-center"
+      >
+        <li>
+          <a
+            href="/about"
+            class="hover:text-slate-900 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+          >
+            <span class="text-lg text-slate-900 hover:text-secondary"
+              >About</span
+            >
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="/linelanding"
+            class="py-2 px-3 group text-base transition-all duration-300 flex items-center justify-center gap-1"
+          >
+            <span class="text-lg text-text-slate-900 hover:text-secondary"
+              >Our Services</span
+            >
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="/property-management"
+            class="hover:text-secondary py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+          >
+            <span class="text-lg text-text-slate-900 hover:text-secondary"
+              >Property Management</span
+            >
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="/properties"
+            class="py-2 px-3 group text-base text-muted-500 transition-all duration-300 flex items-center justify-center gap-1"
+          >
+            <span class="text-lg text-slate-900 hover:text-secondary"
+              >All Properties</span
+            >
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="/contact"
+            class="hover:text-secondary py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+          >
+            <span class="text-lg text-text-slate-900 hover:text-secondary"
+              >Contact Us</span
+            >
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="tel:1-800-888-8888"
+            class="hover:text-slate-900 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+          >
+            <button
+              class="bg-secondary w-full min-w-[120px] font-medium text-lg leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 shadow-md shadow-slate-500/30 rounded-3xl text-white"
+            >
+              1-800-888-8888
+            </button>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
   <MegaMenu />
-  <!-- <div class="flex justify-center w-full mt-4"><PropertySearch /></div> -->
-  <!-- <div class="py-6 border-b shadow border-muted-100 flex gap-6 flex justify-center flex-wrap">
-    
-     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-secondary hover:text-cyan-50 active:bg-secondary active:text-cyan-50 focus:bg-secondary focus:text-cyan-50">Pets Allowed</button>
-     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-secondary hover:text-cyan-50 active:bg-secondary active:text-cyan-50 focus:bg-secondary focus:text-cyan-50">Gym</button>
-     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-secondary hover:text-cyan-50 active:bg-secondary active:text-cyan-50 focus:bg-secondary focus:text-cyan-50">Swimming Pool</button>
-     <button class=" inline-block whitespace-nowrap leading-[2.5] px-3 rounded-full sx: text-sm text-md bg-muted-200 text-muted-900 shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] text-md shadow-[rgba(0,0,15,0.5)_0px_0px_5px_1px] shadow-cyan-500/50 hover:bg-secondary hover:text-cyan-50 active:bg-secondary active:text-cyan-50 focus:bg-secondary focus:text-cyan-50">Beachfront</button>
-
-
-  </div> -->
 </div>
 
 <script>

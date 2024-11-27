@@ -2,81 +2,44 @@
 import Layout from "@layouts/Split.astro";
 import Section from "@components/Section.astro";
 import Page2 from "@components/Page2.astro";
-import { contentfulClient } from "../lib/contentful";
-import type { BlogPost } from "../lib/contentful";
-import AvailabilitySearch from "../components/AvailabilitySearch";
 import GuestyListings from "../components/GuestyListings.astro";
-import Testimonials from "@components/sections/Testimonials.astro";
-import Process from "@components/sections/Process.astro";
-import SideFeatureOne from "@components/sections/SideFeatureOne.astro";
-import SideFeatureTwo from "@components/sections/SideFeatureTwo.astro";
-import SideIllustrations from "@components/sections/SideIllustrations.astro";
-import Faq from "@components/Faq.astro";
-import HeroAbout from "@components/sections/HeroAbout.astro";
+import App from "../components/App";
+import TagNavigation from "@components/TagNavigation";
 ---
 
 <Layout title="Properties">
   <Section>
-    <!-- <div
-      class="pt-36 flex flex-col justify-center items-center bg-[url('https://assets.guesty.com/image/upload/v1713834676/kop5uviux1z7u9ywluaj.jpg')] bg-blend-overlay w-full bg-cover bg-neutral-950/50 bg-center bg-no-repeat"
-    > -->
     <div
-      class="xs:pt-20 md:pt-36 flex flex-col justify-center items-center bg-white w-full bg-neutral-950/50 bg-center bg-no-repeat"
+      class="xs:pt-20 md:pt-24 flex flex-col justify-center items-center bg-white w-full bg-neutral-950/50 bg-center bg-no-repeat"
     >
-      <AvailabilitySearch client:only />
+      <App client:only="react" />
+      <TagNavigation client:only />
     </div>
-  </Section>
-  <div class="mt-[-10px]">
-    <h2 class="font-bold text-slate-800 m-0 text-4xl pt-12 pb-3 text-center">
-      Featured Listings
-    </h2>
-    <div
-      class="py-8 flex flex-col lg:flex-row gap-6 bg-no-repeat"
-      style="background-image: url('/images/shapes/1.svg');"
-    >
-      <div class="pb-3 md:px-24 grid grid-cols-1 md:grid-cols-5 my-0 gap-6">
-        <GuestyListings />
-      </div>
-    </div>
-    <div>
-      <span
-        class="flex bg-white xs:px-16 justify-center h-full py-8 align-center"
-      >
-        <button
+    <div class="mt-10">
+
+        <div class="md:px-24 grid grid-cols-1 md:grid-cols-5 my-0 gap-6">
+          <GuestyListings />
+        </div>
+
+        <div>
+          <span
+          class="flex bg-white xs:px-16 justify-center h-full py-2 align-center"
+          >
+          <button
           id="showHide"
           class="bg-secondary md:text-2xl font-bold py-2 px-4 rounded-md text-slate-100"
           ><span class="door-text">More Listings Here</span></button
-        >
-      </span>
-      <div class="w-full bg-white">
-        <span
-          id="listing2"
-          class="hidden py-7 px-6 md:px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
-        >
-          <Page2 />
+          >
         </span>
+          <div class="w-full bg-white">
+          <span
+            id="listing2"
+            class="hidden py-7 px-6 md:px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
+            >
+            <Page2 />
+          </span>
+        </div>
       </div>
     </div>
-
-    <!-- <div class="md:mb-12 md:mt-20">
-    <HeroAbout />
-  </div>
-
-  <div class="md:mb-12 mt-20">
-    <SideIllustrations />
-  </div>
-  <div class="md:my-12"><Testimonials /></div>
-  <div class="md:my-12"><SideFeatureOne /></div>
-
-  <div class="overflow-hidden">
-    <Process />
-  </div>
-
-  <div class="md:my-12">
-    <SideFeatureTwo />
-  </div>
-  <div class="md:my-12">
-    <Faq />
-  </div> -->
-  </div>
+  </Section>
 </Layout>
