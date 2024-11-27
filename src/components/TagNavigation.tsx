@@ -54,15 +54,15 @@ const TagNavigation: React.FC = () => {
     const getIconForTag = (tag: string) => {
         switch (tag) {
             case "Ocean_front":
-                return <FiSun />;
+                return <FiSun className="text-foreground size-7"/>;
             case "Ocean_view":
-                return <FiEye />;
+                return <FiEye className="text-foreground size-7" />;
             case "web_featured":
-                return <FiStar />;
+                return <FiStar className="text-foreground size-7" />;
             case "Public_pool":
-                return <FiDroplet />;
+                return <FiDroplet className="text-foreground size-7" />;
             case "Pets":
-                return <FiHeart />;
+                return <FiHeart className="text-foreground size-7" />;
             default:
                 return null;
         }

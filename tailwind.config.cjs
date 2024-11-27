@@ -40,7 +40,7 @@ module.exports = {
       colors: {
         primary: '#F8F0E5',
         secondary: '#102C57',
-        foreground: '#FEFAF6',
+        foreground: '#DAC0A3',
         muted: colors.gray,
         info: colors.sky,
         success: colors.green,
