@@ -111,7 +111,7 @@ const TagNavigation: React.FC = () => {
 
     return (
         <div className="w-full">
-            <div className="mb-4 tags flex gap-6 justify-center items-center">
+            <div className="mb-4 tags flex gap-6 justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar">
                 {tagsLoading ? (
                     <p>Loading tags...</p>
                 ) : (
@@ -128,6 +128,15 @@ const TagNavigation: React.FC = () => {
                     ))
                 )}
             </div>
+            <style>{`
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+`}</style>
             {loading ? (
                 <div className="flex justify-center items-center h-64">
                     <ClipLoader size={50} color={"#102C57"} loading={loading} />

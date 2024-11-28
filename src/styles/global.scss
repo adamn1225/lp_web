@@ -35,7 +35,7 @@ body {
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: #0891B2;
+  color: #102C57;
   font-weight: 900;
   width: 55px;
   height: 55px;
@@ -108,7 +108,7 @@ article {
 }
 
 .welcome-mat__content__inner__text {
-  color: #0f172a;
+  color: #102C57;
 }
 
 [x-cloak] {
@@ -117,7 +117,7 @@ article {
 
 .custom-date-input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #0f172a;
+  box-shadow: 0 0 0 2px #102C57;
 }
 
 .custom-date-input::-webkit-calendar-picker-indicator {
@@ -125,7 +125,7 @@ article {
 }
 
 .custom-date-input::selection {
-  background: #0f172a;
+  background: #102C57;
   color: white;
 }
 
@@ -133,7 +133,7 @@ article {
 .react-datepicker__day--in-selecting-range,
 .react-datepicker__day--in-range,
 .react-datepicker__day--keyboard-selected {
-  background-color: #0f172a !important;
+  background-color: #102C57 !important;
   color: white !important;
 }
 
@@ -155,7 +155,7 @@ article {
 .rdrCalendarWrapper .rdrDay span.rdrStartEdge,
 .rdrCalendarWrapper .rdrDay span.rdrEndEdge,
 .rdrCalendarWrapper .rdrDay span.rdrInRange {
-  background-color: #0f172a;
+  background-color: #102C57;
   color: white;
 }
 
@@ -180,7 +180,7 @@ article {
 
 .share-options a:hover,
 .share-options button:hover {
-  color: #3182ce;
+  color: #102C57;
   /* Adjust hover color as needed */
 }
 
@@ -216,4 +216,19 @@ article {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
   z-index: 1000;
+}
+
+/* Remove the default focus ring and add a custom one */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px #102C57;
+}
+
+
+.custom-focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px #102C57;
 }

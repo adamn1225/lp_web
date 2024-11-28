@@ -44,47 +44,51 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ sta
                             ranges={state}
                             disabledDates={disabledDates}
                             minDate={new Date()} // Prevent selection of past dates
+                            months={2} // Show two calendars
+                            direction="vertical" // Show calendars in a column
+                            className="flex"
                         />
                     </div>
                 </div>
             )}
             <style>{`
-        .custom-modal {
-          display: block;
-          position: fixed;
-          z-index: 1000;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          overflow: auto;
-          background-color: rgba(0,0,0,0.4);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .custom-modal-content {
-          background-color: #fefefe;
-          padding: 20px;
-          border: 1px solid #888;
-          border-radius: 8px;
-          position: relative;
-        }
-        .custom-close {
-          color: #aaa;
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          font-size: 28px;
-          font-weight: bold;
-        }
-        .custom-close:hover,
-        .custom-close:focus {
-          color: black;
-          text-decoration: none;
-          cursor: pointer;
-        }
-      `}</style>
+                .custom-modal {
+                    position: fixed;
+                    z-index: 1000;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgba(0,0,0,0.4);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .custom-modal-content {
+                    background-color: #fefefe;
+                    padding: 20px;
+                    border: 1px solid #888;
+                    border-radius: 8px;
+                    position: relative;
+                    width: screen;
+                    max-width: 500px;
+                }
+                .custom-close {
+                    color: #000;
+                    position: absolute;
+                    top: 1px;
+                    right: 5px;
+                    font-size: 28px;
+                    font-weight: bold;
+                }
+                .custom-close:hover,
+                .custom-close:focus {
+                    color: black;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+            `}</style>
         </div>
     );
 };

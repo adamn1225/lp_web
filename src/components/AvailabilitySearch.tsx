@@ -5,6 +5,7 @@ import '../styles/global.scss';
 import { addDays } from "date-fns";
 import { ClipLoader } from 'react-spinners';
 import DateRangePickerComponent from './ui/DateRangePickerComponent';
+import Modal from './ui/Modal';
 
 interface Listing {
   _id: string;
@@ -42,6 +43,7 @@ const AvailabilitySearch: React.FC = () => {
   const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>('');
   const [cities, setCities] = useState<string[]>([]);
   const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const apiUrl = '/.netlify/functions/availability';
 
@@ -87,6 +89,7 @@ const AvailabilitySearch: React.FC = () => {
       setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
+      setIsModalOpen(false); // Close the modal after search
     }
   };
 
@@ -99,7 +102,7 @@ const AvailabilitySearch: React.FC = () => {
   return (
     <div className="w-full flex flex-col justify-center items-center">
       <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full">
-        <form onSubmit={handleSubmit} className="z-10 xs:py-5 flex flex-col justify-center bg-white rounded-md">
+        <form onSubmit={handleSubmit} className="hidden md:flex z-10 xs:py-5 flex-col justify-center bg-white rounded-md">
           <div className="flex flex-col items-center justify-center w-full px-6">
             <div className="flex xs:flex-col md:flex-row justify-center items-center gap-1 w-full">
               <div className="w-full flex flex-col">
@@ -158,7 +161,68 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           )}
         </form>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="md:hidden w-2/3 mx-auto  h-fit flex flex-col items-start gap-1 shadow-lg justify-start bg-white border border-secondary pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-gray-400"
+        >
+          <span className="flex items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
+        </button>
       </div>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <form onSubmit={handleSubmit} className="flex flex-col justify-center bg-zinc-100 items-center h-1/2 rounded-md">
+          <div className="flex flex-col items-center justify-center w-full px-6">
+            <div className="flex flex-col justify-center items-center gap-1 w-full">
+              <div className="w-full flex flex-col">
+                <label className="text-slate-800 font-semibold" htmlFor="dateRange">Select Dates:</label>
+                <DateRangePickerComponent
+                  state={dateRange}
+                  setState={setDateRange}
+                  disabledDates={[]} // Add any disabled dates here
+                />
+              </div>
+              <div className="w-full flex flex-col">
+                <label htmlFor="location" className="text-slate-800 font-semibold">Search by City</label>
+                <select
+                  id="location"
+                  value={selectedLocation}
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  className="border border-slate-400 rounded-xl p-2 w-full"
+                >
+                  <option value="">Select Location</option>
+                  {cities.map((city) => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-full flex flex-col">
+                <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
+                <select
+                  id="bedroomAmount"
+                  value={selectedBedroomAmount}
+                  onChange={(e) => setSelectedBedroomAmount(e.target.value)}
+                  className="border rounded-xl border-slate-400 p-2 w-full"
+                >
+                  <option value="">Select Bedroom Amount</option>
+                  <option value="studio">Studio</option>
+                  <option value="1BR">1 Bedroom</option>
+                  <option value="2BR">2 Bedroom</option>
+                  <option value="3BR">3 Bedroom</option>
+                  <option value="4BR">4 Bedroom</option>
+                  <option value="5BR">5 Bedroom</option>
+                  <option value="6BR">6 Bedroom</option>
+                  <option value="7BR">7 Bedroom</option>
+                </select>
+              </div>
+
+              <div className="h-full flex items-end">
+                <button type="submit" className="w-fit h-fit flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center  bg-secondary m-0  pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
+                  <Search size={20} /> <p>Search</p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Modal>
       <div className="border-b border-zinc-900/20 w-full my-3"></div>
       <div className="bg-white w-screen mb-0 z-20 h-full overflow-auto">
         {loading && (
