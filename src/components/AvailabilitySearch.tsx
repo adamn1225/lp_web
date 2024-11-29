@@ -27,11 +27,13 @@ interface Listing {
   };
   bedrooms: number;
   bathrooms: number;
+  accommodates: number; // Add accommodates property
   // Add other properties as needed
 }
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
+  const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
@@ -83,7 +85,10 @@ const AvailabilitySearch: React.FC = () => {
         setError('No results found');
       }
 
-      setListings(data.results);
+      // Filter listings based on the number of guests
+      const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
+
+      setListings(filteredListings);
     } catch (err) {
       console.error(err);
       setError(err.message || 'An error occurred');
@@ -100,72 +105,13 @@ const AvailabilitySearch: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center">
-      <div className="flex flex-col md:flex-row justify-center align-middle h-full w-full">
-        <form onSubmit={handleSubmit} className="hidden md:flex z-10 xs:py-5 flex-col justify-center bg-white rounded-md">
-          <div className="flex flex-col items-center justify-center w-full px-6">
-            <div className="flex xs:flex-col md:flex-row justify-center items-center gap-1 w-full">
-              <div className="w-full flex flex-col">
-                <label className="text-slate-800 font-semibold" htmlFor="dateRange">Select Dates:</label>
-                <DateRangePickerComponent
-                  state={dateRange}
-                  setState={setDateRange}
-                  disabledDates={[]} // Add any disabled dates here
-                />
-              </div>
-              <div className="w-full flex flex-col">
-                <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
-                <select
-                  id="bedroomAmount"
-                  value={selectedBedroomAmount}
-                  onChange={(e) => setSelectedBedroomAmount(e.target.value)}
-                  className="border rounded-xl border-slate-400 p-2 w-full"
-                >
-                  <option value="">Select Bedroom Amount</option>
-                  <option value="studio">Studio</option>
-                  <option value="1BR">1 Bedroom</option>
-                  <option value="2BR">2 Bedroom</option>
-                  <option value="3BR">3 Bedroom</option>
-                  <option value="4BR">4 Bedroom</option>
-                  <option value="5BR">5 Bedroom</option>
-                  <option value="6BR">6 Bedroom</option>
-                  <option value="7BR">7 Bedroom</option>
-                </select>
-              </div>
-              <div className="w-full flex flex-col">
-                <label htmlFor="location" className="text-slate-800 font-semibold">Search by City</label>
-                <select
-                  id="location"
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="border border-slate-400 rounded-xl p-2 w-full"
-                >
-                  <option value="">Select Location</option>
-                  {cities.map((city) => (
-                    <option key={city} value={city}>{city}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="h-full flex items-end">
-                <button type="submit" className="w-fit h-fit flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center  bg-secondary m-0  pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
-                  <Search size={20} /> <p>Search</p>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="flex gap-12 items-center justify-center pb-3 w-full"></div>
-          {searchAttempted && available.length === 0 && !loading && !error && (
-            <div className="flex flex-col items-center justify-center h-full">
-              <p>Sorry, there were no listings available in the search results.</p>
-              <p>Try changing your search request by location, bedroom, or by removing any of the selected tags.</p>
-            </div>
-          )}
-        </form>
+    <div className="w-full h-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
+      <div className="flex flex-col md:flex-row justify-center align-middle w-full h-full ">
         <button
           onClick={() => setIsModalOpen(true)}
-          className="md:hidden w-2/3 mx-auto  h-fit flex flex-col items-start gap-1 shadow-lg justify-start bg-white border border-secondary pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-gray-400"
+          className="w-4/5 md:w-1/4 mx-auto h-fit flex flex-col items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
         >
-          <span className="flex items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
+          <span className="flex w-fit items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
         </button>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -213,7 +159,17 @@ const AvailabilitySearch: React.FC = () => {
                   <option value="7BR">7 Bedroom</option>
                 </select>
               </div>
-
+              <div className="w-full flex flex-col">
+                <label htmlFor="numGuests" className="text-slate-800 font-semibold">Number of Guests</label>
+                <input
+                  type="number"
+                  id="numGuests"
+                  value={numGuests}
+                  onChange={(e) => setNumGuests(Number(e.target.value))}
+                  className="focus:outline-none focus:ring focus:border-primary border rounded-xl border-slate-400 p-2 w-full"
+                  min="1"
+                />
+              </div>
               <div className="h-full flex items-end">
                 <button type="submit" className="w-fit h-fit flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center  bg-secondary m-0  pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
                   <Search size={20} /> <p>Search</p>
@@ -223,7 +179,7 @@ const AvailabilitySearch: React.FC = () => {
           </div>
         </form>
       </Modal>
-      <div className="border-b border-zinc-900/20 w-full my-3"></div>
+      <div className="w-full my-3"></div>
       <div className="bg-white w-screen mb-0 z-20 h-full overflow-auto">
         {loading && (
           <div className="flex flex-col items-center justify-center h-full">

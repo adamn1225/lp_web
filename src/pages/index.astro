@@ -11,11 +11,11 @@ import FeaturedListings from "@components/FeaturedListings.astro";
 <Layout title="Properties">
   <Section>
     <div
-      class="xs:pt-20 md:pt-24 flex flex-col justify-center items-center bg-white w-full bg-neutral-950/50 bg-center bg-no-repeat"
+      class="pt-20 h-full flex flex-col justify-center items-center bg-white w-full bg-neutral-950/50 bg-center bg-no-repeat"
     >
       <App client:only="react" />
-      <TagNavigation client:only />
     </div>
+    <TagNavigation client:only="react" />
     <FeaturedListings />
   </Section></Layout
 >
