@@ -6,6 +6,7 @@ import { addDays } from "date-fns";
 import { ClipLoader } from 'react-spinners';
 import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
+import GoogleMap from './GoogleMap'; // Import the GoogleMap component
 
 interface Listing {
   _id: string;
@@ -14,12 +15,22 @@ interface Listing {
     thumbnail: string;
     caption: string;
   };
+  pictures: {
+    original: string;
+  };
   publicDescription: {
     summary: string;
   };
   address: {
+    street: string;
     city: string;
     state: string;
+    zipcode: string;
+    country: string;
+    lat: number;
+    lng: number;
+    apt: string;
+    full: string;
   };
   prices: {
     basePrice: number;
@@ -72,7 +83,7 @@ const AvailabilitySearch: React.FC = () => {
 
     try {
       const tagsQuery = selectedTags.join(',');
-      const url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&tags=${encodeURIComponent(tagsQuery)}&city=${encodeURIComponent(selectedLocation)}&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
+      const url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&city=${encodeURIComponent(selectedLocation)}&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
       console.log('API URL:', url);
 
       const response = await fetch(url);
@@ -171,7 +182,7 @@ const AvailabilitySearch: React.FC = () => {
                 />
               </div>
               <div className="h-full flex items-end">
-                <button type="submit" className="w-fit h-fit flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center  bg-secondary m-0  pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
+                <button type="submit" className="w-fit h-fit flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
                   <Search size={20} /> <p>Search</p>
                 </button>
               </div>
@@ -180,7 +191,7 @@ const AvailabilitySearch: React.FC = () => {
         </form>
       </Modal>
       <div className="w-full my-3"></div>
-      <div className="bg-white w-screen mb-0 z-20 h-full overflow-auto">
+      <div className="bg-white w-screen mb-0 z-20">
         {loading && (
           <div className="flex flex-col items-center justify-center h-full">
             <ClipLoader size={50} color={"#102C57"} loading={loading} />
@@ -196,22 +207,33 @@ const AvailabilitySearch: React.FC = () => {
             </button>
           </div>
         )}
-        <div className="search-results grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8 md:px-12 px-4">
-          {available.map((property) => (
-            <a href={property._id} key={property._id}>
-              <article className="flex flex-col bg-white w shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md">
-                <div className="result-item">
-                  <img className="w-full object-cover h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
-                  <div className="p-4 text-normal flex flex-col gap-4">
-                    <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
-                    <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
-                    <div className="border border-stone-300"> </div>
-                    <div className="flex min-h-min flex-row justify-start align-bottom"><button className="text-slate-900 font-extrabold mb-4">${property.prices.basePrice} Night</button></div>
-                  </div>
-                </div>
-              </article>
-            </a>
-          ))}
+        <div className="flex gap-1 w-screen h-full p-3">
+          <div className="h-full w-full overflow-y-auto max-h-[100vh]">
+            {available.length > 0 && (
+              <div className="search-results overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-1 px-4">
+                {available.map((property) => (
+                  <a href={property._id} key={property._id}>
+                    <article className="bg-white w shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md">
+                      <div className="result-item">
+                        <img className="w-full object-cover" src={property.pictures[0].original} alt={property.picture.caption} />
+                        <div className="p-4 text-normal flex flex-col gap-4">
+                          <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
+                          <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
+                          <div className="border border-stone-300"></div>
+                          <div className="flex min-h-min flex-row justify-start align-bottom">
+                            <button className="text-slate-900 font-extrabold">${property.prices.basePrice} Night</button>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          <div className="w-full max-h-[100vh]"><GoogleMap listings={available} /></div>
+        
         </div>
       </div>
     </div>

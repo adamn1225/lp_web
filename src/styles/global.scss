@@ -2,24 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 html {
   height: 100%;
   overflow-x: hidden;
-}
-
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-a,
-li {
-  margin: 0;
-  font-family: sans-serif;
 }
 
 body {
@@ -226,7 +211,6 @@ button:focus {
   outline: none;
   box-shadow: 0 0 0 1px #DAC0A3 !important;
 }
-
 
 .custom-focus-ring:focus {
   outline: none;
