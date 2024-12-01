@@ -35,6 +35,7 @@ const TagNavigation: React.FC = () => {
     const [tagsLoading, setTagsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [prefetchedListings, setPrefetchedListings] = useState<{ [key: string]: Listing[] }>({});
 
     const tagsApiUrl = '/.netlify/functions/tags';
 
@@ -80,6 +81,23 @@ const TagNavigation: React.FC = () => {
                 }
                 const filteredTags = data.filter((tag: string) => allowedTags.includes(tag));
                 setTags(filteredTags);
+
+                // Prefetch listings for all tags
+                const listingsPromises = filteredTags.map(async (tag: string) => {
+                    const response = await fetch(`${tagsApiUrl}?tags=${tag}`);
+                    const data = await response.json();
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    return { tag, listings: data.results };
+                });
+
+                const listingsResults = await Promise.all(listingsPromises);
+                const listingsMap: { [key: string]: Listing[] } = {};
+                listingsResults.forEach(({ tag, listings }) => {
+                    listingsMap[tag] = listings;
+                });
+                setPrefetchedListings(listingsMap);
             } catch (err) {
                 console.error('Error fetching tags:', err);
                 setError('Failed to load tags');
@@ -91,23 +109,9 @@ const TagNavigation: React.FC = () => {
         fetchTags();
     }, []);
 
-    const handleTagClick = async (tag: string) => {
+    const handleTagClick = (tag: string) => {
         setSelectedTag(tag === selectedTag ? null : tag);
-
-        setLoading(true);
-        try {
-            const response = await fetch(`${tagsApiUrl}?tags=${tag}`);
-            const data = await response.json();
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            setListings(data.results);
-        } catch (err) {
-            console.error('Error fetching listings:', err);
-            setError('Failed to load listings');
-        } finally {
-            setLoading(false);
-        }
+        setListings(prefetchedListings[tag] || []);
     };
 
     return (
