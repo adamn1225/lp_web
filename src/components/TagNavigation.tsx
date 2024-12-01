@@ -31,15 +31,13 @@ interface Listing {
 const TagNavigation: React.FC = () => {
     const [listings, setListings] = useState<Listing[]>([]);
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
-    const [tags, setTags] = useState<string[]>([]);
+    const [tags, setTags] = useState<string[]>(["Ocean_front", "Ocean_view", "web_featured", "Public_pool", "Pets"]);
     const [tagsLoading, setTagsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [prefetchedListings, setPrefetchedListings] = useState<{ [key: string]: Listing[] }>({});
 
     const tagsApiUrl = '/.netlify/functions/tags';
-
-    const allowedTags = ["Ocean_front", "Ocean_view", "web_featured", "Public_pool", "Pets"];
 
     const tagDisplayNames: { [key: string]: string } = {
         "Ocean_front": "Ocean Front",
@@ -79,11 +77,49 @@ const TagNavigation: React.FC = () => {
                 if (data.error) {
                     throw new Error(data.error);
                 }
-                const filteredTags = data.filter((tag: string) => allowedTags.includes(tag));
+                const filteredTags = data.filter((tag: string) => tags.includes(tag));
                 setTags(filteredTags);
+            } catch (err) {
+                console.error('Error fetching tags:', err);
+                setError('Failed to load tags');
+            } finally {
+                setTagsLoading(false);
+            }
+        };
 
-                // Prefetch listings for all tags
-                const listingsPromises = filteredTags.map(async (tag: string) => {
+        fetchTags();
+    }, []);
+
+    const fetchListingsForTag = async (tag: string) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${tagsApiUrl}?tags=${tag}`);
+            const data = await response.json();
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            setListings(data.results);
+        } catch (err) {
+            console.error('Error fetching listings:', err);
+            setError('Failed to load listings');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleTagClick = (tag: string) => {
+        setSelectedTag(tag === selectedTag ? null : tag);
+        if (prefetchedListings[tag]) {
+            setListings(prefetchedListings[tag]);
+        } else {
+            fetchListingsForTag(tag);
+        }
+    };
+
+    useEffect(() => {
+        const prefetchListings = async () => {
+            try {
+                const listingsPromises = tags.map(async (tag: string) => {
                     const response = await fetch(`${tagsApiUrl}?tags=${tag}`);
                     const data = await response.json();
                     if (data.error) {
@@ -99,20 +135,12 @@ const TagNavigation: React.FC = () => {
                 });
                 setPrefetchedListings(listingsMap);
             } catch (err) {
-                console.error('Error fetching tags:', err);
-                setError('Failed to load tags');
-            } finally {
-                setTagsLoading(false);
+                console.error('Error prefetching listings:', err);
             }
         };
 
-        fetchTags();
-    }, []);
-
-    const handleTagClick = (tag: string) => {
-        setSelectedTag(tag === selectedTag ? null : tag);
-        setListings(prefetchedListings[tag] || []);
-    };
+        prefetchListings();
+    }, [tags]);
 
     return (
         <div className="w-full">

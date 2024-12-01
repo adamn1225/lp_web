@@ -13,7 +13,7 @@ export default defineConfig({
   integrations: [tailwind(), alpinejs(), icon(), react(), markdoc(), image()],
   vite: {
     server: {
-      middlewareMode: false, // Ensure this is set correctly
+      middlewareMode: false,
     },
   },
 });

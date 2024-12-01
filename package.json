@@ -55,6 +55,7 @@
     "astro-seo": "^0.8.4",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.4",
+    "cloudinary": "^2.5.1",
     "contentful": "^10.15.0",
     "cors": "^2.8.5",
     "csv-parse": "^5.5.6",
