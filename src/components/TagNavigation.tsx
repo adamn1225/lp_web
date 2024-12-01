@@ -92,13 +92,17 @@ const TagNavigation: React.FC = () => {
 
     const fetchListingsForTag = async (tag: string) => {
         setLoading(true);
+        setListings([]); // Clear previous listings
         try {
             const response = await fetch(`${tagsApiUrl}?tags=${tag}`);
             const data = await response.json();
             if (data.error) {
                 throw new Error(data.error);
             }
-            setListings(data.results);
+            // Incrementally update listings as they are fetched
+            for (const listing of data.results) {
+                setListings((prevListings) => [...prevListings, listing]);
+            }
         } catch (err) {
             console.error('Error fetching listings:', err);
             setError('Failed to load listings');
@@ -170,7 +174,7 @@ const TagNavigation: React.FC = () => {
           scrollbar-width: none;  /* Firefox */
         }
       `}</style>
-            {loading ? (
+            {loading && listings.length === 0 ? (
                 <div className="flex justify-center items-center h-64">
                     <ClipLoader size={50} color={"#102C57"} loading={loading} />
                 </div>
