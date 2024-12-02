@@ -28,7 +28,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ listings }) => {
             if (mapRef.current && listings.length > 0) {
                 const map = new window.google.maps.Map(mapRef.current, {
                     center: { lat: listings[0].address.lat, lng: listings[0].address.lng },
-                    zoom: 10,
+                    zoom: 15,
                 });
 
                 listings.forEach((listing) => {

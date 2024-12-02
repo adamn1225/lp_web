@@ -7,6 +7,7 @@ import { ClipLoader } from 'react-spinners';
 import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
 import GoogleMap from './GoogleMap'; // Import the GoogleMap component
+import FilterComponent from './ui/FilterComponent'; // Import the FilterComponent
 
 interface Listing {
   _id: string;
@@ -48,6 +49,7 @@ const AvailabilitySearch: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
+  const [filteredListings, setFilteredListings] = useState<Listing[]>([]);
   const [dateRange, setDateRange] = useState([{ startDate: new Date(), endDate: addDays(new Date(), 7), key: 'selection' }]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
@@ -57,6 +59,7 @@ const AvailabilitySearch: React.FC = () => {
   const [cities, setCities] = useState<string[]>([]);
   const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [filters, setFilters] = useState<any>({});
 
   const apiUrl = '/.netlify/functions/availability';
 
@@ -100,6 +103,7 @@ const AvailabilitySearch: React.FC = () => {
       const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
 
       setListings(filteredListings);
+      setFilteredListings(filteredListings); // Set the filtered listings to the initial search results
     } catch (err) {
       console.error(err);
       setError(err.message || 'An error occurred');
@@ -112,7 +116,44 @@ const AvailabilitySearch: React.FC = () => {
   // Clear the search results
   const clearResults = () => {
     setListings([]);
+    setFilteredListings([]);
     setSearchAttempted(false);
+  };
+
+  const handleFilterChange = (newFilters: any) => {
+    setFilters(newFilters);
+    applyFilters(newFilters);
+  };
+
+  const applyFilters = (filters: any) => {
+    let filtered = [...available];
+
+    if (filters.priceOrder) {
+      if (filters.priceOrder === 'lowToHigh') {
+        filtered = filtered.sort((a, b) => a.prices.basePrice - b.prices.basePrice);
+      } else if (filters.priceOrder === 'highToLow') {
+        filtered = filtered.sort((a, b) => b.prices.basePrice - a.prices.basePrice);
+      }
+    }
+
+    if (filters.bedroomCount) {
+      filtered = filtered.filter(listing => listing.bedrooms === filters.bedroomCount);
+    }
+
+    if (filters.selectedTags && filters.selectedTags.length > 0) {
+      filtered = filtered.filter(listing => filters.selectedTags.every(tag => listing.publicDescription.summary.includes(tag)));
+    }
+
+    if (filters.city) {
+      filtered = filtered.filter(listing => listing.address.city === filters.city);
+    }
+
+    setFilteredListings(filtered);
+  };
+
+  const resetFilters = () => {
+    setFilters({});
+    setFilteredListings(available);
   };
 
   return (
@@ -191,6 +232,7 @@ const AvailabilitySearch: React.FC = () => {
         </form>
       </Modal>
       <div className="w-full my-3"></div>
+
       <div className={`bg-white w-screen mb-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
         {loading && (
           <div className="flex flex-col items-center justify-center h-full">
@@ -209,30 +251,37 @@ const AvailabilitySearch: React.FC = () => {
         )}
         {available.length > 0 && (
           <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-full">
+            <div className="w-full md:w-1/4">
+              {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} />}
+            </div>
             <div className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
               <div className="search-results w-full overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-3 self-center">
-                {available.map((property) => (
-                  <a href={property._id} key={property._id}>
-                    <article className="bg-white w-full flex flex-col justify-center md:items-start shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md md:p-6">
-                      <div className="result-item">
-                        <img className="w-full md:h-auto md:w-[750px] md:object-center pt-2 shadow-lg" src={property.pictures[0].original} alt={property.picture.caption} />
-                        <div className="p-4 text-normal flex flex-col gap-4">
-                          <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
-                          <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
-                          <div className="border md:w-1/2 border-stone-300"></div>
-                          <div className="flex min-h-min flex-row justify-start align-bottom">
-                            <button className="text-slate-900 font-extrabold"><strong>Starting at:</strong> ${property.prices.basePrice} Night</button>
+                {filteredListings.length > 0 ? (
+                  filteredListings.map((property) => (
+                    <a href={property._id} key={property._id}>
+                      <article className="bg-white w-full flex flex-col justify-center md:items-start shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md md:p-6">
+                        <div className="result-item">
+                          <img className="w-full md:h-auto md:w-fit md:object-center pt-2 shadow-lg" src={property.pictures[0].original} alt={property.picture.caption} />
+                          <div className="p-4 text-normal flex flex-col gap-4">
+                            <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
+                            <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
+                            <div className="border md:w-1/2 border-stone-300"></div>
+                            <div className="flex min-h-min flex-row justify-start align-bottom">
+                              <button className="text-slate-900 font-extrabold"><strong>Starting at:</strong> ${property.prices.basePrice} Night</button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </article>
-                  </a>
-                ))}
+                      </article>
+                    </a>
+                  ))
+                ) : (
+                  <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
+                )}
               </div>
             </div>
 
-            <div className="w-full md:w-1/2 h-64 md:h-full">
-              <GoogleMap listings={available} />
+            <div className="w-full md:w-2/3 h-64 md:h-full">
+              <GoogleMap listings={filteredListings} />
             </div>
           </div>
         )}
