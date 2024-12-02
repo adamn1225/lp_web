@@ -147,7 +147,7 @@ const TagNavigation: React.FC = () => {
     }, [tags]);
 
     return (
-        <div className="w-full">
+        <div className="w-full mt-2">
             <div className="mb-4 tags flex gap-6 justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar">
                 {tagsLoading ? (
                     <p>Loading Search...</p>

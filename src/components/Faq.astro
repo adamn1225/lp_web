@@ -128,7 +128,6 @@ const faqs = [
         row-gap: 2rem;
     }
     .faq-question {
-        grid-column: span 2;
         display: flex;
         width: 100%;
         text-wrap: nowrap; /* Added text-wrap */
@@ -136,7 +135,7 @@ const faqs = [
     .question-link:hover {
         @apply text-secondary underline;
     }
-     .question-link.active {
+    .question-link.active {
         @apply text-secondary underline;
     }
 
@@ -144,11 +143,6 @@ const faqs = [
         .faq-container {
             grid-template-columns: 1fr;
             /* Single column for mobile */
-        }
-        .faq-question {
-            grid-column: span 1;
-            padding-left: 20px;
-            padding-right: 20px;
         }
     }
 </style>
@@ -189,27 +183,53 @@ const faqs = [
     <h2 class="text-4xl font-bold mb-6">Frequently Asked Questions</h2>
     <hr class="w-[100px] border-2 border-secondary mb-6" />
     <div class="faq-container">
-        {
-            faqs.map((faq, index) => (
-                <div class="mb-4">
-                    <div class="md:m-0 md:faq-question justify-center border-b md:w-full md:p-0">
-                        <a
-                            href="javascript:void(0);"
-                            class={`text-lg font-semibold text-slate-800 hover:underline question-link ${index === 0 ? "active" : ""}`}
-                            id={`question-${index}`}
-                            data-index={index}
+        <div class="faq-column">
+            {
+                faqs.slice(0, Math.ceil(faqs.length / 2)).map((faq, index) => (
+                    <div class="mb-4">
+                        <div class="md:m-0 md:faq-question justify-center border-b md:w-full md:p-0">
+                            <a
+                                href="javascript:void(0);"
+                                class={`text-lg font-semibold text-slate-800 hover:underline question-link ${index === 0 ? "active" : ""}`}
+                                id={`question-${index}`}
+                                data-index={index}
+                            >
+                                {faq.question}
+                            </a>
+                        </div>
+                        <div
+                            id={`answer-${index}`}
+                            class={`faq-answer my-2 text-start text-slate-800 font-semibold ${index === 0 ? "active" : ""}`}
                         >
-                            {faq.question}
-                        </a>
+                            <HtmlContent html={faq.answer} />
+                        </div>
                     </div>
-                    <div
-                        id={`answer-${index}`}
-                        class={`faq-answer my-2 text-start text-slate-800 font-semibold ${index === 0 ? "active" : ""}`}
-                    >
-                        <HtmlContent html={faq.answer} />
+                ))
+            }
+        </div>
+        <div class="faq-column">
+            {
+                faqs.slice(Math.ceil(faqs.length / 2)).map((faq, index) => (
+                    <div class="mb-4">
+                        <div class="md:m-0 md:faq-question justify-center border-b md:w-full md:p-0">
+                            <a
+                                href="javascript:void(0);"
+                                class={`text-lg font-semibold text-slate-800 hover:underline question-link ${index + Math.ceil(faqs.length / 2) === 0 ? "active" : ""}`}
+                                id={`question-${index + Math.ceil(faqs.length / 2)}`}
+                                data-index={index + Math.ceil(faqs.length / 2)}
+                            >
+                                {faq.question}
+                            </a>
+                        </div>
+                        <div
+                            id={`answer-${index + Math.ceil(faqs.length / 2)}`}
+                            class={`faq-answer my-2 text-start text-slate-800 font-semibold ${index + Math.ceil(faqs.length / 2) === 0 ? "active" : ""}`}
+                        >
+                            <HtmlContent html={faq.answer} />
+                        </div>
                     </div>
-                </div>
-            ))
-        }
+                ))
+            }
+        </div>
     </div>
 </section>

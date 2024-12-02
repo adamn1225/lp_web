@@ -12,6 +12,7 @@ import { fetchAllListings } from "./api/dataFetcher";
 import { fetchReviews } from "./api/listingReviews";
 import BookingFormWrapper from "../components/BookingFormWrapper";
 import SwiperComponent from '@components/SwiperComponent.tsx';
+import { BedDouble } from 'lucide-react';
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
@@ -365,9 +366,9 @@ function capitalizeFirstLetter(string: string) {
 
                       <!-- bedroom -->
                       <div class="flex flex-col">
-                       <p class="text-lg font-bold">{PropertyType}</p>
-                       
-                        <p class="text-sm text-muted-400">Property Type</p>
+                        <BedDouble />
+                        <p class="text-lg font-bold">{beds}</p>
+                        <p class="text-sm text-muted-400">Beds</p>
                       </div>
                       <!-- bathroom -->
                       <div class="flex flex-col">

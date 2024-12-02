@@ -10,16 +10,17 @@ export const handler = async (event, context) => {
         : 'https://open-api.guesty.com/v1/listings/tags';
 
     const currentTime = Date.now();
-    if (currentTime - lastRequestTime < RATE_LIMIT_INTERVAL) {
-        return {
-            statusCode: 429,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ error: 'Too many requests' })
-        };
-    }
+    // Comment out the rate limiting logic for testing
+    // if (currentTime - lastRequestTime < RATE_LIMIT_INTERVAL) {
+    //     return {
+    //         statusCode: 429,
+    //         headers: {
+    //             'Access-Control-Allow-Origin': '*',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({ error: 'Too many requests' })
+    //     };
+    // }
 
     lastRequestTime = currentTime;
 
