@@ -213,15 +213,15 @@ const AvailabilitySearch: React.FC = () => {
               <div className="search-results w-full overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-3 self-center">
                 {available.map((property) => (
                   <a href={property._id} key={property._id}>
-                    <article className="bg-white w-full flex flex-col items-center shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md md:pr-16">
-                      <div className="result-item">
-                        <img className="md:h-[400px] md:w-[600px] md:object-center pt-2" src={property.pictures[0].original} alt={property.picture.caption} />
+                    <article className="bg-white w-full flex flex-col justify-center items-center shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md md:pl-6">
+                      <div className="result-item flex flex-col justify-center">
+                        <img className="md:h-auto md:w-5/6 md:object-cover md:object-center pt-2 shadow-lg" src={property.pictures[0].original} alt={property.picture.caption} />
                         <div className="p-4 text-normal flex flex-col gap-4">
                           <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
                           <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
                           <div className="border md:w-1/2 border-stone-300"></div>
                           <div className="flex min-h-min flex-row justify-start align-bottom">
-                            <button className="text-slate-900 font-extrabold">${property.prices.basePrice} Night</button>
+                            <button className="text-slate-900 font-extrabold"><strong>Starting at:</strong> ${property.prices.basePrice} Night</button>
                           </div>
                         </div>
                       </div>
@@ -231,7 +231,7 @@ const AvailabilitySearch: React.FC = () => {
               </div>
             </div>
 
-            <div className="w-full md:w-1/3 h-64 md:h-full">
+            <div className="w-full md:w-2/3 h-64 md:h-full">
               <GoogleMap listings={available} />
             </div>
           </div>
