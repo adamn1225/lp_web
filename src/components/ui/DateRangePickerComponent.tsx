@@ -21,6 +21,11 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ sta
         setShowPicker(false);
     };
 
+    const handleSelect = (ranges: any) => {
+        setState([ranges.selection]);
+        setShowPicker(false); // Close the modal upon selecting the range of dates
+    };
+
     const formattedStartDate = state[0].startDate ? format(state[0].startDate, 'MM/dd/yyyy') : '';
     const formattedEndDate = state[0].endDate ? format(state[0].endDate, 'MM/dd/yyyy') : '';
 
@@ -34,59 +39,39 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ sta
                 className="border rounded-xl border-slate-400 p-2 w-full"
             />
             {showPicker && (
-                <div className="custom-modal">
-                    <div className="custom-modal-content">
-                        <span className="custom-close" onClick={handleClose}>&times;</span>
-                        <DateRange
-                            editableDateInputs={true}
-                            onChange={item => setState([item.selection])}
-                            moveRangeOnFirstSelection={false}
-                            ranges={state}
-                            disabledDates={disabledDates}
-                            minDate={new Date()} // Prevent selection of past dates
-                            months={2} // Show two calendars
-                            direction="vertical" // Show calendars in a column
-                            className="flex"
-                        />
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-fit w-full">
+                        <div className="flex justify-end">
+                            <button onClick={handleClose} className="text-black text-2xl">&times;</button>
+                        </div>
+                        <div className="rdrMonthsContainer">
+                            <DateRange
+                                editableDateInputs={true}
+                                onChange={handleSelect}
+                                moveRangeOnFirstSelection={false}
+                                ranges={state}
+                                disabledDates={disabledDates}
+                                minDate={new Date()} // Prevent selection of past dates
+                                months={2} // Show two calendars
+                                direction="horizontal" // Show calendars in a row for desktop
+                                className="flex-1"
+                            />
+                        </div>
+                        <div className="flex justify-center mt-4">
+                            <button onClick={handleClose} className="bg-blue-500 text-white px-4 py-2 rounded">Select Dates</button>
+                        </div>
                     </div>
                 </div>
             )}
             <style>{`
-                .custom-modal {
-                    position: fixed;
-                    z-index: 1000;
-                    left: 0;
-                    top: 0;
-                    width: 100%;
-                    height: 100%;
-                    overflow: auto;
-                    background-color: rgba(0,0,0,0.4);
+                .rdrMonthsContainer .rdrMonths {
                     display: flex;
-                    justify-content: center;
-                    align-items: center;
+                    flex-direction: column;
                 }
-                .custom-modal-content {
-                    background-color: #fefefe;
-                    padding: 20px;
-                    border: 1px solid #888;
-                    border-radius: 8px;
-                    position: relative;
-                    width: screen;
-                    max-width: 500px;
-                }
-                .custom-close {
-                    color: #000;
-                    position: absolute;
-                    top: 1px;
-                    right: 5px;
-                    font-size: 28px;
-                    font-weight: bold;
-                }
-                .custom-close:hover,
-                .custom-close:focus {
-                    color: black;
-                    text-decoration: none;
-                    cursor: pointer;
+                @media (min-width: 768px) {
+                    .rdrMonthsContainer .rdrMonths {
+                        flex-direction: row;
+                    }
                 }
             `}</style>
         </div>
