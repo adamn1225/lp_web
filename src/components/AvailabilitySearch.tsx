@@ -232,7 +232,11 @@ const AvailabilitySearch: React.FC = () => {
             )}
           </div>
 
-          <div className="w-full md:w-1/3 h-64 md:h-full"><GoogleMap listings={available} /></div>
+          {available.length > 0 && (
+            <div className="w-full md:w-1/3 h-64 md:h-full">
+              <GoogleMap listings={available} />
+            </div>
+          )}
 
         </div>
       </div>
