@@ -213,9 +213,9 @@ const AvailabilitySearch: React.FC = () => {
               <div className="search-results w-full overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-3 self-center">
                 {available.map((property) => (
                   <a href={property._id} key={property._id}>
-                    <article className="bg-white w-full flex flex-col justify-center items-center shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md md:pl-6">
-                      <div className="result-item flex flex-col justify-center">
-                        <img className="md:h-auto md:w-5/6 md:object-cover md:object-center pt-2 shadow-lg" src={property.pictures[0].original} alt={property.picture.caption} />
+                    <article className="bg-white w-full flex flex-col justify-center md:items-start shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md md:p-6">
+                      <div className="result-item">
+                        <img className="w-full md:h-auto md:w-[750px] md:object-center pt-2 shadow-lg" src={property.pictures[0].original} alt={property.picture.caption} />
                         <div className="p-4 text-normal flex flex-col gap-4">
                           <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
                           <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
@@ -231,7 +231,7 @@ const AvailabilitySearch: React.FC = () => {
               </div>
             </div>
 
-            <div className="w-full md:w-2/3 h-64 md:h-full">
+            <div className="w-full md:w-1/2 h-64 md:h-full">
               <GoogleMap listings={available} />
             </div>
           </div>
