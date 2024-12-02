@@ -191,7 +191,7 @@ const AvailabilitySearch: React.FC = () => {
         </form>
       </Modal>
       <div className="w-full my-3"></div>
-      <div className="bg-white w-screen mb-0 z-20">
+      <div className="h-screen bg-white w-screen mb-0 z-20">
         {loading && (
           <div className="flex flex-col items-center justify-center h-full">
             <ClipLoader size={50} color={"#102C57"} loading={loading} />
