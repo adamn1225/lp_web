@@ -116,8 +116,8 @@ const AvailabilitySearch: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
-      <div className="flex flex-col md:flex-row justify-center align-middle w-full h-full ">
+    <div className="w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
+      <div className="flex flex-col md:flex-row justify-center align-middle w-full">
         <button
           onClick={() => setIsModalOpen(true)}
           className="w-4/5 md:w-1/4 mx-auto h-fit flex flex-col items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
@@ -191,7 +191,7 @@ const AvailabilitySearch: React.FC = () => {
         </form>
       </Modal>
       <div className="w-full my-3"></div>
-      <div className="h-screen bg-white w-screen mb-0 z-20">
+      <div className={`bg-white w-screen mb-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
         {loading && (
           <div className="flex flex-col items-center justify-center h-full">
             <ClipLoader size={50} color={"#102C57"} loading={loading} />
@@ -207,19 +207,19 @@ const AvailabilitySearch: React.FC = () => {
             </button>
           </div>
         )}
-        <div className="flex flex-col-reverse md:flex-row gap-1 w-screen h-full p-3">
-          <div className="h-full w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
-            {available.length > 0 && (
-              <div className="search-results overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-1">
+        {available.length > 0 && (
+          <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-full">
+            <div className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
+              <div className="search-results w-full overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-3 self-center">
                 {available.map((property) => (
                   <a href={property._id} key={property._id}>
-                    <article className="bg-white w shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md">
+                    <article className="bg-white w-full flex flex-col items-center shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md md:pr-16">
                       <div className="result-item">
-                        <img className="w-full object-cover" src={property.pictures[0].original} alt={property.picture.caption} />
+                        <img className="md:h-[400px] md:w-[600px] md:object-center pt-2" src={property.pictures[0].original} alt={property.picture.caption} />
                         <div className="p-4 text-normal flex flex-col gap-4">
                           <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
                           <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
-                          <div className="border border-stone-300"></div>
+                          <div className="border md:w-1/2 border-stone-300"></div>
                           <div className="flex min-h-min flex-row justify-start align-bottom">
                             <button className="text-slate-900 font-extrabold">${property.prices.basePrice} Night</button>
                           </div>
@@ -229,16 +229,13 @@ const AvailabilitySearch: React.FC = () => {
                   </a>
                 ))}
               </div>
-            )}
-          </div>
+            </div>
 
-          {available.length > 0 && (
             <div className="w-full md:w-1/3 h-64 md:h-full">
               <GoogleMap listings={available} />
             </div>
-          )}
-
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

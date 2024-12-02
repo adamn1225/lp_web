@@ -1,4 +1,27 @@
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+import NodeCache from 'node-cache';
+
+dotenv.config();
+
+const cache = new NodeCache({ stdTTL: 60 * 60 }); // Cache for 1 hour
+const RATE_LIMIT_INTERVAL = 1000; // 1 second
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const fetchWithRetry = async (url, options, retries = 3) => {
+  for (let i = 0; i < retries; i++) {
+    const response = await fetch(url, options);
+    if (response.status === 429) {
+      const retryAfter = response.headers.get('Retry-After');
+      const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
+      await delay(delayMs);
+    } else {
+      return response;
+    }
+  }
+  throw new Error('Max retries reached');
+};
 
 export const handler = async (event, context) => {
   const { checkIn, checkOut, minOccupancy, tags, location, bedroomAmount, city, fetchCities } = event.queryStringParameters;
@@ -12,7 +35,7 @@ export const handler = async (event, context) => {
           'https://open-api.guesty.com/v1/listings?limit=100&skip=200'
         ];
 
-        const allResults = await Promise.all(urls.map(url => fetch(url, {
+        const allResults = await Promise.all(urls.map(url => fetchWithRetry(url, {
           headers: {
             'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
             'Accept': 'application/json'
@@ -61,12 +84,26 @@ export const handler = async (event, context) => {
   if (location) tagsArray.push(location);
   if (bedroomAmount) tagsArray.push(bedroomAmount);
 
+  const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${tags}-${location}-${bedroomAmount}-${city}`;
+  const cachedData = cache.get(cacheKey);
+
+  if (cachedData) {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(cachedData)
+    };
+  }
+
   try {
     const fetchListings = async (tag) => {
       const url = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}${tag ? `&tags=${encodeURIComponent(tag)}` : ''}&city=${encodeURIComponent(city)}`;
       console.log(`Fetching listings for tag: ${tag} from URL: ${url}`);
 
-      const response = await fetch(url, {
+      const response = await fetchWithRetry(url, {
         headers: {
           'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
           'Accept': 'application/json'
@@ -89,6 +126,8 @@ export const handler = async (event, context) => {
       if (acc.length === 0) return result.results;
       return acc.filter(listing => result.results.some(r => r._id === listing._id));
     }, []);
+
+    cache.set(cacheKey, { results: combinedResults }); // Cache the response data
 
     return {
       statusCode: 200,

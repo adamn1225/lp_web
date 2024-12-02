@@ -1,10 +1,27 @@
 import fetch from 'node-fetch';
 
+let lastRequestTime = 0;
+const RATE_LIMIT_INTERVAL = 1000; // 1 second
+
 export const handler = async (event, context) => {
     const { tags } = event.queryStringParameters || {};
     const apiUrl = tags
         ? `https://open-api.guesty.com/v1/listings?tags=${tags}&limit=100&skip=0`
         : 'https://open-api.guesty.com/v1/listings/tags';
+
+    const currentTime = Date.now();
+    if (currentTime - lastRequestTime < RATE_LIMIT_INTERVAL) {
+        return {
+            statusCode: 429,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ error: 'Too many requests' })
+        };
+    }
+
+    lastRequestTime = currentTime;
 
     try {
         const response = await fetch(apiUrl, {
