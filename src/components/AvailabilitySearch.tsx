@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Search } from "lucide-react";
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/global.scss';
@@ -62,6 +62,8 @@ const AvailabilitySearch: React.FC = () => {
   const [filters, setFilters] = useState<any>({});
 
   const apiUrl = '/.netlify/functions/availability';
+
+  const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -144,8 +146,8 @@ const AvailabilitySearch: React.FC = () => {
       filtered = filtered.filter(listing => filters.selectedTags.every(tag => listing.publicDescription.summary.includes(tag)));
     }
 
-    if (filters.city) {
-      filtered = filtered.filter(listing => listing.address.city === filters.city);
+    if (filters.selectedCity) {
+      filtered = filtered.filter(listing => listing.address.city === filters.selectedCity);
     }
 
     setFilteredListings(filtered);
@@ -154,6 +156,13 @@ const AvailabilitySearch: React.FC = () => {
   const resetFilters = () => {
     setFilters({});
     setFilteredListings(available);
+  };
+
+  const handleMarkerClick = (id: string) => {
+    const listingElement = listingRefs.current[id];
+    if (listingElement) {
+      listingElement.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -251,14 +260,14 @@ const AvailabilitySearch: React.FC = () => {
         )}
         {available.length > 0 && (
           <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-full">
-            <div className="w-full md:w-1/4">
+            <div className="hidden md:grid w-full md:w-1/4">
               {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} />}
             </div>
             <div className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
               <div className="search-results w-full overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-3 self-center">
                 {filteredListings.length > 0 ? (
                   filteredListings.map((property) => (
-                    <a href={property._id} key={property._id}>
+                    <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
                       <article className="bg-white w-full flex flex-col justify-center md:items-start shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md md:p-6">
                         <div className="result-item">
                           <img className="w-full md:h-auto md:w-fit md:object-center pt-2 shadow-lg" src={property.pictures[0].original} alt={property.picture.caption} />
@@ -279,10 +288,14 @@ const AvailabilitySearch: React.FC = () => {
                 )}
               </div>
             </div>
-
-            <div className="w-full md:w-2/3 h-64 md:h-full">
-              <GoogleMap listings={filteredListings} />
+            <div className="w-full md:w-2/3 h-full">
+              <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} />
             </div>
+            <div className="md:hidden w-full md:w-1/4">
+              {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} />}
+            </div>
+
+
           </div>
         )}
       </div>

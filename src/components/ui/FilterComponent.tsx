@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 interface FilterComponentProps {
     onFilterChange: (filters: any) => void;
@@ -98,7 +98,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
                 </div>
                 <div className="tags-filter w-full flex flex-col items-center text-start md:mt-4">
                     <label className="font-semibold">Amenities:</label>
-                    <div className="tags w-full flex flex-col items-center gap-2 mt-2">
+                    <div className="tags w-full flex flex-wrap md:flex-col justify-center items-center gap-2 mt-2">
                         {tags.map(tag => (
                             <button
                                 key={tag}
@@ -111,7 +111,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
                         ))}
                     </div>
                 </div>
-
             </div>
         </div>
     );
