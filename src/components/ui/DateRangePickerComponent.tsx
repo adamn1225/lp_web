@@ -23,7 +23,6 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ sta
 
     const handleSelect = (ranges: any) => {
         setState([ranges.selection]);
-        setShowPicker(false); // Close the modal upon selecting the range of dates
     };
 
     const formattedStartDate = state[0].startDate ? format(state[0].startDate, 'MM/dd/yyyy') : '';
@@ -58,7 +57,7 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ sta
                             />
                         </div>
                         <div className="flex justify-center mt-4">
-                            <button onClick={handleClose} className="bg-blue-500 text-white px-4 py-2 rounded">Select Dates</button>
+                            <button onClick={handleClose} className="bg-secondary text-white px-4 py-2 rounded">Select Dates</button>
                         </div>
                     </div>
                 </div>

@@ -201,16 +201,16 @@ const AvailabilitySearch: React.FC = () => {
         {error && <p>Error: {error}</p>}
         {available.length > 0 && (
           <div className="flex flex-col justify-start items-center pt-8">
-            <h2 className="font-sans font-light border-b-2 border-slate-700 text-3xl text-cyan-900 bb-4 text-center">Available for Instant Booking!</h2>
-            <button onClick={clearResults} className="bg-red-600 text-white w-1/5 py-3 px-1 my-6 rounded-md">
+            <h2 className="font-sans font-light md:border-b-2 border-slate-700 text-3xl text-cyan-900 bb-4 text-center">Available for Instant Booking!</h2>
+            <button onClick={clearResults} className="bg-red-600 text-white md:w-1/5 py-3 px-1 my-6 rounded-md">
               Clear Search Display
             </button>
           </div>
         )}
-        <div className="flex gap-1 w-screen h-full p-3">
-          <div className="h-full w-full overflow-y-auto max-h-[100vh]">
+        <div className="flex flex-col-reverse md:flex-row gap-1 w-screen h-full p-3">
+          <div className="h-full w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
             {available.length > 0 && (
-              <div className="search-results overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-1 px-4">
+              <div className="search-results overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-1">
                 {available.map((property) => (
                   <a href={property._id} key={property._id}>
                     <article className="bg-white w shadow-lg shadow-slate-300/30 h-fit border border-slate-500/30 rounded-md">
@@ -231,9 +231,9 @@ const AvailabilitySearch: React.FC = () => {
               </div>
             )}
           </div>
-          
-          <div className="w-full max-h-[100vh]"><GoogleMap listings={available} /></div>
-        
+
+          <div className="w-full md:w-1/3 h-64 md:h-full"><GoogleMap listings={available} /></div>
+
         </div>
       </div>
     </div>
