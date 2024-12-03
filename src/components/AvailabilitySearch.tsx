@@ -67,54 +67,60 @@ const AvailabilitySearch: React.FC = () => {
   const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
   const resultsContainerRef = useRef<HTMLDivElement>(null); // Add reference to the results container
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
-  setSearchAttempted(true);
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const response = await fetch('/.netlify/functions/availability?fetchCities=true');
+        const data = await response.json();
+        setCities(data.results);
+      } catch (err) {
+        console.error('Error fetching cities:', err);
+        setError('Failed to load cities');
+      }
+    };
 
-  try {
-    const tagsQuery = selectedTags.join(',');
-    let url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
+    fetchCities();
+  }, []);
 
-    if (selectedLocation) {
-      url += `&city=${encodeURIComponent(selectedLocation)}`;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSearchAttempted(true);
+
+    try {
+      const tagsQuery = selectedTags.join(',');
+      const url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&city=${encodeURIComponent(selectedLocation)}&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
+      console.log('API URL:', url);
+
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch listings: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      if (!data.results) {
+        setError('No results found');
+      }
+
+      // Filter listings based on the number of guests
+      const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
+
+      setListings(filteredListings);
+      setFilteredListings(filteredListings); // Set the filtered listings to the initial search results
+
+      // Scroll to the top of the results container
+      if (resultsContainerRef.current) {
+        resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'An error occurred');
+    } finally {
+      setLoading(false);
+      setIsModalOpen(false); // Close the modal after search
     }
-
-    if (selectedBedroomAmount) {
-      url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
-    }
-
-    console.log('API URL:', url);
-
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch listings: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    if (!data.results) {
-      setError('No results found');
-    }
-
-    // Filter listings based on the number of guests
-    const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
-
-    setListings(filteredListings);
-    setFilteredListings(filteredListings); // Set the filtered listings to the initial search results
-
-    // Scroll to the top of the results container
-    if (resultsContainerRef.current) {
-      resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  } catch (err) {
-    console.error(err);
-    setError(err.message || 'An error occurred');
-  } finally {
-    setLoading(false);
-    setIsModalOpen(false); // Close the modal after search
-  }
-};
+  };
 
   // Clear the search results
   const clearResults = () => {
@@ -250,9 +256,9 @@ const handleSubmit = async (e: React.FormEvent) => {
       </Modal>
       <div className="w-full my-3"></div>
 
-      <div ref={resultsContainerRef} className={`bg-white w-screen m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
+      <div className={`bg-white w-screen m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
         {loading && (
-          <div className="flex flex-col items-center justify-center h-full">
+          <div ref={resultsContainerRef} className="flex flex-col items-center justify-center h-full">
             <ClipLoader size={50} color={"#102C57"} loading={loading} />
             <p>One moment while we load your results...</p>
           </div>
