@@ -79,7 +79,7 @@ const TagNavigation: React.FC = () => {
                 setTags(filteredTags);
             } catch (err) {
                 console.error('Error fetching tags:', err);
-                setError('Failed to load tags');
+                setError('');
             } finally {
                 setTagsLoading(false);
             }
@@ -118,7 +118,7 @@ const TagNavigation: React.FC = () => {
 
     return (
     <div className="w-full mt-2">
-        <div className="mb-4 tags flex gap-6 justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
+        <div className="ml-4 md:ml-0 mb-4 tags flex gap-6 justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
             {tagsLoading ? (
                 <p>Loading Search...</p>
             ) : (
@@ -162,7 +162,7 @@ const TagNavigation: React.FC = () => {
                 </Suspense>
             </motion.div>
         )}
-        {error && <div className="error">{error}</div>}
+        {/* {error && <div className="error">{error}</div>} */}
     </div>
 );
 };

@@ -62,11 +62,11 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
 
     return (
         <div className="filter-component flex flex-col items-center justify-start gap-4 p-2 md:p-4 w-full bg-secondary/10 h-full">
-            <button onClick={handleResetFilters} className="md:mt-4 bg-gray-500 text-white px-2 py-1 rounded">
+            <button onClick={handleResetFilters} className="md:mt-4 bg-secondary w-1/2 md:w-1/5 text-white px-2 py-2 rounded">
                 Reset Filters
             </button>
             <div className='items-start text-sm md:text-base'>
-                <div className="flex md:flex-col gap-1">
+                <div className="flex  gap-1">
                     <div className="price-filter">
                         <label className="font-semibold ">Price Order:</label>
                         <select value={priceOrder} onChange={handlePriceChange} className="border border-secondary/30 rounded-lg p-2 w-full">
@@ -88,7 +88,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
                             <option value="7">7</option>
                         </select>
                     </div>
-                </div>
                 <div className="city-filter">
                     <label className="font-semibold">City:</label>
                     <select value={selectedCity} onChange={handleCityChange} className="border border-secondary/30 rounded-lg p-2 w-full">
@@ -98,9 +97,9 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
                         ))}
                     </select>
                 </div>
+                </div>
                 <div className="tags-filter w-full flex flex-col items-center text-start md:mt-4">
-                    <label className="font-semibold">Amenities:</label>
-                    <div className="tags w-full flex flex-wrap md:flex-col justify-center items-center gap-2 mt-2">
+                    <div className="tags w-full flex flex-wrap justify-center items-center gap-2 mt-2">
                         {tags.map(tag => (
                             <button
                                 key={tag}

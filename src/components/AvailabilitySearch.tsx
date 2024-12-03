@@ -61,6 +61,7 @@ const AvailabilitySearch: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [filters, setFilters] = useState<any>({});
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false); // Add state to track the visibility of the filter modal
+  const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false); // Add state to track the visibility of the results modal
 
   const apiUrl = '/.netlify/functions/availability';
 
@@ -122,6 +123,9 @@ const AvailabilitySearch: React.FC = () => {
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
       }
+
+      // Open the results modal
+      setIsResultsModalOpen(true);
     } catch (err) {
       console.error(err);
       setError(err.message || 'An error occurred');
@@ -136,6 +140,7 @@ const AvailabilitySearch: React.FC = () => {
     setListings([]);
     setFilteredListings([]);
     setSearchAttempted(false);
+    setIsResultsModalOpen(false); // Close the results modal
   };
 
   const handleFilterChange = (newFilters: any) => {
@@ -155,7 +160,12 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     if (filters.bedroomCount) {
-      filtered = filtered.filter(listing => listing.bedrooms === filters.bedroomCount);
+      filtered = filtered.filter(listing => {
+        if (filters.bedroomCount === 'studio') {
+          return listing.bedrooms === 0;
+        }
+        return listing.bedrooms === parseInt(filters.bedroomCount, 10);
+      });
     }
 
     if (filters.selectedTags && filters.selectedTags.length > 0) {
@@ -198,10 +208,10 @@ const AvailabilitySearch: React.FC = () => {
           <span className="flex w-fit items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
         </button>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <form onSubmit={handleSubmit} className="flex flex-col justify-center bg-zinc-100 items-center h-1/2 rounded-md">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} showCloseButton>
+        <form onSubmit={handleSubmit} className="flex flex-col justify-start bg-zinc-100 items-center h-full rounded-md p-8">
           <div className="flex flex-col items-center justify-center w-full px-6">
-            <div className="flex flex-col justify-center items-center gap-1 w-full">
+            <div className="flex flex-col justify-center items-center gap-4 w-full pt-6 md:pt-0">
               <div className="w-full flex flex-col">
                 <label className="text-slate-800 font-semibold" htmlFor="dateRange">Select Dates:</label>
                 <DateRangePickerComponent
@@ -265,68 +275,65 @@ const AvailabilitySearch: React.FC = () => {
       </Modal>
       <div className="w-full my-3"></div>
 
-      <div className={`bg-white w-screen m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
-        {loading && (
-          <div ref={resultsContainerRef} className="flex flex-col items-center justify-center h-full">
-            <ClipLoader size={50} color={"#102C57"} loading={loading} />
-            <p>One moment while we load your results...</p>
-          </div>
-        )}
-        {error && <p>Error: {error}</p>}
-        {available.length > 0 && (
-          <div className="flex flex-col justify-start items-center ">
-            <button onClick={clearResults} className="bg-gray-600 text-white md:w-1/5 px-3 py-2 font-semibold my-3 rounded-md">
-              Clear Search Display
-            </button>
-          </div>
-        )}
-        {available.length > 0 && (
-          <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
-            <div className="hidden md:grid w-full md:w-1/4">
-              {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} />}
+      <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen>
+        <div className={`bg-white w-screen h-screen z-20`}>
+          {loading && (
+            <div className="flex flex-col items-center justify-center h-full">
+              <ClipLoader size={50} color={"#102C57"} loading={loading} />
+              <p>One moment while we load your results...</p>
             </div>
-            <div ref={resultsContainerRef} className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
-              <div className="search-results h-full w-full overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-3 self-center">
-                {filteredListings.length > 0 ? (
-                  filteredListings.map((property) => (
-                    <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
-                      <article className="bg-white w-full flex flex-col justify-center md:items-start shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md md:p-6">
-                        <div className="result-item">
-                          <img className="w-full md:h-auto md:w-fit md:object-center pt-2 shadow-lg" src={property.pictures[0].original} alt={property.picture.caption} />
-                          <div className="p-4 text-normal flex flex-col gap-4">
-                            <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
-                            <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
-                            <div className="border md:w-1/2 border-stone-300"></div>
-                            <div className="flex min-h-min flex-row justify-start align-bottom">
-                              <button className="text-slate-900 font-extrabold"><strong>Starting at:</strong> ${property.prices.basePrice} Night</button>
+          )}
+          {error && <p>Error: {error}</p>}
+          {available.length > 0 && (
+            <div className="flex flex-col justify-start items-center ">
+              <button onClick={clearResults} className="bg-gray-600 text-white md:w-1/5 px-3 py-2 font-semibold my-3 rounded-md">
+                Clear Search Display
+              </button>
+            </div>
+          )}
+          {available.length > 0 && (
+            <div className="flex flex-col gap-3 w-screen h-screen">
+              <div ref={resultsContainerRef} className="w-full">
+                <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} />
+              </div>
+              <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-full h-full">
+                <div className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto">
+                  <div className="search-results h-full w-full overflow-y-auto grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-3 self-center px-2">
+                    {filteredListings.length > 0 ? (
+                      filteredListings.map((property) => (
+                        <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
+                          <article className="bg-white w-full flex flex-col shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md">
+                            <div className="result-item h-full flex flex-col justify-between">
+                              <div>
+                                <img className="w-full md:h-auto md:w-fit md:object-center shadow-lg" src={property.pictures[0].original} alt={property.picture.caption} />
+                                <div className="p-4">
+                                  <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
+                                  <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
+                                </div>
+                              </div>
+                              <div className="p-4">
+                                <div className="border md:w-1/2 border-stone-300"></div>
+                                <div className="flex min-h-min flex-row justify-start align-bottom">
+                                  <button className="text-slate-900 font-extrabold"><strong>Starting at:</strong> ${property.prices.basePrice} Night</button>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </article>
-                    </a>
-                  ))
-                ) : (
-                  <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
-                )}
+                          </article>
+                        </a>
+                      ))
+                    ) : (
+                      <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
+                    )}
+                  </div>
+                </div>
+                <div className="w-full md:w-2/3 md:h-full">
+                  <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} />
+                </div>
               </div>
             </div>
-            <div className="w-full md:w-2/3 md:h-full">
-              <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} />
-            </div>
-            <div className="md:hidden flex justify-center items-baseline mt-4 h-fit w-full md:w-1/4">
-              <button
-                onClick={() => setIsFilterModalOpen(true)}
-                className="w-2/3 flex gap-1 text-lg justify-center font-semibold bg-secondary text-white py-1.5 rounded-md"
-              >
-              <SlidersHorizontal />  Filter Search
-              </button>
-              <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)}>
-                <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} />
-              </Modal>
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 };

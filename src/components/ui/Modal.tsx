@@ -1,24 +1,30 @@
 import React from 'react';
+import { X } from 'lucide-react';
 
 interface ModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    children: React.ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  fullScreen?: boolean;
+  showCloseButton?: boolean; // Add prop for close button
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
-    if (!isOpen) return null;
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, fullScreen = false, showCloseButton = false }) => {
+  if (!isOpen) return null;
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-zinc-100 h-fit rounded-lg p-4 w-11/12 max-w-md">
-                <button onClick={onClose} className="relative top-1 right-1 text-3xl text-secondary hover:text-gray-700">
-                    &times;
-                </button>
-                {children}
-            </div>
-        </div>
-    );
+  return (
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${fullScreen ? 'w-full h-full' : ''}`}>
+      <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
+      <div className={`relative bg-white rounded-lg shadow-lg ${fullScreen ? 'w-full h-full' : 'w-auto h-2/3 md:h-auto'}`}>
+        {showCloseButton && (
+          <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+            <X size={24} />
+          </button>
+        )}
+        {children}
+      </div>
+    </div>
+  );
 };
 
 export default Modal;
