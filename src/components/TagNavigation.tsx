@@ -2,7 +2,6 @@ import React, { useState, useEffect, Suspense } from "react";
 import { FiSun, FiEye, FiStar, FiDroplet, FiHeart } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { ClipLoader } from "react-spinners";
-import { useInView } from "react-intersection-observer";
 
 const LazyLoadCard = React.lazy(() => import('./ui/LazyLoadCard'));
 
@@ -35,7 +34,6 @@ const TagNavigation: React.FC = () => {
     const [tagsLoading, setTagsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [prefetchedListings, setPrefetchedListings] = useState<{ [key: string]: Listing[] }>({});
 
     const tagsApiUrl = '/.netlify/functions/tags';
 
@@ -99,10 +97,7 @@ const TagNavigation: React.FC = () => {
             if (data.error) {
                 throw new Error(data.error);
             }
-            // Incrementally update listings as they are fetched
-            for (const listing of data.results) {
-                setListings((prevListings) => [...prevListings, listing]);
-            }
+            setListings(data.results);
         } catch (err) {
             console.error('Error fetching listings:', err);
             setError('Failed to load listings');
@@ -112,39 +107,14 @@ const TagNavigation: React.FC = () => {
     };
 
     const handleTagClick = (tag: string) => {
-        setSelectedTag(tag === selectedTag ? null : tag);
-        if (prefetchedListings[tag]) {
-            setListings(prefetchedListings[tag]);
+        if (tag === selectedTag) {
+            setSelectedTag(null);
+            setListings([]);
         } else {
+            setSelectedTag(tag);
             fetchListingsForTag(tag);
         }
     };
-
-    useEffect(() => {
-        const prefetchListings = async () => {
-            try {
-                const listingsPromises = tags.map(async (tag: string) => {
-                    const response = await fetch(`${tagsApiUrl}?tags=${tag}`);
-                    const data = await response.json();
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-                    return { tag, listings: data.results };
-                });
-
-                const listingsResults = await Promise.all(listingsPromises);
-                const listingsMap: { [key: string]: Listing[] } = {};
-                listingsResults.forEach(({ tag, listings }) => {
-                    listingsMap[tag] = listings;
-                });
-                setPrefetchedListings(listingsMap);
-            } catch (err) {
-                console.error('Error prefetching listings:', err);
-            }
-        };
-
-        prefetchListings();
-    }, [tags]);
 
     return (
         <div className="w-full mt-2">
@@ -192,6 +162,7 @@ const TagNavigation: React.FC = () => {
                     </Suspense>
                 </motion.div>
             )}
+            {error && <div className="error">{error}</div>}
         </div>
     );
 };

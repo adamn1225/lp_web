@@ -89,7 +89,7 @@ const featured: Listing[] = [...listingsOne, ...listingsTwo, ...listingsThree];
       _id,
       propertyType,
     }) => (
-      <a href={_id}>
+      <a href={`/${_id}`}>
         <article class="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative">
           <div class="swiper-container">
             <div class="swiper-wrapper">
@@ -97,7 +97,7 @@ const featured: Listing[] = [...listingsOne, ...listingsTwo, ...listingsThree];
                 <div class="swiper-slide" id={`${_id}-${index}`}>
                   <div class="relative w-full h-48">
                     <img
-                      class="absolute inset0 w-full h-full object-cover"
+                      class="absolute inset-0 w-full h-full object-cover"
                       src={picture.original}
                       alt={`Slide ${index + 1}`}
                     />
