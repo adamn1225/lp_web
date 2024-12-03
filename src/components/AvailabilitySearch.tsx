@@ -90,7 +90,16 @@ const AvailabilitySearch: React.FC = () => {
 
     try {
       const tagsQuery = selectedTags.join(',');
-      const url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&city=${encodeURIComponent(selectedLocation)}&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
+      let url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
+      
+      if (selectedLocation) {
+        url += `&city=${encodeURIComponent(selectedLocation)}`;
+      }
+
+      if (selectedBedroomAmount) {
+        url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
+      }
+
       console.log('API URL:', url);
 
       const response = await fetch(url);
@@ -276,7 +285,7 @@ const AvailabilitySearch: React.FC = () => {
             <div className="hidden md:grid w-full md:w-1/4">
               {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} />}
             </div>
-            <div className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
+            <div ref={resultsContainerRef} className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
               <div className="search-results h-full w-full overflow-y-auto grid grid-cols-1 gap-x-6 gap-y-3 self-center">
                 {filteredListings.length > 0 ? (
                   filteredListings.map((property) => (

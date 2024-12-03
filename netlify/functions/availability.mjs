@@ -100,7 +100,13 @@ export const handler = async (event, context) => {
 
   try {
     const fetchListings = async (tag) => {
-      const url = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}${tag ? `&tags=${encodeURIComponent(tag)}` : ''}&city=${encodeURIComponent(city)}`;
+      let url = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
+      if (tag) {
+        url += `&tags=${encodeURIComponent(tag)}`;
+      }
+      if (city) {
+        url += `&city=${encodeURIComponent(city)}`;
+      }
       console.log(`Fetching listings for tag: ${tag} from URL: ${url}`);
 
       const response = await fetchWithRetry(url, {
