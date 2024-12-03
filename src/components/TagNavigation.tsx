@@ -117,54 +117,54 @@ const TagNavigation: React.FC = () => {
     };
 
     return (
-        <div className="w-full mt-2">
-            <div className="mb-4 tags flex gap-6 justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar">
-                {tagsLoading ? (
-                    <p>Loading Search...</p>
-                ) : (
-                    tags.map((tag) => (
-                        <button
-                            key={tag}
-                            type="button"
-                            onClick={() => handleTagClick(tag)}
-                            className={`px-3 py-2 text-nowrap w-fit text-secondary rounded flex flex-col items-center gap-2 ${selectedTag === tag ? 'bg-secondary rounded-2xl text-white' : ''}`}
-                        >
-                            {getIconForTag(tag)}
-                            {formatTag(tag)}
-                        </button>
-                    ))
-                )}
-            </div>
-            <style>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;  /* Firefox */
-        }
-      `}</style>
-            {loading && listings.length === 0 ? (
-                <div className="flex justify-center items-center h-64">
-                    <ClipLoader size={50} color={"#102C57"} loading={loading} />
-                </div>
+    <div className="w-full mt-2">
+        <div className="mb-4 tags flex gap-6 justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
+            {tagsLoading ? (
+                <p>Loading Search...</p>
             ) : (
-                <motion.div
-                    className="search-results grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-8 justify-center md:px-12 px-4"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                >
-                    <Suspense fallback={<div>Loading...</div>}>
-                        {listings.map((property) => (
-                            <LazyLoadCard key={property._id} property={property} />
-                        ))}
-                    </Suspense>
-                </motion.div>
+                tags.map((tag) => (
+                    <button
+                        key={tag}
+                        type="button"
+                        onClick={() => handleTagClick(tag)}
+                        className={`px-3 py-2 text-nowrap w-fit text-secondary rounded flex flex-col items-center gap-2 ${selectedTag === tag ? 'bg-secondary rounded-2xl text-white' : ''}`}
+                    >
+                        {getIconForTag(tag)}
+                        {formatTag(tag)}
+                    </button>
+                ))
             )}
-            {error && <div className="error">{error}</div>}
         </div>
-    );
+        <style>{`
+            .no-scrollbar::-webkit-scrollbar {
+                display: none;
+            }
+            .no-scrollbar {
+                -ms-overflow-style: none;  /* IE and Edge */
+                scrollbar-width: none;  /* Firefox */
+            }
+        `}</style>
+        {loading && listings.length === 0 ? (
+            <div className="flex justify-center items-center h-64">
+                <ClipLoader size={50} color={"#102C57"} loading={loading} />
+            </div>
+        ) : (
+            <motion.div
+                className="search-results grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-8 justify-center md:px-12 px-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+            >
+                <Suspense fallback={<div>Loading...</div>}>
+                    {listings.map((property) => (
+                        <LazyLoadCard key={property._id} property={property} />
+                    ))}
+                </Suspense>
+            </motion.div>
+        )}
+        {error && <div className="error">{error}</div>}
+    </div>
+);
 };
 
 export default TagNavigation;
