@@ -20,40 +20,11 @@ const fetchWithRetry = async (url, options, retries = 3) => {
     throw new Error('Max retries reached');
 };
 
-const amenityMapping = {
-    "Ocean_front": "LOCATION_TYPE_OCEAN_FRONT",
-    "Ocean_view": "LOCATION_TYPE_NEAR_OCEAN",
-    "Public_pool": [
-        "POOL_SPA_COMMUNAL_POOL",
-        "POOL_SPA_INDOOR_POOL",
-        "POOL_SPA_COMMUNAL_POOL",
-        "POOL_SPA_PRIVATE_POOL",
-        "POOL_SPA_INDOOR_POOL",
-        "POOL_COMMUNITY"
-    ]
-};
-
 export const handler = async (event, context) => {
     const { tags } = event.queryStringParameters || {};
-    let apiUrl;
-
-    if (!tags) {
-        return {
-            statusCode: 400,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ error: 'Missing required query parameter: tags' })
-        };
-    }
-
-    if (tags === "Pets") {
-        apiUrl = `https://open-api.guesty.com/v1/listings?tags=${tags}&limit=100&skip=0`;
-    } else {
-        const amenities = tags.split(',').map(tag => amenityMapping[tag]).flat().join(',');
-        apiUrl = `https://open-api.guesty.com/v1/listings?amenity=${amenities}&limit=100&skip=0`;
-    }
+    const apiUrl = tags
+        ? `https://open-api.guesty.com/v1/listings?tags=${tags}&limit=100&skip=0`
+        : 'https://open-api.guesty.com/v1/listings/tags';
 
     const currentTime = Date.now();
     if (currentTime - lastRequestTime < RATE_LIMIT_INTERVAL) {
