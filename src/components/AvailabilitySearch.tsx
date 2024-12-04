@@ -40,8 +40,24 @@ interface Listing {
   bedrooms: number;
   bathrooms: number;
   accommodates: number; // Add accommodates property
-  // Add other properties as needed
+  amenities: string[]; // Add amenities property
+  tags: string[]; // Add tags property
 }
+
+const allowedAmenities = ["Ocean_front", "Ocean_view", "web_featured", "Public_pool"];
+const allowedTags = ["Pets"];
+
+const tagDisplayNames: { [key: string]: string } = {
+  "Ocean_front": "Ocean Front",
+  "Ocean_view": "Ocean View",
+  "web_featured": "Featured",
+  "Public_pool": "Pool",
+  "Pets": "Pet Friendly"
+};
+
+const formatTag = (tag: string): string => {
+  return tagDisplayNames[tag] || tag;
+};
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
@@ -57,11 +73,13 @@ const AvailabilitySearch: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>('');
   const [cities, setCities] = useState<string[]>([]);
+  const [amenities, setAmenities] = useState<string[]>([]);
   const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [filters, setFilters] = useState<any>({});
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
+  const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false); // Add state to track search completion
 
   const apiUrl = '/.netlify/functions/availability';
 
@@ -120,11 +138,19 @@ const AvailabilitySearch: React.FC = () => {
       setListings(filteredListings);
       setFilteredListings(filteredListings);
 
+      // Extract unique amenities and tags from the listings
+      const uniqueAmenities = Array.from(new Set(filteredListings.flatMap(listing => listing.amenities.filter(amenity => allowedAmenities.includes(amenity))))) as string[];
+      const uniqueTags = Array.from(new Set(filteredListings.flatMap(listing => listing.tags.filter(tag => allowedTags.includes(tag))))) as string[];
+
+      setAmenities(uniqueAmenities);
+      setTags(uniqueTags);
+
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
       }
 
       setIsResultsModalOpen(true);
+      setIsSearchComplete(true); // Set search completion state to true
     } catch (err) {
       console.error(err);
       setError(err.message || 'An error occurred');
@@ -138,6 +164,8 @@ const AvailabilitySearch: React.FC = () => {
     setListings([]);
     setFilteredListings([]);
     setSearchAttempted(false);
+    setIsResultsModalOpen(false);
+    setIsSearchComplete(false); // Reset search completion state
   };
 
   const handleFilterChange = (newFilters: any) => {
@@ -161,7 +189,11 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     if (filters.selectedTags && filters.selectedTags.length > 0) {
-      filtered = filtered.filter(listing => filters.selectedTags.every(tag => listing.publicDescription.summary.includes(tag)));
+      filtered = filtered.filter(listing => filters.selectedTags.every(tag => listing.tags.includes(tag)));
+    }
+
+    if (filters.selectedAmenities && filters.selectedAmenities.length > 0) {
+      filtered = filtered.filter(listing => filters.selectedAmenities.every(amenity => listing.amenities.includes(amenity)));
     }
 
     if (filters.selectedCity) {
@@ -193,6 +225,7 @@ const AvailabilitySearch: React.FC = () => {
       return 'grid-cols-1';
     }
   };
+
 
   return (
     <div className="w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
@@ -270,7 +303,7 @@ const AvailabilitySearch: React.FC = () => {
         </form>
       </Modal>
       <div className="w-full my-3"></div>
-      <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen>
+      <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
         <div className={`bg-white w-screen m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
           {loading && (
             <div ref={resultsContainerRef} className="flex flex-col items-center justify-center h-full">
@@ -287,11 +320,10 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           )}
           <div className="w-full">
-            {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} />}
+            {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} amenities={amenities} tags={tags} />}
           </div>
           {available.length > 0 && (
             <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
-
               <div ref={resultsContainerRef} className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
                 <div className={`search-results h-full w-full overflow-y-auto grid ${getGridColsClass()} gap-x-6 gap-y-3 self-center px-2`}>
                   {filteredListings.length > 0 ? (
@@ -313,6 +345,7 @@ const AvailabilitySearch: React.FC = () => {
                             <p className="text-sm text-muted-400">
                               {property.address.city}, {property.address.state}
                             </p>
+                            <span className="hidden">{property.amenities.map(formatTag).join(', ')}</span>
                             <hr className="border border-muted-200 dark:border-muted-800 my-2" />
                             <div className="flex items-end h-full">
                               <button className="text-slate-900 font-extrabold mb-4">
@@ -339,7 +372,7 @@ const AvailabilitySearch: React.FC = () => {
                   <SlidersHorizontal />  Filter Search
                 </button>
                 <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)}>
-                  <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} />
+                  <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} amenities={amenities} tags={tags} />
                 </Modal>
               </div>
             </div>

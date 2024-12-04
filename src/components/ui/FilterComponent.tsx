@@ -4,36 +4,69 @@ interface FilterComponentProps {
     onFilterChange: (filters: any) => void;
     onResetFilters: () => void;
     cities: string[];
+    amenities: string[];
+    tags: string[];
 }
 
-const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onResetFilters, cities }) => {
+const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onResetFilters, cities, amenities, tags }) => {
     const [priceOrder, setPriceOrder] = useState<string>('default');
     const [bedroomCount, setBedroomCount] = useState<number | null>(null);
     const [selectedCity, setSelectedCity] = useState<string>('');
+    const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     const handlePriceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newPriceOrder = e.target.value;
         setPriceOrder(newPriceOrder);
-        onFilterChange({ priceOrder: newPriceOrder, bedroomCount, selectedCity });
+        onFilterChange({ priceOrder: newPriceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags });
     };
 
     const handleBedroomChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newBedroomCount = Number(e.target.value);
         setBedroomCount(newBedroomCount);
-        onFilterChange({ priceOrder, bedroomCount: newBedroomCount, selectedCity });
+        onFilterChange({ priceOrder, bedroomCount: newBedroomCount, selectedCity, selectedAmenities, selectedTags });
     };
 
     const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newSelectedCity = e.target.value;
         setSelectedCity(newSelectedCity);
-        onFilterChange({ priceOrder, bedroomCount, selectedCity: newSelectedCity });
+        onFilterChange({ priceOrder, bedroomCount, selectedCity: newSelectedCity, selectedAmenities, selectedTags });
+    };
+
+    const handleAmenityChange = (amenity: string) => {
+        const newSelectedAmenities = selectedAmenities.includes(amenity)
+            ? selectedAmenities.filter(a => a !== amenity)
+            : [...selectedAmenities, amenity];
+        setSelectedAmenities(newSelectedAmenities);
+        onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities: newSelectedAmenities, selectedTags });
+    };
+
+    const handleTagChange = (tag: string) => {
+        const newSelectedTags = selectedTags.includes(tag)
+            ? selectedTags.filter(t => t !== tag)
+            : [...selectedTags, tag];
+        setSelectedTags(newSelectedTags);
+        onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags: newSelectedTags });
     };
 
     const handleResetFilters = () => {
         setPriceOrder('default');
         setBedroomCount(null);
         setSelectedCity('');
+        setSelectedAmenities([]);
+        setSelectedTags([]);
         onResetFilters();
+    };
+
+    const formatTag = (tag: string): string => {
+        const tagDisplayNames: { [key: string]: string } = {
+            "Ocean_front": "Ocean Front",
+            "Ocean_view": "Ocean View",
+            "web_featured": "Featured",
+            "Public_pool": "Pool",
+            "Pets": "Pet Friendly"
+        };
+        return tagDisplayNames[tag] || tag;
     };
 
     return (
@@ -72,6 +105,30 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
                                 <option key={city} value={city}>{city}</option>
                             ))}
                         </select>
+                    </div>
+                </div>
+                <div className="amenities-filter">
+                    <div className="flex flex-wrap gap-2">
+                        {amenities.map(amenity => (
+                            <button
+                                key={amenity}
+                                type="button"
+                                onClick={() => handleAmenityChange(amenity)}
+                                className={`px-3 py-1 text-nowrap w-fit text-secondary rounded ${selectedAmenities.includes(amenity) ? 'bg-foreground text-white' : 'bg-secondary text-white'}`}
+                            >
+                                {formatTag(amenity)}
+                            </button>
+                        ))}
+                        {tags.map(tag => (
+                            <button
+                                key={tag}
+                                type="button"
+                                onClick={() => handleTagChange(tag)}
+                                className={`px-3 py-1 text-nowrap w-fit text-secondary rounded ${selectedTags.includes(tag) ? 'bg-foreground text-white' : 'bg-secondary text-white'}`}
+                            >
+                                {formatTag(tag)}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </div>
