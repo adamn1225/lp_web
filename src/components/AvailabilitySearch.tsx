@@ -106,49 +106,47 @@ const AvailabilitySearch: React.FC = () => {
     setLoading(true);
     setError('');
     setSearchAttempted(true);
-
+  
     try {
       const tagsQuery = selectedTags.join(',');
       let url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
-
+  
       if (selectedLocation) {
         url += `&city=${encodeURIComponent(selectedLocation)}`;
       }
-
+  
       if (selectedBedroomAmount) {
         url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
       }
-
+  
       console.log('API URL:', url);
-
+  
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch listings: ${response.statusText}`);
       }
-
+  
       const data = await response.json();
       console.log('Fetched Data:', data);
-
+  
       if (!data.results) {
         setError('No results found');
       }
-
+  
       const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
-
+  
       setListings(filteredListings);
       setFilteredListings(filteredListings);
-
-      // Extract unique amenities and tags from the listings
-      const uniqueAmenities = Array.from(new Set(filteredListings.flatMap(listing => listing.amenities.filter(amenity => allowedAmenities.includes(amenity))))) as string[];
+  
+      // Extract unique tags from the listings
       const uniqueTags = Array.from(new Set(filteredListings.flatMap(listing => listing.tags.filter(tag => allowedTags.includes(tag))))) as string[];
-
-      setAmenities(uniqueAmenities);
+  
       setTags(uniqueTags);
-
+  
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-
+  
       setIsResultsModalOpen(true);
       setIsSearchComplete(true); // Set search completion state to true
     } catch (err) {
@@ -304,7 +302,7 @@ const AvailabilitySearch: React.FC = () => {
       </Modal>
       <div className="w-full my-3"></div>
       <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
-        <div className={`bg-white w-screen m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
+        <div className={`bg-white w-screen overflow-y-auto m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
           {loading && (
             <div ref={resultsContainerRef} className="flex flex-col items-center justify-center h-full">
               <ClipLoader size={50} color={"#102C57"} loading={loading} />
@@ -320,7 +318,7 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           )}
           <div className="w-full">
-            {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} amenities={amenities} tags={tags} />}
+            {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} tags={tags} />}
           </div>
           {available.length > 0 && (
             <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
@@ -372,7 +370,7 @@ const AvailabilitySearch: React.FC = () => {
                   <SlidersHorizontal />  Filter Search
                 </button>
                 <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)}>
-                  <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} amenities={amenities} tags={tags} />
+                  <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} tags={tags} />
                 </Modal>
               </div>
             </div>
