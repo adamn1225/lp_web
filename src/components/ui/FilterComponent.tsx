@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { Dog, SlidersHorizontal, } from "lucide-react";
 interface FilterComponentProps {
   onFilterChange: (filters: any) => void;
   onResetFilters: () => void;
@@ -60,12 +60,13 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
   };
 
   return (
-    <div className="filter-component flex flex-col items-center justify-start gap-4 p-2 md:p-4 w-full bg-primary/40 h-full">
-      <button onClick={handleResetFilters} className="md:mt-4 bg-secondary w-1/2 md:w-1/5 text-white px-2 py-2 rounded">
+    <div className="filter-component flex flex-col items-start justify-end gap-4 p-2 md:p-4 w-full bg-primary/40 h-full">
+
+      <div className='flex jutify-start items-end gap-3 text-sm md:text-base'>
+        <div className="flex gap-1 items-end justify-center">
+        <button onClick={handleResetFilters} className="md:mt-4 bg-zinc-700 w-fit text-white px-2 py-1.5 rounded-md">
         Reset Filters
       </button>
-      <div className='items-start text-sm md:text-base'>
-        <div className="flex gap-1">
           <div className="price-filter">
             <label className="font-semibold">Price Order:</label>
             <select value={priceOrder} onChange={handlePriceChange} className="border border-secondary/30 rounded-lg p-2 w-full">
@@ -98,15 +99,15 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
           </div> */}
         </div>
         <div className="tags-filter">
-          <div className="flex items-center justify-center flex-wrap gap-2">
+          <div className="flex items-center justify-center gap-2 h-full w-fit">
             {tags.filter(tag => allowedTags.includes(tag)).map(tag => (
               <button
                 key={tag}
                 type="button"
                 onClick={() => handleTagChange(tag)}
-                className={`px-3 py-1 mt-2 text-nowrap w-fit shadown-md text-secondary rounded ${selectedTags.includes(tag) ? 'bg-foreground text-white' : 'bg-secondary text-white'}`}
+                className={`px-3 py-1 text-nowrap flex gap-2 items-center w-fit shadown-md text-secondary rounded-lg ${selectedTags.includes(tag) ? 'bg-foreground text-white' : 'bg-secondary text-white'}`}
               >
-                {formatTag(tag)}
+               <Dog />  {formatTag(tag)}
               </button>
             ))}
           </div>
