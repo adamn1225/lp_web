@@ -13,10 +13,11 @@ import { fetchReviews } from "./api/listingReviews";
 import BookingFormWrapper from "../components/BookingFormWrapper";
 import SwiperComponent from '@components/SwiperComponent.tsx';
 import { BedDouble } from 'lucide-react';
+import ImageGallery from '@components/ImageGallery.tsx';
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
-  const reviews = await fetchReviews();
+  const reviews = await fetchReviews(listings[0]._id);
   const paths = listings.map((listing: any) => ({
     params: {
       listingPage: listing._id, // Ensure this matches the requested path
@@ -40,9 +41,7 @@ export async function getStaticPaths() {
       bedrooms: listing.bedrooms,
       checkIn: listing.defaultCheckInTime,
       checkOut: listing.defaultCheckOutTime,
-      reviews: Array.isArray(reviews)
-        ? reviews.filter((review: any) => review.listingId === listing._id)
-        : [], // Filter reviews for the listing
+      reviews: reviews 
     },
   }));
 
@@ -86,7 +85,15 @@ export async function get({ params }) {
     "public, durable, s-maxage=3600, stale-while-revalidate=86400",
   );
 
+  let reviews = [];
+  try {
+    reviews = await fetchReviews(listing._id);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+  }
+
   return {
+    _id: listing._id,
     title: listing.title,
     apt: listing.address.apt,
     city: listing.address.city,
@@ -104,16 +111,8 @@ export async function get({ params }) {
     bedrooms: listing.bedrooms,
     checkIn: listing.defaultCheckInTime,
     checkOut: listing.defaultCheckOutTime,
-    reviews: Array.isArray(reviews)
-      ? reviews.filter((review: any) => review.listingId === listing._id)
-      : [] // Filter reviews for the listing
+    reviews: reviews
   };
-}
-let reviews = [];
-try {
-  reviews = await fetchReviews();
-} catch (error) {
-  console.error('Error fetching reviews:', error);
 }
 
 function calculateAverageRatings(reviews: any[]) {
@@ -123,13 +122,13 @@ function calculateAverageRatings(reviews: any[]) {
 
   const categoryRatings = {};
 
-  reviews.forEach((review: { rawReview: { category_ratings: any[]; }; }) => {
-    if (review.rawReview && Array.isArray(review.rawReview.category_ratings)) {
-      review.rawReview.category_ratings.forEach((rating: { category: string | number; rating: any; }) => {
+  reviews.forEach((review: { rawReview: { starRatings: any[]; }; }) => {
+    if (review.rawReview && Array.isArray(review.rawReview.starRatings)) {
+      review.rawReview.starRatings.forEach((rating: { category: string | number; value: any; }) => {
         if (!categoryRatings[rating.category]) {
           categoryRatings[rating.category] = [];
         }
-        categoryRatings[rating.category].push(rating.rating);
+        categoryRatings[rating.category].push(parseFloat(rating.value));
       });
     }
   });
@@ -143,8 +142,6 @@ function calculateAverageRatings(reviews: any[]) {
 
   return averageRatings;
 }
-
-const averageRatings = calculateAverageRatings(reviews);
 
 const {
   title,
@@ -164,7 +161,10 @@ const {
   checkIn,
   checkOut,
   bedrooms,
+  reviews // Ensure reviews is included here
 } = Astro.props;
+
+const averageRatings = calculateAverageRatings(reviews);
 
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -260,7 +260,7 @@ function capitalizeFirstLetter(string: string) {
 
                 <!-- End Carousel -->
 
-                <div class="hidden md:flex flex-col md:flex-row items-stretch gap-4 mb-4">
+                <div class="hidden md:flex flex-col items-stretch gap-4 mb-4">
                   <div class="main-image md:flex-grow-[2]">
                     <img
                       class="block object-cover min-h-[450px]"
@@ -272,37 +272,7 @@ function capitalizeFirstLetter(string: string) {
                       loading="lazy"
                     />
                   </div>
-                  <div
-                    class="flex flex-row md:flex-col xs:flex-wrap gap-4 max-w-full md:max-w-[180px] md:w-full"
-                  >
-                    <img
-                      class="object-cover md:w-auto flex-1"
-                      src={pictures[1].original}
-                      alt="Sub image"
-                      width={2000}
-                      height={1333}
-                      data-zoom
-                      loading="lazy"
-                    />
-                    <img
-                      class="object-cover md:w-auto flex-1"
-                      src={pictures[2].original}
-                      alt="Sub image"
-                      width={2000}
-                      height={1333}
-                      data-zoom
-                      loading="lazy"
-                    />
-                    <img
-                      class="object-cover md:w-auto flex-1"
-                      src={pictures[3].original}
-                      alt="Sub image"
-                      width={2000}
-                      height={1333}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
+                  <ImageGallery pictures={pictures} client:only/>
                 </div>
                     
                
@@ -586,54 +556,61 @@ function capitalizeFirstLetter(string: string) {
               
                     </div>
                   </div>
-                <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
- {reviews && reviews.length > 0 ? (
-                  <>
-                    <div class="grid grid-cols-2 gap-6 max-w-xl mb-8">
-                      {averageRatings.map((rating, index) => (
-                        <div class="relative rating-{index}">
-                          <div class="flex items-center justify-between max-w-xl">
-                            <div class="text-base text-muted-700 dark:text-muted-200">
-                              <span>{rating.category}</span>
-                            </div>
-                            <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                              <progress
-                                class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                value={rating.rating}
-                                max="5"
-                              >
-                                {rating.rating}
-                              </progress>
-                              <span class="ms-3 font-medium text-base text-muted-900">
-                                {rating.rating.toFixed(1)}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <!-- Display the review comments in two columns -->
-                    <div class="flex flex-wrap items-start justify-start gap-y-8 gap-x-6">
-                      {reviews.map((review, index) => (
-                        <div class="relative review-{index}">
-                          <div class="gap-4 mb-6 flex items-center">
-                            <div class="meta">
-                              <div class="flex gap-4 justify-start flex-wrap w-1/2">
-                                <h4 class="text-slate-950 text-4xl" class="text-base font-semibold font-sans text-slate-950">
-                                  {review.value}
-                                </h4>
-                                <h4 class="text-slate-950 text-4xl">{review.primaryGuest}</h4>
+                  <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
+                    {reviews && reviews.length > 0 ? (
+                      <>
+                        <div class="grid grid-cols-2 gap-6 max-w-xl mb-8">
+                          {averageRatings.map((rating, index) => (
+                            <div class="relative rating-{index}">
+                              <div class="flex items-center justify-between max-w-xl">
+                                <div class="text-base text-muted-700 dark:text-muted-200">
+                                  <span>{capitalizeFirstLetter(rating.category)}</span>
+                                </div>
+                                <div class="flex items-center flex-grow-[2] max-w-[140px]">
+                                  <progress
+                                    class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
+                                    value={rating.rating}
+                                    max="5"
+                                  >
+                                    {rating.rating}
+                                  </progress>
+                                  <span class="ms-3 font-medium text-base text-muted-900">
+                                    {rating.rating.toFixed(1)}
+                                  </span>
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <p>No reviews available</p>
-                )}
+                  
+                        <!-- Display the review comments in two columns -->
+                        <div class="flex flex-wrap items-start justify-start gap-y-8 gap-x-6">
+                          {reviews
+                            .filter((review: { rawReview: { reservation: { primaryGuest: any; }; body: { value: any; }; }; }) => review.rawReview.reservation?.primaryGuest && review.rawReview.body?.value)
+                            .map((review: { rawReview: { reservation: { primaryGuest: { firstName: unknown; lastName: unknown; }; }; createdDateTime: string | number | Date; body: { value: unknown; }; }; }, index: any) => (
+                              <div class="relative review-{index}">
+                                <div class="gap-4 mb-6 flex items-center">
+                                  <div class="meta">
+                                    <div class="flex gap-4 justify-start items-center flex-wrap w-1/2">
+                                      <h4 class="text-slate-950 text-base font-semibold font-sans">
+                                        {review.rawReview.reservation.primaryGuest.firstName} {review.rawReview.reservation.primaryGuest.lastName}
+                                      </h4>
+                                      <span class="text-muted-700 text-sm">
+                                        {new Date(review.rawReview.createdDateTime).toLocaleDateString()}
+                                      </span>
+                                      <p class="text-slate-950 text-base">
+                                        {review.rawReview.body.value}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </>
+                    ) : (
+                      <p>No reviews available</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -642,13 +619,7 @@ function capitalizeFirstLetter(string: string) {
               <div
                 class="xs:hidden sm:hidden md:flex flex w-full max-w-max flex-col md:px-2 md:justify-center lg:justify-start items-center px-7"
               >
-                <!-- <ChatBox conversationId={conversationId} client:load={true} /> -->
-                <!-- <button
-                class="bg-cyan-600 mb-6 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
-              >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
-              <span class="pl-2">Send Message</span> 
-              </button> -->
+
                 <span class="xs:hidden">
                   <InquireForm
                     listingId={listingId}
@@ -678,10 +649,7 @@ function capitalizeFirstLetter(string: string) {
                   </span>
 
                   <InstantBooking listingId={listingId} client:only="react" />
-                  <!-- <BookingFormWrapper
-                    listingId={listingId}
-                    client:only="react"
-                  /> -->
+
                   <h4 class="text-2xl mt-6 font-bold font-sans text-slate-900">
                     Amenities
                   </h4>
