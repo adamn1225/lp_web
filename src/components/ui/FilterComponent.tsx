@@ -1,36 +1,75 @@
-import React, { useState } from 'react';
-import { Dog, SlidersHorizontal, } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+
 interface FilterComponentProps {
   onFilterChange: (filters: any) => void;
   onResetFilters: () => void;
   cities: string[];
+  amenities: string[];
   tags: string[];
+  initialPriceOrder: string;
+  initialBedroomCount: number | null;
+  initialSelectedCity: string;
+  initialSelectedAmenities: string[];
+  initialSelectedTags: string[];
 }
 
-const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onResetFilters, cities, tags }) => {
-  const [priceOrder, setPriceOrder] = useState<string>('default');
-  const [bedroomCount, setBedroomCount] = useState<number | null>(null);
-  const [selectedCity, setSelectedCity] = useState<string>('');
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+const FilterComponent: React.FC<FilterComponentProps> = ({
+  onFilterChange,
+  onResetFilters,
+  cities,
+  amenities,
+  tags,
+  initialPriceOrder,
+  initialBedroomCount,
+  initialSelectedCity,
+  initialSelectedAmenities,
+  initialSelectedTags
+}) => {
+  const [priceOrder, setPriceOrder] = useState<string>(initialPriceOrder);
+  const [bedroomCount, setBedroomCount] = useState<number | null>(initialBedroomCount);
+  const [selectedCity, setSelectedCity] = useState<string>(initialSelectedCity);
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(initialSelectedAmenities);
+  const [selectedTags, setSelectedTags] = useState<string[]>(initialSelectedTags);
+  const [bedroomOptions, setBedroomOptions] = useState<number[]>([]);
 
-  const allowedTags = ["Ocean_front", "Ocean_view", "Public_pool", "Pets"];
+  useEffect(() => {
+    const fetchBedroomOptions = async () => {
+      try {
+        const response = await fetch('/.netlify/functions/availability?fetchBedrooms=true');
+        const data = await response.json();
+        setBedroomOptions(data.results);
+      } catch (err) {
+        console.error('Error fetching bedroom options:', err);
+      }
+    };
+
+    fetchBedroomOptions();
+  }, []);
+
+  useEffect(() => {
+    onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags });
+  }, [priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags]);
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newPriceOrder = e.target.value;
     setPriceOrder(newPriceOrder);
-    onFilterChange({ priceOrder: newPriceOrder, bedroomCount, selectedCity, selectedTags });
   };
 
   const handleBedroomChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newBedroomCount = Number(e.target.value);
     setBedroomCount(newBedroomCount);
-    onFilterChange({ priceOrder, bedroomCount: newBedroomCount, selectedCity, selectedTags });
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSelectedCity = e.target.value;
     setSelectedCity(newSelectedCity);
-    onFilterChange({ priceOrder, bedroomCount, selectedCity: newSelectedCity, selectedTags });
+  };
+
+  const handleAmenityChange = (amenity: string) => {
+    const newSelectedAmenities = selectedAmenities.includes(amenity)
+      ? selectedAmenities.filter(a => a !== amenity)
+      : [...selectedAmenities, amenity];
+    setSelectedAmenities(newSelectedAmenities);
   };
 
   const handleTagChange = (tag: string) => {
@@ -38,13 +77,13 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
       ? selectedTags.filter(t => t !== tag)
       : [...selectedTags, tag];
     setSelectedTags(newSelectedTags);
-    onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedTags: newSelectedTags });
   };
 
   const handleResetFilters = () => {
     setPriceOrder('default');
     setBedroomCount(null);
     setSelectedCity('');
+    setSelectedAmenities([]);
     setSelectedTags([]);
     onResetFilters();
   };
@@ -53,20 +92,20 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
     const tagDisplayNames: { [key: string]: string } = {
       "Ocean_front": "Ocean Front",
       "Ocean_view": "Ocean View",
+      "web_featured": "Featured",
       "Public_pool": "Pool",
-      "Pets": "Toggle Pet Friendly"
+      "Pets": "Pet Friendly"
     };
     return tagDisplayNames[tag] || tag;
   };
 
   return (
-    <div className="filter-component flex flex-col items-start justify-end gap-4 p-2 md:p-4 w-full bg-primary/40 h-full">
-
-      <div className='flex jutify-start items-end gap-3 text-sm md:text-base'>
-        <div className="flex gap-1 items-end justify-center">
-        <button onClick={handleResetFilters} className="md:mt-4 bg-zinc-700 w-fit text-white px-2 py-1.5 rounded-md">
+    <div className="filter-component flex flex-col items-center justify-start gap-4 p-2 md:p-4 w-full bg-primary/40 h-full">
+      <button onClick={handleResetFilters} className="md:mt-4 bg-secondary w-1/2 md:w-1/5 text-white px-2 py-2 rounded">
         Reset Filters
       </button>
+      <div className='items-start text-sm md:text-base'>
+        <div className="flex gap-1">
           <div className="price-filter">
             <label className="font-semibold">Price Order:</label>
             <select value={priceOrder} onChange={handlePriceChange} className="border border-secondary/30 rounded-lg p-2 w-full">
@@ -75,17 +114,13 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
               <option value="highToLow">Highest to Lowest</option>
             </select>
           </div>
-          {/* <div className="bedroom-filter">
+          <div className="bedroom-filter">
             <label className="font-semibold">Bedrooms:</label>
             <select value={bedroomCount || ''} onChange={handleBedroomChange} className="border border-secondary/30 rounded-lg p-2 w-full">
               <option value="">Any</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
+              {bedroomOptions.map(bedroom => (
+                <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
+              ))}
             </select>
           </div>
           <div className="city-filter">
@@ -96,18 +131,28 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, onRes
                 <option key={city} value={city}>{city}</option>
               ))}
             </select>
-          </div> */}
+          </div>
         </div>
-        <div className="tags-filter">
-          <div className="flex items-center justify-center gap-2 h-full w-fit">
-            {tags.filter(tag => allowedTags.includes(tag)).map(tag => (
+        <div className="amenities-filter mt-2">
+          <div className="flex flex-wrap gap-2">
+            {amenities.map(amenity => (
+              <button
+                key={amenity}
+                type="button"
+                onClick={() => handleAmenityChange(amenity)}
+                className={`px-3 py-1 text-nowrap w-fit text-secondary rounded ${selectedAmenities.includes(amenity) ? 'bg-foreground text-white' : 'bg-secondary text-white'}`}
+              >
+                {formatTag(amenity)}
+              </button>
+            ))}
+            {tags.map(tag => (
               <button
                 key={tag}
                 type="button"
                 onClick={() => handleTagChange(tag)}
-                className={`px-3 py-1 text-nowrap flex gap-2 items-center w-fit shadown-md text-secondary rounded-lg ${selectedTags.includes(tag) ? 'bg-foreground text-white' : 'bg-secondary text-white'}`}
+                className={`px-3 py-1 text-nowrap w-fit text-secondary rounded ${selectedTags.includes(tag) ? 'bg-foreground text-white' : 'bg-secondary text-white'}`}
               >
-               <Dog />  {formatTag(tag)}
+                {formatTag(tag)}
               </button>
             ))}
           </div>

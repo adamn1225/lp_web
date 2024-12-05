@@ -42,6 +42,17 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ listings, onMarkerClick }) => {
                 const map = new window.google.maps.Map(mapRef.current, {
                     center: { lat: listings[0].address.lat, lng: listings[0].address.lng },
                     zoom: 15,
+                    mapTypeControl: true,
+                    mapTypeControlOptions: {
+                        style: window.google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                        position: window.google.maps.ControlPosition.TOP_RIGHT,
+                        mapTypeIds: [
+                            window.google.maps.MapTypeId.ROADMAP,
+                            window.google.maps.MapTypeId.SATELLITE,
+                            window.google.maps.MapTypeId.HYBRID,
+                            window.google.maps.MapTypeId.TERRAIN
+                        ]
+                    }
                 });
 
                 listings.forEach((listing) => {

@@ -59,6 +59,27 @@ const formatTag = (tag: string): string => {
   return tagDisplayNames[tag] || tag;
 };
 
+const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
+  const toRad = (value: number) => (value * Math.PI) / 180;
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in kilometers
+};
+
+const sortListingsByDistance = (listings: Listing[], selectedCityLat: number, selectedCityLng: number): Listing[] => {
+  return listings.sort((a, b) => {
+    const distanceA = calculateDistance(selectedCityLat, selectedCityLng, a.address.lat, a.address.lng);
+    const distanceB = calculateDistance(selectedCityLat, selectedCityLng, b.address.lat, b.address.lng);
+    return distanceA - distanceB;
+  });
+};
+
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
   const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
@@ -74,6 +95,7 @@ const AvailabilitySearch: React.FC = () => {
   const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>('');
   const [cities, setCities] = useState<string[]>([]);
   const [amenities, setAmenities] = useState<string[]>([]);
+  const [bedroomOptions, setBedroomOptions] = useState<number[]>([]);
   const [searchAttempted, setSearchAttempted] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [filters, setFilters] = useState<any>({});
@@ -98,7 +120,19 @@ const AvailabilitySearch: React.FC = () => {
       }
     };
 
+    const fetchBedroomOptions = async () => {
+      try {
+        const response = await fetch('/.netlify/functions/availability?fetchBedrooms=true');
+        const data = await response.json();
+        setBedroomOptions(data.results);
+      } catch (err) {
+        console.error('Error fetching bedroom options:', err);
+        setError('Failed to load bedroom options');
+      }
+    };
+
     fetchCities();
+    fetchBedroomOptions();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -106,47 +140,47 @@ const AvailabilitySearch: React.FC = () => {
     setLoading(true);
     setError('');
     setSearchAttempted(true);
-  
+
     try {
       const tagsQuery = selectedTags.join(',');
       let url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
-  
+
       if (selectedLocation) {
         url += `&city=${encodeURIComponent(selectedLocation)}`;
       }
-  
+
       if (selectedBedroomAmount) {
         url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
       }
-  
+
       console.log('API URL:', url);
-  
+
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch listings: ${response.statusText}`);
       }
-  
+
       const data = await response.json();
       console.log('Fetched Data:', data);
-  
+
       if (!data.results) {
         setError('No results found');
       }
-  
+
       const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
-  
+
       setListings(filteredListings);
       setFilteredListings(filteredListings);
-  
+
       // Extract unique tags from the listings
       const uniqueTags = Array.from(new Set(filteredListings.flatMap(listing => listing.tags.filter(tag => allowedTags.includes(tag))))) as string[];
-  
+
       setTags(uniqueTags);
-  
+
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-  
+
       setIsResultsModalOpen(true);
       setIsSearchComplete(true); // Set search completion state to true
     } catch (err) {
@@ -183,7 +217,7 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     if (filters.bedroomCount) {
-      filtered = filtered.filter(listing => listing.bedrooms === filters.bedroomCount);
+      filtered = filtered.filter(listing => listing.bedrooms === Number(filters.bedroomCount));
     }
 
     if (filters.selectedTags && filters.selectedTags.length > 0) {
@@ -195,7 +229,14 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     if (filters.selectedCity) {
-      filtered = filtered.filter(listing => listing.address.city === filters.selectedCity);
+      const selectedCity = cities.find(city => city === filters.selectedCity);
+      if (selectedCity) {
+        const selectedCityLat = available.find(listing => listing.address.city === selectedCity)?.address.lat;
+        const selectedCityLng = available.find(listing => listing.address.city === selectedCity)?.address.lng;
+        if (selectedCityLat && selectedCityLng) {
+          filtered = sortListingsByDistance(filtered, selectedCityLat, selectedCityLng);
+        }
+      }
     }
 
     setFilteredListings(filtered);
@@ -223,7 +264,6 @@ const AvailabilitySearch: React.FC = () => {
       return 'grid-cols-1';
     }
   };
-
 
   return (
     <div className="w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
@@ -255,7 +295,7 @@ const AvailabilitySearch: React.FC = () => {
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="border border-slate-400 rounded-xl p-2 w-full"
                 >
-                  <option value="">Select Location</option>
+                  <option value="any">Any City</option> {/* Add the "Any City" option */}
                   {cities.map((city) => (
                     <option key={city} value={city}>{city}</option>
                   ))}
@@ -269,15 +309,10 @@ const AvailabilitySearch: React.FC = () => {
                   onChange={(e) => setSelectedBedroomAmount(e.target.value)}
                   className="border rounded-xl border-slate-400 p-2 w-full"
                 >
-                  <option value="">Select Bedroom Amount</option>
-                  <option value="studio">Studio</option>
-                  <option value="1BR">1 Bedroom</option>
-                  <option value="2BR">2 Bedroom</option>
-                  <option value="3BR">3 Bedroom</option>
-                  <option value="4BR">4 Bedroom</option>
-                  <option value="5BR">5 Bedroom</option>
-                  <option value="6BR">6 Bedroom</option>
-                  <option value="7BR">7 Bedroom</option>
+                  <option value="">Any</option>
+                  {bedroomOptions.map(bedroom => (
+                    <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
+                  ))}
                 </select>
               </div>
               <div className="w-full flex flex-col">
@@ -318,7 +353,20 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           )}
           <div className="w-full">
-            {available.length > 0 && <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} tags={tags} />}
+            {available.length > 0 && (
+              <FilterComponent
+                onFilterChange={handleFilterChange}
+                onResetFilters={resetFilters}
+                cities={cities}
+                tags={tags}
+                amenities={amenities}
+                initialPriceOrder={filters.priceOrder || ''}
+                initialBedroomCount={filters.bedroomCount || ''}
+                initialSelectedCity={filters.selectedCity || ''}
+                initialSelectedAmenities={filters.selectedAmenities || []}
+                initialSelectedTags={filters.selectedTags || []}
+              />
+            )}
           </div>
           {available.length > 0 && (
             <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
@@ -344,6 +392,7 @@ const AvailabilitySearch: React.FC = () => {
                               {property.address.city}, {property.address.state}
                             </p>
                             <span className="hidden">{property.amenities.map(formatTag).join(', ')}</span>
+                            <span className="hidden">{property.bedrooms}</span>
                             <hr className="border border-muted-200 dark:border-muted-800 my-2" />
                             <div className="flex items-end h-full">
                               <button className="text-slate-900 font-extrabold mb-4">
@@ -370,7 +419,18 @@ const AvailabilitySearch: React.FC = () => {
                   <SlidersHorizontal />  Filter Search
                 </button>
                 <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)}>
-                  <FilterComponent onFilterChange={handleFilterChange} onResetFilters={resetFilters} cities={cities} tags={tags} />
+                  <FilterComponent 
+                    onFilterChange={handleFilterChange} 
+                    onResetFilters={resetFilters} 
+                    cities={cities} 
+                    tags={tags} 
+                    amenities={amenities} 
+                    initialPriceOrder={filters.priceOrder || ''} 
+                    initialBedroomCount={filters.bedroomCount || ''} 
+                    initialSelectedCity={filters.selectedCity || ''} 
+                    initialSelectedAmenities={filters.selectedAmenities || []} 
+                    initialSelectedTags={filters.selectedTags || []} 
+                  />
                 </Modal>
               </div>
             </div>

@@ -24,7 +24,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, tags, location, bedroomAmount, city, fetchCities } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms } = event.queryStringParameters;
 
   if (fetchCities) {
     try {
@@ -69,6 +69,49 @@ export const handler = async (event, context) => {
     }
   }
 
+  if (fetchBedrooms) {
+    try {
+      const fetchAllListings = async () => {
+        const urls = [
+          'https://open-api.guesty.com/v1/listings?limit=100&skip=0',
+          'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
+          'https://open-api.guesty.com/v1/listings?limit=100&skip=200'
+        ];
+
+        const allResults = await Promise.all(urls.map(url => fetchWithRetry(url, {
+          headers: {
+            'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+            'Accept': 'application/json'
+          }
+        }).then(response => response.json())));
+
+        return allResults.flatMap(result => result.results);
+      };
+
+      const listings = await fetchAllListings();
+      const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms)));
+
+      return {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ results: uniqueBedrooms })
+      };
+    } catch (error) {
+      console.error('Error fetching bedrooms:', error);
+      return {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ error: 'Internal Server Error' })
+      };
+    }
+  }
+
   if (!checkIn || !checkOut || !minOccupancy) {
     return {
       statusCode: 400,
@@ -80,11 +123,7 @@ export const handler = async (event, context) => {
     };
   }
 
-  const tagsArray = tags ? tags.split(',') : [];
-  if (location) tagsArray.push(location);
-  if (bedroomAmount) tagsArray.push(bedroomAmount);
-
-  const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${tags}-${location}-${bedroomAmount}-${city}`;
+  const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${location}-${bedroomAmount}-${city}`;
   const cachedData = cache.get(cacheKey);
 
   if (cachedData) {
@@ -99,15 +138,15 @@ export const handler = async (event, context) => {
   }
 
   try {
-    const fetchListings = async (tag) => {
+    const fetchListings = async () => {
       let url = `https://open-api.guesty.com/v1/listings?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy)}`;
-      if (tag) {
-        url += `&tags=${encodeURIComponent(tag)}`;
+      if (location) {
+        url += `&location=${encodeURIComponent(location)}`;
       }
       if (city) {
         url += `&city=${encodeURIComponent(city)}`;
       }
-      console.log(`Fetching listings for tag: ${tag} from URL: ${url}`);
+      console.log(`Fetching listings from URL: ${url}`);
 
       const response = await fetchWithRetry(url, {
         headers: {
@@ -125,13 +164,13 @@ export const handler = async (event, context) => {
       return response.json();
     };
 
-    const allResults = await Promise.all(tagsArray.map(tag => fetchListings(tag)));
+    const data = await fetchListings();
 
-    // Combine results to find listings that match all selected tags
-    const combinedResults = allResults.reduce((acc, result) => {
-      if (acc.length === 0) return result.results;
-      return acc.filter(listing => result.results.some(r => r._id === listing._id));
-    }, []);
+    // Filter by bedroom amount if specified
+    let combinedResults = data.results;
+    if (bedroomAmount) {
+      combinedResults = combinedResults.filter(listing => listing.bedrooms === Number(bedroomAmount));
+    }
 
     cache.set(cacheKey, { results: combinedResults }); // Cache the response data
 
