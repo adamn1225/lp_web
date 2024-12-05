@@ -63,7 +63,7 @@ const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: numbe
   const toRad = (value: number) => (value * Math.PI) / 180;
   const R = 6371; // Radius of the Earth in kilometers
   const dLat = toRad(lat2 - lat1);
-  const dLng = toRad(lng2 - lng1);
+  const dLng = toRad(lat2 - lng1);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
@@ -124,7 +124,8 @@ const AvailabilitySearch: React.FC = () => {
       try {
         const response = await fetch('/.netlify/functions/availability?fetchBedrooms=true');
         const data = await response.json();
-        setBedroomOptions(data.results);
+        const sortedBedrooms = data.results.sort((a: number, b: number) => a - b);
+        setBedroomOptions(sortedBedrooms);
       } catch (err) {
         console.error('Error fetching bedroom options:', err);
         setError('Failed to load bedroom options');
@@ -365,6 +366,7 @@ const AvailabilitySearch: React.FC = () => {
                 initialSelectedCity={filters.selectedCity || ''}
                 initialSelectedAmenities={filters.selectedAmenities || []}
                 initialSelectedTags={filters.selectedTags || []}
+                showBedroomFilter={selectedBedroomAmount === ''}
               />
             )}
           </div>
@@ -429,7 +431,8 @@ const AvailabilitySearch: React.FC = () => {
                     initialBedroomCount={filters.bedroomCount || ''} 
                     initialSelectedCity={filters.selectedCity || ''} 
                     initialSelectedAmenities={filters.selectedAmenities || []} 
-                    initialSelectedTags={filters.selectedTags || []} 
+                    initialSelectedTags={filters.selectedTags || []}
+                    showBedroomFilter={selectedBedroomAmount === ''}
                   />
                 </Modal>
               </div>

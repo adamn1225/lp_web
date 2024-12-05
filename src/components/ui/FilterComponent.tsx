@@ -11,6 +11,7 @@ interface FilterComponentProps {
   initialSelectedCity: string;
   initialSelectedAmenities: string[];
   initialSelectedTags: string[];
+  showBedroomFilter: boolean; // Add the showBedroomFilter prop
 }
 
 const FilterComponent: React.FC<FilterComponentProps> = ({
@@ -23,7 +24,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   initialBedroomCount,
   initialSelectedCity,
   initialSelectedAmenities,
-  initialSelectedTags
+  initialSelectedTags,
+  showBedroomFilter // Destructure the showBedroomFilter prop
 }) => {
   const [priceOrder, setPriceOrder] = useState<string>(initialPriceOrder);
   const [bedroomCount, setBedroomCount] = useState<number | null>(initialBedroomCount);
@@ -37,7 +39,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
       try {
         const response = await fetch('/.netlify/functions/availability?fetchBedrooms=true');
         const data = await response.json();
-        setBedroomOptions(data.results);
+        const sortedBedrooms = data.results.sort((a: number, b: number) => a - b);
+        setBedroomOptions(sortedBedrooms);
       } catch (err) {
         console.error('Error fetching bedroom options:', err);
       }
@@ -48,7 +51,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
   useEffect(() => {
     onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags });
-  }, [priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags]);
+  }, [priceOrder, selectedCity, selectedAmenities, selectedTags]);
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newPriceOrder = e.target.value;
@@ -58,6 +61,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   const handleBedroomChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newBedroomCount = Number(e.target.value);
     setBedroomCount(newBedroomCount);
+    onFilterChange({ priceOrder, bedroomCount: newBedroomCount, selectedCity, selectedAmenities, selectedTags });
   };
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -114,15 +118,17 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
               <option value="highToLow">Highest to Lowest</option>
             </select>
           </div>
-          <div className="bedroom-filter">
-            <label className="font-semibold">Bedrooms:</label>
-            <select value={bedroomCount || ''} onChange={handleBedroomChange} className="border border-secondary/30 rounded-lg p-2 w-full">
-              <option value="">Any</option>
-              {bedroomOptions.map(bedroom => (
-                <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
-              ))}
-            </select>
-          </div>
+          {showBedroomFilter && ( // Conditionally render the bedroom filter
+            <div className="bedroom-filter">
+              <label className="font-semibold">Bedrooms:</label>
+              <select value={bedroomCount || ''} onChange={handleBedroomChange} className="border border-secondary/30 rounded-lg p-2 w-full">
+                <option value="">Any</option>
+                {bedroomOptions.map(bedroom => (
+                  <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
+                ))}
+              </select>
+            </div>
+          )}
           <div className="city-filter">
             <label className="font-semibold">City:</label>
             <select value={selectedCity} onChange={handleCityChange} className="border border-secondary/30 rounded-lg p-2 w-full">
