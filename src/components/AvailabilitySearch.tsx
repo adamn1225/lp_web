@@ -277,7 +277,7 @@ const AvailabilitySearch: React.FC = () => {
         </button>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <form onSubmit={handleSubmit} className="flex flex-col justify-center bg-zinc-100 items-center h-1/2 rounded-md p-7">
+        <form onSubmit={handleSubmit} className="flex flex-col justify-evenly bg-zinc-100 items-start h-full rounded-md px-7 pb-12 md:p-7">
           <div className="flex flex-col items-center justify-center w-full px-6">
             <div className="flex flex-col justify-center items-center gap-1 w-full">
               <div className="w-full flex flex-col">
