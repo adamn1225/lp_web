@@ -265,20 +265,22 @@ function capitalizeFirstLetter(string: string) {
 
                 <!-- End Carousel -->
 
-                <div class="hidden md:flex flex-col items-stretch gap-4 mb-4">
-                  <div class="main-image md:flex-grow-[2]">
-                    <img
-                      class="block object-cover min-h-[450px]"
-                      src={pictures[0].original}
-                      alt="Main image"
-                      width={2000}
-                      height={1333}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                  <ImageGallery pictures={pictures} client:only/>
-                </div>
+<div class="hidden md:flex gap-2 mb-4 w-full">
+  <div class="main-image">
+    <img
+      class="block object-cover w-full h-full"
+      src={pictures[0].original}
+      alt="Main image"
+      width={2000}
+      height={1333}
+      data-zoom
+      loading="lazy"
+    />
+  </div>
+  <div class="flex flex-col gap-2 w-1/5 overflow-y-auto no-scrollbar">
+    <ImageGallery pictures={pictures} client:only />
+  </div>
+</div>
                     
                
     

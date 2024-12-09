@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
 import Modal from './Modal'; // Adjust the import path as needed
-import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ImageGallery = ({ pictures }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [startIndex, setStartIndex] = useState(0);
     const scrollContainerRef = useRef(null);
 
     const openModal = (index) => {
@@ -26,46 +27,40 @@ const ImageGallery = ({ pictures }) => {
     };
 
     const scrollNext = () => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
-        }
+        setStartIndex((prevIndex) => Math.min(prevIndex + 1, pictures.length - 9));
     };
 
     const scrollPrevious = () => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
-        }
+        setStartIndex((prevIndex) => Math.max(prevIndex - 1, 0));
     };
 
     return (
         <>
-            <div className="relative">
-                <div className="flex gap-1 overflow-x-hidden no-scrollbar" ref={scrollContainerRef}>
-                    {pictures.slice(1).map((picture, index) => (
-                        <img
-                            key={index}
-                            className="object-cover max-h-24 shadow-md flex-1 cursor-pointer"
-                            src={picture.original}
-                            alt={`Sub image ${index + 1}`}
-                            width={2000}
-                            height={1333}
-                            data-zoom
-                            loading="lazy"
-                            onClick={() => openModal(index + 1)} // Adjust index to match sliced array
-                        />
-                    ))}
-                </div>
+            <div className="relative flex flex-col gap-2 overflow-y-auto no-scrollbar h-full w-auto" ref={scrollContainerRef}>
+                {pictures.slice(startIndex + 1, startIndex + 9).map((picture, index) => (
+                    <img
+                        key={index}
+                        className="object-cover max-h-24 w-auto shadow-md flex-1 cursor-pointer"
+                        src={picture.original}
+                        alt={`Sub image ${index + 1}`}
+                        width={1750}
+                        height={1000}
+                        data-zoom
+                        loading="lazy"
+                        onClick={() => openModal(startIndex + index + 1)} // Adjust index to match sliced array
+                    />
+                ))}
                 <button
-                    className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2"
+                    className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white p-2"
                     onClick={scrollPrevious}
                 >
-                    <ChevronLeft />
+                    <ChevronUp />
                 </button>
                 <button
-                    className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2"
+                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white p-2"
                     onClick={scrollNext}
                 >
-                    <ChevronRight />
+                    <ChevronDown />
                 </button>
             </div>
             {isModalOpen && (
