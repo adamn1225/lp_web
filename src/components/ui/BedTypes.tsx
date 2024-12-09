@@ -2,6 +2,8 @@ import React from 'react';
 import { BedDouble } from 'lucide-react';
 import { MdOutlineKingBed } from 'react-icons/md';
 import { IoBedOutline } from 'react-icons/io5';
+import { LiaCouchSolid } from "react-icons/lia";
+
 
 interface Bed {
     type: string;
@@ -20,6 +22,8 @@ const getBedIcon = (type: string) => {
     switch (type) {
         case 'SINGLE_BED':
             return <IoBedOutline className="w-5 h-5" />;
+        case 'SOFA_BED':
+            return <LiaCouchSolid className="w-5 h-5" />;
         case 'DOUBLE_BED':
             return <BedDouble className="w-5 h-5" />;
         case 'QUEEN_BED':

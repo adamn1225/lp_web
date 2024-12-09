@@ -337,16 +337,12 @@ function capitalizeFirstLetter(string: string) {
                     </h4>
 
                     <div
-                      class="mb-6 grid grid-cols-3 gap-2 justify-items-center"
+                      class="mb-4 grid grid-cols-2 gap-2 justify-items-center"
                     >
 
 
                       <!-- bedroom -->
-                      <div class="flex flex-col">
-                        <BedDouble />
-                        <p class="text-lg font-bold">{bedsCount}</p>
-                        <p class="text-sm text-muted-400">Beds</p>
-                      </div>
+                    
                       <!-- bathroom -->
                       <div class="flex flex-col">
                         <div
@@ -408,6 +404,7 @@ function capitalizeFirstLetter(string: string) {
                         <p class="text-sm text-muted-400">Bedrooms</p>
                       </div>
                     </div>
+                      <div class="mb-4"><BedTypes beds={beds} client:load /></div>
                     <div
                       class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap"
                     >
