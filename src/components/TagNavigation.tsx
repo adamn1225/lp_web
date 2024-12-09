@@ -8,10 +8,9 @@ const LazyLoadCard = React.lazy(() => import('./ui/LazyLoadCard'));
 interface Listing {
     _id: string;
     title: string;
-    picture: {
-        thumbnail: string;
-        caption: string;
-    };
+    pictures: {
+        original: string;
+    }[];
     publicDescription: {
         summary: string;
     };
@@ -136,14 +135,14 @@ const TagNavigation: React.FC = () => {
                 )}
             </div>
             <style>{`
-            .no-scrollbar::-webkit-scrollbar {
-                display: none;
-            }
-            .no-scrollbar {
-                -ms-overflow-style: none;  /* IE and Edge */
-                scrollbar-width: none;  /* Firefox */
-            }
-        `}</style>
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+        }
+      `}</style>
             {loading && listings.length === 0 ? (
                 <div className="flex justify-center items-center h-64">
                     <ClipLoader size={50} color={"#102C57"} loading={loading} />
@@ -162,7 +161,7 @@ const TagNavigation: React.FC = () => {
                     </Suspense>
                 </motion.div>
             )}
-            {/* {error && <div className="error">{error}</div>} */}
+            {error && <div className="error">{error}</div>}
         </div>
     );
 };

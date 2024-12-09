@@ -4,10 +4,9 @@ import { useInView } from 'react-intersection-observer';
 interface Listing {
   _id: string;
   title: string;
-  picture: {
-    thumbnail: string;
-    caption: string;
-  };
+  pictures: {
+    original: string;
+  }[];
   publicDescription: {
     summary: string;
   };
@@ -32,16 +31,27 @@ const LazyLoadCard: React.FC<{ property: Listing }> = ({ property }) => {
   return (
     <div ref={ref}>
       {inView && (
-        <a href={property._id}>
-          <article className="flex flex-col bg-white pt-4 w shadow-lg shadow-slate-300/30 h-full border border-slate-500/30 rounded-md mx-auto">
-            <div className="result-item">
-              <img className="w-full object-cover h-64" src={property.picture.thumbnail} alt={property.picture.caption} />
-              <div className="p-4 text-normal flex flex-col gap-4">
-                <h3 className="text-sm font-bold text-slate-900">{property.title}</h3>
-                <p className="text-sm font-light">{property.address.city}, {property.address.state}</p>
-                <div className="border border-stone-300"> </div>
-                <div className="flex min-h-min flex-row justify-start align-bottom"><button className="text-slate-900 font-extrabold mb-4">${property.prices.basePrice} Night</button></div>
-              </div>
+        <a href={`/${property._id}`}>
+          <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative pb-12"> {/* Add padding to the bottom */}
+            <div className="relative w-full h-48"> {/* Set a fixed height for the image container */}
+              <img
+                className="absolute inset-0 w-full h-full object-cover"
+                src={property.pictures[0].original}
+                alt={property.title}
+              />
+              <div className="absolute inset-0 bg-neutral-950/50" />
+            </div>
+            <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
+              <h4 className="font-sans text-wrap font-medium text-lg text-slate-900">
+                {property.title}
+              </h4>
+              <p className="text-sm text-muted-400">
+                {property.address.city}, {property.address.state}
+              </p>
+              <hr className="border border-muted-200 dark:border-muted-800 my-2" />
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 flex justify-center items-end">
+              <button className="lp-button mb-1">View Listing</button>
             </div>
           </article>
         </a>
