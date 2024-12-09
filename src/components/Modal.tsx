@@ -1,22 +1,24 @@
 import React from 'react';
 
-const Modal = ({ isOpen, onClose, imageSrc }) => {
+interface ModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    children: React.ReactNode;
+}
+
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-            <div className="relative max-w-full max-h-full overflow-auto p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="relative bg-white p-8 rounded-lg shadow-lg max-w-full max-h-full overflow-clip">
                 <button
-                    className="absolute top-0 right-0 m-4 text-white text-2xl bg-black bg-opacity-50 rounded-full p-2"
+                    className="absolute top-1 right-2 text-3xl text-gray-600 font-semibold hover:text-gray-900"
                     onClick={onClose}
                 >
                     &times;
                 </button>
-                <img
-                    className="max-w-full max-h-screen object-contain"
-                    src={imageSrc}
-                    alt="Enlarged view"
-                />
+                {children}
             </div>
         </div>
     );

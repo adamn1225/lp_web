@@ -330,7 +330,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                         closeModal();
                         setIsInquireModalOpen(true); // Open new modal
                       }}
-                      className="absolute top-0 right-0 md:mt-4 md:mr-4 bg-cyan-600 text-muted-50 px-4 py-2 font-medium"
+                      className="absolute top-0 right-0 md:mt-4 md:mr-4 bg-secondary text-muted-50 px-4 py-2 font-medium"
                     >
                       Close
                     </button>
@@ -436,7 +436,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     <span>Tax:</span>
                     <span>${beforeTax.toFixed(2)}</span>
                   </div>
-                  <div className="text-xl flex justify-between pt-2 font-bold border-t border-cyan-950">
+                  <div className="text-xl flex justify-between pt-2 font-bold border-t border-secondary">
                     <span>Total Amount:</span>
                     <span className='mb-4'>${calculatedPrice}</span>
                   </div>
