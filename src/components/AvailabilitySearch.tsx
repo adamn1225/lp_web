@@ -260,9 +260,9 @@ const AvailabilitySearch: React.FC = () => {
     if (filteredListings.length >= 6) {
       return 'grid-cols-2 lg:grid-cols-3';
     } else if (filteredListings.length >= 1 && filteredListings.length <= 5) {
-      return 'grid-cols-1';
+      return 'grid-cols-2';
     } else {
-      return 'grid-cols-1';
+      return 'grid-cols-2';
     }
   };
 
