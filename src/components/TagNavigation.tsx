@@ -117,7 +117,7 @@ const TagNavigation: React.FC = () => {
 
     return (
         <div className="w-full mt-2">
-            <div className="ml-4 md:ml-0 mb-4 tags flex gap-6 justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
+            <div className="ml-0 mb-4 tags flex gap-6 justify-center md:justify-start items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
                 {tagsLoading ? (
                     <p>Loading Search...</p>
                 ) : (
@@ -126,7 +126,7 @@ const TagNavigation: React.FC = () => {
                             key={tag}
                             type="button"
                             onClick={() => handleTagClick(tag)}
-                            className={`px-3 py-2 text-nowrap w-fit text-secondary rounded flex flex-col items-center gap-2 ${selectedTag === tag ? 'bg-secondary rounded-2xl text-white' : ''}`}
+                            className={`px-2 py-2 text-nowrap w-fit text-secondary rounded flex flex-col justify-evenly items-center ${selectedTag === tag ? 'bg-secondary rounded-2xl text-white' : ''}`}
                         >
                             {getIconForTag(tag)}
                             {formatTag(tag)}
