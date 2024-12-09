@@ -12,7 +12,8 @@ import { fetchAllListings } from "./api/dataFetcher";
 import { fetchReviews } from "./api/listingReviews";
 import BookingFormWrapper from "../components/BookingFormWrapper";
 import SwiperComponent from '@components/SwiperComponent.tsx';
-import { BedDouble } from 'lucide-react';
+import { BedDouble } from 'lucide-react'; // Import necessary icons from lucide-react
+import BedTypes from '@components/ui/BedTypes.tsx';
 import ImageGallery from '@components/ImageGallery.tsx';
 
 export async function getStaticPaths() {
@@ -35,7 +36,8 @@ export async function getStaticPaths() {
       otherAmenities: listing.otherAmenities,
       bathrooms: listing.bathrooms,
       pictures: listing.pictures,
-      beds: listing.beds,
+      beds: listing.listingRooms,
+      bedsCount: listing.beds,
       Description: listing.publicDescription,
       listingId: listing._id,
       bedrooms: listing.bedrooms,
@@ -106,7 +108,8 @@ export async function get({ params }) {
     PropertyType: listing.propertyType,
     bathrooms: listing.bathrooms,
     pictures: listing.pictures,
-    beds: listing.beds,
+    beds: listing.listingRooms,
+    bedsCount: listing.beds,
     listingId: listing._id,
     bedrooms: listing.bedrooms,
     checkIn: listing.defaultCheckInTime,
@@ -143,6 +146,7 @@ function calculateAverageRatings(reviews: any[]) {
   return averageRatings;
 }
 
+
 const {
   title,
   pictures,
@@ -154,6 +158,7 @@ const {
   Description,
   apt,
   beds,
+  bedsCount,
   amenities,
   bathrooms,
   listingId,
@@ -337,7 +342,7 @@ function capitalizeFirstLetter(string: string) {
                       <!-- bedroom -->
                       <div class="flex flex-col">
                         <BedDouble />
-                        <p class="text-lg font-bold">{beds}</p>
+                        <p class="text-lg font-bold">{bedsCount}</p>
                         <p class="text-sm text-muted-400">Beds</p>
                       </div>
                       <!-- bathroom -->
@@ -654,7 +659,7 @@ function capitalizeFirstLetter(string: string) {
                     Amenities
                   </h4>
 
-                  <div class="mb-6 grid grid-cols-3 gap-2 justify-items-center">
+                  <div class="mb-3 grid grid-cols-2 gap-2 justify-items-center">
                     <!-- bedroom -->
                     <div class="flex flex-col">
                       <div
@@ -693,38 +698,10 @@ function capitalizeFirstLetter(string: string) {
                       </div>
                       <p class="text-sm text-muted-400">Bathrooms</p>
                     </div>
-
-                    <div class="flex flex-col">
-                      <div
-                        class="flex items-center gap-2 text-muted-900 dark:text-white"
-                      >
-                        <svg
-                          class="size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          style="--darkreader-inline-stroke: currentColor;"
-                          data-darkreader-inline-stroke=""
-                          ><path
-                            d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
-                          ></path><line x1="10" y1="5" x2="8" y2="7"
-                          ></line><line x1="2" y1="12" x2="22" y2="12"
-                          ></line><line x1="7" y1="19" x2="7" y2="21"
-                          ></line><line x1="17" y1="19" x2="17" y2="21"></line>
-                        </svg>
-                        <p class="text-lg font-bold">{bedrooms}</p>
-                      </div>
-                      <p class="text-sm text-muted-400">Bedrooms</p>
-                    </div>
                   </div>
+                  <div class=""> <BedTypes beds={beds} client:load /></div>
                   <div
-                    class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap"
+                    class="pb-6 my-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap"
                   >
                     <span
                       class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
