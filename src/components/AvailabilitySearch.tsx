@@ -8,6 +8,7 @@ import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
 import GoogleMap from './GoogleMap'; // Import the GoogleMap component
 import FilterComponent from './ui/FilterComponent'; // Import the FilterComponent
+import LazyLoad from 'react-lazyload';
 
 interface Listing {
   _id: string;
@@ -59,30 +60,36 @@ const formatTag = (tag: string): string => {
   return tagDisplayNames[tag] || tag;
 };
 
-const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
-  const toRad = (value: number) => (value * Math.PI) / 180;
-  const R = 6371; // Radius of the Earth in kilometers
-  const dLat = toRad(lat2 - lat1);
-  const dLng = toRad(lat2 - lng1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-    Math.sin(dLng / 2) * Math.sin(dLng / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // Distance in kilometers
-};
+// const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
+//   const toRad = (value: number) => (value * Math.PI) / 180;
+//   const R = 6371; // Radius of the Earth in kilometers
+//   const dLat = toRad(lat2 - lat1);
+//   const dLng = toRad(lat2 - lng2);
+//   const a =
+//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+//     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+//     Math.sin(dLng / 2) * Math.sin(dLng / 2);
+//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//   return R * c; // Distance in kilometers
+// };
 
-const sortListingsByDistance = (listings: Listing[], selectedCityLat: number, selectedCityLng: number): Listing[] => {
-  return listings.sort((a, b) => {
-    const distanceA = calculateDistance(selectedCityLat, selectedCityLng, a.address.lat, a.address.lng);
-    const distanceB = calculateDistance(selectedCityLat, selectedCityLng, b.address.lat, b.address.lng);
-    return distanceA - distanceB;
-  });
-};
+// const cityCoordinates: { [key: string]: { lat: number, lng: number } } = {
+//   "North Myrtle Beach": { lat: 33.8160, lng: -78.6800 },
+//   "Little River": { lat: 33.8732, lng: -78.6142 },
+//   // Add other cities and their coordinates here
+// };
+
+// const sortListingsByDistance = (listings: Listing[], cityLat: number, cityLng: number): Listing[] => {
+//   return listings.sort((a, b) => {
+//     const distanceA = calculateDistance(cityLat, cityLng, a.address.lat, a.address.lng);
+//     const distanceB = calculateDistance(cityLat, cityLng, b.address.lat, b.address.lng);
+//     return distanceA - distanceB;
+//   });
+// };
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
-  const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guest
+  const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
@@ -132,8 +139,28 @@ const AvailabilitySearch: React.FC = () => {
       }
     };
 
+    const fetchTags = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('/.netlify/functions/searchTags');
+        const data = await response.json();
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        const allowedTags = ["Public_pool", "Ocean_view", "web_featured", "Ocean_front", "Pets"];
+        const filteredTags = data.results.filter((tag: string) => allowedTags.includes(tag));
+        setTags(filteredTags);
+      } catch (err) {
+        console.error('Error fetching tags:', err);
+        setError('Failed to load tags');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchCities();
     fetchBedroomOptions();
+    fetchTags();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -166,17 +193,17 @@ const AvailabilitySearch: React.FC = () => {
 
       if (!data.results) {
         setError('No results found');
+        setListings([]);
+        setFilteredListings([]);
+        setIsResultsModalOpen(true);
+        setIsSearchComplete(true);
+        return;
       }
 
       const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
 
       setListings(filteredListings);
       setFilteredListings(filteredListings);
-
-      // Extract unique tags from the listings
-      const uniqueTags = Array.from(new Set(filteredListings.flatMap(listing => listing.tags.filter(tag => allowedTags.includes(tag))))) as string[];
-
-      setTags(uniqueTags);
 
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -230,14 +257,14 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     if (filters.selectedCity) {
-      const selectedCity = cities.find(city => city === filters.selectedCity);
-      if (selectedCity) {
-        const selectedCityLat = available.find(listing => listing.address.city === selectedCity)?.address.lat;
-        const selectedCityLng = available.find(listing => listing.address.city === selectedCity)?.address.lng;
-        if (selectedCityLat && selectedCityLng) {
-          filtered = sortListingsByDistance(filtered, selectedCityLat, selectedCityLng);
-        }
-      }
+      filtered = filtered.filter(listing => listing.address.city === filters.selectedCity);
+      // const selectedCity = cities.find(city => city === filters.selectedCity);
+      // if (selectedCity) {
+      //   const cityCoords = cityCoordinates[selectedCity];
+      //   if (cityCoords) {
+      //     filtered = sortListingsByDistance(filtered, cityCoords.lat, cityCoords.lng);
+      //   }
+      // }
     }
 
     setFilteredListings(filtered);
@@ -266,6 +293,7 @@ const AvailabilitySearch: React.FC = () => {
     }
   };
 
+
   return (
     <div className="w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
       <div className="flex flex-col md:flex-row justify-center align-middle w-full">
@@ -277,7 +305,7 @@ const AvailabilitySearch: React.FC = () => {
         </button>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <form onSubmit={handleSubmit} className="flex flex-col justify-evenly bg-zinc-100 items-start h-full rounded-md px-7 pb-12 md:p-7">
+        <form onSubmit={handleSubmit} className="flex flex-col justify-center bg-zinc-100 items-center h-1/2 rounded-md p-7">
           <div className="flex flex-col items-center justify-center w-full px-6">
             <div className="flex flex-col justify-center items-center gap-1 w-full">
               <div className="w-full flex flex-col">
@@ -346,38 +374,29 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           )}
           {error && <p>Error: {error}</p>}
-          {available.length > 0 && (
-            <div className="flex flex-col justify-start items-center ">
-              <button onClick={clearResults} className="bg-gray-600 text-white md:w-1/5 px-3 py-2 font-semibold my-3 rounded-md">
-                Clear Search Display
-              </button>
-            </div>
-          )}
           <div className="w-full">
-            {available.length > 0 && (
-              <FilterComponent
-                onFilterChange={handleFilterChange}
-                onResetFilters={resetFilters}
-                cities={cities}
-                tags={tags}
-                amenities={amenities}
-                initialPriceOrder={filters.priceOrder || ''}
-                initialBedroomCount={filters.bedroomCount || ''}
-                initialSelectedCity={filters.selectedCity || ''}
-                initialSelectedAmenities={filters.selectedAmenities || []}
-                initialSelectedTags={filters.selectedTags || []}
-                showBedroomFilter={selectedBedroomAmount === ''}
-              />
-            )}
+            <FilterComponent
+              onFilterChange={handleFilterChange}
+              onResetFilters={resetFilters}
+              cities={cities}
+              tags={tags}
+              amenities={amenities}
+              initialPriceOrder={filters.priceOrder || ''}
+              initialBedroomCount={filters.bedroomCount || ''}
+              initialSelectedCity={filters.selectedCity || ''}
+              initialSelectedAmenities={filters.selectedAmenities || []}
+              initialSelectedTags={filters.selectedTags || []}
+              showBedroomFilter={selectedBedroomAmount === ''}
+            />
           </div>
-          {available.length > 0 && (
+          {available.length > 0 ? (
             <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
               <div ref={resultsContainerRef} className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
                 <div className={`search-results h-full w-full overflow-y-auto grid ${getGridColsClass()} gap-x-6 gap-y-3 self-center px-2`}>
                   {filteredListings.length > 0 ? (
                     filteredListings.map((property) => (
                       <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
-                        <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-full rounded-xl overflow-hidden relative">
+                        <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-fit rounded-xl overflow-hidden relative">
                           <div className="relative w-full h-48">
                             <img
                               className="absolute inset-0 w-full h-full object-cover"
@@ -393,7 +412,6 @@ const AvailabilitySearch: React.FC = () => {
                             <p className="text-sm text-muted-400">
                               {property.address.city}, {property.address.state}
                             </p>
-                            <span className="hidden">{property.amenities.map(formatTag).join(', ')}</span>
                             <span className="hidden">{property.bedrooms}</span>
                             <hr className="border border-muted-200 dark:border-muted-800 my-2" />
                             <div className="flex items-end h-full">
@@ -411,7 +429,7 @@ const AvailabilitySearch: React.FC = () => {
                 </div>
               </div>
               <div className="w-full md:w-2/3 md:h-full">
-                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} />
+                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "Myrtle Beach"} />
               </div>
               <div className="md:hidden flex justify-center items-baseline mt-4 h-fit w-full md:w-1/4">
                 <button
@@ -421,20 +439,32 @@ const AvailabilitySearch: React.FC = () => {
                   <SlidersHorizontal />  Filter Search
                 </button>
                 <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)}>
-                  <FilterComponent 
-                    onFilterChange={handleFilterChange} 
-                    onResetFilters={resetFilters} 
-                    cities={cities} 
-                    tags={tags} 
-                    amenities={amenities} 
-                    initialPriceOrder={filters.priceOrder || ''} 
-                    initialBedroomCount={filters.bedroomCount || ''} 
-                    initialSelectedCity={filters.selectedCity || ''} 
-                    initialSelectedAmenities={filters.selectedAmenities || []} 
+                  <FilterComponent
+                    onFilterChange={handleFilterChange}
+                    onResetFilters={resetFilters}
+                    cities={cities}
+                    tags={tags}
+                    amenities={amenities}
+                    initialPriceOrder={filters.priceOrder || ''}
+                    initialBedroomCount={filters.bedroomCount || ''}
+                    initialSelectedCity={filters.selectedCity || ''}
+                    initialSelectedAmenities={filters.selectedAmenities || []}
                     initialSelectedTags={filters.selectedTags || []}
                     showBedroomFilter={selectedBedroomAmount === ''}
                   />
                 </Modal>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
+              <div className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
+                <div className="flex flex-col items-start justify-center h-full">
+                  <p className="pt-12 text-center">Sorry, no results were displayed. Please try your search again.</p>
+                    <button className="lp-button mt-4"><a href="/">Back to Search</a></button>
+                </div>
+              </div>
+              <div className="w-full md:w-2/3 md:h-full">
+                <GoogleMap listings={[]} onMarkerClick={handleMarkerClick} selectedCity="Myrtle Beach" />
               </div>
             </div>
           )}

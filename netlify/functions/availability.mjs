@@ -89,7 +89,7 @@ export const handler = async (event, context) => {
       };
 
       const listings = await fetchAllListings();
-      const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms)));
+      const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
 
       return {
         statusCode: 200,

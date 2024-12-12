@@ -12,6 +12,7 @@ interface FilterComponentProps {
   initialSelectedAmenities: string[];
   initialSelectedTags: string[];
   showBedroomFilter: boolean; // Add the showBedroomFilter prop
+  // Remove the onTagClick prop
 }
 
 const FilterComponent: React.FC<FilterComponentProps> = ({
@@ -51,7 +52,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
   useEffect(() => {
     onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags });
-  }, [priceOrder, selectedCity, selectedAmenities, selectedTags]);
+  }, [priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags]);
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newPriceOrder = e.target.value;
@@ -81,6 +82,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
       ? selectedTags.filter(t => t !== tag)
       : [...selectedTags, tag];
     setSelectedTags(newSelectedTags);
+    onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags: newSelectedTags });
   };
 
   const handleResetFilters = () => {
@@ -156,7 +158,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                 key={tag}
                 type="button"
                 onClick={() => handleTagChange(tag)}
-                className={`px-3 py-1 text-nowrap w-fit text-secondary rounded ${selectedTags.includes(tag) ? 'bg-foreground text-white' : 'bg-secondary text-white'}`}
+                className={`px-3 py-1 text-nowrap w-fit ${selectedTags.includes(tag) ? 'bg-foreground text-white' : 'bg-secondary text-white'}`}
               >
                 {formatTag(tag)}
               </button>
