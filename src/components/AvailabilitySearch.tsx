@@ -82,7 +82,7 @@ const sortListingsByDistance = (listings: Listing[], selectedCityLat: number, se
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
-  const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
+  const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guest
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
