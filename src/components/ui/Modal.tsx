@@ -21,7 +21,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, fullScreen = f
             <X size={24} />
           </button>
         )}
-        <div className="p-4">
+        <div className="">
           {children}
         </div>
       </div>
