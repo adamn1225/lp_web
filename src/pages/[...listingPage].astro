@@ -506,6 +506,19 @@ function capitalizeFirstLetter(string: string) {
                     }
 
                     {
+                      Description?.space && (
+                        <>
+                          <>
+                            <p class="text-muted-500 text-base xs:text-center">
+                              {Description.space}
+                            </p>
+                            <br />
+                          </>
+                        </>
+                      )
+                    }
+
+                    {
                       Description?.notes && (
                         <>
                           <>

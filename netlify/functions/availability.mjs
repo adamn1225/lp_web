@@ -16,6 +16,8 @@ const fetchWithRetry = async (url, options, retries = 3) => {
       const retryAfter = response.headers.get('Retry-After');
       const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
       await delay(delayMs);
+    } else if (response.status === 401) {
+      throw new Error('Not Authorized');
     } else {
       return response;
     }
@@ -24,7 +26,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId } = event.queryStringParameters;
 
   if (fetchCities) {
     try {
@@ -108,6 +110,69 @@ export const handler = async (event, context) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ error: 'Internal Server Error' })
+      };
+    }
+  }
+
+  if (fetchBookedDates) {
+    if (!listingId || !checkIn || !checkOut) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ error: 'Missing required query parameters: listingId, checkIn, checkOut' })
+      };
+    }
+
+    const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings/${encodeURIComponent(listingId)}?startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        headers: {
+          'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+          'Accept': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.data || !Array.isArray(data.data.days)) {
+        return {
+          statusCode: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ error: 'Invalid data structure' })
+        };
+      }
+
+      const bookedDates = data.data.days
+        .filter(day => day.status === 'booked')
+        .map(day => day.date);
+
+      return {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ bookedDates })
+      };
+    } catch (error) {
+      return {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ error: error.message })
       };
     }
   }

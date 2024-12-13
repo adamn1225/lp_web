@@ -8,7 +8,6 @@ import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
 import GoogleMap from './GoogleMap'; // Import the GoogleMap component
 import FilterComponent from './ui/FilterComponent'; // Import the FilterComponent
-import LazyLoad from 'react-lazyload';
 
 interface Listing {
   _id: string;
@@ -60,33 +59,6 @@ const formatTag = (tag: string): string => {
   return tagDisplayNames[tag] || tag;
 };
 
-// const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
-//   const toRad = (value: number) => (value * Math.PI) / 180;
-//   const R = 6371; // Radius of the Earth in kilometers
-//   const dLat = toRad(lat2 - lat1);
-//   const dLng = toRad(lat2 - lng2);
-//   const a =
-//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-//     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-//     Math.sin(dLng / 2) * Math.sin(dLng / 2);
-//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//   return R * c; // Distance in kilometers
-// };
-
-// const cityCoordinates: { [key: string]: { lat: number, lng: number } } = {
-//   "North Myrtle Beach": { lat: 33.8160, lng: -78.6800 },
-//   "Little River": { lat: 33.8732, lng: -78.6142 },
-//   // Add other cities and their coordinates here
-// };
-
-// const sortListingsByDistance = (listings: Listing[], cityLat: number, cityLng: number): Listing[] => {
-//   return listings.sort((a, b) => {
-//     const distanceA = calculateDistance(cityLat, cityLng, a.address.lat, a.address.lng);
-//     const distanceB = calculateDistance(cityLat, cityLng, b.address.lat, b.address.lng);
-//     return distanceA - distanceB;
-//   });
-// };
-
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
   const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
@@ -116,51 +88,35 @@ const AvailabilitySearch: React.FC = () => {
   const resultsContainerRef = useRef<HTMLDivElement>(null); // Add reference to the results container
 
   useEffect(() => {
-    const fetchCities = async () => {
+    const fetchInitialData = async () => {
       try {
-        const response = await fetch('/.netlify/functions/availability?fetchCities=true');
-        const data = await response.json();
-        setCities(data.results);
-      } catch (err) {
-        console.error('Error fetching cities:', err);
-        setError('Failed to load cities');
-      }
-    };
+        const [citiesResponse, bedroomsResponse, tagsResponse] = await Promise.all([
+          fetch('/.netlify/functions/availability?fetchCities=true'),
+          fetch('/.netlify/functions/availability?fetchBedrooms=true'),
+          fetch('/.netlify/functions/searchTags')
+        ]);
 
-    const fetchBedroomOptions = async () => {
-      try {
-        const response = await fetch('/.netlify/functions/availability?fetchBedrooms=true');
-        const data = await response.json();
-        const sortedBedrooms = data.results.sort((a: number, b: number) => a - b);
+        const citiesData = await citiesResponse.json();
+        const bedroomsData = await bedroomsResponse.json();
+        const tagsData = await tagsResponse.json();
+
+        setCities(citiesData.results);
+        const sortedBedrooms = bedroomsData.results.sort((a: number, b: number) => a - b);
         setBedroomOptions(sortedBedrooms);
-      } catch (err) {
-        console.error('Error fetching bedroom options:', err);
-        setError('Failed to load bedroom options');
-      }
-    };
 
-    const fetchTags = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch('/.netlify/functions/searchTags');
-        const data = await response.json();
-        if (data.error) {
-          throw new Error(data.error);
+        if (tagsData.error) {
+          throw new Error(tagsData.error);
         }
         const allowedTags = ["Public_pool", "Ocean_view", "web_featured", "Ocean_front", "Pets"];
-        const filteredTags = data.results.filter((tag: string) => allowedTags.includes(tag));
+        const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
         setTags(filteredTags);
       } catch (err) {
-        console.error('Error fetching tags:', err);
-        setError('Failed to load tags');
-      } finally {
-        setLoading(false);
+        console.error('Error fetching initial data:', err);
+        setError('Failed to load initial data');
       }
     };
 
-    fetchCities();
-    fetchBedroomOptions();
-    fetchTags();
+    fetchInitialData();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -458,7 +414,7 @@ const AvailabilitySearch: React.FC = () => {
           ) : (
             <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
               <div className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
-                <div className="flex flex-col items-start justify-center h-full">
+                <div className="flex flex-col items-center justify-start h-full">
                   <p className="pt-12 text-center">Sorry, no results were displayed. Please try your search again.</p>
                     <button className="lp-button mt-4"><a href="/">Back to Search</a></button>
                 </div>
