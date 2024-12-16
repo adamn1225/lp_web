@@ -60,6 +60,8 @@ const formatTag = (tag: string): string => {
 };
 
 const AvailabilitySearch: React.FC = () => {
+  console.log("AvailabilitySearch component rendered");
+
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
   const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
   const [loading, setLoading] = useState<boolean>(false);
@@ -104,9 +106,18 @@ const AvailabilitySearch: React.FC = () => {
         const bedroomsData = await bedroomsResponse.json();
         const tagsData = await tagsResponse.json();
 
-        setCities(citiesData.results);
-        const sortedBedrooms = bedroomsData.results.sort((a: number, b: number) => a - b);
-        setBedroomOptions(sortedBedrooms);
+        if (citiesData.results) {
+          setCities(citiesData.results);
+        } else {
+          setCities([]);
+        }
+
+        if (bedroomsData.results) {
+          const sortedBedrooms = bedroomsData.results.sort((a: number, b: number) => a - b);
+          setBedroomOptions(sortedBedrooms);
+        } else {
+          setBedroomOptions([]);
+        }
 
         if (tagsData.error) {
           throw new Error(tagsData.error);
@@ -349,14 +360,6 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           )}
           {error && <p>Error: {error}</p>}
-          <div className="flex flex-col md:flex-row justify-center align-middle w-full py-6">
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="w-4/5 md:w-1/4 mx-auto h-fit z-50 flex flex-col items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
-            >
-              <span className="flex w-fit items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
-            </button>
-          </div>
           <div className="w-full">
             <FilterComponent
               onFilterChange={handleFilterChange}
