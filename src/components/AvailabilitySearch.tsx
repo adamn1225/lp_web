@@ -60,8 +60,6 @@ const formatTag = (tag: string): string => {
 };
 
 const AvailabilitySearch: React.FC = () => {
-  console.log("AvailabilitySearch component rendered");
-
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
   const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
   const [loading, setLoading] = useState<boolean>(false);

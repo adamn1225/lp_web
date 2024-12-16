@@ -43,7 +43,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
       try {
         const response = await fetch('/.netlify/functions/availability?fetchBedrooms=true');
         const data = await response.json();
-        const sortedBedrooms = data.results.sort((a: number, b: number) => a - b);
+        const sortedBedrooms = (data.results || []).sort((a: number, b: number) => a - b);
         setBedroomOptions(sortedBedrooms);
       } catch (err) {
         console.error('Error fetching bedroom options:', err);
@@ -127,8 +127,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
   return (
     <div className="filter-component flex flex-col items-center justify-start gap-4 p-2 md:p-4 w-full bg-primary/40 h-full">
-
-
       <div className='items-start justify-center text-sm md:text-base'>
         <div className="amenities-filter mt-2">
           <div className="flex flex-wrap items-center gap-2">

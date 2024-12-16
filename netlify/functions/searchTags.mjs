@@ -1,4 +1,7 @@
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 let lastRequestTime = 0;
 const RATE_LIMIT_INTERVAL = 1000; // 1 second
@@ -13,8 +16,10 @@ const fetchWithRetry = async (url, options, retries = 3) => {
             const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
             console.warn(`Rate limit hit, retrying after ${delayMs}ms...`);
             await delay(delayMs);
-        } else {
+        } else if (response.ok) {
             return response;
+        } else {
+            console.error(`Error fetching data: ${response.status} ${response.statusText}`);
         }
     }
     throw new Error('Max retries reached');
