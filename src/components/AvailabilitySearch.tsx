@@ -81,11 +81,15 @@ const AvailabilitySearch: React.FC = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false); // Add state to track search completion
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage] = useState<number>(10); // Number of items to display per page
 
   const apiUrl = '/.netlify/functions/availability';
 
   const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
   const resultsContainerRef = useRef<HTMLDivElement>(null); // Add reference to the results container
+
+  const cache = useRef<{ [key: string]: Listing[] }>({}); // Client-side cache
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -127,6 +131,18 @@ const AvailabilitySearch: React.FC = () => {
 
     try {
       const tagsQuery = selectedTags.join(',');
+      const cacheKey = `${dateRange[0].startDate.toISOString().slice(0, 10)}-${dateRange[0].endDate.toISOString().slice(0, 10)}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}`;
+
+      if (cache.current[cacheKey]) {
+        console.log('Returning cached results');
+        setListings(cache.current[cacheKey]);
+        setFilteredListings(cache.current[cacheKey]);
+        setLoading(false);
+        setIsResultsModalOpen(true);
+        setIsSearchComplete(true);
+        return;
+      }
+
       let url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
 
       if (selectedLocation) {
@@ -160,6 +176,9 @@ const AvailabilitySearch: React.FC = () => {
 
       setListings(filteredListings);
       setFilteredListings(filteredListings);
+      cache.current[cacheKey] = filteredListings; // Cache the results
+
+      console.log('Filtered Listings:', filteredListings);
 
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -214,13 +233,6 @@ const AvailabilitySearch: React.FC = () => {
 
     if (filters.selectedCity) {
       filtered = filtered.filter(listing => listing.address.city === filters.selectedCity);
-      // const selectedCity = cities.find(city => city === filters.selectedCity);
-      // if (selectedCity) {
-      //   const cityCoords = cityCoordinates[selectedCity];
-      //   if (cityCoords) {
-      //     filtered = sortListingsByDistance(filtered, cityCoords.lat, cityCoords.lng);
-      //   }
-      // }
     }
 
     setFilteredListings(filtered);
@@ -249,18 +261,25 @@ const AvailabilitySearch: React.FC = () => {
     }
   };
 
+  // Get current listings for pagination
+  const indexOfLastListing = currentPage * itemsPerPage;
+  const indexOfFirstListing = indexOfLastListing - itemsPerPage;
+  const currentListings = filteredListings.slice(indexOfFirstListing, indexOfLastListing);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div className="w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
       <div className="flex flex-col md:flex-row justify-center align-middle w-full">
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-4/5 md:w-1/4 mx-auto h-fit flex flex-col items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
+          className="w-4/5 md:w-1/4 mx-auto h-fit z-50 flex flex-col items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
         >
           <span className="flex w-fit items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
         </button>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="z-50">
         <form onSubmit={handleSubmit} className="flex flex-col justify-center bg-zinc-100 items-center h-1/2 rounded-md p-7">
           <div className="flex flex-col items-center justify-center w-full px-6">
             <div className="flex flex-col justify-center items-center gap-1 w-full">
@@ -322,7 +341,7 @@ const AvailabilitySearch: React.FC = () => {
       </Modal>
       <div className="w-full my-3"></div>
       <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
-        <div className={`bg-white w-screen overflow-y-auto m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
+        <div className={`bg-white overflow-y-auto overflow-x-hidden m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
           {loading && (
             <div ref={resultsContainerRef} className="flex flex-col items-center justify-center h-full">
               <ClipLoader size={50} color={"#102C57"} loading={loading} />
@@ -330,6 +349,14 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           )}
           {error && <p>Error: {error}</p>}
+          <div className="flex flex-col md:flex-row justify-center align-middle w-full py-6">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="w-4/5 md:w-1/4 mx-auto h-fit z-50 flex flex-col items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
+            >
+              <span className="flex w-fit items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
+            </button>
+          </div>
           <div className="w-full">
             <FilterComponent
               onFilterChange={handleFilterChange}
@@ -338,7 +365,7 @@ const AvailabilitySearch: React.FC = () => {
               tags={tags}
               amenities={amenities}
               initialPriceOrder={filters.priceOrder || ''}
-              initialBedroomCount={filters.bedroomCount || ''}
+              initialBedroomCount={Number(filters.bedroomCount) || 0} // Ensure it's a number
               initialSelectedCity={filters.selectedCity || ''}
               initialSelectedAmenities={filters.selectedAmenities || []}
               initialSelectedTags={filters.selectedTags || []}
@@ -349,8 +376,8 @@ const AvailabilitySearch: React.FC = () => {
             <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
               <div ref={resultsContainerRef} className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
                 <div className={`search-results h-full w-full overflow-y-auto grid ${getGridColsClass()} gap-x-6 gap-y-3 self-center px-2`}>
-                  {filteredListings.length > 0 ? (
-                    filteredListings.map((property) => (
+                  {currentListings.length > 0 ? (
+                    currentListings.map((property) => (
                       <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
                         <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-fit rounded-xl overflow-hidden relative">
                           <div className="relative w-full h-48">
@@ -383,6 +410,17 @@ const AvailabilitySearch: React.FC = () => {
                     <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
                   )}
                 </div>
+                <div className="pagination flex justify-center mb-8">
+                  {Array.from({ length: Math.ceil(filteredListings.length / itemsPerPage) }, (_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => paginate(index + 1)}
+                      className={`page-item mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-secondary text-white' : 'bg-gray-200 text-gray-700'}`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
               </div>
               <div className="w-full md:w-2/3 md:h-full">
                 <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "Myrtle Beach"} />
@@ -392,9 +430,9 @@ const AvailabilitySearch: React.FC = () => {
                   onClick={() => setIsFilterModalOpen(true)}
                   className="w-2/3 flex gap-1 text-lg justify-center font-semibold bg-secondary text-white py-1.5 rounded-md"
                 >
-                  <SlidersHorizontal />  Filter Search
+                  <SlidersHorizontal />  Filter
                 </button>
-                <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)}>
+                <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)} className="z-40 h-3/4">
                   <FilterComponent
                     onFilterChange={handleFilterChange}
                     onResetFilters={resetFilters}
@@ -402,7 +440,7 @@ const AvailabilitySearch: React.FC = () => {
                     tags={tags}
                     amenities={amenities}
                     initialPriceOrder={filters.priceOrder || ''}
-                    initialBedroomCount={filters.bedroomCount || ''}
+                    initialBedroomCount={Number(filters.bedroomCount) || 0} // Ensure it's a number
                     initialSelectedCity={filters.selectedCity || ''}
                     initialSelectedAmenities={filters.selectedAmenities || []}
                     initialSelectedTags={filters.selectedTags || []}
@@ -416,7 +454,7 @@ const AvailabilitySearch: React.FC = () => {
               <div className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
                 <div className="flex flex-col items-center justify-start h-full">
                   <p className="pt-12 text-center">Sorry, no results were displayed. Please try your search again.</p>
-                    <button className="lp-button mt-4"><a href="/">Back to Search</a></button>
+                  <button className="lp-button mt-4"><a href="/">Back to Search</a></button>
                 </div>
               </div>
               <div className="w-full md:w-2/3 md:h-full">

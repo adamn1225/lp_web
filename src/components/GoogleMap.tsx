@@ -98,7 +98,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ listings, onMarkerClick, selected
         }
     }, [listings, onMarkerClick, selectedCity]);
 
-    return <div ref={mapRef} className="w-full h-full" />;
+    return <div ref={mapRef} className=" h-full" />;
 };
 
 export default GoogleMap;
