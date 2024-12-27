@@ -119,7 +119,7 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       >
         <div className="bg-white xs:mx-2 xs:px-4 px-8 py-4 rounded shadow-lg w-full max-w-md">
-          <h2 className="text-center px-4 pb-2 text-slate-700 font-semibold text-lg">Let us know about who you are and when you're planning stay and your host will respond instantly!</h2>
+          <h2 className="text-start pr-1 pb-2 text-slate-700 font-semibold text-nowrap text-lg">Let your host know who you are and begin the chat</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex gap-1">
               <input

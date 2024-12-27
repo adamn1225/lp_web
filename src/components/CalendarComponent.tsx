@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -10,6 +10,18 @@ interface CalendarComponentProps {
 }
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates }) => {
+  const [killRange, setKillRange] = useState([
+    {
+      startDate: null,
+      endDate: null,
+      key: 'selection'
+    }
+  ]);
+
+  const handleSelect = (ranges) => {
+    setKillRange([ranges.selection]);
+  };
+  
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set time to midnight to avoid timezone issues
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addDays } from "date-fns";
-import CalendarComponent from "./CalendarComponent";
 import BookingFormModal from "./BookingFormModal";
+import CalendarComponent from "./CalendarComponent";
 
 interface Listing {
   _id: string;
@@ -25,14 +25,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
-  const [initialized, setInitialized] = useState<boolean>(false);
-  const [state, setState] = useState<any[]>([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: 'selection'
-    }
-  ]);
+  const [state, setState] = useState<any[]>([]);
   const [unavailableDates, setUnavailableDates] = useState<Date[]>([]);
   const [bookedDates, setBookedDates] = useState<Date[]>([]);
   const [isLocal, setIsLocal] = useState<boolean>(false);
@@ -40,6 +33,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [guests, setGuests] = useState<number>(1);
   const [pets, setPets] = useState<number>(0);
   const [occupancy, setOccupancy] = useState<number>(2);
+  const [initialized, setInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -94,23 +88,51 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   }, [isLocal, listingId]);
 
   useEffect(() => {
-    if (!initialized) {
+    if (!initialized && unavailableDates.length > 0) {
+      // Calculate the next available date
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      let nextAvailableDate = today;
+      while (unavailableDates.some(date => date.getTime() === nextAvailableDate.getTime()) ||
+        bookedDates.some(date => date.getTime() === nextAvailableDate.getTime())) {
+        nextAvailableDate = addDays(nextAvailableDate, 1);
+      }
+
       setState([
         {
-          startDate: new Date(),
-          endDate: addDays(new Date(), 7),
-          key: 'selection'
-        }
+          startDate: null,
+          endDate: addDays(nextAvailableDate, 5),
+          key: 'selection',
+        },
       ]);
       setInitialized(true);
     }
-  }, [initialized]);
+  }, [initialized, unavailableDates, bookedDates]);
 
   // Combine unavailable and booked dates
   const disabledDates = [...unavailableDates, ...bookedDates];
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const isSelectedRangeUnavailable = () => {
+    if (state.length === 0 || !state[0].startDate || !state[0].endDate) {
+      return true;
+    }
+    const { startDate, endDate } = state[0];
+    return isDateRangeUnavailable(startDate, endDate, unavailableDates, bookedDates);
+  };
+
+  const isDateRangeUnavailable = (startDate: Date, endDate: Date, unavailable: Date[], booked: Date[]) => {
+    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+      if (unavailable.some(unavailableDate => unavailableDate.getTime() === date.getTime()) ||
+        booked.some(bookedDate => bookedDate.getTime() === date.getTime())) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   return (
     <div className="mt-4">
@@ -127,24 +149,26 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
           type="button"
           className="h-full shadow-lg shadow-zinc-100 lp-button m-0 drop-shadow-lg w-5/6 py-1 xs:mx-2 text-lg rounded-lg text-white"
           onClick={openModal}
+          disabled={isSelectedRangeUnavailable()}
         >
           Get Pricing Details
         </button>
       </div>
-      <BookingFormModal
-        isModalOpen={isModalOpen}
-        closeModal={closeModal}
-        guests={guests}
-        setGuests={setGuests}
-        pets={pets}
-        setPets={setPets}
-        dateRange={state}
-        setDateRange={setState}
-        listingId={listingId}
-        occupancy={occupancy}
-        setOccupancy={setOccupancy}
-        taxes={0}
-      />
+      {state.length > 0 && (
+        <BookingFormModal
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          guests={guests}
+          setGuests={setGuests}
+          pets={pets}
+          setPets={setPets}
+          dateRange={state}
+          setDateRange={setState}
+          listingId={listingId}
+          occupancy={occupancy}
+          setOccupancy={setOccupancy}
+        />
+      )}
     </div>
   );
 };

@@ -111,7 +111,6 @@ article {
 
 .custom-date-input::selection {
   background: #102C57;
-  color: white;
 }
 
 .react-datepicker__day--selected,
@@ -119,7 +118,6 @@ article {
 .react-datepicker__day--in-range,
 .react-datepicker__day--keyboard-selected {
   background-color: #102C57 !important;
-  color: white !important;
 }
 
 .react-datepicker__day--today {
@@ -137,11 +135,14 @@ article {
   -moz-appearance: textfield;
 }
 
-.rdrCalendarWrapper .rdrDay span.rdrStartEdge,
-.rdrCalendarWrapper .rdrDay span.rdrEndEdge,
+.rdrCalendarWrapper ,
+.rdrCalendarWrapper
 .rdrCalendarWrapper .rdrDay span.rdrInRange {
-  background-color: #102C57;
-  color: white;
+  background-color: rgba(248, 248, 248, 0.301); 
+}
+
+.rdrDayToday .rdrDayNumber span:after {
+  background-color: #ffffff00 !important;
 }
 
 .lp-button {
@@ -245,4 +246,3 @@ article {
 .custom-info-window .info-window-button:hover {
   background-color: #0056b3;
 }
-

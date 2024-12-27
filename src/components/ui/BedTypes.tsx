@@ -1,5 +1,5 @@
 import React from 'react';
-import { BedDouble } from 'lucide-react';
+import { BedDouble, BedDoubleIcon } from 'lucide-react';
 import { MdOutlineKingBed } from 'react-icons/md';
 import { IoBedOutline } from 'react-icons/io5';
 

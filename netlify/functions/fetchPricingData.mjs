@@ -15,11 +15,12 @@ export const handler = async (event, context) => {
         };
     }
 
+    const manUrl = `https://open-api.guesty.com/v1/additional-fees/account/`;
     const apiUrl1 = `https://open-api.guesty.com/v1/listings/${listingId}`;
     const apiUrl2 = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings/${listingId}?startDate=${startDate}&endDate=${endDate}`;
 
     try {
-        const [response1, response2] = await Promise.all([
+        const [response1, response2, response3] = await Promise.all([
             fetch(apiUrl1, {
                 headers: {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
@@ -31,7 +32,13 @@ export const handler = async (event, context) => {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
                     'Accept': 'application/json'
                 }
-            })
+            }),
+            fetch(manUrl, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+                    'Accept': 'application/json'
+                }
+            }),
         ]);
 
         if (!response1.ok) {
@@ -42,8 +49,13 @@ export const handler = async (event, context) => {
             throw new Error(`Error fetching data from second endpoint: ${response2.status} ${response2.statusText}`);
         }
 
+        if (!response3.ok) {
+            throw new Error(`Error fetching data from third endpoint: ${response3.status} ${response3.statusText}`);
+        }
+
         const data1 = await response1.json();
         const data2 = await response2.json();
+        const data3 = await response3.json();
 
         if (!data2.data || !Array.isArray(data2.data.days)) {
             return {
@@ -92,6 +104,12 @@ export const handler = async (event, context) => {
         const localTax = accountTaxes.find(tax => tax.type === 'LOCAL_TAX')?.amount || 0;
         const cityTax = accountTaxes.find(tax => tax.type === 'CITY_TAX')?.amount || 0;
 
+        // Extract the management fee percentage
+        const managementFeePercentage = data3.find(fee => fee.name === 'Management')?.sourcesConfigurations[0]?.value || 0;
+
+        // Log the management fee percentage
+        console.log('Management Fee Percentage:', managementFeePercentage);
+
         return {
             statusCode: 200,
             headers: {
@@ -110,7 +128,8 @@ export const handler = async (event, context) => {
                 guestsIncludedInRegularFee,
                 extraPersonFee,
                 localTax,
-                cityTax
+                cityTax,
+                managementFeePercentage,
             })
         };
     } catch (error) {
