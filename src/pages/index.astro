@@ -3,6 +3,7 @@ import Layout from "@layouts/Split.astro";
 import Section from "@components/Section.astro";
 import Page2 from "@components/Page2.astro";
 import GuestyListings from "../components/GuestyListings.astro";
+import AvailabilitySearch from "@/components/AvailabilitySearch";
 import App from "../components/App";
 import TagNavigation from "@components/TagNavigation";
 import FeaturedListings from "@components/FeaturedListings.astro";
@@ -11,7 +12,7 @@ import FeaturedListings from "@components/FeaturedListings.astro";
 <Layout title="Properties">
   <Section>
     <div class="pt-20">
-      <App client:only="react" />
+      <AvailabilitySearch client:only="react" />
     </div>
     <TagNavigation client:only="react" />
     <FeaturedListings />

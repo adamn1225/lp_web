@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { motion } from "framer-motion";
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/global.scss';
 import { addDays } from "date-fns";
@@ -56,6 +55,10 @@ const tagDisplayNames: { [key: string]: string } = {
   "Pets": "Pet Friendly"
 };
 
+const formatTag = (tag: string): string => {
+  return tagDisplayNames[tag] || tag;
+};
+
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
   const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
@@ -63,7 +66,7 @@ const AvailabilitySearch: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
   const [filteredListings, setFilteredListings] = useState<Listing[]>([]);
-  const [dateRange, setDateRange] = useState([{ startDate: new Date(), endDate: addDays(new Date(), 7), key: 'selection' }]);
+  const [dateRange, setDateRange] = useState([{ startDate: addDays(new Date(), 12), endDate: addDays(new Date(), 24), key: 'selection' }]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [tagsLoading, setTagsLoading] = useState<boolean>(false);
@@ -137,7 +140,7 @@ const AvailabilitySearch: React.FC = () => {
 
     try {
       const tagsQuery = selectedTags.join(',');
-      const cacheKey = `${dateRange[0].startDate.toISOString().slice(0, 10)}-${dateRange[0].endDate.toISOString().slice(0, 10)}-${minOccupancy}-${selectedLocation || 'undefined'}-${selectedBedroomAmount || 'undefined'}-${tagsQuery || 'undefined'}`;
+      const cacheKey = `${dateRange[0].startDate.toISOString().slice(0, 10)}-${dateRange[0].endDate.toISOString().slice(0, 10)}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}`;
 
       if (cache.current[cacheKey]) {
         console.log('Returning cached results');
@@ -159,6 +162,8 @@ const AvailabilitySearch: React.FC = () => {
         url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
       }
 
+      console.log('API URL:', url);
+
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch listings: ${response.statusText}`);
@@ -167,23 +172,29 @@ const AvailabilitySearch: React.FC = () => {
       const data = await response.json();
       console.log('Fetched Data:', data);
 
-      if (response.ok) {
-        cache.current[cacheKey] = data.results;
-        setListings(data.results);
-        setFilteredListings(data.results);
+      if (!data.results) {
+        setError('No results found');
+        setListings([]);
+        setFilteredListings([]);
         setIsResultsModalOpen(true);
         setIsSearchComplete(true);
+        return;
       }
 
       const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
 
       setListings(filteredListings);
       setFilteredListings(filteredListings);
-      cache.current[cacheKey] = filteredListings;
+      cache.current[cacheKey] = filteredListings; // Cache the results
+
+      console.log('Filtered Listings:', filteredListings);
 
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
       }
+
+      setIsResultsModalOpen(true);
+      setIsSearchComplete(true); // Set search completion state to true
     } catch (err) {
       console.error(err);
       setError(err.message || 'An error occurred');
@@ -222,7 +233,7 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     if (filters.selectedTags && filters.selectedTags.length > 0) {
-      filtered = filtered.filter((listing: Listing) => filters.selectedTags.every((tag: string) => listing.tags.includes(tag)));
+      filtered = filtered.filter(listing => filters.selectedTags.every(tag => listing.tags.includes(tag)));
     }
 
     if (filters.selectedAmenities && filters.selectedAmenities.length > 0) {
@@ -267,18 +278,35 @@ const AvailabilitySearch: React.FC = () => {
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+  useEffect(() => {
+    if (dateRange[0].startDate) {
+      const prefetchData = async () => {
+        const checkIn = dateRange[0].startDate;
+        const checkOut = dateRange[0].endDate || new Date(checkIn).setDate(new Date(checkIn).getDate() + 1); // Default to one day if endDate is not selected
+        const minOccupancy = 1;
+        const city = 'North Myrtle Beach';
+        const bedroomAmount = 1;
+
+        const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
+        const cachedData = localStorage.getItem(cacheKey);
+
+        if (!cachedData) {
+          try {
+            const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
+            const data = await response.json();
+            localStorage.setItem(cacheKey, JSON.stringify(data));
+          } catch (error) {
+            console.error('Error prefetching data:', error);
+          }
+        }
+      };
+
+      prefetchData();
+    }
+  }, [dateRange[0].startDate]);
+
   return (
-    <div className=" availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
-      {loading && (
-        <div className="progress-bar">
-          <motion.div
-            className="progress-bar-inner"
-            initial={{ width: 0 }}
-            animate={{ width: '100%' }}
-            transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
-          />
-        </div>
-      )}
+    <div className="w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
       <div className="flex flex-col md:flex-row justify-center align-middle w-full">
         <button
           onClick={() => setIsModalOpen(true)}

@@ -78,6 +78,7 @@
     "netlify-cli": "^17.34.2",
     "node-cache": "^5.1.2",
     "node-fetch": "^3.3.2",
+    "p-limit": "^6.2.0",
     "patch-package": "^8.0.0",
     "plyr": "^3.7.8",
     "postcss": "^8.4.47",

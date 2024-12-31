@@ -1,43 +1,17 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import { createClient } from 'redis';
+import fs from 'fs';
+import path from 'path';
 import { promisify } from 'util';
 
 dotenv.config();
 
-const redisClient = createClient({
-  url: `redis://${process.env.REDIS_URL}:${process.env.REDIS_PORT}`,
-  password: process.env.REDIS_PASSWORD
-});
-
-const getAsync = promisify(redisClient.get).bind(redisClient);
-const setAsync = promisify(redisClient.set).bind(redisClient);
-
-redisClient.on('error', (err) => {
-  console.error('Redis error:', err);
-});
-
-redisClient.on('connect', () => {
-  console.log('Connected to Redis');
-});
-
-redisClient.on('ready', () => {
-  console.log('Redis client ready');
-});
-
-redisClient.on('end', () => {
-  console.log('Redis client disconnected');
-});
-
-const ensureRedisConnection = async () => {
-  if (!redisClient.isOpen) {
-    await redisClient.connect();
-  }
-};
-
 const RATE_LIMIT_INTERVAL = 1000; // 1 second
+const CONCURRENCY_LIMIT = 5; // Adjust as needed
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
 
 const fetchWithRetry = async (url, options, retries = 3) => {
   for (let i = 0; i < retries; i++) {
@@ -58,16 +32,6 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingId, checkIn, checkOut) => {
-  await ensureRedisConnection();
-
-  const cacheKey = `availability:${listingId}:${checkIn}:${checkOut}`;
-  const cachedData = await getAsync(cacheKey);
-
-  if (cachedData) {
-    console.log(`Returning cached availability data for listing ${listingId}`);
-    return JSON.parse(cachedData);
-  }
-
   const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings/${encodeURIComponent(listingId)}?startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}`;
 
   console.log(`Fetching availability for listing ${listingId} from URL: ${apiUrl}`);
@@ -97,33 +61,32 @@ const fetchAvailability = async (listingId, checkIn, checkOut) => {
 
   console.log(`Booked dates for listing ${listingId}: ${JSON.stringify(bookedDates)}`);
 
-  try {
-    await setAsync(cacheKey, JSON.stringify(bookedDates), 'EX', 60 * 60); // Cache for 1 hour
-    console.log(`Cached availability data for listing ${listingId} with key ${cacheKey}`);
-  } catch (error) {
-    console.error(`Error caching availability data for listing ${listingId}: ${error.message}`);
-  }
-
   return bookedDates;
 };
 
-const fetchAllAvailabilities = async (listings, checkIn, checkOut) => {
-  const batchSize = 10; // Adjust batch size as needed
-  const results = [];
-
-  for (let i = 0; i < listings.length; i += batchSize) {
-    const batch = listings.slice(i, i + batchSize);
-    const batchResults = await Promise.all(batch.map(listing => fetchAvailability(listing._id, checkIn, checkOut)));
-    results.push(...batchResults);
+const updateCache = async (cacheFilePath, cacheData) => {
+  try {
+    await writeFileAsync(cacheFilePath, JSON.stringify(cacheData, null, 2));
+    console.log('Cache updated successfully');
+  } catch (error) {
+    console.error('Error updating cache:', error);
   }
-
-  return results;
 };
 
 export const handler = async (event, context) => {
   const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId } = event.queryStringParameters;
 
   console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId })}`);
+
+  const cacheFilePath = path.resolve(__dirname, 'availabilityCache.json');
+  let cacheData = {};
+
+  try {
+    const cacheFileContent = await readFileAsync(cacheFilePath, 'utf8');
+    cacheData = JSON.parse(cacheFileContent);
+  } catch (error) {
+    console.error('Error reading cache file:', error);
+  }
 
   if (fetchCities) {
     try {
@@ -263,8 +226,7 @@ export const handler = async (event, context) => {
   }
 
   const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${location}-${bedroomAmount}-${city}`;
-  await ensureRedisConnection();
-  const cachedData = await getAsync(cacheKey);
+  const cachedData = cacheData[cacheKey];
 
   if (cachedData) {
     console.log(`Returning cached data for key: ${cacheKey}`);
@@ -274,7 +236,7 @@ export const handler = async (event, context) => {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(JSON.parse(cachedData))
+      body: JSON.stringify(cachedData)
     };
   }
 
@@ -324,13 +286,24 @@ export const handler = async (event, context) => {
     console.log(`Listings after filtering by bedroom amount: ${JSON.stringify(combinedResults)}`);
 
     // Fetch availability for each listing and filter out booked listings
-    const availableListings = await fetchAllAvailabilities(combinedResults, checkIn, checkOut);
+    const availableListings = [];
+    for (const listing of combinedResults) {
+      try {
+        const bookedDates = await fetchAvailability(listing._id, checkIn, checkOut);
+        if (bookedDates.length === 0) {
+          availableListings.push(listing);
+        } else {
+          console.log(`Listing ${listing._id} is booked for dates: ${JSON.stringify(bookedDates)}`);
+        }
+      } catch (error) {
+        console.error(`Error fetching availability for listing ${listing._id}: ${error.message}`);
+      }
+    }
 
-    const filteredAvailableListings = availableListings.filter(listing => listing !== null);
+    console.log(`Available listings: ${JSON.stringify(availableListings)}`);
 
-    console.log(`Available listings: ${JSON.stringify(filteredAvailableListings)}`);
-
-    await setAsync(cacheKey, JSON.stringify({ results: filteredAvailableListings }), 'EX', 60 * 60); // Cache for 1 hour
+    cacheData[cacheKey] = { results: availableListings };
+    await updateCache(cacheFilePath, cacheData); // Update the cache file
 
     return {
       statusCode: 200,
@@ -338,7 +311,7 @@ export const handler = async (event, context) => {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ results: filteredAvailableListings })
+      body: JSON.stringify({ results: availableListings })
     };
   } catch (error) {
     console.error(`Error fetching data: ${error.message}`);
