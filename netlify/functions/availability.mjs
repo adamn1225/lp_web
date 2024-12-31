@@ -97,7 +97,12 @@ const fetchAvailability = async (listingId, checkIn, checkOut) => {
 
   console.log(`Booked dates for listing ${listingId}: ${JSON.stringify(bookedDates)}`);
 
-  await setAsync(cacheKey, JSON.stringify(bookedDates), 'EX', 60 * 60); // Cache for 1 hour
+  try {
+    await setAsync(cacheKey, JSON.stringify(bookedDates), 'EX', 60 * 60); // Cache for 1 hour
+    console.log(`Cached availability data for listing ${listingId} with key ${cacheKey}`);
+  } catch (error) {
+    console.error(`Error caching availability data for listing ${listingId}: ${error.message}`);
+  }
 
   return bookedDates;
 };
