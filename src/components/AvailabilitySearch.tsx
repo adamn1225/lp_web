@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
+import { motion } from "framer-motion";
 import 'react-datepicker/dist/react-datepicker.css';
 import '../styles/global.scss';
 import { addDays } from "date-fns";
@@ -306,7 +307,17 @@ const AvailabilitySearch: React.FC = () => {
   }, [dateRange[0].startDate]);
 
   return (
-    <div className="w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
+    <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
+      {loading && (
+        <div className="progress-bar">
+          <motion.div
+            className="progress-bar-inner"
+            initial={{ width: 0 }}
+            animate={{ width: '100%' }}
+            transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+          />
+        </div>
+      )}
       <div className="flex flex-col md:flex-row justify-center align-middle w-full">
         <button
           onClick={() => setIsModalOpen(true)}
