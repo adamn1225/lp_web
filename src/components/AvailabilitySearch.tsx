@@ -414,36 +414,51 @@ const AvailabilitySearch: React.FC = () => {
           {available.length > 0 ? (
             <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
               <div ref={resultsContainerRef} className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
+                <div className="pagination flex justify-center mb-8">
+                  {Array.from({ length: Math.ceil(filteredListings.length / itemsPerPage) }, (_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => paginate(index + 1)}
+                      className={`page-item mt-6 mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-secondary text-white' : 'bg-gray-200 text-gray-700'}`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
                 <div className={`search-results h-full w-full overflow-y-auto grid ${getGridColsClass()} gap-x-6 gap-y-3 self-center px-2`}>
+
                   {currentListings.length > 0 ? (
                     currentListings.map((property) => (
-                      <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
-                        <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-fit rounded-xl overflow-hidden relative">
-                          <div className="relative w-full h-48">
-                            <img
-                              className="absolute inset-0 w-full h-full object-cover"
-                              src={property.pictures[0].original}
-                              alt={property.picture.caption}
-                            />
-                            <div className="absolute inset-0 bg-neutral-950/50" />
-                          </div>
-                          <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
-                            <h4 className="font-sans text-wrap font-medium text-xl text-slate-900">
-                              {property.title}
-                            </h4>
-                            <p className="text-sm text-muted-400">
-                              {property.address.city}, {property.address.state}
-                            </p>
-                            <span className="hidden">{property.bedrooms}</span>
-                            <hr className="border border-muted-200 dark:border-muted-800 my-2" />
-                            <div className="flex items-end h-full">
-                              <button className="text-slate-900 font-extrabold mb-4">
-                                <strong>Starting at:</strong> ${property.prices.basePrice} Night
-                              </button>
+                      <>
+
+                        <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
+                          <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-fit rounded-xl overflow-hidden relative">
+                            <div className="relative w-full h-48">
+                              <img
+                                className="absolute inset-0 w-full h-full object-cover"
+                                src={property.pictures[0].original}
+                                alt={property.picture.caption}
+                              />
+                              <div className="absolute inset-0 bg-neutral-950/50" />
                             </div>
-                          </div>
-                        </article>
-                      </a>
+                            <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
+                              <h4 className="font-sans text-wrap font-medium text-xl text-slate-900">
+                                {property.title}
+                              </h4>
+                              <p className="text-sm text-muted-400">
+                                {property.address.city}, {property.address.state}
+                              </p>
+                              <span className="hidden">{property.bedrooms}</span>
+                              <hr className="border border-muted-200 dark:border-muted-800 my-2" />
+                              <div className="flex items-end h-full">
+                                <button className="text-slate-900 font-extrabold mb-4">
+                                  <p className="font-semibold text-base">Starting at:</p> ${property.prices.basePrice} Night
+                                </button>
+                              </div>
+                            </div>
+                          </article>
+                        </a>
+                      </>
                     ))
                   ) : (
                     <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
@@ -454,7 +469,7 @@ const AvailabilitySearch: React.FC = () => {
                     <button
                       key={index}
                       onClick={() => paginate(index + 1)}
-                      className={`page-item mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-secondary text-white' : 'bg-gray-200 text-gray-700'}`}
+                      className={`page-item mt-6 mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-secondary text-white' : 'bg-gray-200 text-gray-700'}`}
                     >
                       {index + 1}
                     </button>
