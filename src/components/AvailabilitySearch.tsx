@@ -137,7 +137,7 @@ const AvailabilitySearch: React.FC = () => {
 
     try {
       const tagsQuery = selectedTags.join(',');
-      const cacheKey = `${dateRange[0].startDate.toISOString().slice(0, 10)}-${dateRange[0].endDate.toISOString().slice(0, 10)}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}`;
+      const cacheKey = `${dateRange[0].startDate.toISOString().slice(0, 10)}-${dateRange[0].endDate.toISOString().slice(0, 10)}-${minOccupancy}-${selectedLocation || 'undefined'}-${selectedBedroomAmount || 'undefined'}-${tagsQuery || 'undefined'}`;
 
       if (cache.current[cacheKey]) {
         console.log('Returning cached results');
