@@ -102,6 +102,19 @@ const fetchAvailability = async (listingId, checkIn, checkOut) => {
   return bookedDates;
 };
 
+const fetchAllAvailabilities = async (listings, checkIn, checkOut) => {
+  const batchSize = 10; // Adjust batch size as needed
+  const results = [];
+
+  for (let i = 0; i < listings.length; i += batchSize) {
+    const batch = listings.slice(i, i + batchSize);
+    const batchResults = await Promise.all(batch.map(listing => fetchAvailability(listing._id, checkIn, checkOut)));
+    results.push(...batchResults);
+  }
+
+  return results;
+};
+
 export const handler = async (event, context) => {
   const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId } = event.queryStringParameters;
 
@@ -306,20 +319,7 @@ export const handler = async (event, context) => {
     console.log(`Listings after filtering by bedroom amount: ${JSON.stringify(combinedResults)}`);
 
     // Fetch availability for each listing and filter out booked listings
-    const availableListings = await Promise.all(combinedResults.map(async (listing) => {
-      try {
-        const bookedDates = await fetchAvailability(listing._id, checkIn, checkOut);
-        if (bookedDates.length === 0) {
-          return listing;
-        } else {
-          console.log(`Listing ${listing._id} is booked for dates: ${JSON.stringify(bookedDates)}`);
-          return null;
-        }
-      } catch (error) {
-        console.error(`Error fetching availability for listing ${listing._id}: ${error.message}`);
-        return null;
-      }
-    }));
+    const availableListings = await fetchAllAvailabilities(combinedResults, checkIn, checkOut);
 
     const filteredAvailableListings = availableListings.filter(listing => listing !== null);
 
