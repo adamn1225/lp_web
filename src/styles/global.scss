@@ -135,10 +135,9 @@ article {
   -moz-appearance: textfield;
 }
 
-.rdrCalendarWrapper ,
-.rdrCalendarWrapper
-.rdrCalendarWrapper .rdrDay span.rdrInRange {
-  background-color: rgba(248, 248, 248, 0.301); 
+.rdrCalendarWrapper,
+.rdrCalendarWrapper .rdrCalendarWrapper .rdrDay span.rdrInRange {
+  background-color: rgba(248, 248, 248, 0.301);
 }
 
 .rdrDayToday .rdrDayNumber span:after {
@@ -245,4 +244,20 @@ article {
 
 .custom-info-window .info-window-button:hover {
   background-color: #0056b3;
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #f3f4f6;
+  z-index: 9999;
+}
+
+.progress-bar-inner {
+  height: 100%;
+  background-color: #102C57;
+  width: 0;
 }

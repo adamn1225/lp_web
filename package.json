@@ -99,6 +99,7 @@
     "react-spinners": "^0.14.1",
     "react-whatsapp": "^0.3.0",
     "react-with-styles": "^5.0.0",
+    "redis": "^4.7.0",
     "replace-json-property": "^1.9.0",
     "sass": "^1.77.8",
     "sharp": "^0.33.5",

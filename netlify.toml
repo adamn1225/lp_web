@@ -7,10 +7,13 @@
   node_bundler = "esbuild"
 
 [build.environment]
-  NODE_VERSION = "18.17.1"  # Ensure this is a valid Node.js version
+  NODE_VERSION = "18.17.1"
 
 [functions."refreshToken"]
   schedule = "@daily"
+
+[functions."availability"]
+  timeout = 60
 
 [functions."cache-images"]
   schedule = "@daily"
@@ -19,7 +22,7 @@
   package = "netlify-plugin-cache"
 
   [plugins.inputs]
-    paths = ["dist/**/*"]  # Cache all generated pages
+    paths = ["dist/**/*"]
 
 [build.processing]
   skip_processing = true
