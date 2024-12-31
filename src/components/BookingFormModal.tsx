@@ -154,7 +154,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       setCalculatedPrice(afterTax);
       setBeforeTax(calculatedBeforeTax);
     }
-  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, cityTax, localTax, maintenanceFee, managementFeePercentage]);
+  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, cityTax, localTax, managementFeePercentage]);
 
   useEffect(() => {
     const initializeGuestyTokenization = async () => {
@@ -315,7 +315,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Booking Form"
-      className="xs:max-h-full md:max-h-full bg-white z-50 px-4 py-6 rounded-lg drop-shadow-2xl shadow-lg md:w-4/5 lg:w-5/6 md:mt-18 overflow-y-auto"
+      className="h-full md:max-h-[90vh] bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg md:w-4/5 lg:w-1/2 md:mt-18 overflow-y-auto"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       appElement={document.getElementById('Top')!}
     >
@@ -327,7 +327,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
               <div className="w-full xs:px-1 md:px-4">
                 <div className='flex flex-col items-center justify-around'>
                   <div className='flex justify-between gap-4 w-full'>
-                
+
                   </div>
                   <h2 className="xs:text-center xs:text-md text-slate-800 text-2xl mb-4 underline self-center">Fill out the form below and reserve the date</h2>
                 </div>
@@ -357,24 +357,26 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     </label>
                   </div>
                 </div>
-                <div className="mb-1 flex gap-4 w-full">
+                <div className="mt-4 flex gap-4 w-full">
                   <div className="flex-1">
+                    <label htmlFor="firstName" className="block text-slate-800">First Name</label>
                     <input
                       type="text"
                       id="firstName"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
+                      className="w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
                       placeholder="First Name"
                     />
                   </div>
                   <div className="flex-1">
+                    <label htmlFor="lastName" className="block text-slate-800">Last Name</label>
                     <input
                       type="text"
                       id="lastName"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
+                      className="w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
                       placeholder="Last name"
                     />
                   </div>
@@ -406,43 +408,41 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                   </div>
                 </div>
               </div>
-              <div className='xs:w-full flex flex-col gap-0 w-3/4'>
-                <div className="mt-4 w-full">
-                  {pets > 0 && (
-                    <div className="flex justify-between pb-2">
-                      <span>Pet Fee:</span>
-                      <span>${petFee}</span>
+              <div className='xs:w-full flex flex-col items-center gap-0 w-fit'>
+                <div className='flex justify-between w-1/3 '>
+                  <div className="mt-4 w-full">
+                    {pets > 0 && (
+                      <div className="flex justify-between pb-2 text-sm">
+                        <span>Pet Fee:</span>
+                        <span>${petFee}</span>
+                      </div>
+                    )}
+                    <div className="text-base flex justify-between ">
+                      <span>Base Price:</span>
+                      <span>${basePrice} Per Night</span>
                     </div>
-                  )}
-                  <div className="text-lg flex justify-between ">
-                    <span>Base Price:</span>
-                    <span>${basePrice} Per Night</span>
-                  </div>
-                  <div className="text-lg flex justify-between ">
-                    <span>Maintenance Fee:</span>
-                    <span>${maintenanceFee}</span>
-                  </div>
-                  <div className="text-lg flex justify-between ">
-                    <span>Cleaning Fee:</span>
-                    <span>${cleaningFee}</span>
-                  </div>
-                  <div className="text-lg flex justify-between ">
-                    <span>Tax:</span>
-                    <span>${beforeTax.toFixed(2)}</span>
-                  </div>
-                  <div className="text-xl flex justify-between pt-2 font-bold border-t border-secondary">
-                    <span>Total Amount:</span>
-                    <span className='mb-4'>${calculatedPrice.toFixed(2)}</span>
+                    <div className="text-base flex justify-between ">
+                      <span>Cleaning Fee:</span>
+                      <span>${cleaningFee}</span>
+                    </div>
+                    <div className="text-base flex justify-between ">
+                      <span>Tax:</span>
+                      <span>${beforeTax.toFixed(2)}</span>
+                    </div>
+                    <div className="text-lg flex justify-between pt-2 font-bold border-t border-secondary">
+                      <span>Total Amount:</span>
+                      <span className='mb-4'>${calculatedPrice.toFixed(2)}</span>
+                    </div>
                   </div>
                 </div>
                 <TextArea />
                 <button
-                className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
-                type="submit"
-                disabled={loading}
-              >
-                <CreditCard />  Proceed to Payment
-              </button>
+                  className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+                  type="submit"
+                  disabled={loading}
+                >
+                  <CreditCard />  Proceed to Payment
+                </button>
               </div>
             </form>
           </>
@@ -467,10 +467,6 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 <div className="flex justify-between">
                   <p><strong>Taxes:</strong></p>
                   <p>${beforeTax.toFixed(2)}</p>
-                </div>
-                <div className="flex justify-between">
-                  <p><strong>Maintenance Fee:</strong></p>
-                  <p>${maintenanceFee.toFixed(2)}</p>
                 </div>
                 <div className='border border-x-0 border-y-1 border-slate-800 my-2'> </div>
                 <div className="flex justify-between">
