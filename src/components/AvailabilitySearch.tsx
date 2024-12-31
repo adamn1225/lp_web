@@ -56,10 +56,6 @@ const tagDisplayNames: { [key: string]: string } = {
   "Pets": "Pet Friendly"
 };
 
-const formatTag = (tag: string): string => {
-  return tagDisplayNames[tag] || tag;
-};
-
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
   const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
@@ -163,8 +159,6 @@ const AvailabilitySearch: React.FC = () => {
         url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
       }
 
-      console.log('API URL:', url);
-
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch listings: ${response.statusText}`);
@@ -173,29 +167,23 @@ const AvailabilitySearch: React.FC = () => {
       const data = await response.json();
       console.log('Fetched Data:', data);
 
-      if (!data.results) {
-        setError('No results found');
-        setListings([]);
-        setFilteredListings([]);
+      if (response.ok) {
+        cache.current[cacheKey] = data.results;
+        setListings(data.results);
+        setFilteredListings(data.results);
         setIsResultsModalOpen(true);
         setIsSearchComplete(true);
-        return;
       }
 
       const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
 
       setListings(filteredListings);
       setFilteredListings(filteredListings);
-      cache.current[cacheKey] = filteredListings; // Cache the results
-
-      console.log('Filtered Listings:', filteredListings);
+      cache.current[cacheKey] = filteredListings;
 
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-
-      setIsResultsModalOpen(true);
-      setIsSearchComplete(true); // Set search completion state to true
     } catch (err) {
       console.error(err);
       setError(err.message || 'An error occurred');
@@ -234,7 +222,7 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     if (filters.selectedTags && filters.selectedTags.length > 0) {
-      filtered = filtered.filter(listing => filters.selectedTags.every(tag => listing.tags.includes(tag)));
+      filtered = filtered.filter((listing: Listing) => filters.selectedTags.every((tag: string) => listing.tags.includes(tag)));
     }
 
     if (filters.selectedAmenities && filters.selectedAmenities.length > 0) {

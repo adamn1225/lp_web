@@ -9,11 +9,11 @@
 [build.environment]
   NODE_VERSION = "18.17.1"
 
+[functions."availability"]
+  timeout = 60  # Increase the timeout to 60 seconds
+
 [functions."refreshToken"]
   schedule = "@daily"
-
-[functions."availability"]
-  timeout = 60
 
 [functions."cache-images"]
   schedule = "@daily"
