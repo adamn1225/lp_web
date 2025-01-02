@@ -7,10 +7,7 @@
   node_bundler = "esbuild"
 
 [build.environment]
-  NODE_VERSION = "18.17.1"
-
-[functions."availability"]
-  timeout = 60  # Increase the timeout to 60 seconds
+  NODE_VERSION = "18.17.1"  # Update to a valid Node.js version
 
 [functions."refreshToken"]
   schedule = "@daily"
@@ -22,7 +19,7 @@
   package = "netlify-plugin-cache"
 
   [plugins.inputs]
-    paths = ["dist/**/*"]
+    paths = ["dist/**/*"]  # Cache all generated pages
 
 [build.processing]
   skip_processing = true
