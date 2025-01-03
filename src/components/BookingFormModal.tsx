@@ -525,27 +525,6 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
             </div>
           </div>
         )}
-        <Modal
-          isOpen={isInquireModalOpen}
-          onRequestClose={() => setIsInquireModalOpen(false)}
-          contentLabel="Inquire Form"
-          className="bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg w-2/6 h-6/6 my-12"
-          overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-          appElement={document.getElementById('Top')!}
-        >
-          <div className="relative flex flex-col justify-center items-center max-h-full overflow-y-auto">
-            <h2 className="text-slate-800 text-2xl mb-4">Have more questions about this listing?</h2>
-            <div className='flex justify-normal'>
-              <InquireForm listingId={listingId} buttonText='Chat with an agent' />
-            </div>
-            <button
-              onClick={() => setIsInquireModalOpen(false)}
-              className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full"
-            >
-              Close
-            </button>
-          </div>
-        </Modal>
       </div>
     </Modal>
   );
