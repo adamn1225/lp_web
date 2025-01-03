@@ -45,11 +45,9 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [cityTax, setCityTax] = useState<number>(0);
   const [localTax, setLocalTax] = useState<number>(0);
-  const [taxes, setTaxes] = useState<number>(0);
   const [accommodates, setAccommodates] = useState<number>(0);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [beforeTax, setBeforeTax] = useState<number>(0);
-  const [maintenanceFee, setMaintenanceFee] = useState<number>(0);
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -63,20 +61,14 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
   const [isInquireModalOpen, setIsInquireModalOpen] = useState(false);
   const [paymentDateTime, setPaymentDateTime] = useState<Date | null>(null);
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState<boolean>(false);
-  const [isChecked, setIsChecked] = useState(false);
   const [managementFeePercentage, setManagementFeePercentage] = useState<number>(0);
 
-  const handleAccept = () => {
-    if (isChecked) {
-      setIsAcceptModalOpen(false);
-      setCurrentStep(2);
-    }
-  };
-
   useEffect(() => {
-    const fetchPricingData = async () => {
+    const fetchAndCalculatePricing = async () => {
       try {
         const { startDate, endDate } = dateRange[0];
+        if (!startDate || !endDate) return;
+
         const formattedStartDate = startDate.toISOString().slice(0, 10);
         const formattedEndDate = endDate.toISOString().slice(0, 10);
 
@@ -91,6 +83,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         const data = await response.json();
         console.log('Fetched pricing data:', data);
 
+        // Set fetched pricing data
+        setBasePrice(data.basePrice || 0);
         setWeeklyPriceFactor(data.weeklyPriceFactor || 1);
         setMonthlyPriceFactor(data.monthlyPriceFactor || 1);
         setCleaningFee(data.cleaningFee || 0);
@@ -100,69 +94,50 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
         setAccommodates(data.accommodates || 2);
         setManagementFeePercentage(data.managementFeePercentage || 0);
 
+        // Calculate pricing
         const timeDiff = endDate.getTime() - startDate.getTime();
         const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
         let stayPrice = 0;
 
+        // Determine daily prices or base price
         for (let i = 0; i < daysDiff; i++) {
           const currentDate = new Date(startDate);
           currentDate.setDate(currentDate.getDate() + i);
           const formattedDate = currentDate.toISOString().slice(0, 10);
-          stayPrice += data.datePrices[formattedDate] || 0;
+          stayPrice += data.datePrices?.[formattedDate] || data.basePrice;
         }
 
-        const dayPrice = stayPrice / daysDiff; // Calculate the base price per night
-        setBasePrice(dayPrice);
+        // Apply discounts for weekly/monthly stays
+        if (daysDiff >= 30) {
+          stayPrice *= data.monthlyPriceFactor || 1;
+        } else if (daysDiff >= 7) {
+          stayPrice *= data.weeklyPriceFactor || 1;
+        }
 
-        const petPrice = pets > 0 ? petFee : 0;
-        const totalPrice = stayPrice + cleaningFee + petPrice;
-        const taxes = (data.cityTax + data.localTax) * 0.01;
-        const calculatedBeforeTax = totalPrice * taxes;
+        const petPrice = pets > 0 ? data.petFee || 0 : 0;
+        const totalPrice = stayPrice + data.cleaningFee + petPrice;
         const managementFee = totalPrice * (data.managementFeePercentage / 100);
-        const afterTax = totalPrice + calculatedBeforeTax + managementFee;
+        const beforeTax = totalPrice + managementFee;
+        const taxes = (data.cityTax + data.localTax) * 0.01;
+        const afterTax = beforeTax + (beforeTax * taxes);
+
         console.log('Calculated afterTax:', afterTax);
         setCalculatedPrice(afterTax);
-        setBeforeTax(calculatedBeforeTax);
+        setBeforeTax(beforeTax);
       } catch (error) {
-        console.error('Error fetching pricing data:', error);
+        console.error('Error fetching or calculating pricing:', error);
       }
     };
 
-    fetchPricingData();
-  }, [listingId, dateRange, pets, petFee, cityTax, localTax, accommodates]);
-
-  useEffect(() => {
-    const { startDate, endDate } = dateRange[0];
-    if (startDate && endDate) {
-      const timeDiff = endDate.getTime() - startDate.getTime();
-      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      let stayPrice = daysDiff * basePrice;
-
-      if (daysDiff >= 30) {
-        stayPrice *= monthlyPriceFactor;
-      } else if (daysDiff >= 7) {
-        stayPrice *= weeklyPriceFactor;
-      }
-
-      const petPrice = pets > 0 ? petFee : 0;
-      const totalPrice = stayPrice + cleaningFee + petPrice + maintenanceFee;
-      const taxes = (cityTax + localTax) * 0.01;
-      const calculatedBeforeTax = totalPrice * taxes;
-      const managementFee = totalPrice * (managementFeePercentage / 100);
-      const afterTax = totalPrice + calculatedBeforeTax + managementFee;
-      console.log('Calculated afterTax in second useEffect:', afterTax);
-      setCalculatedPrice(afterTax);
-      setBeforeTax(calculatedBeforeTax);
-    }
-  }, [dateRange, basePrice, weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee, cityTax, localTax, managementFeePercentage]);
-
+    fetchAndCalculatePricing();
+  }, [listingId, dateRange, pets]);
   useEffect(() => {
     const initializeGuestyTokenization = async () => {
       const options: GuestyTokenizationRenderOptions = {
         containerId: 'payment-container',
-        providerId: '65667fb19986e2000e99278f',
-        amount: calculatedPrice || 0,
-        currency: 'USD',
+        providerId: '65667fb19986e2000e99278f', // Replace with your actual valid provider ID
+        amount: calculatedPrice || 0, // Ensure calculatedPrice is a valid number
+        currency: 'USD', // Replace with the actual currency
         onStatusChange: (isValid) => {
           setIsFormValid(isValid);
           console.log('Form validity changed:', isValid);
@@ -308,28 +283,44 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
     setPaymentDateTime(new Date()); // Set the current date and time
   };
 
-  const propertyId = listingId;
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+
 
   return (
     <Modal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
       contentLabel="Booking Form"
-      className="h-full md:max-h-[90vh] bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg md:w-4/5 lg:w-1/2 md:mt-18 overflow-y-auto"
+      className="xs:max-h-full md:max-h-full bg-white z-50 px-4 py-6 rounded-lg drop-shadow-2xl shadow-lg md:w-4/5 lg:w-5/6 md:mt-18 overflow-y-auto"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
       appElement={document.getElementById('Top')!}
     >
       <div className="relative flex flex-col justify-center items-center max-h-full">
         {currentStep === 1 && (
           <>
-            <div className='flex w-full justify-start'><InquireForm listingId={propertyId} buttonText='Chat with an agent' /></div>
             <form onSubmit={(e) => { e.preventDefault(); setCurrentStep(2); }} className="flex flex-col justify-center items-center w-full">
-              <div className="w-full xs:px-1 md:px-4">
-                <div className='flex flex-col items-center justify-around'>
-                  <div className='flex justify-between gap-4 w-full'>
 
+
+
+              <div className="w-full xs:px-1 md:px-4">
+                <div className='flex  flex-col items-center justify-around'>
+                  <div className='flex justify-between gap-4 w-full'>
+                    <InquireForm listingId={listingId} buttonText='Chat with an agent' />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        closeModal();
+                        setIsInquireModalOpen(true); // Open new modal
+                      }}
+                      className="absolute top-0 right-0 md:mt-4 md:mr-4 bg-cyan-600 text-muted-50 px-4 py-2 font-medium"
+                    >
+                      Close
+                    </button>
                   </div>
-                  <h2 className="xs:text-center xs:text-md text-slate-800 text-2xl mb-4 underline self-center">Fill out the form below and reserve the date</h2>
+                  <h2 className="xs:text-center xs:text-md text-slate-800 text-xl mb-4 underline self-center">Fill out the form below and reserve the date</h2>
                 </div>
                 <div className='flex gap-4 w-full'>
                   <div className="flex-1">
@@ -357,26 +348,26 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     </label>
                   </div>
                 </div>
-                <div className="mt-4 flex gap-4 w-full">
+                <div className="mb-1 flex gap-4 w-full">
                   <div className="flex-1">
-                    <label htmlFor="firstName" className="block text-slate-800">First Name</label>
+
                     <input
                       type="text"
                       id="firstName"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
+                      className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
                       placeholder="First Name"
                     />
                   </div>
                   <div className="flex-1">
-                    <label htmlFor="lastName" className="block text-slate-800">Last Name</label>
+
                     <input
                       type="text"
                       id="lastName"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
+                      className="mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder:text-slate-500"
                       placeholder="Last name"
                     />
                   </div>
@@ -391,6 +382,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="xs:mb-4 mt-1 w-full border border-slate-500 rounded-md shadow-sm focus:ring-2 focus:ring-slate-800 focus:border-slate-800 placeholder-slate-500/60 placeholder:text-slate-500"
+
                       />
                     </label>
                   </div>
@@ -414,24 +406,41 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     {pets > 0 && (
                       <div className="flex justify-between pb-2 text-sm">
                         <span>Pet Fee:</span>
-                        <span>${petFee}</span>
+                        <span>{formatter.format(petFee)}</span>
                       </div>
                     )}
                     <div className="text-base flex justify-between ">
                       <span>Base Price:</span>
-                      <span>${basePrice} Per Night</span>
+                      <span>{formatter.format(basePrice)} Per Night</span>
                     </div>
                     <div className="text-base flex justify-between ">
                       <span>Cleaning Fee:</span>
-                      <span>${cleaningFee}</span>
+                      <span>{formatter.format(cleaningFee)}</span>
                     </div>
                     <div className="text-base flex justify-between ">
-                      <span>Tax:</span>
-                      <span>${beforeTax.toFixed(2)}</span>
+                      <span>Management Fee:</span>
+                      <span>{formatter.format(beforeTax * (managementFeePercentage / 100))}</span>
                     </div>
+                    <div className="text-base flex justify-between ">
+                      <span>Total Before Taxes:</span>
+                      <span>{formatter.format(beforeTax)}</span>
+                    </div>
+
+                    {dateRange[0].endDate.getTime() - dateRange[0].startDate.getTime() >= 7 * 24 * 60 * 60 * 1000 && (
+                      <>
+                        <div className="text-base flex justify-between ">
+                          <span>Weekly Price Factor:</span>
+                          <span>{weeklyPriceFactor}</span>
+                        </div>
+                        <div className="text-base flex justify-between ">
+                          <span>Price without Weekly Factor:</span>
+                          <span>${formatter.format(calculatedPrice / weeklyPriceFactor)}</span>
+                        </div>
+                      </>
+                    )}
                     <div className="text-lg flex justify-between pt-2 font-bold border-t border-secondary">
-                      <span>Total Amount:</span>
-                      <span className='mb-4'>${calculatedPrice.toFixed(2)}</span>
+                      <span>Total After Taxes:</span>
+                      <span className='mb-4'>{formatter.format(calculatedPrice)}</span>
                     </div>
                   </div>
                 </div>
@@ -467,6 +476,10 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 <div className="flex justify-between">
                   <p><strong>Taxes:</strong></p>
                   <p>${beforeTax.toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p><strong>Management Fee:</strong></p>
+                  <p>$</p>
                 </div>
                 <div className='border border-x-0 border-y-1 border-slate-800 my-2'> </div>
                 <div className="flex justify-between">
@@ -512,6 +525,27 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
             </div>
           </div>
         )}
+        <Modal
+          isOpen={isInquireModalOpen}
+          onRequestClose={() => setIsInquireModalOpen(false)}
+          contentLabel="Inquire Form"
+          className="bg-white z-50 px-4 py-12 rounded-lg drop-shadow-2xl shadow-lg w-2/6 h-6/6 my-12"
+          overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+          appElement={document.getElementById('Top')!}
+        >
+          <div className="relative flex flex-col justify-center items-center max-h-full overflow-y-auto">
+            <h2 className="text-slate-800 text-2xl mb-4">Have more questions about this listing?</h2>
+            <div className='flex justify-normal'>
+              <InquireForm listingId={listingId} buttonText='Chat with an agent' />
+            </div>
+            <button
+              onClick={() => setIsInquireModalOpen(false)}
+              className="mt-4 bg-gray-700 text-white px-4 py-2 rounded w-full"
+            >
+              Close
+            </button>
+          </div>
+        </Modal>
       </div>
     </Modal>
   );

@@ -68,6 +68,16 @@ export const handler = async (event, context) => {
             };
         }
 
+        // Extract base price from the first day in the days array
+        const basePrice = data2.data.days.length > 0 ? data2.data.days[0].price : 0;
+
+        // Helper function to add a day to a date
+        const addDays = (date, days) => {
+            const result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result.toISOString().split('T')[0]; // Return date in YYYY-MM-DD format
+        };
+
         // Extract unavailable dates
         const unavailableDates = data2.data.days
             .filter(day => day.status === 'unavailable')
@@ -78,18 +88,20 @@ export const handler = async (event, context) => {
             .filter(day => day.status === 'booked')
             .map(day => day.date);
 
-        // Helper function to add a day to a date
-        const addDays = (date, days) => {
-            const result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result.toISOString().split('T')[0]; // Return date in YYYY-MM-DD format
-        };
-
         // Include the day before the check-out date as unavailable
         const adjustedUnavailableDates = bookedDates.map(date => addDays(date, -1));
 
         // Combine unavailable dates and adjusted unavailable dates
         const allUnavailableDates = [...new Set([...unavailableDates, ...adjustedUnavailableDates])];
+
+        const accommodates = data1.accommodates || 2;
+
+        const accountTaxes = data1.accountTaxes || [];
+        const localTax = accountTaxes.length > 0 ? accountTaxes[0].amount : 0;
+        const cityTax = accountTaxes.length > 1 ? accountTaxes[1].amount : 0;
+
+        const { prices } = data1;
+        const { weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee } = prices;
 
         // Extract date-specific prices
         const datePrices = data2.data.days.reduce((acc, day) => {
@@ -97,18 +109,7 @@ export const handler = async (event, context) => {
             return acc;
         }, {});
 
-        const { prices, accountTaxes } = data1;
-        const { monthlyPriceFactor, weeklyPriceFactor, cleaningFee, petFee, securityDepositFee, guestsIncludedInRegularFee, extraPersonFee } = prices;
-
-        // Extract local and city taxes
-        const localTax = accountTaxes.find(tax => tax.type === 'LOCAL_TAX')?.amount || 0;
-        const cityTax = accountTaxes.find(tax => tax.type === 'CITY_TAX')?.amount || 0;
-
-        // Extract the management fee percentage
         const managementFeePercentage = data3.find(fee => fee.name === 'Management')?.sourcesConfigurations[0]?.value || 0;
-
-        // Log the management fee percentage
-        console.log('Management Fee Percentage:', managementFeePercentage);
 
         return {
             statusCode: 200,
@@ -117,19 +118,19 @@ export const handler = async (event, context) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                unavailableDates: allUnavailableDates,
+                unavailableDates: allUnavailableDates, // Use allUnavailableDates here
                 bookedDates,
-                datePrices,
-                monthlyPriceFactor,
+                basePrice,
                 weeklyPriceFactor,
+                monthlyPriceFactor,
                 cleaningFee,
                 petFee,
-                securityDepositFee,
-                guestsIncludedInRegularFee,
-                extraPersonFee,
+                datePrices,
+                accountTaxes,
                 localTax,
                 cityTax,
-                managementFeePercentage,
+                accommodates,
+                managementFeePercentage
             })
         };
     } catch (error) {
