@@ -20,7 +20,7 @@ export const handler = async (event, context) => {
     const apiUrl2 = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings/${listingId}?startDate=${startDate}&endDate=${endDate}`;
 
     try {
-        const [response1, response2, response3] = await Promise.all([
+        const [response1, response2, response3, response4] = await Promise.all([
             fetch(apiUrl1, {
                 headers: {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
@@ -28,6 +28,12 @@ export const handler = async (event, context) => {
                 }
             }),
             fetch(apiUrl2, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+                    'Accept': 'application/json'
+                }
+            }),
+            fetch(manUrl, {
                 headers: {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
                     'Accept': 'application/json'
@@ -53,9 +59,14 @@ export const handler = async (event, context) => {
             throw new Error(`Error fetching data from third endpoint: ${response3.status} ${response3.statusText}`);
         }
 
+        if (!response4.ok) {
+            throw new Error(`Error fetching data from fourth endpoint: ${response4.status} ${response4.statusText}`);
+        }
+
         const data1 = await response1.json();
         const data2 = await response2.json();
         const data3 = await response3.json();
+        const data4 = await response4.json();
 
         if (!data2.data || !Array.isArray(data2.data.days)) {
             return {
@@ -83,16 +94,27 @@ export const handler = async (event, context) => {
             .filter(day => day.status === 'unavailable')
             .map(day => day.date);
 
-        // Extract booked dates and include the day before the check-out date
+        // Extract booked dates using checkInDateLocalized and checkOutDateLocalized
         const bookedDates = data2.data.days
             .filter(day => day.status === 'booked')
-            .map(day => day.date);
+            .flatMap(day => {
+                const blockRefs = day.blockRefs || [];
+                return blockRefs.flatMap(blockRef => {
+                    const checkInDate = blockRef.reservation.checkInDateLocalized;
+                    const checkOutDate = blockRef.reservation.checkOutDateLocalized;
+                    const dates = [];
+                    let currentDate = new Date(checkInDate);
+                    const endDate = new Date(checkOutDate);
+                    while (currentDate <= endDate) { // Use <= to include the check-out date
+                        dates.push(currentDate.toISOString().split('T')[0]);
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                    return dates;
+                });
+            });
 
-        // Include the day before the check-out date as unavailable
-        const adjustedUnavailableDates = bookedDates.map(date => addDays(date, -1));
-
-        // Combine unavailable dates and adjusted unavailable dates
-        const allUnavailableDates = [...new Set([...unavailableDates, ...adjustedUnavailableDates])];
+        // Combine unavailable dates and booked dates
+        const allUnavailableDates = [...new Set([...unavailableDates, ...bookedDates])];
 
         const accommodates = data1.accommodates || 2;
 
@@ -100,8 +122,8 @@ export const handler = async (event, context) => {
         const localTax = accountTaxes.length > 0 ? accountTaxes[0].amount : 0;
         const cityTax = accountTaxes.length > 1 ? accountTaxes[1].amount : 0;
 
-        const { prices } = data1;
-        const { weeklyPriceFactor, monthlyPriceFactor, cleaningFee, petFee } = prices;
+        const { prices, amenities } = data1;
+        const { weeklyPriceFactor, monthlyPriceFactor, cleaningFee } = prices;
 
         // Extract date-specific prices
         const datePrices = data2.data.days.reduce((acc, day) => {
@@ -110,6 +132,9 @@ export const handler = async (event, context) => {
         }, {});
 
         const managementFeePercentage = data3.find(fee => fee.name === 'Management')?.sourcesConfigurations[0]?.value || 0;
+
+        // Extract pet fee from the additional fees data
+        const petFee = data4.find(fee => fee.type === 'PET')?.value || 0;
 
         return {
             statusCode: 200,
@@ -130,7 +155,8 @@ export const handler = async (event, context) => {
                 localTax,
                 cityTax,
                 accommodates,
-                managementFeePercentage
+                managementFeePercentage,
+                amenities // Include amenities in the response
             })
         };
     } catch (error) {

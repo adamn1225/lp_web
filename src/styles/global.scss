@@ -261,3 +261,11 @@ article {
   background-color: #102C57;
   width: 0;
 }
+
+.payment-step-container {
+  width: 100%; /* Adjust the width to match the modal */
+  max-width: 80%; /* Ensure it doesn't exceed the modal width */
+  margin-top: 2rem; 
+  padding: 0 16px 18px; /* Add padding if needed */
+  box-sizing: border-box; /* Ensure padding is included in the width */
+}

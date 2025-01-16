@@ -11,14 +11,13 @@ interface CalendarComponentProps {
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates }) => {
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Set time to midnight to avoid timezone issues
+  today.setHours(0, 0, 0, 0);
 
   const initialRange = [{ startDate: null, endDate: null, key: 'selection' }];
 
-  // Ensure disabledDates are in the correct format
   const formattedDisabledDates = disabledDates.map(date => {
     const newDate = new Date(date);
-    newDate.setHours(0, 0, 0, 0); // Set time to midnight to avoid timezone issues
+    newDate.setHours(0, 0, 0, 0);
     return newDate;
   });
 
