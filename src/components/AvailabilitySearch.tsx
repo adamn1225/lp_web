@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { motion } from "framer-motion";
 import 'react-datepicker/dist/react-datepicker.css';
@@ -8,7 +8,8 @@ import { ClipLoader } from 'react-spinners';
 import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
 import GoogleMap from './GoogleMap'; // Import the GoogleMap component
-import FilterComponent from './ui/FilterComponent'; // Import the FilterComponent
+import FilterComponent from './ui/FilterComponent';
+import { debounce } from 'lodash';
 
 interface Listing {
   _id: string;
@@ -45,24 +46,11 @@ interface Listing {
   tags: string[]; // Add tags property
 }
 
-const allowedAmenities = ["Ocean_front", "Ocean_view", "web_featured", "Public_pool"];
 const allowedTags = ["Pets"];
-
-const tagDisplayNames: { [key: string]: string } = {
-  "Ocean_front": "Ocean Front",
-  "Ocean_view": "Ocean View",
-  "web_featured": "Featured",
-  "Public_pool": "Pool",
-  "Pets": "Pet Friendly"
-};
-
-const formatTag = (tag: string): string => {
-  return tagDisplayNames[tag] || tag;
-};
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
-  const [numGuests, setNumGuests] = useState<number>(1); // Add state for number of guests
+  const [numGuests, setNumGuests] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<Listing[]>([]);
@@ -81,16 +69,16 @@ const AvailabilitySearch: React.FC = () => {
   const [filters, setFilters] = useState<any>({});
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
-  const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false); // Add state to track search completion
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(10); // Number of items to display per page
+  const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
+  const [itemsPerPage] = useState<number>(6);
+  const [displayedItems, setDisplayedItems] = useState<number>(itemsPerPage);
 
   const apiUrl = '/.netlify/functions/availability';
 
   const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
-  const resultsContainerRef = useRef<HTMLDivElement>(null); // Add reference to the results container
+  const resultsContainerRef = useRef<HTMLDivElement>(null);
 
-  const cache = useRef<{ [key: string]: Listing[] }>({}); // Client-side cache
+  const cache = useRef<{ [key: string]: Listing[] }>({});
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -133,46 +121,53 @@ const AvailabilitySearch: React.FC = () => {
     fetchInitialData();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    debouncedHandleSubmit(e);
+  };
+  
+  const debouncedHandleSubmit = debounce(async (e: React.FormEvent) => {
     setLoading(true);
     setError('');
     setSearchAttempted(true);
-
+  
     try {
-      const tagsQuery = selectedTags.join(',');
-      const cacheKey = `${dateRange[0].startDate.toISOString().slice(0, 10)}-${dateRange[0].endDate.toISOString().slice(0, 10)}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}`;
-
+      const tagsQuery = allowedTags.join(',');
+      const startDate = dateRange[0].startDate.toISOString().slice(0, 10);
+      const endDate = dateRange[0].endDate.toISOString().slice(0, 10);
+      const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}`;
+  
       if (cache.current[cacheKey]) {
         console.log('Returning cached results');
         setListings(cache.current[cacheKey]);
         setFilteredListings(cache.current[cacheKey]);
+        setDisplayedItems(itemsPerPage); // Set displayedItems to itemsPerPage
         setLoading(false);
         setIsResultsModalOpen(true);
         setIsSearchComplete(true);
         return;
       }
-
-      let url = `${apiUrl}?checkIn=${encodeURIComponent(dateRange[0].startDate.toISOString().slice(0, 10))}&checkOut=${encodeURIComponent(dateRange[0].endDate.toISOString().slice(0, 10))}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
-
+  
+      let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
+  
       if (selectedLocation) {
-        url += `&city=${encodeURIComponent(selectedLocation)}`;
+        url += `&location=${encodeURIComponent(selectedLocation)}`;
       }
-
+  
       if (selectedBedroomAmount) {
         url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
       }
-
+  
       console.log('API URL:', url);
-
+  
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch listings: ${response.statusText}`);
       }
-
+  
       const data = await response.json();
       console.log('Fetched Data:', data);
-
+  
       if (!data.results) {
         setError('No results found');
         setListings([]);
@@ -181,36 +176,36 @@ const AvailabilitySearch: React.FC = () => {
         setIsSearchComplete(true);
         return;
       }
-
-      const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= numGuests);
-
+  
+      const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= minOccupancy);
+  
       setListings(filteredListings);
       setFilteredListings(filteredListings);
-      cache.current[cacheKey] = filteredListings; // Cache the results
-
+      setDisplayedItems(itemsPerPage); // Set displayedItems to itemsPerPage
+      cache.current[cacheKey] = filteredListings;
+  
       console.log('Filtered Listings:', filteredListings);
-
+  
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
       }
-
+  
       setIsResultsModalOpen(true);
-      setIsSearchComplete(true); // Set search completion state to true
+      setIsSearchComplete(true);
     } catch (err) {
       console.error(err);
       setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
-  };
+  }, 300);
 
-  // Clear the search results
   const clearResults = () => {
     setListings([]);
     setFilteredListings([]);
     setSearchAttempted(false);
     setIsResultsModalOpen(false);
-    setIsSearchComplete(false); // Reset search completion state
+    setIsSearchComplete(false); 
   };
 
   const handleFilterChange = (newFilters: any) => {
@@ -271,26 +266,26 @@ const AvailabilitySearch: React.FC = () => {
     }
   };
 
-  // Get current listings for pagination
-  const indexOfLastListing = currentPage * itemsPerPage;
-  const indexOfFirstListing = indexOfLastListing - itemsPerPage;
-  const currentListings = filteredListings.slice(indexOfFirstListing, indexOfLastListing);
+  const currentListings = useMemo(() => {
+    return filteredListings.slice(0, displayedItems);
+  }, [filteredListings, displayedItems]);
 
-  // Change page
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const showMoreItems = () => {
+    setDisplayedItems(prev => prev + itemsPerPage);
+  };
 
   useEffect(() => {
     if (dateRange[0].startDate) {
       const prefetchData = async () => {
-        const checkIn = dateRange[0].startDate;
-        const checkOut = dateRange[0].endDate || new Date(checkIn).setDate(new Date(checkIn).getDate() + 1); // Default to one day if endDate is not selected
+        const checkIn = dateRange[0].startDate.toISOString().split('T')[0];
+        const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
         const minOccupancy = 1;
         const city = 'North Myrtle Beach';
         const bedroomAmount = 1;
-
+  
         const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
         const cachedData = localStorage.getItem(cacheKey);
-
+  
         if (!cachedData) {
           try {
             const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
@@ -301,7 +296,7 @@ const AvailabilitySearch: React.FC = () => {
           }
         }
       };
-
+  
       prefetchData();
     }
   }, [dateRange[0].startDate]);
@@ -333,10 +328,30 @@ const AvailabilitySearch: React.FC = () => {
               <div className="w-full flex flex-col">
                 <label className="text-slate-800 font-semibold" htmlFor="dateRange">Select Dates:</label>
                 <DateRangePickerComponent
-                  state={dateRange}
-                  setState={setDateRange}
-                  disabledDates={[]} // Add any disabled dates here
-                />
+  state={dateRange}
+  setState={setDateRange}
+  disabledDates={[]} // Add any disabled dates here
+  onClick={async () => {
+    const checkIn = dateRange[0].startDate.toISOString().split('T')[0];
+    const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
+    const minOccupancy = 1;
+    const city = 'North Myrtle Beach';
+    const bedroomAmount = 1;
+
+    const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
+    const cachedData = localStorage.getItem(cacheKey);
+
+    if (!cachedData) {
+      try {
+        const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
+        const data = await response.json();
+        localStorage.setItem(cacheKey, JSON.stringify(data));
+      } catch (error) {
+        console.error('Error prefetching data:', error);
+      }
+    }
+  }}
+/>
               </div>
               <div className="w-full flex flex-col">
                 <label htmlFor="location" className="text-slate-800 font-semibold">Search by City</label>
@@ -346,7 +361,7 @@ const AvailabilitySearch: React.FC = () => {
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="border border-slate-400 rounded-xl p-2 w-full"
                 >
-                  <option value="any">Any City</option> {/* Add the "Any City" option */}
+                  <option value="any">Any City</option> 
                   {cities.map((city) => (
                     <option key={city} value={city}>{city}</option>
                   ))}
@@ -388,7 +403,7 @@ const AvailabilitySearch: React.FC = () => {
       </Modal>
       <div className="w-full my-3"></div>
       <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
-        <div className={`bg-white overflow-y-auto overflow-x-hidden m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
+        <div className={`bg-white overflow-hidden m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
           {loading && (
             <div ref={resultsContainerRef} className="flex flex-col items-center justify-center h-full">
               <ClipLoader size={50} color={"#102C57"} loading={loading} />
@@ -413,18 +428,7 @@ const AvailabilitySearch: React.FC = () => {
           </div>
           {available.length > 0 ? (
             <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
-              <div ref={resultsContainerRef} className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
-                <div className="pagination flex justify-center mb-8">
-                  {Array.from({ length: Math.ceil(filteredListings.length / itemsPerPage) }, (_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => paginate(index + 1)}
-                      className={`page-item mt-6 mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-secondary text-white' : 'bg-gray-200 text-gray-700'}`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
-                </div>
+              <div ref={resultsContainerRef} className="h-full flex flex-col w-full md:w-2/3 max-h-[100vh]">
                 <div className={`search-results h-full w-full overflow-y-auto grid ${getGridColsClass()} gap-x-6 gap-y-3 self-center px-2`}>
 
                   {currentListings.length > 0 ? (
@@ -432,7 +436,7 @@ const AvailabilitySearch: React.FC = () => {
                       <>
 
                         <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
-                          <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-fit rounded-xl overflow-hidden relative">
+                          <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 h-fit mb-4 rounded-xl relative">
                             <div className="relative w-full h-48">
                               <img
                                 className="absolute inset-0 w-full h-full object-cover"
@@ -464,20 +468,18 @@ const AvailabilitySearch: React.FC = () => {
                     <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
                   )}
                 </div>
-                <div className="pagination flex justify-center mb-8">
-                  {Array.from({ length: Math.ceil(filteredListings.length / itemsPerPage) }, (_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => paginate(index + 1)}
-                      className={`page-item mt-6 mx-1 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-secondary text-white' : 'bg-gray-200 text-gray-700'}`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
+                <div className="pagination flex justify-center mb-8 mt-8">
+{currentListings.length < filteredListings.length && (
+  <div className="flex justify-center mt-4">
+    <button onClick={showMoreItems} className="lp-button">
+      Show More
+    </button>
+  </div>
+)}
                 </div>
               </div>
               <div className="w-full md:w-2/3 md:h-full">
-                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "Myrtle Beach"} />
+                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "North Myrtle Beach"} />
               </div>
               <div className="md:hidden flex justify-center items-baseline mt-4 h-fit w-full md:w-1/4">
                 <button
@@ -505,15 +507,13 @@ const AvailabilitySearch: React.FC = () => {
             </div>
           ) : (
             <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
-              <div className="h-full flex flex-col w-full md:w-2/3 overflow-y-auto max-h-[100vh]">
+              <div className="h-full flex flex-col w-full md:w-2/3 max-h-[100vh]">
                 <div className="flex flex-col items-center justify-start h-full">
                   <p className="pt-12 text-center">Sorry, no results were displayed. Please try your search again.</p>
                   <button className="lp-button mt-4"><a href="/">Back to Search</a></button>
                 </div>
               </div>
-              <div className="w-full md:w-2/3 md:h-full">
-                <GoogleMap listings={[]} onMarkerClick={handleMarkerClick} selectedCity="Myrtle Beach" />
-              </div>
+
             </div>
           )}
         </div>

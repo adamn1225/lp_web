@@ -8,13 +8,17 @@ interface DateRangePickerComponentProps {
     state: any[];
     setState: (state: any[]) => void;
     disabledDates: Date[];
+    onClick?: () => void; // Add onClick prop
 }
 
-const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ state, setState, disabledDates }) => {
+const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ state, setState, disabledDates, onClick }) => {
     const [showPicker, setShowPicker] = useState(false);
 
     const handleInputClick = () => {
         setShowPicker(true);
+        if (onClick) {
+            onClick(); // Call the onClick prop if provided
+        }
     };
 
     const handleClose = () => {

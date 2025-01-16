@@ -72,6 +72,7 @@
     "html2pdf.js": "^0.10.2",
     "jspdf": "^2.5.2",
     "libphonenumber-js": "^1.11.11",
+    "lodash": "^4.17.21",
     "lucide-astro": "^0.408.0",
     "lucide-react": "^0.424.0",
     "moment": "^2.30.1",

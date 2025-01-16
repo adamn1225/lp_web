@@ -10,8 +10,6 @@ const RATE_LIMIT_INTERVAL = 1000; // 1 second
 const CONCURRENCY_LIMIT = 5; // Adjust as needed
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const readFileAsync = promisify(fs.readFile);
-const writeFileAsync = promisify(fs.writeFile);
 
 const fetchWithRetry = async (url, options, retries = 3) => {
   for (let i = 0; i < retries; i++) {
@@ -64,29 +62,29 @@ const fetchAvailability = async (listingId, checkIn, checkOut) => {
   return bookedDates;
 };
 
-const updateCache = async (cacheFilePath, cacheData) => {
-  try {
-    await writeFileAsync(cacheFilePath, JSON.stringify(cacheData, null, 2));
-    console.log('Cache updated successfully');
-  } catch (error) {
-    console.error('Error updating cache:', error);
-  }
-};
+// const updateCache = async (cacheFilePath, cacheData) => {
+//   try {
+//     await writeFileAsync(cacheFilePath, JSON.stringify(cacheData, null, 2));
+//     console.log('Cache updated successfully');
+//   } catch (error) {
+//     console.error('Error updating cache:', error);
+//   }
+// };
 
 export const handler = async (event, context) => {
   const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId } = event.queryStringParameters;
 
   console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId })}`);
 
-  const cacheFilePath = path.resolve(__dirname, 'availabilityCache.json');
-  let cacheData = {};
+  // const cacheFilePath = path.resolve(__dirname, 'availabilityCache.json');
+  // let cacheData = {};
 
-  try {
-    const cacheFileContent = await readFileAsync(cacheFilePath, 'utf8');
-    cacheData = JSON.parse(cacheFileContent);
-  } catch (error) {
-    console.error('Error reading cache file:', error);
-  }
+  // try {
+  //   const cacheFileContent = await readFileAsync(cacheFilePath, 'utf8');
+  //   cacheData = JSON.parse(cacheFileContent);
+  // } catch (error) {
+  //   console.error('Error reading cache file:', error);
+  // }
 
   if (fetchCities) {
     try {
@@ -225,20 +223,20 @@ export const handler = async (event, context) => {
     };
   }
 
-  const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${location}-${bedroomAmount}-${city}`;
-  const cachedData = cacheData[cacheKey];
+  // const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${location}-${bedroomAmount}-${city}`;
+  // const cachedData = cacheData[cacheKey];
 
-  if (cachedData) {
-    console.log(`Returning cached data for key: ${cacheKey}`);
-    return {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(cachedData)
-    };
-  }
+  // if (cachedData) {
+  //   console.log(`Returning cached data for key: ${cacheKey}`);
+  //   return {
+  //     statusCode: 200,
+  //     headers: {
+  //       'Access-Control-Allow-Origin': '*',
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(cachedData)
+  //   };
+  // }
 
   try {
     const fetchListings = async () => {
@@ -302,8 +300,8 @@ export const handler = async (event, context) => {
 
     console.log(`Available listings: ${JSON.stringify(availableListings)}`);
 
-    cacheData[cacheKey] = { results: availableListings };
-    await updateCache(cacheFilePath, cacheData); // Update the cache file
+    // cacheData[cacheKey] = { results: availableListings };
+    // await updateCache(cacheFilePath, cacheData); // Update the cache file
 
     return {
       statusCode: 200,

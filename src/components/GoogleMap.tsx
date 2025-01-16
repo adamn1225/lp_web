@@ -31,14 +31,15 @@ interface Listing {
 interface GoogleMapProps {
     listings: Listing[];
     onMarkerClick: (id: string) => void;
-    selectedCity: string; // Add selectedCity prop
+    selectedCity: string;
 }
 
 const cityCoordinates: { [key: string]: { lat: number, lng: number } } = {
     "North Myrtle Beach": { lat: 33.8160, lng: -78.6800 },
     "Little River": { lat: 33.8732, lng: -78.6142 },
-    "Myrtle Beach": { lat: 33.6891, lng: -78.8867 }, // Add Myrtle Beach coordinates
-    // Add other cities and their coordinates here
+    "Myrtle Beach": { lat: 33.6891, lng: -78.8867 },
+    "Surfside Beach": { lat: 33.6064, lng: -78.9730 },
+    "Murrells Inlet": { lat: 33.5519, lng: -79.0417 },
 };
 
 const GoogleMap: React.FC<GoogleMapProps> = ({ listings, onMarkerClick, selectedCity }) => {
