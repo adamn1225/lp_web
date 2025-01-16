@@ -435,7 +435,7 @@ const AvailabilitySearch: React.FC = () => {
       return (
         <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
           <article className="xs:mx-2 flex flex-col bg-white  shadow-lg shadow-muted-300/30 h-fit mb-4 rounded-xl relative">
-            <div className="relative w-full h-48">
+            <div className="relative w-full h-64">
               <img
                 className="absolute inset-0 w-full h-full object-cover"
                 src={property.pictures[0].original}
