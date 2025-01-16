@@ -1,8 +1,5 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'path';
-import { promisify } from 'util';
 
 dotenv.config();
 
@@ -30,7 +27,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingId, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings/${encodeURIComponent(listingId)}?startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings/${encodeURIComponent(listingId)}?startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&ignoreInactiveChildAllotment=true&ignoreUnlistedChildAllotment=true`;
 
   console.log(`Fetching availability for listing ${listingId} from URL: ${apiUrl}`);
 
@@ -62,50 +59,48 @@ const fetchAvailability = async (listingId, checkIn, checkOut) => {
   return bookedDates;
 };
 
-// const updateCache = async (cacheFilePath, cacheData) => {
-//   try {
-//     await writeFileAsync(cacheFilePath, JSON.stringify(cacheData, null, 2));
-//     console.log('Cache updated successfully');
-//   } catch (error) {
-//     console.error('Error updating cache:', error);
-//   }
-// };
+const fetchAllListings = async (url) => {
+  const response = await fetchWithRetry(url, {
+    headers: {
+      'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+      'Accept': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Guesty API error: ${errorText}`);
+    throw new Error(`Guesty API error: ${errorText}`);
+  }
+
+  return response.json();
+};
+
+const fetchListingsInBatches = async (urls) => {
+  const results = [];
+  for (let i = 0; i < urls.length; i += CONCURRENCY_LIMIT) {
+    const batch = urls.slice(i, i + CONCURRENCY_LIMIT);
+    const batchResults = await Promise.all(batch.map(url => fetchAllListings(url)));
+    results.push(...batchResults.flatMap(result => result.results));
+    await delay(RATE_LIMIT_INTERVAL); // Delay between batches to avoid rate limiting
+  }
+  return results;
+};
 
 export const handler = async (event, context) => {
   const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId } = event.queryStringParameters;
 
   console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId })}`);
 
-  // const cacheFilePath = path.resolve(__dirname, 'availabilityCache.json');
-  // let cacheData = {};
-
-  // try {
-  //   const cacheFileContent = await readFileAsync(cacheFilePath, 'utf8');
-  //   cacheData = JSON.parse(cacheFileContent);
-  // } catch (error) {
-  //   console.error('Error reading cache file:', error);
-  // }
-
   if (fetchCities) {
     try {
-      const fetchAllListings = async () => {
-        const urls = [
-          'https://open-api.guesty.com/v1/listings?limit=100&skip=0',
-          'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
-          'https://open-api.guesty.com/v1/listings?limit=100&skip=200'
-        ];
+      const urls = [
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=0',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=200'
+      ];
 
-        const allResults = await Promise.all(urls.map(url => fetchWithRetry(url, {
-          headers: {
-            'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
-            'Accept': 'application/json'
-          }
-        }).then(response => response.json())));
-
-        return allResults.flatMap(result => result.results);
-      };
-
-      const listings = await fetchAllListings();
+      const listings = await fetchListingsInBatches(urls);
       const uniqueCities = Array.from(new Set(listings.map(listing => listing.address.city)));
 
       console.log(`Fetched unique cities: ${JSON.stringify(uniqueCities)}`);
@@ -133,24 +128,13 @@ export const handler = async (event, context) => {
 
   if (fetchBedrooms) {
     try {
-      const fetchAllListings = async () => {
-        const urls = [
-          'https://open-api.guesty.com/v1/listings?limit=100&skip=0',
-          'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
-          'https://open-api.guesty.com/v1/listings?limit=100&skip=200'
-        ];
+      const urls = [
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=0',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=200'
+      ];
 
-        const allResults = await Promise.all(urls.map(url => fetchWithRetry(url, {
-          headers: {
-            'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
-            'Accept': 'application/json'
-          }
-        }).then(response => response.json())));
-
-        return allResults.flatMap(result => result.results);
-      };
-
-      const listings = await fetchAllListings();
+      const listings = await fetchListingsInBatches(urls);
       const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
 
       console.log(`Fetched unique bedrooms: ${JSON.stringify(uniqueBedrooms)}`);
@@ -223,21 +207,6 @@ export const handler = async (event, context) => {
     };
   }
 
-  // const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${location}-${bedroomAmount}-${city}`;
-  // const cachedData = cacheData[cacheKey];
-
-  // if (cachedData) {
-  //   console.log(`Returning cached data for key: ${cacheKey}`);
-  //   return {
-  //     statusCode: 200,
-  //     headers: {
-  //       'Access-Control-Allow-Origin': '*',
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(cachedData)
-  //   };
-  // }
-
   try {
     const fetchListings = async () => {
       let url = `https://open-api.guesty.com/v1/listings?limit=100&skip=0`;
@@ -299,9 +268,6 @@ export const handler = async (event, context) => {
     }
 
     console.log(`Available listings: ${JSON.stringify(availableListings)}`);
-
-    // cacheData[cacheKey] = { results: availableListings };
-    // await updateCache(cacheFilePath, cacheData); // Update the cache file
 
     return {
       statusCode: 200,
