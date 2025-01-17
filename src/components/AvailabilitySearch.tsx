@@ -263,7 +263,7 @@ const AvailabilitySearch: React.FC = () => {
   // Determine the grid columns based on the number of filtered listings
   const getGridColsClass = () => {
     if (filteredListings.length >= 4) {
-      return 'grid-cols-2 lg:grid-cols-2';
+      return 'grid-cols-2 xl:grid-cols-3';
     } else if (filteredListings.length >= 1 && filteredListings.length <= 4) {
       return 'grid-cols-2';
     } else {
@@ -332,7 +332,7 @@ const AvailabilitySearch: React.FC = () => {
                 <DateRangePickerComponent
                   state={dateRange}
                   setState={setDateRange}
-                  disabledDates={[]} // Add any disabled dates here
+                  disabledDates={[]}
                   onClick={async () => {
                     const checkIn = dateRange[0].startDate.toISOString().split('T')[0];
                     const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
@@ -431,21 +431,21 @@ const AvailabilitySearch: React.FC = () => {
           </div>
           {available.length > 0 ? (
         <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
-          <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col w-full md:w-2/3 max-h-[100vh]">
+          <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
             <div className="text-center py-4">
               <h2 className="text-xl font-semibold">Available Listings</h2>
               <p className="text-sm text-muted-400">
                 {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
               </p>
             </div>
-            <div className={`search-results h-full w-full overflow-y-auto grid grid-cols-1 md:${getGridColsClass()} gap-x-6 gap-y-3 self-center px-2`}>
+            <div className={`search-results h-full w-full overflow-y-auto grid grid-cols-1 mr-3 md:mr-0 md:grid-cols-2 xl:${getGridColsClass()} md:gap-x-6 gap-y-3 place-items-center md:px-2`}>
               {currentListings.length > 0 ? (
                 currentListings.map((property, index) => {
-                  const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice; // Get the first date-specific price or fallback to basePrice
+                  const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
                   if (index === currentListings.length - 1) {
                     return (
                       <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
-                        <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
+                        <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
                           <div className="relative w-full h-64">
                             <img
                               className="absolute inset-0 w-full h-full object-cover"
@@ -474,7 +474,7 @@ const AvailabilitySearch: React.FC = () => {
       return (
         <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
           <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-            <div className="relative w-full h-64">
+            <div className="relative w-full h-40 lg:h-64">
               <img
                 className="absolute inset-0 w-full h-full object-cover"
                 src={property.pictures[0].original}
@@ -492,7 +492,7 @@ const AvailabilitySearch: React.FC = () => {
               <span className="hidden">{property.bedrooms}</span>
               <hr className="border border-muted-200 dark:border-muted-800 my-2" />
               <div className="flex items-end h-full">
-                  <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
+                  <p className="font-semibold text-sm lg:text-base text-nowrap">Starting at ${price} Per Night</p>
               </div>
             </div>
           </article>
@@ -505,7 +505,7 @@ const AvailabilitySearch: React.FC = () => {
 )}
                 </div>
               </div>
-              <div className="w-full md:h-full">
+              <div className="w-full md:h-full md:pb-20 xl:pr-4">
                 <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "North Myrtle Beach"} />
               </div>
               <div className="md:hidden flex justify-center items-baseline mt-4 h-fit w-full md:w-1/4">
