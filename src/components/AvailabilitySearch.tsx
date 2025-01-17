@@ -421,7 +421,7 @@ const AvailabilitySearch: React.FC = () => {
               tags={tags}
               amenities={amenities}
               initialPriceOrder={filters.priceOrder || ''}
-              initialBedroomCount={Number(filters.bedroomCount) || 0} // Ensure it's a number
+              initialBedroomCount={Number(filters.bedroomCount) || 0}
               initialSelectedCity={filters.selectedCity || ''}
               initialSelectedAmenities={filters.selectedAmenities || []}
               initialSelectedTags={filters.selectedTags || []}
