@@ -50,13 +50,15 @@ const fetchAvailability = async (listingId, checkIn, checkOut) => {
     throw new Error('Invalid data structure');
   }
 
-  const bookedDates = data.data.days
-    .filter(day => day.status === 'booked')
-    .map(day => day.date);
+  const availabilityData = data.data.days.map(day => ({
+    date: day.date,
+    status: day.status,
+    price: day.price
+  }));
 
-  console.log(`Booked dates for listing ${listingId}: ${JSON.stringify(bookedDates)}`);
+  console.log(`Availability data for listing ${listingId}: ${JSON.stringify(availabilityData)}`);
 
-  return bookedDates;
+  return availabilityData;
 };
 
 const fetchAllListings = async (url) => {
@@ -173,7 +175,7 @@ export const handler = async (event, context) => {
     }
 
     try {
-      const bookedDates = await fetchAvailability(listingId, checkIn, checkOut);
+      const availabilityData = await fetchAvailability(listingId, checkIn, checkOut);
 
       return {
         statusCode: 200,
@@ -181,7 +183,7 @@ export const handler = async (event, context) => {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ bookedDates })
+        body: JSON.stringify({ availabilityData })
       };
     } catch (error) {
       console.error(`Error fetching booked dates: ${error.message}`);
@@ -256,9 +258,12 @@ export const handler = async (event, context) => {
     const availableListings = [];
     for (const listing of combinedResults) {
       try {
-        const bookedDates = await fetchAvailability(listing._id, checkIn, checkOut);
+        const availabilityData = await fetchAvailability(listing._id, checkIn, checkOut);
+        const bookedDates = availabilityData.filter(day => day.status === 'booked').map(day => day.date);
+        const prices = availabilityData.map(day => ({ date: day.date, price: day.price }));
+
         if (bookedDates.length === 0) {
-          availableListings.push(listing);
+          availableListings.push({ ...listing, prices });
         } else {
           console.log(`Listing ${listing._id} is booked for dates: ${JSON.stringify(bookedDates)}`);
         }

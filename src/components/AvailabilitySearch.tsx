@@ -53,8 +53,8 @@ const AvailabilitySearch: React.FC = () => {
   const [numGuests, setNumGuests] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [available, setListings] = useState<Listing[]>([]);
-  const [filteredListings, setFilteredListings] = useState<Listing[]>([]);
+  const [available, setListings] = useState<any[]>([]);
+  const [filteredListings, setFilteredListings] = useState<any[]>([]);
   const [dateRange, setDateRange] = useState([{ startDate: addDays(new Date(), 1), endDate: addDays(new Date(), 3), key: 'selection' }]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
@@ -79,7 +79,7 @@ const AvailabilitySearch: React.FC = () => {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastListingElementRef = useRef<HTMLAnchorElement | null>(null);
 
-  const cache = useRef<{ [key: string]: Listing[] }>({});
+  const cache = useRef<{ [key: string]: any[] }>({});
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -89,6 +89,10 @@ const AvailabilitySearch: React.FC = () => {
           fetch('/.netlify/functions/availability?fetchBedrooms=true'),
           fetch('/.netlify/functions/searchTags')
         ]);
+
+        if (!citiesResponse.ok || !bedroomsResponse.ok || !tagsResponse.ok) {
+          throw new Error('Failed to fetch initial data');
+        }
 
         const citiesData = await citiesResponse.json();
         const bedroomsData = await bedroomsResponse.json();
@@ -178,7 +182,7 @@ const AvailabilitySearch: React.FC = () => {
         return;
       }
   
-      const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= minOccupancy);
+      const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
   
       setListings(filteredListings);
       setFilteredListings(filteredListings);
@@ -422,6 +426,7 @@ const AvailabilitySearch: React.FC = () => {
               initialSelectedAmenities={filters.selectedAmenities || []}
               initialSelectedTags={filters.selectedTags || []}
               showBedroomFilter={selectedBedroomAmount === ''}
+              bedroomOptions={bedroomOptions}
             />
           </div>
           {available.length > 0 ? (
@@ -429,12 +434,13 @@ const AvailabilitySearch: React.FC = () => {
               <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col w-full md:w-2/3 max-h-[100vh]">
                 <div className={`search-results h-full w-full overflow-y-auto grid ${getGridColsClass()} gap-x-6 gap-y-3 self-center px-2`}>
   
-{currentListings.length > 0 ? (
+                {currentListings.length > 0 ? (
   currentListings.map((property, index) => {
+    const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice; // Get the first date-specific price or fallback to basePrice
     if (index === currentListings.length - 1) {
       return (
         <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
-          <article className="xs:mx-2 flex flex-col bg-white  shadow-lg shadow-muted-300/30 h-fit mb-4 rounded-xl relative">
+          <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
             <div className="relative w-full h-64">
               <img
                 className="absolute inset-0 w-full h-full object-cover"
@@ -453,7 +459,7 @@ const AvailabilitySearch: React.FC = () => {
               <span className="hidden">{property.bedrooms}</span>
               <hr className="border border-muted-200 dark:border-muted-800 my-2" />
               <div className="flex items-end h-full">
-                  <p className="font-semibold text-base text-nowrap">Starting at ${property.prices.basePrice} Per Night</p>
+                  <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
               </div>
             </div>
           </article>
@@ -462,7 +468,7 @@ const AvailabilitySearch: React.FC = () => {
     } else {
       return (
         <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
-          <article className="xs:mx-2 flex flex-wrap items-center bg-white shadow-lg shadow-muted-300/30 h-min mt-12 mb-4 rounded-xl relative">
+          <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
             <div className="relative w-full h-64">
               <img
                 className="absolute inset-0 w-full h-full object-cover"
@@ -481,7 +487,7 @@ const AvailabilitySearch: React.FC = () => {
               <span className="hidden">{property.bedrooms}</span>
               <hr className="border border-muted-200 dark:border-muted-800 my-2" />
               <div className="flex items-end h-full">
-                <p className="font-semibold text-base text-nowrap">Starting at ${property.prices.basePrice} Per Night</p>
+                  <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
               </div>
             </div>
           </article>
@@ -517,6 +523,7 @@ const AvailabilitySearch: React.FC = () => {
                     initialSelectedAmenities={filters.selectedAmenities || []}
                     initialSelectedTags={filters.selectedTags || []}
                     showBedroomFilter={selectedBedroomAmount === ''}
+                    bedroomOptions={bedroomOptions}
                   />
                 </Modal>
               </div>

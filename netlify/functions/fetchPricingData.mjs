@@ -1,5 +1,26 @@
 import fetch from 'node-fetch';
 
+const RATE_LIMIT_INTERVAL = 1000; // 1 second
+const MAX_RETRIES = 5;
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const fetchWithRetry = async (url, options, retries = MAX_RETRIES) => {
+    for (let i = 0; i < retries; i++) {
+        const response = await fetch(url, options);
+        if (response.status === 429) {
+            const retryAfter = response.headers.get('Retry-After');
+            const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
+            await delay(delayMs);
+        } else if (response.ok) {
+            return response;
+        } else {
+            console.error(`Error fetching data: ${response.status} ${response.statusText}`);
+        }
+    }
+    throw new Error('Max retries reached');
+};
+
 export const handler = async (event, context) => {
     const { listingId, startDate, endDate } = event.queryStringParameters;
 
@@ -21,47 +42,31 @@ export const handler = async (event, context) => {
 
     try {
         const [response1, response2, response3, response4] = await Promise.all([
-            fetch(apiUrl1, {
+            fetchWithRetry(apiUrl1, {
                 headers: {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
                     'Accept': 'application/json'
                 }
             }),
-            fetch(apiUrl2, {
+            fetchWithRetry(apiUrl2, {
                 headers: {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
                     'Accept': 'application/json'
                 }
             }),
-            fetch(manUrl, {
+            fetchWithRetry(manUrl, {
                 headers: {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
                     'Accept': 'application/json'
                 }
             }),
-            fetch(manUrl, {
+            fetchWithRetry(manUrl, {
                 headers: {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
                     'Accept': 'application/json'
                 }
             }),
         ]);
-
-        if (!response1.ok) {
-            throw new Error(`Error fetching data from first endpoint: ${response1.status} ${response1.statusText}`);
-        }
-
-        if (!response2.ok) {
-            throw new Error(`Error fetching data from second endpoint: ${response2.status} ${response2.statusText}`);
-        }
-
-        if (!response3.ok) {
-            throw new Error(`Error fetching data from third endpoint: ${response3.status} ${response3.statusText}`);
-        }
-
-        if (!response4.ok) {
-            throw new Error(`Error fetching data from fourth endpoint: ${response4.status} ${response4.statusText}`);
-        }
 
         const data1 = await response1.json();
         const data2 = await response2.json();

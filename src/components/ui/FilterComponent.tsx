@@ -9,6 +9,7 @@ interface FilterComponentProps {
   cities: string[];
   amenities: string[];
   tags: string[];
+  bedroomOptions: number[]; // Add bedroomOptions prop
   initialPriceOrder: string;
   initialBedroomCount: number | null;
   initialSelectedCity: string;
@@ -23,6 +24,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   cities,
   amenities,
   tags,
+  bedroomOptions, // Destructure bedroomOptions prop
   initialPriceOrder,
   initialBedroomCount,
   initialSelectedCity,
@@ -35,23 +37,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   const [selectedCity, setSelectedCity] = useState<string>(initialSelectedCity);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(initialSelectedAmenities);
   const [selectedTags, setSelectedTags] = useState<string[]>(initialSelectedTags);
-  const [bedroomOptions, setBedroomOptions] = useState<number[]>([]);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchBedroomOptions = async () => {
-      try {
-        const response = await fetch('/.netlify/functions/availability?fetchBedrooms=true');
-        const data = await response.json();
-        const sortedBedrooms = (data.results || []).sort((a: number, b: number) => a - b);
-        setBedroomOptions(sortedBedrooms);
-      } catch (err) {
-        console.error('Error fetching bedroom options:', err);
-      }
-    };
-
-    fetchBedroomOptions();
-  }, []);
 
   useEffect(() => {
     onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags });
