@@ -324,7 +324,7 @@ const AvailabilitySearch: React.FC = () => {
         </button>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="z-50">
-        <form onSubmit={handleSubmit} className="flex flex-col justify-center bg-zinc-100 items-center h-1/2 rounded-md p-7">
+        <form onSubmit={handleSubmit} className="flex flex-col justify-center bg-zinc-100 items-center h-full md:h-1/2 rounded-md p-7">
           <div className="flex flex-col items-center justify-center w-full px-6">
             <div className="flex flex-col justify-center items-center gap-1 w-full">
               <div className="w-full flex flex-col">
@@ -429,16 +429,23 @@ const AvailabilitySearch: React.FC = () => {
               bedroomOptions={bedroomOptions}
             />
           </div>
+
           {available.length > 0 ? (
-        <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
+        <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-screen h-screen">
+          <div className="md:hidden h-96 flex flex-col w-full max-h-[100vh] mt-1">
+          <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "North Myrtle Beach"} />
+          </div>
           <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
-            <div className="text-center py-4">
+
+            <div className="text-center py-2 md:py-4">
               <h2 className="text-xl font-semibold">Available Listings</h2>
               <p className="text-sm text-muted-400">
                 {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
               </p>
             </div>
-            <div className={`search-results h-full w-full overflow-y-auto grid grid-cols-1 mr-3 md:mr-0 md:grid-cols-2 xl:${getGridColsClass()} md:gap-x-6 gap-y-3 place-items-center md:px-2`}>
+            <div 
+            className={`search-results h-full w-full overflow-y-auto flex flex-col items-stretch md:grid grid-cols-1 md:mr-0 md:grid-cols-2 
+            xl:${getGridColsClass()} md:gap-x-6 gap-y-3 place-items-center px-2`}>
               {currentListings.length > 0 ? (
                 currentListings.map((property, index) => {
                   const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
@@ -446,7 +453,7 @@ const AvailabilitySearch: React.FC = () => {
                     return (
                       <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
                         <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-                          <div className="relative w-full h-64">
+                          <div className="relative w-full h-40 lg:h-64">
                             <img
                               className="absolute inset-0 w-full h-full object-cover"
                               src={property.pictures[0].original}
@@ -454,7 +461,7 @@ const AvailabilitySearch: React.FC = () => {
                             />
                             <div className="absolute inset-0 bg-neutral-950/50" />
             </div>
-            <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
+            <div className="p-2 w-full bg-white flex flex-col justify-start ">
               <h4 className="font-sans text-wrap font-medium text-xl text-slate-900">
                 {property.title}
               </h4>
@@ -473,7 +480,7 @@ const AvailabilitySearch: React.FC = () => {
     } else {
       return (
         <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
-          <article className="xs:mx-2 flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
+          <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
             <div className="relative w-full h-40 lg:h-64">
               <img
                 className="absolute inset-0 w-full h-full object-cover"
@@ -482,8 +489,8 @@ const AvailabilitySearch: React.FC = () => {
               />
               <div className="absolute inset-0 bg-neutral-950/50" />
             </div>
-            <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
-              <h4 className="font-sans text-wrap font-medium text-xl text-slate-900">
+            <div className="p-2 w-full bg-white flex flex-col justify-start">
+              <h4 className="font-sans text-wrap font-medium text-normal lg:text-xl text-slate-900">
                 {property.title}
               </h4>
               <p className="text-sm text-muted-400">
