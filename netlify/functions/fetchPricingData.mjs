@@ -136,7 +136,7 @@ export const handler = async (event, context) => {
             return acc;
         }, {});
 
-        const managementFeePercentage = data3.find(fee => fee.name === 'Management')?.sourcesConfigurations[0]?.value || 0;
+        const managementFeePercentage = 5; // Set management fee percentage to 5%
 
         // Extract pet fee from the additional fees data
         const petFee = data4.find(fee => fee.type === 'PET')?.value || 0;
@@ -160,7 +160,7 @@ export const handler = async (event, context) => {
                 localTax,
                 cityTax,
                 accommodates,
-                managementFeePercentage,
+                managementFeePercentage, // Include management fee percentage in the response
                 amenities // Include amenities in the response
             })
         };
