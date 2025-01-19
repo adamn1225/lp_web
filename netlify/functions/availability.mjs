@@ -254,18 +254,18 @@ export const handler = async (event, context) => {
 
     console.log(`Listings after filtering by bedroom amount: ${JSON.stringify(combinedResults)}`);
 
-    // Fetch availability for each listing and filter out booked listings
+    // Fetch availability for each listing and filter out unavailable listings
     const availableListings = [];
     for (const listing of combinedResults) {
       try {
         const availabilityData = await fetchAvailability(listing._id, checkIn, checkOut);
-        const bookedDates = availabilityData.filter(day => day.status === 'booked').map(day => day.date);
+        const availableDates = availabilityData.filter(day => day.status === 'available').map(day => day.date);
         const prices = availabilityData.map(day => ({ date: day.date, price: day.price }));
 
-        if (bookedDates.length === 0) {
+        if (availableDates.length > 0) {
           availableListings.push({ ...listing, prices });
         } else {
-          console.log(`Listing ${listing._id} is booked for dates: ${JSON.stringify(bookedDates)}`);
+          console.log(`Listing ${listing._id} is not available for dates: ${JSON.stringify(availableDates)}`);
         }
       } catch (error) {
         console.error(`Error fetching availability for listing ${listing._id}: ${error.message}`);
