@@ -197,6 +197,10 @@ const AvailabilitySearch: React.FC = () => {
 
       setIsResultsModalOpen(true);
       setIsSearchComplete(true);
+
+      if (data.partial) {
+        await fetchRemainingResults(startDate, endDate, minOccupancy, selectedLocation, selectedBedroomAmount, tagsQuery, cacheKey);
+      }
     } catch (err) {
       console.error(err);
       setError(err.message || 'An error occurred');
@@ -204,6 +208,47 @@ const AvailabilitySearch: React.FC = () => {
       setLoading(false);
     }
   }, 300);
+
+  const fetchRemainingResults = async (startDate: string, endDate: string, minOccupancy: number, selectedLocation: string, selectedBedroomAmount: string, tagsQuery: string, cacheKey: string) => {
+    let hasMoreResults = true;
+
+    while (hasMoreResults) {
+      try {
+        let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
+
+        if (selectedLocation) {
+          url += `&location=${encodeURIComponent(selectedLocation)}`;
+        }
+
+        if (selectedBedroomAmount) {
+          url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
+        }
+
+        console.log('Fetching remaining results from URL:', url);
+
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch remaining listings: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('Fetched remaining Data:', data);
+
+        if (data.results) {
+          const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
+          setListings(prevListings => [...prevListings, ...filteredListings]);
+          setFilteredListings(prevListings => [...prevListings, ...filteredListings]);
+          cache.current[cacheKey] = [...cache.current[cacheKey], ...filteredListings];
+        }
+
+        hasMoreResults = data.partial;
+      } catch (err) {
+        console.error('Error fetching remaining results:', err);
+        setError(err.message || 'An error occurred');
+        hasMoreResults = false;
+      }
+    }
+  };
 
   const clearResults = () => {
     setListings([]);
@@ -406,12 +451,6 @@ const AvailabilitySearch: React.FC = () => {
       <div className="w-full my-3"></div>
       <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
         <div className={`bg-white overflow-hidden m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
-          {loading && (
-            <div ref={resultsContainerRef} className="flex flex-col items-center justify-center h-full">
-              <ClipLoader size={50} color={"#102C57"} loading={loading} />
-              <p>One moment while we load your results...</p>
-            </div>
-          )}
           {error && <p>Error: {error}</p>}
           <div className="w-full">
             <FilterComponent

@@ -260,10 +260,22 @@ export const handler = async (event, context) => {
       try {
         const availabilityData = await fetchAvailability(listing._id, checkIn, checkOut);
         const availableDates = availabilityData.filter(day => day.status === 'available').map(day => day.date);
-        const prices = availabilityData.map(day => ({ date: day.date, price: day.price }));
+        const prices = availabilityData.filter(day => day.status === 'available').map(day => ({ date: day.date, price: day.price }));
 
         if (availableDates.length > 0) {
           availableListings.push({ ...listing, prices });
+          if (availableListings.length % 6 === 0) {
+            console.log(`Fetched ${availableListings.length} available listings so far`);
+            // Return the results in batches of 6
+            return {
+              statusCode: 200,
+              headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ results: availableListings, partial: true })
+            };
+          }
         } else {
           console.log(`Listing ${listing._id} is not available for dates: ${JSON.stringify(availableDates)}`);
         }
@@ -280,7 +292,7 @@ export const handler = async (event, context) => {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ results: availableListings })
+      body: JSON.stringify({ results: availableListings, partial: false })
     };
   } catch (error) {
     console.error(`Error fetching data: ${error.message}`);
