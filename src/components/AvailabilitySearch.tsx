@@ -311,7 +311,7 @@ const AvailabilitySearch: React.FC = () => {
   // Determine the grid columns based on the number of filtered listings
   const getGridColsClass = () => {
     if (filteredListings.length >= 4) {
-      return 'grid-cols-2 xl:grid-cols-3';
+      return 'md:grid-cols-2 xxl:grid-cols-3';
     } else if (filteredListings.length >= 1 && filteredListings.length <= 4) {
       return 'grid-cols-2';
     } else {
@@ -486,8 +486,8 @@ const AvailabilitySearch: React.FC = () => {
                   </p>
                 </div>
                 <div
-                  className={`search-results h-full w-full overflow-y-auto flex flex-col md:flex-row items-stretch md:grid md:mr-0 md:grid-cols-2 xl:${getGridColsClass()} 
-                  md:gap-x-6 gap-y-3 place-items-center px-2 pb-40 mb-40`}>
+                  className={`search-results h-full w-full overflow-y-auto flex flex-col items-centergap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
+                  gap-x-12 gap-y-1 place-items-center justify-items-start px-2 pb-40 mb-40`}>
                   {currentListings.length > 0 ? (
                     currentListings.map((property, index) => {
                       const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
@@ -495,7 +495,7 @@ const AvailabilitySearch: React.FC = () => {
                         return (
                           <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
                             <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-                              <div className="relative w-[300px] h-40 lg:h-64">
+                              <div className="relative w-full h-56 lg:h-64">
                                 <img
                                   className="absolute inset-0 w-full h-full object-cover"
                                   src={property.pictures[0].original}
@@ -523,7 +523,7 @@ const AvailabilitySearch: React.FC = () => {
                         return (
                           <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
                             <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-                              <div className="relative w-[300px] h-40 lg:h-64">
+                              <div className="relative w-full h-56 lg:h-64">
                                 <img
                                   className="absolute inset-0 w-full h-full object-cover"
                                   src={property.pictures[0].original}
@@ -552,7 +552,7 @@ const AvailabilitySearch: React.FC = () => {
                   ) : (
                     <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
                   )}
-                  <div className="flex justify-center items-center w-full ml-96">
+                  <div className="flex justify-center items-center w-full ml-70 mt-12">
                     {loading && available.length >= 6 && (
                       <div className="h-40 w-full pl-96">
                         <ClipLoader size={70} color={"#123abc"} loading={true} />
