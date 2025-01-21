@@ -486,7 +486,7 @@ const AvailabilitySearch: React.FC = () => {
                   </p>
                 </div>
                 <div
-                  className={`search-results h-full w-full overflow-y-auto flex flex-col items-center md:grid md:mr-0 md:grid-cols-2 xl:${getGridColsClass()} 
+                  className={`search-results h-full w-full overflow-y-auto flex flex-col md:flex-row items-stretch md:grid md:mr-0 md:grid-cols-2 xl:${getGridColsClass()} 
                   md:gap-x-6 gap-y-3 place-items-center px-2 pb-40 mb-40`}>
                   {currentListings.length > 0 ? (
                     currentListings.map((property, index) => {
@@ -495,7 +495,7 @@ const AvailabilitySearch: React.FC = () => {
                         return (
                           <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
                             <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-                              <div className="relative w-[325px] h-40 lg:h-64">
+                              <div className="relative w-[300px] h-40 lg:h-64">
                                 <img
                                   className="absolute inset-0 w-full h-full object-cover"
                                   src={property.pictures[0].original}
@@ -523,7 +523,7 @@ const AvailabilitySearch: React.FC = () => {
                         return (
                           <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
                             <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-                              <div className="relative w-[325px] h-40 lg:h-64">
+                              <div className="relative w-[300px] h-40 lg:h-64">
                                 <img
                                   className="absolute inset-0 w-full h-full object-cover"
                                   src={property.pictures[0].original}
