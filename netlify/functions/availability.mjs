@@ -90,9 +90,9 @@ const fetchListingsInBatches = async (urls) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, skip = 0 } = event.queryStringParameters;
 
-  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId })}`);
+  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, skip })}`);
 
   if (fetchCities) {
     try {
@@ -210,8 +210,8 @@ export const handler = async (event, context) => {
   }
 
   try {
-    const fetchListings = async () => {
-      let url = `https://open-api.guesty.com/v1/listings?limit=100&skip=0`;
+    const fetchListings = async (skip) => {
+      let url = `https://open-api.guesty.com/v1/listings?limit=100&skip=${skip}`;
       const queryParams = new URLSearchParams({
         checkIn: checkIn,
         checkOut: checkOut,
@@ -242,7 +242,7 @@ export const handler = async (event, context) => {
       return response.json();
     };
 
-    const data = await fetchListings();
+    const data = await fetchListings(skip);
 
     console.log(`Fetched listings: ${JSON.stringify(data.results)}`);
 
@@ -273,7 +273,7 @@ export const handler = async (event, context) => {
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ results: availableListings, partial: true })
+              body: JSON.stringify({ results: availableListings, partial: true, nextSkip: skip + 100 })
             };
           }
         } else {

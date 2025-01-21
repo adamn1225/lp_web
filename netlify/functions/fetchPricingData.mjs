@@ -105,16 +105,19 @@ export const handler = async (event, context) => {
             .flatMap(day => {
                 const blockRefs = day.blockRefs || [];
                 return blockRefs.flatMap(blockRef => {
-                    const checkInDate = blockRef.reservation.checkInDateLocalized;
-                    const checkOutDate = blockRef.reservation.checkOutDateLocalized;
-                    const dates = [];
-                    let currentDate = new Date(checkInDate);
-                    const endDate = new Date(checkOutDate);
-                    while (currentDate <= endDate) { // Use <= to include the check-out date
-                        dates.push(currentDate.toISOString().split('T')[0]);
-                        currentDate.setDate(currentDate.getDate() + 1);
+                    if (blockRef.reservation && blockRef.reservation.checkInDateLocalized && blockRef.reservation.checkOutDateLocalized) {
+                        const checkInDate = blockRef.reservation.checkInDateLocalized;
+                        const checkOutDate = blockRef.reservation.checkOutDateLocalized;
+                        const dates = [];
+                        let currentDate = new Date(checkInDate);
+                        const endDate = new Date(checkOutDate);
+                        while (currentDate <= endDate) { // Use <= to include the check-out date
+                            dates.push(currentDate.toISOString().split('T')[0]);
+                            currentDate.setDate(currentDate.getDate() + 1);
+                        }
+                        return dates;
                     }
-                    return dates;
+                    return [];
                 });
             });
 

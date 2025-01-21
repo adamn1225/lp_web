@@ -71,6 +71,7 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [displayedItems, setDisplayedItems] = useState<number>(1); // Initialize with 1 item
+  const [nextSkip, setNextSkip] = useState<number | null>(0); // Initialize nextSkip
 
   const apiUrl = '/.netlify/functions/availability';
 
@@ -197,9 +198,10 @@ const AvailabilitySearch: React.FC = () => {
 
       setIsResultsModalOpen(true);
       setIsSearchComplete(true);
+      setNextSkip(data.nextSkip || null); // Set nextSkip value
 
       if (data.partial) {
-        await fetchRemainingResults(startDate, endDate, minOccupancy, selectedLocation, selectedBedroomAmount, tagsQuery, cacheKey);
+        await fetchRemainingResults(startDate, endDate, minOccupancy, selectedLocation, selectedBedroomAmount, tagsQuery, cacheKey, data.nextSkip);
       }
     } catch (err) {
       console.error(err);
@@ -209,12 +211,12 @@ const AvailabilitySearch: React.FC = () => {
     }
   }, 300);
 
-  const fetchRemainingResults = async (startDate: string, endDate: string, minOccupancy: number, selectedLocation: string, selectedBedroomAmount: string, tagsQuery: string, cacheKey: string) => {
+  const fetchRemainingResults = async (startDate: string, endDate: string, minOccupancy: number, selectedLocation: string, selectedBedroomAmount: string, tagsQuery: string, cacheKey: string, skip: number | null) => {
     let hasMoreResults = true;
 
-    while (hasMoreResults) {
+    while (hasMoreResults && skip !== null) {
       try {
-        let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
+        let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&skip=${skip}`;
 
         if (selectedLocation) {
           url += `&location=${encodeURIComponent(selectedLocation)}`;
@@ -242,6 +244,7 @@ const AvailabilitySearch: React.FC = () => {
         }
 
         hasMoreResults = data.partial;
+        skip = data.nextSkip || null; // Update skip value
       } catch (err) {
         console.error('Error fetching remaining results:', err);
         setError(err.message || 'An error occurred');
@@ -350,13 +353,13 @@ const AvailabilitySearch: React.FC = () => {
 
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
-      {loading && (
+      {loading && available.length < 6 && (
         <div className="progress-bar">
           <motion.div
             className="progress-bar-inner"
             initial={{ width: 0 }}
             animate={{ width: '100%' }}
-            transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+            transition={{ duration: 4, ease: "easeInOut", repeat: Infinity }}
           />
         </div>
       )}
@@ -483,8 +486,8 @@ const AvailabilitySearch: React.FC = () => {
                   </p>
                 </div>
                 <div
-                  className={`search-results h-full w-full overflow-y-auto flex flex-col items-stretch md:grid grid-cols-1 md:mr-0 md:grid-cols-2 
-            xl:${getGridColsClass()} md:gap-x-6 gap-y-3 place-items-center px-2`}>
+                  className={`search-results h-full w-full overflow-y-auto flex flex-col items-center md:grid md:mr-0 md:grid-cols-2 xl:${getGridColsClass()} 
+                  gap-y-3 place-items-center px-2  md:px-0 pb-40 mb-40`}>
                   {currentListings.length > 0 ? (
                     currentListings.map((property, index) => {
                       const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
@@ -492,7 +495,7 @@ const AvailabilitySearch: React.FC = () => {
                         return (
                           <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
                             <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-                              <div className="relative w-full h-40 lg:h-64">
+                              <div className="relative w-[325px] h-40 lg:h-64">
                                 <img
                                   className="absolute inset-0 w-full h-full object-cover"
                                   src={property.pictures[0].original}
@@ -520,7 +523,7 @@ const AvailabilitySearch: React.FC = () => {
                         return (
                           <a href={property._id} key={property._id} ref={(el) => (listingRefs.current[property._id] = el)}>
                             <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-                              <div className="relative w-full h-40 lg:h-64">
+                              <div className="relative w-[325px] h-40 lg:h-64">
                                 <img
                                   className="absolute inset-0 w-full h-full object-cover"
                                   src={property.pictures[0].original}
@@ -549,7 +552,16 @@ const AvailabilitySearch: React.FC = () => {
                   ) : (
                     <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
                   )}
+                  <div className="flex justify-center items-center w-full ml-96">
+                    {loading && available.length >= 6 && (
+                      <div className="h-40 w-full pl-96">
+                        <ClipLoader size={70} color={"#123abc"} loading={true} />
+                      </div>
+                    )}
+                  </div>
                 </div>
+
+
               </div>
               <div className="w-full md:h-full md:pb-20 xl:pr-4">
                 <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "North Myrtle Beach"} />
