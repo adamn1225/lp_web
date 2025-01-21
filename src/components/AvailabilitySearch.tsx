@@ -487,7 +487,7 @@ const AvailabilitySearch: React.FC = () => {
                 </div>
                 <div
                   className={`search-results h-full w-full overflow-y-auto flex flex-col items-center md:grid md:mr-0 md:grid-cols-2 xl:${getGridColsClass()} 
-                  gap-y-3 place-items-center px-2  md:px-0 pb-40 mb-40`}>
+                  md:gap-x-6 gap-y-3 place-items-center px-2 pb-40 mb-40`}>
                   {currentListings.length > 0 ? (
                     currentListings.map((property, index) => {
                       const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
