@@ -114,8 +114,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   return (
     <div className="filter-component flex flex-col items-center justify-start gap-4 p-2 md:p-4 w-full bg-primary/40 h-full">
       <div className='items-start justify-center text-sm md:text-base'>
-        <div className="amenities-filter mt-2">
-          <div className="flex flex-wrap items-center justify-center gap-2">
+        <div className="flex flex-col md:flex-row-reverse w-full items-center gap-2 justify-center amenities-filter mt-2">
+          <div className="flex flex-wrap md:flex-nowrap w-full items-center justify-center gap-2">
             {amenities.map(amenity => (
               <button
                 key={amenity}
@@ -137,7 +137,9 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                 {formatTag(tag)}
               </button>
             ))}
-            <button onClick={() => setIsFilterModalOpen(true)} className="hidden h-fit py-2 px-2 md:flex gap-1 text-base justify-center items-center font-medium bg-secondary text-white rounded-md">
+          </div>
+          <div className='w-full flex justify-center'>
+            <button onClick={() => setIsFilterModalOpen(true)} className="h-fit flex flex-nowrap w-fit text-nowrap py-2 px-2 md:flex gap-1 text-base justify-center items-center font-medium bg-secondary text-white rounded-md">
               <SlidersHorizontal className='size-5' />   Filters
             </button>
           </div>
