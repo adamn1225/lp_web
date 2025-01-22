@@ -205,7 +205,7 @@ export const handler = async (event, context) => {
 
   try {
     const fetchListings = async (skip) => {
-      let url = `https://open-api.guesty.com/v1/listings?limit=100&skip=${skip}`;
+      let url = `https://open-api.guesty.com/v1/listings?limit=100&skip=${skip}&nids=6616a8ae8d971e00122287c2`;
       const queryParams = new URLSearchParams({
         checkIn: checkIn,
         checkOut: checkOut,

@@ -475,7 +475,7 @@ const AvailabilitySearch: React.FC = () => {
           {available.length > 0 ? (
             <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-screen h-screen">
               <div className="md:hidden h-80 flex flex-col w-full max-h-[100vh] mt-1">
-                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "North Myrtle Beach"} />
+                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "Myrtle Beach"} />
               </div>
               <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
 
@@ -487,15 +487,15 @@ const AvailabilitySearch: React.FC = () => {
                 </div>
                 <div
                   className={`md:search-results h-full w-full overflow-y-auto flex flex-col items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
-                  md:gap-x-6 md:gap-y-1 md:place-items-center md:justify-items-start px-2 pb-40 mb-16 md:mb-40`}>
+                  md:gap-x-6 md:gap-y-1 md:place-items-start md:justify-items-start px-2 pb-16 mb-16`}>
                   {currentListings.length > 0 ? (
                     currentListings.map((property, index) => {
                       const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
                       if (index === currentListings.length - 1) {
                         return (
                           <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
-                            <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-                              <div className="relative w-full h-64">
+                            <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-82 h-82 mb-4 rounded-xl relative">
+                              <div className="relative w-full h-72">
                                 <img
                                   className="absolute inset-0 w-full h-full object-cover"
                                   src={property.pictures[0].original}
@@ -522,8 +522,8 @@ const AvailabilitySearch: React.FC = () => {
                       } else {
                         return (
                           <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
-                            <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-full mb-4 rounded-xl relative">
-                              <div className="relative w-full h-64">
+                            <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30  w-82 h-82 mb-4 rounded-xl relative">
+                              <div className="relative w-full h-72">
                                 <img
                                   className="absolute inset-0 w-full h-full object-cover"
                                   src={property.pictures[0].original}
@@ -531,7 +531,7 @@ const AvailabilitySearch: React.FC = () => {
                                 />
                                 <div className="absolute inset-0 bg-neutral-950/50" />
                               </div>
-                              <div className="p-2 w-full bg-white flex flex-col justify-start">
+                              <div className="p-4 w-full bg-white flex flex-col justify-start">
                                 <h4 className="font-sans text-wrap font-medium text-normal lg:text-xl text-slate-900">
                                   {property.title}
                                 </h4>
@@ -564,9 +564,9 @@ const AvailabilitySearch: React.FC = () => {
 
               </div>
               <div className="w-full md:h-full md:pb-20 xl:pr-4">
-                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "North Myrtle Beach"} />
+                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "Myrtle Beach"} />
               </div>
-              <div className="md:hidden flex justify-center items-baseline mt-4 h-fit w-full md:w-1/4">
+              <div className="md:hidden flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
                 <button
                   onClick={() => setIsFilterModalOpen(true)}
                   className="w-2/3 flex gap-1 text-lg justify-center font-semibold bg-secondary text-white py-1.5 rounded-md"

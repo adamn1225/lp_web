@@ -70,7 +70,7 @@ async function fetchFeaturedListings() {
 
 // Specific function to fetch all listings
 async function fetchListings() {
-  const url = 'https://open-api.guesty.com/v1/listings?limit=100';
+  const url = 'https://open-api.guesty.com/v1/listings?limit=100&nids=6616a8ae8d971e00122287c2';
   return await fetchListingsInBatches(url);
 }
 
