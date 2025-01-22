@@ -213,9 +213,9 @@ function capitalizeFirstLetter(string: string) {
             </div>
             <!-- property details -->
             <div
-              class="flex flex-col md:flex-row flex-nowrap items-start justify-normal w-full"
+              class="flex flex-col md:flex-row flex-nowrap items-start justify-stretch w-full"
             >
-              <div class="hidden md:flex justify-start items-stretch w-full">
+              <div class="hidden md:flex justify-stretch items-stretch w-full">
                 <div class="main-image">
                   <img
                     class="block object-cover w-full h-full"
@@ -605,7 +605,7 @@ function capitalizeFirstLetter(string: string) {
                 </div>
               </div>
               <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
-                <AirReviews listingId={listingId} client:load />
+                <AirReviews listingId={listingId} client:idle />
               </div>
 
               <!-- Display the review comments in two columns -->

@@ -28,6 +28,23 @@ const getBedIcon = (type: string) => {
             return <MdOutlineKingBed className="w-5 h-5" />;
         case 'KING_BED':
             return <BedDouble className="w-5 h-5" />;
+        case 'CRIB':
+            return <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48">
+                <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M38 6V44" />
+                    <path d="M10 40H38" />
+                    <path d="M10 34H38" />
+                    <path d="M6 12H42" />
+                    <path d="M35 6L41 6" />
+                    <path d="M7 6L13 6" />
+                    <path d="M10 6V44" />
+                    <path d="M17 12V28" />
+                    <path d="M24 12V28" />
+                    <path d="M31 12V28" />
+                </g>
+            </svg>
+        case 'BUNK_BED':
+            return <IoBedOutline className="w-5 h-5" />;
         default:
             return null;
     }
@@ -39,7 +56,7 @@ const BedTypes: React.FC<BedTypesProps> = ({ beds }) => {
     return (
         <div className="my-4">
             {hasBeds && <h3 className="text-xl font-bold mb-2 text-center">Bed Types</h3>}
-            <div className="flex flex-wrap gap-4">
+            <div className="grid grid-cols-3 gap-x-2 gap-y-3">
                 {beds.filter((room) => room.beds.length > 0).flatMap((room) => (
                     room.beds.map((bed, bedIndex) => (
                         <div key={bedIndex} className="flex items-center gap-2">

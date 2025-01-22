@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
-const RATE_LIMIT_INTERVAL = 1000; // 1 second
-const MAX_RETRIES = 5;
+const MAX_RETRIES = 3;
+const RATE_LIMIT_INTERVAL = 2000; // 1 second
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

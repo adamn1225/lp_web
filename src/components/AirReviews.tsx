@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { ArrowDownWideNarrow, ArrowUpWideNarrow } from 'lucide-react';
 
 interface Review {
     _id: string;
     guestId: string;
+    guestFullName: string;
     overall_rating: number;
     public_review: string;
 }
@@ -16,30 +18,41 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+    const [displayedReviewsCount, setDisplayedReviewsCount] = useState<number>(6);
+
+    const fetchReviews = async (batch: 'initial' | 'remaining') => {
+        try {
+            const url = `/.netlify/functions/propertyReviews?propertyId=${listingId}&batch=${batch}`;
+            console.log(`Fetching reviews from URL: ${url}`);
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch reviews: ${response.statusText}`);
+            }
+            const data = await response.json();
+            setReviews((prevReviews) => {
+                const newReviews = batch === 'initial' ? data : [...prevReviews, ...data];
+                return Array.from(new Set(newReviews.map(review => review._id)))
+                    .map(id => newReviews.find(review => review._id === id));
+            });
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchReviews = async () => {
-            try {
-                const url = `/.netlify/functions/propertyReviews?propertyId=${listingId}`;
-                console.log(`Fetching reviews from URL: ${url}`);
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch reviews: ${response.statusText}`);
-                }
-                const data = await response.json();
-                setReviews(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchReviews();
+        fetchReviews('initial');
     }, [listingId]);
 
     const toggleSortOrder = () => {
         setSortOrder((prevOrder) => (prevOrder === 'desc' ? 'asc' : 'desc'));
+    };
+
+    const handleViewMore = async () => {
+        setDisplayedReviewsCount((prevCount) => prevCount + 5);
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Add a delay of 1 second
+        fetchReviews('remaining');
     };
 
     const sortedReviews = [...reviews].sort((a, b) => {
@@ -49,6 +62,8 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
             return a.overall_rating - b.overall_rating;
         }
     });
+
+    const displayedReviews = sortedReviews.slice(0, displayedReviewsCount);
 
     if (loading) {
         return <p>Loading reviews...</p>;
@@ -63,20 +78,22 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
     }
 
     return (
-        <div>
-            <button onClick={toggleSortOrder}>
-                Sort by Rating: {sortOrder === 'desc' ? 'Highest to Lowest' : 'Lowest to Highest'}
-            </button>
-            <div className="flex flex-wrap items-start justify-start gap-y-8 gap-x-6">
-                {sortedReviews.map((review) => (
+        <div className='w-2/3'>
+            {/* <div className='flex gap-1 items-center mb-4'>
+                <button className='text-secondary flex items-center gap-1 border border-secondary bg-accent rounded-md px-2 shadow-sm' onClick={toggleSortOrder}>
+                    {sortOrder === 'desc' ? 'Highest to Lowest' : 'Lowest to Highest'} {sortOrder === 'desc' ? <ArrowDownWideNarrow size={16} /> : <ArrowUpWideNarrow size={16} />}
+                </button>
+            </div> */}
+            <div className="flex flex-col items-start gap-y-2 gap-x-6">
+                {displayedReviews.map((review) => (
                     <div className="relative" key={review._id}>
-                        <div className="gap-4 mb-6 flex items-center">
+                        <div className="gap-1 mb-6 flex items-center">
                             <div className="meta">
-                                <div className="flex gap-4 justify-start items-center flex-wrap w-1/2">
+                                <div className="flex gap-2 justify-start items-center flex-wrap w-3/4">
                                     <h4 className="text-slate-950 text-base font-semibold font-sans">
-                                        Guest ID: {review.guestId}
+                                        Guest: {review.guestFullName}
                                     </h4>
-                                    <span className="text-muted-700 text-sm">
+                                    <span className="text-muted-700 text-sm font-semibold">
                                         Rating: {review.overall_rating}
                                     </span>
                                     <p className="text-slate-950 text-base">
@@ -88,6 +105,11 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
                     </div>
                 ))}
             </div>
+            {displayedReviewsCount < reviews.length && (
+                <button className='mt-4 text-secondary text-lg font-medium underline underline-offset-2 shadow-sm' onClick={handleViewMore}>
+                    View More Reviews
+                </button>
+            )}
         </div>
     );
 };
