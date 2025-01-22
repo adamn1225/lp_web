@@ -15,6 +15,7 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
     const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
     useEffect(() => {
         const fetchReviews = async () => {
@@ -37,6 +38,18 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
         fetchReviews();
     }, [listingId]);
 
+    const toggleSortOrder = () => {
+        setSortOrder((prevOrder) => (prevOrder === 'desc' ? 'asc' : 'desc'));
+    };
+
+    const sortedReviews = [...reviews].sort((a, b) => {
+        if (sortOrder === 'desc') {
+            return b.overall_rating - a.overall_rating;
+        } else {
+            return a.overall_rating - b.overall_rating;
+        }
+    });
+
     if (loading) {
         return <p>Loading reviews...</p>;
     }
@@ -45,31 +58,36 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
         return <p>Error: {error}</p>;
     }
 
-    if (reviews.length === 0) {
+    if (sortedReviews.length === 0) {
         return <p>No reviews available</p>;
     }
 
     return (
-        <div className="flex flex-wrap items-start justify-start gap-y-8 gap-x-6">
-            {reviews.map((review, index) => (
-                <div className="relative" key={review._id}>
-                    <div className="gap-4 mb-6 flex items-center">
-                        <div className="meta">
-                            <div className="flex gap-4 justify-start items-center flex-wrap w-1/2">
-                                <h4 className="text-slate-950 text-base font-semibold font-sans">
-                                    Guest ID: {review.guestId}
-                                </h4>
-                                <span className="text-muted-700 text-sm">
-                                    Rating: {review.overall_rating}
-                                </span>
-                                <p className="text-slate-950 text-base">
-                                    {review.public_review}
-                                </p>
+        <div>
+            <button onClick={toggleSortOrder}>
+                Sort by Rating: {sortOrder === 'desc' ? 'Highest to Lowest' : 'Lowest to Highest'}
+            </button>
+            <div className="flex flex-wrap items-start justify-start gap-y-8 gap-x-6">
+                {sortedReviews.map((review) => (
+                    <div className="relative" key={review._id}>
+                        <div className="gap-4 mb-6 flex items-center">
+                            <div className="meta">
+                                <div className="flex gap-4 justify-start items-center flex-wrap w-1/2">
+                                    <h4 className="text-slate-950 text-base font-semibold font-sans">
+                                        Guest ID: {review.guestId}
+                                    </h4>
+                                    <span className="text-muted-700 text-sm">
+                                        Rating: {review.overall_rating}
+                                    </span>
+                                    <p className="text-slate-950 text-base">
+                                        {review.public_review}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 };
