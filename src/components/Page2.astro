@@ -1,8 +1,8 @@
 ---
 
-import {fetchOneHundred} from '../pages/api/fetch';
+import {fetchListings} from '../pages/api/fetch';
 
-const listings = await fetchOneHundred();
+const listings = await fetchListings();
 ---
 {
     listings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, accommodates, _id, results}) => (

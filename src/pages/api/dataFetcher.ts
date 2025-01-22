@@ -1,12 +1,10 @@
-import { fetchThreeHundred, fetchOneHundred, fetchTwoHundred, fetchFeaturedListings } from './fetch.ts';
+import { fetchListings, fetchFeaturedListings } from './fetch.ts';
 
 export async function fetchAllListings() {
-    const [threeHundredListings, oneHundredListings, twoHundredListings, featuredListings] = await Promise.all([
-        fetchThreeHundred(),
-        fetchOneHundred(),
-        fetchTwoHundred(),
+    const [fetchedListings, featuredListings] = await Promise.all([
+        fetchListings(),
         fetchFeaturedListings()
     ]);
 
-    return [...threeHundredListings, ...oneHundredListings, ...twoHundredListings, ...featuredListings];
+    return [...fetchedListings, ...featuredListings];
 }

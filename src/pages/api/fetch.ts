@@ -44,35 +44,34 @@ async function fetchFromApi(url: string, options: RequestInit = {}) {
   }
 }
 
-// Specific function to fetch listings
+// Function to fetch listings in batches
+async function fetchListingsInBatches(url: string) {
+  let allListings = [];
+  let skip = 0;
+  let hasMore = true;
+
+  while (hasMore) {
+    const batchUrl = `${url}&skip=${skip}`;
+    const data = await fetchFromApi(batchUrl);
+    allListings = [...allListings, ...data.results];
+    skip += 100;
+    hasMore = data.results.length === 100;
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Delay between batches to avoid rate limiting
+  }
+
+  return allListings;
+}
+
+// Specific function to fetch featured listings
 async function fetchFeaturedListings() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1//listings?tags=web_featured&limit=100&skip=0');
-  return data.results; // Return the listings
+  const url = 'https://open-api.guesty.com/v1/listings?tags=web_featured&limit=100';
+  return await fetchListingsInBatches(url);
 }
 
-async function fetchFeaturedListingsTwo() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1//listings?tags=web_featured&limit=100&skip=100');
-  return data.results; // Return the listings
+// Specific function to fetch all listings
+async function fetchListings() {
+  const url = 'https://open-api.guesty.com/v1/listings?limit=100';
+  return await fetchListingsInBatches(url);
 }
 
-async function fetchFeaturedListingsThree() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1//listings?tags=web_featured&limit=100&skip=200');
-  return data.results; // Return the listings
-}
-
-async function fetchOneHundred() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=100&skip=0');
-  return data.results; // Return the reservations
-}
-
-async function fetchTwoHundred() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=100&skip=100');
-  return data.results; // Return the reservations
-}
-
-async function fetchThreeHundred() {
-  const data = await fetchFromApi('https://open-api.guesty.com/v1/listings?limit=95&skip=201');
-  return data.results; // Return the reservations
-}
-
-export { fetchFeaturedListings, fetchOneHundred, fetchTwoHundred, fetchThreeHundred, fetchFeaturedListingsTwo, fetchFeaturedListingsThree };
+export { fetchFeaturedListings, fetchListings };

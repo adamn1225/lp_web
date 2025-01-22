@@ -213,24 +213,26 @@ function capitalizeFirstLetter(string: string) {
             </div>
             <!-- property details -->
             <div
-              class="flex flex-col md:flex-row flex-nowrap items-start justify-stretch w-full"
+              class="flex flex-col md:flex-row items-start justify-between mb-2"
             >
-              <div class="hidden md:flex justify-stretch items-stretch w-full">
-                <div class="main-image">
+              <div
+                class="hidden md:flex gap-1 justify-normal items-start w-3/4 h-full"
+              >
+                <div class="main-image w-full">
                   <img
-                    class="block object-cover w-full h-full"
+                    class="block object-cover w-fit"
                     src={pictures[0].original}
                     alt="Main image"
                     width={2000}
-                    height={1333}
+                    height={1310}
                     data-zoom
                     loading="lazy"
                   />
                 </div>
                 <div
-                  class="flex flex-col gap-2 w-1/5 overflow-y-auto no-scrollbar"
+                  class="flex flex-col mt-1 w-1/5 overflow-y-auto no-scrollbar"
                 >
-                  <ImageGallery pictures={pictures} client:only />
+                  <ImageGallery pictures={pictures} client:only="react" />
                 </div>
               </div>
 
@@ -436,30 +438,6 @@ function capitalizeFirstLetter(string: string) {
                     </div>
                     <p class="text-sm text-muted-400">Bedrooms</p>
                   </div>
-                </div>
-                <div
-                  class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap"
-                >
-                  <span
-                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                    >Guest toilet</span
-                  >
-                  <span
-                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                    >Open kitchen</span
-                  >
-                  <span
-                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                    >Swimming Pool</span
-                  >
-                  <span
-                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                    >Garden sharing</span
-                  >
-                  <span
-                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                    >Kids playground</span
-                  >
                 </div>
 
                 <div

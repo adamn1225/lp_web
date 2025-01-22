@@ -1,9 +1,5 @@
 ---
-import {
-  fetchFeaturedListings,
-  fetchFeaturedListingsTwo,
-  fetchFeaturedListingsThree,
-} from "../pages/api/fetch";
+import { fetchFeaturedListings } from "../pages/api/fetch";
 
 interface Picture {
   original: string;
@@ -26,13 +22,9 @@ interface Listing {
 }
 
 // Fetch all listings concurrently and combine the results
-const [listingsOne, listingsTwo, listingsThree] = await Promise.all([
-  fetchFeaturedListings(),
-  fetchFeaturedListingsTwo(),
-  fetchFeaturedListingsThree(),
-]);
+const [listingsOne] = await Promise.all([fetchFeaturedListings()]);
 
-const featured: Listing[] = [...listingsOne, ...listingsTwo, ...listingsThree];
+const featured: Listing[] = [...listingsOne];
 ---
 
 <head>

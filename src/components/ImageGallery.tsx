@@ -36,7 +36,7 @@ const ImageGallery = ({ pictures }) => {
 
     return (
         <>
-            <div className="relative flex flex-col gap-2 overflow-y-auto no-scrollbar h-full w-auto" ref={scrollContainerRef}>
+            <div className="relative flex flex-col gap-2 justify-center overflow-y-auto no-scrollbar h-fit w-auto" ref={scrollContainerRef}>
                 {pictures.slice(startIndex + 1, startIndex + 9).map((picture, index) => (
                     <img
                         key={index}

@@ -1,9 +1,9 @@
 ---
 
-import {fetchOneHundred} from '../pages/api/fetch';
+import {fetchListings} from '../pages/api/fetch';
 import { Image } from 'astro:assets';
 
-const listings = await fetchOneHundred();
+const listings = await fetchListings();
 ---
 {
       listings.map(({bedrooms, picture, pictures, title, address, bathrooms, prices, _id, results}) => (

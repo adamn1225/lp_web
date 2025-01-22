@@ -123,7 +123,7 @@ export async function handler(event) {
 
         let reviewsToFetch;
         if (batch === 'initial') {
-            reviewsToFetch = reviews.slice(0, 50);
+            reviewsToFetch = reviews.slice(0, 15);
         } else {
             reviewsToFetch = reviews.slice(10);
         }

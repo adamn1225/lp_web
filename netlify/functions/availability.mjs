@@ -78,15 +78,21 @@ const fetchAllListings = async (url) => {
   return response.json();
 };
 
-const fetchListingsInBatches = async (urls) => {
-  const results = [];
-  for (let i = 0; i < urls.length; i += CONCURRENCY_LIMIT) {
-    const batch = urls.slice(i, i + CONCURRENCY_LIMIT);
-    const batchResults = await Promise.all(batch.map(url => fetchAllListings(url)));
-    results.push(...batchResults.flatMap(result => result.results));
+const fetchListingsInBatches = async () => {
+  let allListings = [];
+  let skip = 0;
+  let hasMore = true;
+
+  while (hasMore) {
+    const url = `https://open-api.guesty.com/v1/listings?limit=100&skip=${skip}`;
+    const data = await fetchAllListings(url);
+    allListings = [...allListings, ...data.results];
+    skip += 100;
+    hasMore = data.results.length === 100;
     await delay(RATE_LIMIT_INTERVAL); // Delay between batches to avoid rate limiting
   }
-  return results;
+
+  return allListings;
 };
 
 export const handler = async (event, context) => {
@@ -96,13 +102,7 @@ export const handler = async (event, context) => {
 
   if (fetchCities) {
     try {
-      const urls = [
-        'https://open-api.guesty.com/v1/listings?limit=100&skip=0',
-        'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
-        'https://open-api.guesty.com/v1/listings?limit=100&skip=200'
-      ];
-
-      const listings = await fetchListingsInBatches(urls);
+      const listings = await fetchListingsInBatches();
       const uniqueCities = Array.from(new Set(listings.map(listing => listing.address.city)));
 
       console.log(`Fetched unique cities: ${JSON.stringify(uniqueCities)}`);
@@ -130,13 +130,7 @@ export const handler = async (event, context) => {
 
   if (fetchBedrooms) {
     try {
-      const urls = [
-        'https://open-api.guesty.com/v1/listings?limit=100&skip=0',
-        'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
-        'https://open-api.guesty.com/v1/listings?limit=100&skip=200'
-      ];
-
-      const listings = await fetchListingsInBatches(urls);
+      const listings = await fetchListingsInBatches();
       const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
 
       console.log(`Fetched unique bedrooms: ${JSON.stringify(uniqueBedrooms)}`);
