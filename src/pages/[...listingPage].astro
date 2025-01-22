@@ -1,58 +1,58 @@
 ---
 export const prerender = true;
 import { amenitiesIcons } from "../lib/amenitiesIcons";
-import { loadIcon } from "../lib/iconLoader"; 
+import { loadIcon } from "../lib/iconLoader";
 import { Icon } from "astro-icon/components";
 import Layout from "@layouts/Default.astro";
 import Section from "@components/Section.astro";
 import InquireForm from "@components/InquireForm";
-import GuestyListings from "@components/GuestyListings.astro";
 import InstantBooking from "@components/InstantBooking.tsx";
 import { fetchAllListings } from "./api/dataFetcher";
-import { fetchReviews } from "./api/listingReviews";
-import BookingFormWrapper from "../components/BookingFormWrapper";
-import SwiperComponent from '@components/SwiperComponent.tsx';
-import { BedDouble } from 'lucide-react'; // Import necessary icons from lucide-react
-import BedTypes from '@components/ui/BedTypes.tsx';
-import ImageGallery from '@components/ImageGallery.tsx';
+import SwiperComponent from "@components/SwiperComponent.tsx";
+import { BedDouble } from "lucide-react";
+import BedTypes from "@components/ui/BedTypes.tsx";
+import ImageGallery from "@components/ImageGallery.tsx";
+import AirReviews from "@components/AirReviews.tsx";
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
-  const reviews = await fetchReviews(listings[0]._id);
-  const paths = listings.map((listing: any) => ({
-    params: {
-      listingPage: listing._id, // Ensure this matches the requested path
-    },
-    props: {
-      street: listing.address.street,
-      apt: listing.address.apt,
-      city: listing.address.city,
-      state: listing.address.state,
-      zip: listing.address.zip,
-      country: listing.address.country,
-      title: listing.title,
-      PropertyType: listing.propertyType,
-      amenities: listing.amenities,
-      otherAmenities: listing.otherAmenities,
-      bathrooms: listing.bathrooms,
-      pictures: listing.pictures,
-      beds: listing.listingRooms,
-      bedsCount: listing.beds,
-      Description: listing.publicDescription,
-      listingId: listing._id,
-      bedrooms: listing.bedrooms,
-      checkIn: listing.defaultCheckInTime,
-      checkOut: listing.defaultCheckOutTime,
-      reviews: reviews 
-    },
-  }));
+  const paths = await Promise.all(
+    listings.map(async (listing: any) => {
+      return {
+        params: {
+          listingPage: listing._id,
+        },
+        props: {
+          _id: listing._id,
+          street: listing.address.street,
+          apt: listing.address.apt,
+          city: listing.address.city,
+          state: listing.address.state,
+          zip: listing.address.zip,
+          country: listing.address.country,
+          title: listing.title,
+          PropertyType: listing.propertyType,
+          amenities: listing.amenities,
+          otherAmenities: listing.otherAmenities,
+          bathrooms: listing.bathrooms,
+          pictures: listing.pictures,
+          beds: listing.listingRooms,
+          bedsCount: listing.beds,
+          Description: listing.publicDescription,
+          listingId: listing._id,
+          bedrooms: listing.bedrooms,
+          checkIn: listing.defaultCheckInTime,
+          checkOut: listing.defaultCheckOutTime,
+        },
+      };
+    }),
+  );
 
-  return paths; // Return the array of paths directly
+  return paths;
 }
 
 function filterAmenities(mergedAmenities: any[], allAmenities: any[]) {
-  // Implement the logic to filter amenities here
-  return mergedAmenities.filter(amenity => allAmenities.includes(amenity));
+  return mergedAmenities.filter((amenity) => allAmenities.includes(amenity));
 }
 
 export async function get({ params }) {
@@ -68,16 +68,10 @@ export async function get({ params }) {
     };
   }
 
-  // Fetch the amenities data
   const allAmenities = listing.amenities;
-
-  // Merge amenities and otherAmenities
   const mergedAmenities = [...listing.amenities, ...listing.otherAmenities];
-
-  // Filter the amenities for the current listing
   const filteredAmenities = filterAmenities(mergedAmenities, allAmenities);
 
-  // Set Cache-Control headers
   Astro.response.headers.set(
     "Cache-Control",
     "public, max-age=3600, s-maxage=3600",
@@ -86,13 +80,6 @@ export async function get({ params }) {
     "Netlify-CDN-Cache-Control",
     "public, durable, s-maxage=3600, stale-while-revalidate=86400",
   );
-
-  let reviews = [];
-  try {
-    reviews = await fetchReviews(listing._id);
-  } catch (error) {
-    console.error('Error fetching reviews:', error);
-  }
 
   return {
     _id: listing._id,
@@ -114,40 +101,11 @@ export async function get({ params }) {
     bedrooms: listing.bedrooms,
     checkIn: listing.defaultCheckInTime,
     checkOut: listing.defaultCheckOutTime,
-    reviews: reviews
   };
 }
 
-function calculateAverageRatings(reviews: any[]) {
-  if (!reviews || reviews.length === 0) {
-    return [];
-  }
-
-  const categoryRatings = {};
-
-  reviews.forEach((review: { rawReview: { starRatings: any[]; }; }) => {
-    if (review.rawReview && Array.isArray(review.rawReview.starRatings)) {
-      review.rawReview.starRatings.forEach((rating: { category: string | number; value: any; }) => {
-        if (!categoryRatings[rating.category]) {
-          categoryRatings[rating.category] = [];
-        }
-        categoryRatings[rating.category].push(parseFloat(rating.value));
-      });
-    }
-  });
-
-  const averageRatings = Object.keys(categoryRatings).map((category) => {
-    const ratings = categoryRatings[category];
-    const averageRating =
-      ratings.reduce((sum: any, rating: any) => sum + rating, 0) / ratings.length;
-    return { category, rating: averageRating };
-  });
-
-  return averageRatings;
-}
-
-
 const {
+  _id,
   title,
   pictures,
   city,
@@ -166,15 +124,11 @@ const {
   checkIn,
   checkOut,
   bedrooms,
-  reviews // Ensure reviews is included here
 } = Astro.props;
-
-const averageRatings = calculateAverageRatings(reviews);
 
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
 ---
 
 <Layout title="Property Details">
@@ -184,8 +138,10 @@ function capitalizeFirstLetter(string: string) {
         <div class="pb-12 mb-12">
           <section class="relative border-b border-muted-200 pb-12">
             <!-- breadcrumb -->
-             <span class="relative mb-0 pb-0 md:hidden"><SwiperComponent pictures={pictures} client:load/></span>
-            <nav class="mb-6 mt-0 md:mt-28 " aria-label="breadcrumbs">
+            <span class="relative mb-0 pb-0 md:hidden"
+              ><SwiperComponent pictures={pictures} client:load /></span
+            >
+            <nav class="mb-6 mt-0 md:mt-28" aria-label="breadcrumbs">
               <ul class="flex items-center xs:justify-center">
                 <li class="flex items-center">
                   <a href="/" class="hover:text-cyan-600 pe-3 text-muted-400">
@@ -242,396 +198,46 @@ function capitalizeFirstLetter(string: string) {
               </div>
               <!-- right -->
               <div
-                class="right flex flex-col justify-center xs:items-center md:items-end xs:w-full"
+                class="flex flex-col justify-center xs:items-center md:items-end xs:w-full"
               >
-<a
-  href="javascript:void(0);"
-  class="gap-1 flex items-start font-medium px-3 py-1 rounded bg-zinc-300"
-  onclick="shareListing()"
->
-  <Icon name="h-4 aspect-square" name="lucide:share-2" />
-  <span class="relative">Share</span>
-</a>
-<div id="fallback-share" class="mt-4"></div>
+                <a
+                  href="javascript:void(0);"
+                  class="gap-1 flex items-start font-medium px-3 py-1 rounded bg-zinc-300"
+                  onclick="shareListing()"
+                >
+                  <Icon name="h-4 aspect-square" name="lucide:share-2" />
+                  <span class="relative">Share</span>
+                </a>
+                <div id="fallback-share" class="mt-4"></div>
               </div>
             </div>
             <!-- property details -->
-            <div class="flex flex-col lg:flex-row items-stretch gap-8">
-              <!-- left -->
-              <div class="flex-grow-[2]">
-                <!-- property images -->
-
-                <!-- Start Carousel -->
-
-                <!-- End Carousel -->
-
-<div class="hidden md:flex gap-2 mb-4 w-full">
-  <div class="main-image">
-    <img
-      class="block object-cover w-full h-full"
-      src={pictures[0].original}
-      alt="Main image"
-      width={2000}
-      height={1333}
-      data-zoom
-      loading="lazy"
-    />
-  </div>
-  <div class="flex flex-col gap-2 w-1/5 overflow-y-auto no-scrollbar">
-    <ImageGallery pictures={pictures} client:only />
-  </div>
-</div>
-                    
-               
-    
-                <!-- mobile -->
-                <div
-                  class="md:hidden flex w-full flex-col justify-start items-center px-7 md:px-2"
-                >
-                  <!-- <ChatBox conversationId={conversationId} client:load={true} /> -->
-                  <!-- <button
-                class="bg-cyan-600 mb-6 font-bold text-sm drop-shadow-lg text-white rounded-full h-11 transition-all duration-300 py-4 px-4 w-full flex items-center place-item-center justify-center cursor-pointer hover:shadow-xl hover:shadow-primary-500/20 transition-all duration-300"
-              >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
-              <span class="pl-2">Send Message</span> 
-              </button> -->
-                  <span class="xs:hidden">
-                    <InquireForm
-                      listingId={listingId}
-                      buttonText="Chat with a property Agent"
-                      client:load
-                    />
-                  </span>
-                  <div
-                    id="main"
-                    class="flex flex-col justify-center items-center md:w-full"
-                  >
-                    <div class="flex gap-2 w-full justify-center items-center">
-                      <p>
-                        <span class="font-bold w-full">Check in: </span>{
-                          checkIn
-                        }
-                      </p>
-                      <p>
-                        <span class="font-bold w-full">Check Out: </span>{
-                          checkOut
-                        }
-                      </p>
-                    </div>
-                    <span
-                      class="text-sm font-light flex justify-center items-center gap-1"
-                    >
-                      <span class="font-bold">Note: </span> Checkin and Checkout
-                      times are in UTC.
-                    </span>
-
-                    <InstantBooking listingId={listingId} client:only="react" />
-                    <!-- <BookingFormWrapper
-                    listingId={listingId}
-                    client:only="react"
-                  /> -->
-                    <h4
-                      class="text-2xl mt-6 font-bold font-sans text-slate-900"
-                    >
-                      Amenities
-                    </h4>
-
-                    <div
-                      class="mb-6 grid grid-cols-3 gap-2 justify-items-center"
-                    >
-
-
-                      <!-- bedroom -->
-                      <div class="flex flex-col">
-                        <BedDouble />
-                        <p class="text-lg font-bold">{bedsCount}</p>
-                        <p class="text-sm text-muted-400">Beds</p>
-                      </div>
-                      <!-- bathroom -->
-                      <div class="flex flex-col">
-                        <div
-                          class="flex items-center gap-2 text-muted-900 dark:text-white"
-                        >
-                          <svg
-                            class="size-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style="--darkreader-inline-stroke: currentColor;"
-                            data-darkreader-inline-stroke=""
-                            ><path
-                              d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
-                            ></path><line x1="10" y1="5" x2="8" y2="7"
-                            ></line><line x1="2" y1="12" x2="22" y2="12"
-                            ></line><line x1="7" y1="19" x2="7" y2="21"
-                            ></line><line x1="17" y1="19" x2="17" y2="21"
-                            ></line>
-                          </svg>
-                          <p class="text-lg font-bold">{bathrooms}</p>
-                        </div>
-                        <p class="text-sm text-muted-400">Bathrooms</p>
-                      </div>
-
-                      <div class="flex flex-col">
-                        <div
-                          class="flex items-center gap-2 text-muted-900 dark:text-white"
-                        >
-                          <svg
-                            class="size-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style="--darkreader-inline-stroke: currentColor;"
-                            data-darkreader-inline-stroke=""
-                            ><path
-                              d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
-                            ></path><line x1="10" y1="5" x2="8" y2="7"
-                            ></line><line x1="2" y1="12" x2="22" y2="12"
-                            ></line><line x1="7" y1="19" x2="7" y2="21"
-                            ></line><line x1="17" y1="19" x2="17" y2="21"
-                            ></line>
-                          </svg>
-                          <p class="text-lg font-bold">{bedrooms}</p>
-                        </div>
-                        <p class="text-sm text-muted-400">Bedrooms</p>
-                      </div>
-                    </div>
-                    <div
-                      class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap"
-                    >
-                      <span
-                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                        >Guest toilet</span
-                      >
-                      <span
-                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                        >Open kitchen</span
-                      >
-                      <span
-                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                        >Swimming Pool</span
-                      >
-                      <span
-                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                        >Garden sharing</span
-                      >
-                      <span
-                        class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
-                        >Kids playground</span
-                      >
-                    </div>
-
-                    <div
-                      class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
-                    >
-                      <!-- <div
-                        class="flex items-center gap-2 justify-between text-sm"
-                      >
-                        <p class="text-muted-400">Type</p>
-                        <p class="text-muted-900">{PropertyType}</p>
-                      </div> -->
-
-                      <span class="sm:hidden mt-12">
-                        <InquireForm
-                          listingId={listingId}
-                          buttonText="Chat with a property Agent"
-                          client:load
-                        />
-                      </span>
-                    </div>
-                  </div>
+            <div
+              class="flex flex-col md:flex-row flex-nowrap items-start justify-normal w-full"
+            >
+              <div class="hidden md:flex justify-start items-stretch w-full">
+                <div class="main-image">
+                  <img
+                    class="block object-cover w-full h-full"
+                    src={pictures[0].original}
+                    alt="Main image"
+                    width={2000}
+                    height={1333}
+                    data-zoom
+                    loading="lazy"
+                  />
                 </div>
-
-                <!-- property content -->
-                <div class="relative" x-data="{ activeTab: 'tab-1' }">
-                  <div
-                    class="tabs mb-6 max-w-fit flex flex-wrap text-base justify-between"
-                  >
-                    <ul
-                      class="flex max-w-fit items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none"
-                    >
-                      <li
-                        :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
-                      >
-                        <a
-                          @click.prevent="activeTab = 'tab-1'"
-                          class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
-                          >Description</a
-                        >
-                      </li>
-                      <li
-                        :class="activeTab === 'tab-2' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
-                      >
-                        <a
-                          @click.prevent="activeTab = 'tab-2'"
-                          class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
-                          >Amenities</a
-                        >
-                      </li>
-                      <li
-                        :class="activeTab === 'tab-3' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
-                      >
-                        <a
-                          @click.prevent="activeTab = 'tab-3'"
-                          class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
-                          >Comments</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                  <div x-cloak x-show="activeTab === 'tab-1'" class="relative">
-                    {
-                      Description?.summary && (
-                        <>
-                            <p class="text-muted-500 text-base xs:text-center">
-                              {Description.summary}
-                            </p>
-                            <br />
-                          </>
-                      )
-                    }
-
-                    {
-                      Description?.space && (
-                        <>
-                            <p class="text-muted-500 text-base xs:text-center">
-                              {Description.space}
-                            </p>
-                            <br />
-                        </>
-                      )
-                    }
-
-                    {
-                      Description?.notes && (
-                        <>
-                            <p class="text-muted-500 text-base xs:text-center">
-                              {Description.notes}
-                            </p>
-                            <br />
-                        </>
-                      )
-                    }
-
-                    {
-                      Description?.access && (
-                        <>
-                          <p class="text-muted-500 text-base xs:text-center">
-                            {Description.access}
-                          </p>
-                        </>
-                      )
-                    }
-                  </div>
-                  <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
-                    <div
-                      class="boxed-amenities flex flex-wrap justify-start gap-3"
-                    >
-                      <!-- Amenity -->
-                      <div
-                        class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
-                      >
-                        <div
-                          class="font-bold gap-2 flex justify-center items-center text-muted-900"
-                        >
-                          
-<div class="flex flex-wrap gap-4">
-  {amenities.map((amenity: string) => {
-    const iconName = amenitiesIcons[amenity];
-    const IconComponent = loadIcon(iconName);
-    console.log(`Loading icon for ${amenity}:`, iconName, IconComponent);
-    return (
-      <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-        <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
-          {IconComponent ? <IconComponent class="text-2xl h-6" /> : null}
-          {amenity}
-        </div>
-      </div>
-    );
-  })}
-</div>
-                        </div>
-                      </div>
-
-              
-                    </div>
-                  </div>
-                  <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
-                    {reviews && reviews.length > 0 ? (
-                      <>
-                        <div class="grid grid-cols-2 gap-6 max-w-xl mb-8">
-                          {averageRatings.map((rating, index) => (
-                            <div class="relative rating-{index}">
-                              <div class="flex items-center justify-between max-w-xl">
-                                <div class="text-base text-muted-700 dark:text-muted-200">
-                                  <span>{capitalizeFirstLetter(rating.category)}</span>
-                                </div>
-                                <div class="flex items-center flex-grow-[2] max-w-[140px]">
-                                  <progress
-                                    class="[&::-webkit-progress-value]:bg-primary-500 [&::-webkit-progress-bar]:bg-muted-300 dark:[&::-webkit-progress-bar]:bg-muted-600 hidden lg:block w-full h-1"
-                                    value={rating.rating}
-                                    max="5"
-                                  >
-                                    {rating.rating}
-                                  </progress>
-                                  <span class="ms-3 font-medium text-base text-muted-900">
-                                    {rating.rating.toFixed(1)}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                  
-                        <!-- Display the review comments in two columns -->
-                        <div class="flex flex-wrap items-start justify-start gap-y-8 gap-x-6">
-                          {reviews
-                            .filter((review: { rawReview: { reservation: { primaryGuest: any; }; body: { value: any; }; }; }) => review.rawReview.reservation?.primaryGuest && review.rawReview.body?.value)
-                            .map((review: { rawReview: { reservation: { primaryGuest: { firstName: unknown; lastName: unknown; }; }; createdDateTime: string | number | Date; body: { value: unknown; }; }; }, index: any) => (
-                              <div class="relative review-{index}">
-                                <div class="gap-4 mb-6 flex items-center">
-                                  <div class="meta">
-                                    <div class="flex gap-4 justify-start items-center flex-wrap w-1/2">
-                                      <h4 class="text-slate-950 text-base font-semibold font-sans">
-                                        {review.rawReview.reservation.primaryGuest.firstName} {review.rawReview.reservation.primaryGuest.lastName}
-                                      </h4>
-                                      <span class="text-muted-700 text-sm">
-                                        {new Date(review.rawReview.createdDateTime).toLocaleDateString()}
-                                      </span>
-                                      <p class="text-slate-950 text-base">
-                                        {review.rawReview.body.value}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      </>
-                    ) : (
-                      <p>No reviews available</p>
-                    )}
-                  </div>
+                <div
+                  class="flex flex-col gap-2 w-1/5 overflow-y-auto no-scrollbar"
+                >
+                  <ImageGallery pictures={pictures} client:only />
                 </div>
               </div>
 
               <!-- right -->
               <div
-                class="xs:hidden sm:hidden md:flex flex w-full max-w-max flex-col md:px-2 md:justify-center lg:justify-start items-center px-7"
+                class="xs:hidden sm:hidden md:flex w-full max-w-max flex-col justify-start items-stretch mr-12"
               >
-
                 <span class="xs:hidden">
                   <InquireForm
                     listingId={listingId}
@@ -641,7 +247,7 @@ function capitalizeFirstLetter(string: string) {
                 </span>
                 <div
                   id="main"
-                  class="flex flex-col justify-center items-center md:w-full"
+                  class="flex flex-col flex-nowrap justify-center items-center w-full"
                 >
                   <div class="flex gap-2 w-full justify-center items-center">
                     <p>
@@ -659,9 +265,7 @@ function capitalizeFirstLetter(string: string) {
                     <span class="font-bold">Note: </span> Checkin and Checkout times
                     are in UTC.
                   </span>
-
                   <InstantBooking listingId={listingId} client:only="react" />
-
                   <h4 class="text-2xl mt-6 font-bold font-sans text-slate-900">
                     Amenities
                   </h4>
@@ -706,7 +310,9 @@ function capitalizeFirstLetter(string: string) {
                       <p class="text-sm text-muted-400">Bathrooms</p>
                     </div>
                   </div>
-                  <div class=""> <BedTypes beds={beds} client:only="react" /></div>
+                  <div class="">
+                    <BedTypes beds={beds} client:only="react" />
+                  </div>
 
                   <div
                     class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
@@ -722,12 +328,300 @@ function capitalizeFirstLetter(string: string) {
                 </div>
               </div>
             </div>
+            <!-- mobile -->
+            <div
+              class="md:hidden flex w-full flex-col justify-start items-center px-7 md:px-2"
+            >
+              <span class="xs:hidden">
+                <InquireForm
+                  listingId={listingId}
+                  buttonText="Chat with a property Agent"
+                  client:load
+                />
+              </span>
+              <div
+                id="main"
+                class="flex flex-col justify-center items-center md:w-full"
+              >
+                <div class="flex gap-2 w-full justify-center items-center">
+                  <p>
+                    <span class="font-bold w-full">Check in: </span>{checkIn}
+                  </p>
+                  <p>
+                    <span class="font-bold w-full">Check Out: </span>{checkOut}
+                  </p>
+                </div>
+                <span
+                  class="text-sm font-light flex justify-center items-center gap-1"
+                >
+                  <span class="font-bold">Note: </span> Checkin and Checkout times
+                  are in UTC.
+                </span>
 
+                <InstantBooking listingId={listingId} client:only="react" />
+                <!-- <BookingFormWrapper
+                    listingId={listingId}
+                    client:only="react"
+                  /> -->
+                <h4 class="text-2xl mt-6 font-bold font-sans text-slate-900">
+                  Amenities
+                </h4>
 
-            <!-- cards -->
-            <div class="mt-12">
-              <div class="flex flex-col">
-                <!-- <h2
+                <div class="mb-6 grid grid-cols-3 gap-2 justify-items-center">
+                  <!-- bedroom -->
+                  <div class="flex flex-col">
+                    <BedDouble />
+                    <p class="text-lg font-bold">{bedsCount}</p>
+                    <p class="text-sm text-muted-400">Beds</p>
+                  </div>
+                  <!-- bathroom -->
+                  <div class="flex flex-col">
+                    <div
+                      class="flex items-center gap-2 text-muted-900 dark:text-white"
+                    >
+                      <svg
+                        class="size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        style="--darkreader-inline-stroke: currentColor;"
+                        data-darkreader-inline-stroke=""
+                        ><path
+                          d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                        ></path><line x1="10" y1="5" x2="8" y2="7"></line><line
+                          x1="2"
+                          y1="12"
+                          x2="22"
+                          y2="12"></line><line x1="7" y1="19" x2="7" y2="21"
+                        ></line><line x1="17" y1="19" x2="17" y2="21"></line>
+                      </svg>
+                      <p class="text-lg font-bold">{bathrooms}</p>
+                    </div>
+                    <p class="text-sm text-muted-400">Bathrooms</p>
+                  </div>
+
+                  <div class="flex flex-col">
+                    <div
+                      class="flex items-center gap-2 text-muted-900 dark:text-white"
+                    >
+                      <svg
+                        class="size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        style="--darkreader-inline-stroke: currentColor;"
+                        data-darkreader-inline-stroke=""
+                        ><path
+                          d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                        ></path><line x1="10" y1="5" x2="8" y2="7"></line><line
+                          x1="2"
+                          y1="12"
+                          x2="22"
+                          y2="12"></line><line x1="7" y1="19" x2="7" y2="21"
+                        ></line><line x1="17" y1="19" x2="17" y2="21"></line>
+                      </svg>
+                      <p class="text-lg font-bold">{bedrooms}</p>
+                    </div>
+                    <p class="text-sm text-muted-400">Bedrooms</p>
+                  </div>
+                </div>
+                <div
+                  class="pb-6 mb-6 border-b border-muted-200 dark:border-muted-800 flex xs:justify-center xs:align-center gap-2 flex-wrap"
+                >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Guest toilet</span
+                  >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Open kitchen</span
+                  >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Swimming Pool</span
+                  >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Garden sharing</span
+                  >
+                  <span
+                    class="dark:bg-muted-950 dark:text-muted-400 inline-block whitespace-nowrap leading-[2.5] px-3 rounded text-xs bg-muted-100 text-muted-900"
+                    >Kids playground</span
+                  >
+                </div>
+
+                <div
+                  class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
+                >
+                  <!-- <div
+                        class="flex items-center gap-2 justify-between text-sm"
+                      >
+                        <p class="text-muted-400">Type</p>
+                        <p class="text-muted-900">{PropertyType}</p>
+                      </div> -->
+
+                  <span class="sm:hidden mt-12">
+                    <InquireForm
+                      listingId={listingId}
+                      buttonText="Chat with a property Agent"
+                      client:load
+                    />
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- property content -->
+            <div class="relative" x-data="{ activeTab: 'tab-1' }">
+              <div
+                class="tabs mb-6 max-w-fit flex flex-wrap text-base justify-between"
+              >
+                <ul
+                  class="flex max-w-fit items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none"
+                >
+                  <li
+                    :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
+                  >
+                    <a
+                      @click.prevent="activeTab = 'tab-1'"
+                      class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                      >Description</a
+                    >
+                  </li>
+                  <li
+                    :class="activeTab === 'tab-2' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
+                  >
+                    <a
+                      @click.prevent="activeTab = 'tab-2'"
+                      class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                      >Amenities</a
+                    >
+                  </li>
+                  <li
+                    :class="activeTab === 'tab-3' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
+                  >
+                    <a
+                      @click.prevent="activeTab = 'tab-3'"
+                      class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                      >Comments</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div
+                x-cloak
+                x-show="activeTab === 'tab-1'"
+                class="relative w-2/3"
+              >
+                {
+                  Description?.summary && (
+                    <>
+                      <p class="text-muted-500 text-base xs:text-center">
+                        {Description.summary}
+                      </p>
+                      <br />
+                    </>
+                  )
+                }
+
+                {
+                  Description?.space && (
+                    <>
+                      <p class="text-muted-500 text-base xs:text-center">
+                        {Description.space}
+                      </p>
+                      <br />
+                    </>
+                  )
+                }
+
+                {
+                  Description?.notes && (
+                    <>
+                      <p class="text-muted-500 text-base xs:text-center">
+                        {Description.notes}
+                      </p>
+                      <br />
+                    </>
+                  )
+                }
+
+                {
+                  Description?.access && (
+                    <>
+                      <p class="text-muted-500 text-base xs:text-center">
+                        {Description.access}
+                      </p>
+                    </>
+                  )
+                }
+              </div>
+              <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
+                <div class="boxed-amenities flex flex-wrap justify-start gap-3">
+                  <!-- Amenity -->
+                  <div
+                    class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
+                  >
+                    <div
+                      class="font-bold gap-2 flex justify-center items-center text-muted-900"
+                    >
+                      <div class="flex flex-wrap gap-4">
+                        {
+                          amenities.map((amenity: string) => {
+                            const iconName = amenitiesIcons[amenity];
+                            const IconComponent = loadIcon(iconName);
+                            console.log(
+                              `Loading icon for ${amenity}:`,
+                              iconName,
+                              IconComponent,
+                            );
+                            return (
+                              <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                                <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
+                                  {IconComponent ? (
+                                    <IconComponent class="text-2xl h-6" />
+                                  ) : null}
+                                  {amenity}
+                                </div>
+                              </div>
+                            );
+                          })
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div x-cloak x-show="activeTab === 'tab-3'" class="relative">
+                <AirReviews listingId={listingId} client:load />
+              </div>
+
+              <!-- Display the review comments in two columns -->
+              <div
+                class="flex flex-wrap items-start justify-start gap-y-8 gap-x-6"
+              >
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- cards -->
+      <div class="mt-12">
+        <div class="flex flex-col">
+          <!-- <h2
                   class="font-sans text-2xl text-muted-900 text-center dark:text-white xs:text-center"
                 >
                   You might also like
@@ -737,46 +631,44 @@ function capitalizeFirstLetter(string: string) {
                 >
                   Based on your previous matches
                 </p> -->
-                <!-- <div
+          <!-- <div
                   class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
                 >
                   <GuestyListings />
                 </div> -->
-              </div>
-              <div
-                class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-              >
-                <!-- {properties.slice(0, 3).map((property) => <PropertyCard {...property} />)} -->
-              </div>
-            </div>
-          </section>
+        </div>
+        <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- {properties.slice(0, 3).map((property) => <PropertyCard {...property} />)} -->
         </div>
       </div>
     </Section>
   </main>
-    <script is:inline>
-    function shareListing() {
-      const shareData = {
-        title: document.title,
-        text: 'Check out this property!',
-        url: window.location.href
-      };
+</Layout>
 
-      if (navigator.share) {
-        navigator.share(shareData)
-          .then(() => console.log('Successful share'))
-          .catch((error) => console.log('Error sharing', error));
-      } else {
-        // Fallback for browsers that do not support navigator.share
-        const shareUrl = encodeURIComponent(window.location.href);
-        const shareText = encodeURIComponent('Check out this property!');
-        const emailLink = `mailto:?subject=${shareData.title}&body=${shareText}%20${shareUrl}`;
-        const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
-        const twitterLink = `https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`;
-        const smsLink = `sms:?body=${shareText}%20${shareUrl}`;
+<script is:inline>
+  function shareListing() {
+    const shareData = {
+      title: document.title,
+      text: "Check out this property!",
+      url: window.location.href,
+    };
 
-        // Display fallback share options
-        const fallbackShareOptions = `
+    if (navigator.share) {
+      navigator
+        .share(shareData)
+        .then(() => console.log("Successful share"))
+        .catch((error) => console.log("Error sharing", error));
+    } else {
+      // Fallback for browsers that do not support navigator.share
+      const shareUrl = encodeURIComponent(window.location.href);
+      const shareText = encodeURIComponent("Check out this property!");
+      const emailLink = `mailto:?subject=${shareData.title}&body=${shareText}%20${shareUrl}`;
+      const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+      const twitterLink = `https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`;
+      const smsLink = `sms:?body=${shareText}%20${shareUrl}`;
+
+      // Display fallback share options
+      const fallbackShareOptions = `
           <div class="share-options">
             <a href="${emailLink}" target="_blank">Email</a>
             <a href="${facebookLink}" target="_blank">Facebook</a>
@@ -785,16 +677,19 @@ function capitalizeFirstLetter(string: string) {
             <button onclick="copyToClipboard('${shareUrl}')">Copy Link</button>
           </div>
         `;
-        document.getElementById('fallback-share').innerHTML = fallbackShareOptions;
-      }
+      document.getElementById("fallback-share").innerHTML =
+        fallbackShareOptions;
     }
+  }
 
-    function copyToClipboard(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        alert('Link copied to clipboard');
-      }).catch((error) => {
-        console.error('Error copying text: ', error);
+  function copyToClipboard(text) {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert("Link copied to clipboard");
+      })
+      .catch((error) => {
+        console.error("Error copying text: ", error);
       });
-    }
-  </script>
-</Layout>
+  }
+</script>
