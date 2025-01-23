@@ -78,18 +78,18 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
     }
 
     return (
-        <div className='w-2/3'>
+        <div className='w-full flex flex-col items-center justify-center md:w-2/3'>
             {/* <div className='flex gap-1 items-center mb-4'>
                 <button className='text-secondary flex items-center gap-1 border border-secondary bg-accent rounded-md px-2 shadow-sm' onClick={toggleSortOrder}>
                     {sortOrder === 'desc' ? 'Highest to Lowest' : 'Lowest to Highest'} {sortOrder === 'desc' ? <ArrowDownWideNarrow size={16} /> : <ArrowUpWideNarrow size={16} />}
                 </button>
             </div> */}
-            <div className="flex flex-col items-start gap-y-2 gap-x-6">
+            <div className="flex flex-col justify-center w-full items-center md:items-start gap-y-2 md:gap-x-6">
                 {displayedReviews.map((review) => (
                     <div className="relative" key={review._id}>
                         <div className="gap-1 mb-6 flex items-center">
                             <div className="meta">
-                                <div className="flex gap-2 justify-start items-center flex-wrap w-3/4">
+                                <div className="flex gap-2 md:justify-start items-center flex-wrap mx-4 md:w-3/4">
                                     <h4 className="text-slate-950 text-base font-semibold font-sans">
                                         Guest: {review.guestFullName}
                                     </h4>

@@ -51,21 +51,20 @@ const getBedIcon = (type: string) => {
 };
 
 const BedTypes: React.FC<BedTypesProps> = ({ beds }) => {
-    const hasBeds = beds.some(room => room.beds.length > 0);
+    const filteredBeds = beds.filter((room) => room.beds.length > 0).flatMap((room) => room.beds);
+    const hasBeds = filteredBeds.length > 0;
 
     return (
         <div className="my-4">
             {hasBeds && <h3 className="text-xl font-bold mb-2 text-center">Bed Types</h3>}
-            <div className="grid grid-cols-3 gap-x-2 gap-y-3">
-                {beds.filter((room) => room.beds.length > 0).flatMap((room) => (
-                    room.beds.map((bed, bedIndex) => (
-                        <div key={bedIndex} className="flex items-center gap-2">
-                            {getBedIcon(bed.type)}
-                            <p className="text-md">
-                                {bed.type.replace('_', ' ').toLowerCase()}
-                            </p>
-                        </div>
-                    ))
+            <div className={`flex ${filteredBeds.length > 2 ? 'md:grid grid-cols-3' : 'flex'} justify-items-center place-items-center gap-x-2 gap-y-3`}>
+                {filteredBeds.map((bed, bedIndex) => (
+                    <div key={bedIndex} className="flex justify-center items-center gap-2">
+                        {getBedIcon(bed.type)}
+                        <p className="text-md">
+                            {bed.type.replace('_', ' ').toLowerCase()}
+                        </p>
+                    </div>
                 ))}
             </div>
         </div>

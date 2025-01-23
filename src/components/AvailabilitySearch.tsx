@@ -566,7 +566,7 @@ const AvailabilitySearch: React.FC = () => {
               <div className="w-full md:h-full md:pb-20 xl:pr-4">
                 <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "Myrtle Beach"} />
               </div>
-              <div className="hidden flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
+              <div className="hidden md:flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
                 <button
                   onClick={() => setIsFilterModalOpen(true)}
                   className="w-2/3 flex gap-1 text-lg justify-center font-semibold bg-secondary text-white py-1.5 rounded-md"
