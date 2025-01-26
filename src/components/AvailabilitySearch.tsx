@@ -453,7 +453,7 @@ const AvailabilitySearch: React.FC = () => {
       </Modal>
       <div className="w-full my-3"></div>
       <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
-        <div className={`bg-white overflow-hidden m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
+        <div className={`bg-white overflow-auto m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
           {error && <p>Error: {error}</p>}
           <div className="w-full">
             <FilterComponent
@@ -475,10 +475,9 @@ const AvailabilitySearch: React.FC = () => {
           {available.length > 0 ? (
             <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-screen h-screen">
               <div className="md:hidden h-80 flex flex-col w-full max-h-[100vh] mt-1">
-                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "Myrtle Beach"} />
+                <GoogleMap listings={filteredListings} onMarkerClick={null} selectedCity={selectedLocation || "Myrtle Beach"} />
               </div>
               <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
-
                 <div className="text-center py-1 md:py-4">
                   <h2 className="text-xl font-semibold">Available Listings</h2>
                   <p className="text-sm text-muted-400">
@@ -560,20 +559,18 @@ const AvailabilitySearch: React.FC = () => {
                     )}
                   </div>
                 </div>
-
-
               </div>
               <div className="w-full md:h-full md:pb-20 xl:pr-4">
                 <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "Myrtle Beach"} />
               </div>
-              <div className="hidden md:flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
+              <div className="md:hidden  flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
                 <button
                   onClick={() => setIsFilterModalOpen(true)}
                   className="w-2/3 flex gap-1 text-lg justify-center font-semibold bg-secondary text-white py-1.5 rounded-md"
                 >
                   <SlidersHorizontal />  Filter
                 </button>
-                <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)} className="z-40 h-3/4">
+                <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)} className=" z-40 h-3/4">
                   <FilterComponent
                     onFilterChange={handleFilterChange}
                     onResetFilters={resetFilters}
