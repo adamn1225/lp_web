@@ -27,7 +27,7 @@ interface SearchFiltersProps {
   resetFilters: () => void;
   filters: any;
   amenities: string[];
-}
+}//push
 
 const SearchFilters: React.FC<SearchFiltersProps> = ({
   dateRange,
@@ -83,7 +83,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="border border-slate-400 rounded-xl p-2 w-full"
                 >
-                  <option value="any">Any City</option> 
+                  <option value="any">Any City</option>
                   {cities.map((city) => (
                     <option key={city} value={city}>{city}</option>
                   ))}

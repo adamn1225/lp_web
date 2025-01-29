@@ -8,7 +8,7 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
 const NETLIFY_SITE_ID = process.env.NETLIFY_SITE_ID; // Replace with your actual site ID
-const ACCOUNT_SLUG = 'line-properties'; // Hard-coded account slug
+const ACCOUNT_SLUG = 'line-properties';
 
 async function triggerRedeploy() {
   const redeployUrl = `https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/builds`;
