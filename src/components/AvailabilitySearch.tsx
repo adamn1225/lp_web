@@ -366,12 +366,12 @@ const AvailabilitySearch: React.FC = () => {
       <div className="flex flex-col md:flex-row justify-center align-middle w-full">
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-4/5 md:w-1/4 mx-auto h-fit z-50 flex flex-col items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
+          className="w-4/5 md:w-1/4 mx-auto h-fit z-30 flex flex-col items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
         >
           <span className="flex w-fit items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
         </button>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="z-50">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="z-30">
         <form onSubmit={handleSubmit} className="flex flex-col justify-center bg-zinc-100 items-center h-full md:h-1/2 rounded-md p-7">
           <div className="flex flex-col items-center justify-center w-full px-6">
             <div className="flex flex-col justify-center items-center gap-1 w-full">

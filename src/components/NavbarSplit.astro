@@ -1,24 +1,10 @@
 ---
-import { Icon } from "astro-icon/components";
-import Logo from "./ui/Logo.astro";
-import MegaMenu from "./ui/MegaMenu.astro";
-import AccountMenu from "./ui/AccountMenu.astro";
-import "../styles/global.scss";
+// filepath: /home/adam-noah/Desktop/lp_web/src/components/NavbarSplit.astro
+import { LayoutGrid, X } from "lucide-react";
 ---
 
-<div
-  id="HeaderWrapper"
-  x-data="navbar"
-  x-on:scroll.window="scroll()"
-  x-on:mouseleave="megamenuOpened = false"
-  role="navigation"
-  aria-label="main navigation"
-  class="absolute top-0 start-0 w-full z-50 bg-white border-slate-100"
->
-  <div
-    id="header"
-    :class="flex flex-row justify-between scrolled || megamenuOpened || mobileOpen  ? 'bg-white border-b w-full z-50 border-muted-200 shadow-muted-300/30' : 'lg:bg-transparent'"
-  >
+<div class="absolute top-0 start-0 w-full z-40 bg-white border-slate-100">
+  <div id="header">
     <header
       id="MainHeader"
       class="min-h-[70px] w-full max-w-full px-3 flex justify-between items-center shadow lg:shadow-md lg:px-8"
@@ -33,107 +19,100 @@ import "../styles/global.scss";
         </a>
       </div>
 
-      <div class="flex items-center gap-3">
-        <button id="MenuToggle" @click="mobileOpen = !mobileOpen">
-          <Icon
-            id="OpenIcon"
-            x-show="!mobileOpen"
-            name="lucide:menu"
-            class="pointer-events-none text-muted-500 dark:text-white size-8 aspect-auto"
-          />
-          <Icon
-            id="CloseIcon"
-            x-show="mobileOpen"
-            name="lucide:x"
-            class="pointer-events-none text-muted-500 dark:text-white size-8 aspect-auto"
-          />
-        </button>
-        <template x-if="$store.app.isLoggedIn">
-          <div class="flex justify-center">
-            <AccountMenu />
-          </div>
-        </template>
-      </div>
-    </header>
-    <nav
-      aria-label="Main Navigation"
-      x-cloak
-      class="absolute top-full right-0 bg-white lg:bg-transparent lg:static px-3 lg:px-0"
-      :class="mobileOpen ? 'block pt-5 pb-8 lg:p-0 right-0 -translate-y-px border-b border-muted-200 dark:border-muted-800 dark:bg-muted-950 shadow-lg shadow-muted-300/30 dark:shadow-muted-800/20' : 'hidden'"
-    >
-      <ul
-        id="LeftLinks"
-        class="flex flex-col lg:flex-col justify-center items-center [&>li>a]:h-full"
-      >
-        <!-- Add your navigation links here -->
-      </ul>
+      <!-- Mobile Menu Button -->
+      <button class="p-2 z-50 lg:hidden" id="menuButton">
+        <LayoutGrid id="menuIcon" />
+        <X id="closeIcon" className="hidden" />
+      </button>
 
-      <ul
-        id="RightLinks"
-        class="flex flex-col lg:flex-col justify-center items-stretch gap-3 [&>li>a]:h-full [&>li>a]:grid [&>li>a]:place-items-center"
+      <!-- Desktop Menu -->
+      <nav
+        id="desktopNav"
+        aria-label="Main Navigation"
+        class="hidden lg:flex items-center gap-4"
       >
+        <a
+          href="/about"
+          class="hover:text-secondary hover:underline underline-offset-4 text-base py-2 px-3"
+          >About</a
+        >
+        <a
+          href="/linelanding"
+          class="hover:text-secondary hover:underline underline-offset-4 text-base py-2 px-3"
+          >Our Services</a
+        >
+        <a
+          href="/property-management"
+          class="hover:text-secondary hover:underline underline-offset-4 text-base py-2 px-3"
+          >Property Management</a
+        >
+        <a
+          href="/properties"
+          class="hover:text-secondary hover:underline underline-offset-4 text-base py-2 px-3"
+          >All Properties</a
+        >
+        <a
+          href="/contact"
+          class="hover:text-secondary hover:underline underline-offset-4 text-base py-2 px-3"
+          >Contact Us</a
+        >
+        <a
+          href="tel:1-800-888-8888"
+          class="hover:text-secondary hover:underline underline-offset-4 text-base py-2 px-3"
+        >
+          <button
+            class="bg-secondary w-full min-w-[120px] font-medium text-lg px-3.5 py-1.5 rounded-3xl text-white"
+          >
+            1-800-888-8888
+          </button>
+        </a>
+      </nav>
+    </header>
+
+    <!-- Mobile Navigation Menu -->
+    <nav
+      id="mobileNav"
+      aria-label="Main Navigation"
+      class="absolute top-full z-50 mt-3 right-0 bg-white lg:hidden px-3 shadow-md hidden"
+    >
+      <ul class="flex flex-col justify-center items-center gap-3">
         <li>
           <a
             href="/about"
-            class="hover:text-slate-900 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+            class="hover:text-secondary hover:underline underline-offset-4 text-base py-2 px-3"
+            >About</a
           >
-            <span class="text-lg text-slate-900 hover:text-secondary"
-              >About</span
-            >
-          </a>
         </li>
-
         <li>
           <a
             href="/linelanding"
-            class="py-2 px-3 group text-base transition-all duration-300 flex items-center justify-center gap-1"
+            class="py-2 px-3 text-base hover:text-secondary">Our Services</a
           >
-            <span class="text-lg text-text-slate-900 hover:text-secondary"
-              >Our Services</span
-            >
-          </a>
         </li>
-
         <li>
           <a
             href="/property-management"
-            class="hover:text-secondary py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+            class="hover:text-secondary text-base py-2 px-3"
+            >Property Management</a
           >
-            <span class="text-lg text-text-slate-900 hover:text-secondary"
-              >Property Management</span
-            >
-          </a>
         </li>
-
         <li>
-          <a
-            href="/properties"
-            class="py-2 px-3 group text-base text-muted-500 transition-all duration-300 flex items-center justify-center gap-1"
+          <a href="/properties" class="py-2 px-3 text-base hover:text-secondary"
+            >All Properties</a
           >
-            <span class="text-lg text-slate-900 hover:text-secondary"
-              >All Properties</span
-            >
-          </a>
         </li>
-
         <li>
-          <a
-            href="/contact"
-            class="hover:text-secondary py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+          <a href="/contact" class="py-2 px-3 text-base hover:text-secondary"
+            >Contact Us</a
           >
-            <span class="text-lg text-text-slate-900 hover:text-secondary"
-              >Contact Us</span
-            >
-          </a>
         </li>
-
         <li>
           <a
             href="tel:1-800-888-8888"
-            class="hover:text-slate-900 py-2 px-3 leading-6 group text-base text-muted-500 dark:text-muted-400 dark:hover:text-white transition-all duration-300 flex items-center justify-center gap-1"
+            class="hover:text-slate-900 text-base py-2 px-3"
           >
             <button
-              class="bg-secondary w-full min-w-[120px] font-medium text-lg leading-6 px-3.5 py-1.5 flex justify-center items-center transition-all duration-300 shadow-md shadow-slate-500/30 rounded-3xl text-white"
+              class="bg-secondary w-full min-w-[120px] font-medium text-lg px-3.5 py-1.5 rounded-3xl text-white"
             >
               1-800-888-8888
             </button>
@@ -142,54 +121,20 @@ import "../styles/global.scss";
       </ul>
     </nav>
   </div>
-  <MegaMenu />
 </div>
 
+<!-- ✅ Working Pure JavaScript Menu Toggle -->
 <script>
-  document.addEventListener("alpine:init", () => {
-    //@ts-ignore
-    Alpine.data("navbar", () => ({
-      scrolled: false,
-      height: 60,
-      mobileOpen: false,
-      megamenuOpened: false,
-      openedMegamenu: "megamenu-1",
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuButton = document.getElementById("menuButton");
+    const menu = document.getElementById("mobileNav");
+    const menuIcon = document.getElementById("menuIcon");
+    const closeIcon = document.getElementById("closeIcon");
 
-      scroll() {
-        let scrollValue = window.scrollY;
-        if (scrollValue >= this.height) {
-          this.scrolled = true;
-        } else {
-          this.scrolled = false;
-        }
-        //@ts-ignore
-        this.searchExpanded = false;
-      },
-      openMobileMenu() {
-        this.mobileOpen = !this.mobileOpen;
-      },
-      init() {
-        document
-          .querySelectorAll('.scroll-link[href^="#"]')
-          .forEach((trigger) => {
-            //@ts-ignore
-            trigger.onclick = function (e: any) {
-              e.preventDefault();
-              let hash = this.getAttribute("href");
-              //@ts-ignore
-              let target = document.querySelector(hash);
-              let headerOffset = 100;
-              //@ts-ignore
-              let elementPosition = target.offsetTop;
-              let offsetPosition = elementPosition - headerOffset;
-
-              window.scrollTo({
-                top: offsetPosition,
-                behavior: "smooth",
-              });
-            };
-          });
-      },
-    }));
+    menuButton.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+      menuIcon.classList.toggle("hidden");
+      closeIcon.classList.toggle("hidden");
+    });
   });
 </script>
