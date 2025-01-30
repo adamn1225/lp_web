@@ -11,6 +11,7 @@ interface ImportMetaEnv {
   readonly CONTENTFUL_ACCESS_TOKEN: string;
   readonly VITE_API_TOKEN: string;
   readonly GOOGLE_MAPS_API_KEY: string;
+  readonly NOETICS_CMS_API_URL: string;
 }
 
 interface ImportMeta {
