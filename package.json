@@ -24,6 +24,7 @@
     "@astrojs/node": "^8.3.3",
     "@astrojs/react": "^3.6.2",
     "@astrojs/rss": "^4.0.7",
+    "@astrojs/sitemap": "^3.2.1",
     "@astrojs/tailwind": "^5.1.0",
     "@contentful/rich-text-html-renderer": "^16.6.8",
     "@guestyorg/tokenization-js": "^1.0.4",

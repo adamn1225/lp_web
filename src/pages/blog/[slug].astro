@@ -15,7 +15,10 @@ try {
         },
     });
 
-    if (!res.ok) throw new Error(`Failed to fetch post: ${res.statusText}`);
+    if (!res.ok) {
+        console.error(`Failed to fetch post: ${res.statusText}`);
+        throw new Error(`Failed to fetch post: ${res.statusText}`);
+    }
     post = await res.json();
 
     if (post?.template) {
