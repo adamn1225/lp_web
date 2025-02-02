@@ -29,7 +29,7 @@ interface Listing {
 const TagNavigation: React.FC = () => {
     const [listings, setListings] = useState<Listing[]>([]);
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
-    const [tags, setTags] = useState<string[]>(["Ocean_front", "Ocean_view", "web_featured", "Public_pool", "Pets"]);
+    const [tags, setTags] = useState<string[]>(["Ocean_front", "Ocean_view", "Public_pool", "Pets"]);
     const [tagsLoading, setTagsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -39,7 +39,6 @@ const TagNavigation: React.FC = () => {
     const tagDisplayNames: { [key: string]: string } = {
         "Ocean_front": "Ocean Front",
         "Ocean_view": "Ocean View",
-        "web_featured": "Featured",
         "Public_pool": "Pool",
         "Pets": "Pet Friendly"
     };
@@ -54,8 +53,6 @@ const TagNavigation: React.FC = () => {
                 return <FiSun className="text-foreground size-7" />;
             case "Ocean_view":
                 return <FiEye className="text-foreground size-7" />;
-            case "web_featured":
-                return <FiStar className="text-foreground size-7" />;
             case "Public_pool":
                 return <FiDroplet className="text-foreground size-7" />;
             case "Pets":

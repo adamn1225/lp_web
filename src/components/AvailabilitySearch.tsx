@@ -45,8 +45,7 @@ interface Listing {
   amenities: string[];
   tags: string[];
 }
-
-const allowedTags = ["Pets"];
+const allowedTags = [];
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
@@ -205,11 +204,22 @@ const AvailabilitySearch: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
-      setError('An error occurred. Please try again later.');
+      setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
   }, 300);
+
+  const handleCityClick = async (city: string): Promise<void> => {
+    console.log(`City selected: ${city}`);
+    setSelectedLocation(city);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        debouncedHandleSubmit(null);
+        resolve();
+      }, 0);
+    });
+  };
 
   const fetchRemainingResults = async (startDate: string, endDate: string, minOccupancy: number, selectedLocation: string, selectedBedroomAmount: string, tagsQuery: string, cacheKey: string, skip: number | null) => {
     let hasMoreResults = true;
@@ -350,14 +360,6 @@ const AvailabilitySearch: React.FC = () => {
     };
   }, [loadMoreListings]);
 
-  const handleCityClick = (city: string) => {
-    setSelectedLocation(city);
-    setTimeout(() => {
-      debouncedHandleSubmit(null);
-    }, 0);
-  };
-
-
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
       {loading && available.length < 6 && (
@@ -422,7 +424,7 @@ const AvailabilitySearch: React.FC = () => {
                     <option>Loading...</option>
                   ) : (
                     <>
-                      <option value="">Select a city</option>
+                      <option value=''>Select a City</option>
                       {cities.map((city) => (
                         <option key={city} value={city}>{city}</option>
                       ))}
@@ -465,9 +467,10 @@ const AvailabilitySearch: React.FC = () => {
         </form>
       </Modal>
       <div className="w-full my-3"></div>
+
       <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
         <div className={`bg-white overflow-auto m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
-          {error && <p className="text-center text-red-500">An error occurred. Please try again later.</p>}
+          {error && <p>Error: {error}</p>}
           <div className="w-full">
             <FilterComponent
               onFilterChange={handleFilterChange}
@@ -483,100 +486,98 @@ const AvailabilitySearch: React.FC = () => {
               showBedroomFilter={selectedBedroomAmount === ''}
               bedroomOptions={bedroomOptions}
             />
-            <CityNavigation cities={cities} onCityClick={handleCityClick} />
           </div>
+          <CityNavigation cities={cities} onCityClick={handleCityClick} />
 
           <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-screen h-screen">
             <div className="md:hidden h-80 flex flex-col w-full max-h-[100vh] mt-1">
-              <GoogleMap listings={filteredListings} onMarkerClick={null} selectedCity={selectedLocation || "North Myrtle Beach"} />
+              <GoogleMap listings={filteredListings} onMarkerClick={null} selectedCity={selectedLocation} />
             </div>
             <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
-              {available.length > 0 ? (
-                <>
-                  <div className="text-center py-1 md:py-4">
-                    <h2 className="text-xl font-semibold">Available Listings</h2>
-                    <p className="text-sm text-muted-400">
-                      {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div
-                    className={`md:search-results h-full w-full overflow-y-auto flex flex-col items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
-                  md:gap-x-6 md:gap-y-1 md:place-items-start md:justify-items-start px-2 pb-16 mb-16`}>
-                    {currentListings.map((property, index) => {
-                      const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
-                      if (index === currentListings.length - 1) {
-                        return (
-                          <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
-                            <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-82 h-82 mb-4 rounded-xl relative">
-                              <div className="relative w-full h-72">
-                                <img
-                                  className="absolute inset-0 w-full h-full object-cover"
-                                  src={property.pictures[0].original}
-                                  alt={property.picture.caption}
-                                />
-                                <div className="absolute inset-0 bg-neutral-950/50" />
+              <div className="text-center py-1 md:py-4">
+                <h2 className="text-xl font-semibold">Available Listings</h2>
+                <p className="text-sm text-muted-400">
+                  {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
+                </p>
+              </div>
+              <div
+                className={`md:search-results h-full w-full overflow-y-auto flex flex-col items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
+              md:gap-x-6 md:gap-y-1 md:place-items-start md:justify-items-start px-2 pb-16 mb-16`}>
+                {currentListings.length > 0 ? (
+                  currentListings.map((property, index) => {
+                    const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
+                    if (index === currentListings.length - 1) {
+                      return (
+                        <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
+                          <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-82 h-82 mb-4 rounded-xl relative">
+                            <div className="relative w-full h-72">
+                              <img
+                                className="absolute inset-0 w-full h-full object-cover"
+                                src={property.pictures[0].original}
+                                alt={property.picture.caption}
+                              />
+                              <div className="absolute inset-0 bg-neutral-950/50" />
+                            </div>
+                            <div className="p-2 w-full bg-white flex flex-col justify-start ">
+                              <h4 className="font-sans text-wrap font-medium text-xl text-slate-900">
+                                {property.title}
+                              </h4>
+                              <p className="text-sm text-muted-400">
+                                {property.address.city}, {property.address.state}
+                              </p>
+                              <span className="hidden">{property.bedrooms}</span>
+                              <hr className="border border-muted-200 dark:border-muted-800 my-2" />
+                              <div className="flex items-end h-full">
+                                <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
                               </div>
-                              <div className="p-2 w-full bg-white flex flex-col justify-start ">
-                                <h4 className="font-sans text-wrap font-medium text-xl text-slate-900">
-                                  {property.title}
-                                </h4>
-                                <p className="text-sm text-muted-400">
-                                  {property.address.city}, {property.address.state}
-                                </p>
-                                <span className="hidden">{property.bedrooms}</span>
-                                <hr className="border border-muted-200 dark:border-muted-800 my-2" />
-                                <div className="flex items-end h-full">
-                                  <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
-                                </div>
+                            </div>
+                          </article>
+                        </a>
+                      );
+                    } else {
+                      return (
+                        <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
+                          <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30  w-82 h-82 mb-4 rounded-xl relative">
+                            <div className="relative w-full h-72">
+                              <img
+                                className="absolute inset-0 w-full h-full object-cover"
+                                src={property.pictures[0].original}
+                                alt={property.picture.caption}
+                              />
+                              <div className="absolute inset-0 bg-neutral-950/50" />
+                            </div>
+                            <div className="p-4 w-full bg-white flex flex-col justify-start">
+                              <h4 className="font-sans text-wrap font-medium text-normal lg:text-xl text-slate-900">
+                                {property.title}
+                              </h4>
+                              <p className="text-sm text-muted-400">
+                                {property.address.city}, {property.address.state}
+                              </p>
+                              <span className="hidden">{property.bedrooms}</span>
+                              <hr className="border border-muted-200 dark:border-muted-800 my-2" />
+                              <div className="flex items-end h-full">
+                                <p className="font-semibold text-sm lg:text-base text-nowrap">Starting at ${price} Per Night</p>
                               </div>
-                            </article>
-                          </a>
-                        );
-                      } else {
-                        return (
-                          <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
-                            <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30  w-82 h-82 mb-4 rounded-xl relative">
-                              <div className="relative w-full h-72">
-                                <img
-                                  className="absolute inset-0 w-full h-full object-cover"
-                                  src={property.pictures[0].original}
-                                  alt={property.picture.caption}
-                                />
-                                <div className="absolute inset-0 bg-neutral-950/50" />
-                              </div>
-                              <div className="p-4 w-full bg-white flex flex-col justify-start">
-                                <h4 className="font-sans text-wrap font-medium text-normal lg:text-xl text-slate-900">
-                                  {property.title}
-                                </h4>
-                                <p className="text-sm text-muted-400">
-                                  {property.address.city}, {property.address.state}
-                                </p>
-                                <span className="hidden">{property.bedrooms}</span>
-                                <hr className="border border-muted-200 dark:border-muted-800 my-2" />
-                                <div className="flex items-end h-full">
-                                  <p className="font-semibold text-sm lg:text-base text-nowrap">Starting at ${price} Per Night</p>
-                                </div>
-                              </div>
-                            </article>
-                          </a>
-                        );
-                      }
-                    })}
-                    <div className="flex justify-center items-center w-full ml-70 mt-12">
-                      {loading && available.length >= 6 && (
-                        <div className="h-40 w-full pl-96">
-                          <ClipLoader size={70} color={"#123abc"} loading={true} />
-                        </div>
-                      )}
+                            </div>
+                          </article>
+                        </a>
+                      );
+                    }
+                  })
+                ) : (
+                  <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
+                )}
+                <div className="flex justify-center items-center w-full ml-70 mt-12">
+                  {loading && available.length >= 6 && (
+                    <div className="h-40 w-full pl-96">
+                      <ClipLoader size={70} color={"#123abc"} loading={true} />
                     </div>
-                  </div>
-                </>
-              ) : (
-                <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
-              )}
+                  )}
+                </div>
+              </div>
             </div>
             <div className="w-full md:h-full md:pb-20 xl:pr-4">
-              <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "North Myrtle Beach"} />
+              <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation} />
             </div>
             <div className="md:hidden  flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
               <button

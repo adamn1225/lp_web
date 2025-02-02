@@ -50,7 +50,7 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ listings, onMarkerClick, selected
     useEffect(() => {
         window.initMap = () => {
             if (mapRef.current) {
-                const cityCoords = cityCoordinates[selectedCity] || { lat: 33.6891, lng: -78.8867 }; // Default to Myrtle Beach
+                const cityCoords = cityCoordinates[selectedCity] || { lat: 33.8160, lng: -78.6800 }; // Default to Myrtle Beach
                 mapInstance.current = new window.google.maps.Map(mapRef.current, {
                     center: cityCoords,
                     zoom: 12,

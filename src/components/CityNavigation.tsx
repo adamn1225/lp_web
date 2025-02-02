@@ -3,22 +3,23 @@ import { motion } from 'framer-motion';
 
 interface CityNavigationProps {
     cities: string[];
-    onCityClick: (city: string) => void;
+    onCityClick: (city: string) => Promise<void>;
 }
 
 const CityNavigation: React.FC<CityNavigationProps> = ({ cities, onCityClick }) => {
     const [activeCity, setActiveCity] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const handleCityClick = async (city: string) => {
+    const handleCityClick = (city: string) => {
         setActiveCity(city);
         setLoading(true);
-        await onCityClick(city);
-        setLoading(false);
+        onCityClick(city).finally(() => {
+            setLoading(false);
+        });
     };
 
     return (
-        <div className="city-navigation flex justify-center gap-6 py-2 bg-gray-100 relative">
+        <div className={`city-navigation flex justify-center gap-4 py-2 bg-gray-100 relative ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
             {cities.map((city) => (
                 <button
                     key={city}
