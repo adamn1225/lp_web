@@ -54,6 +54,7 @@ const AvailabilitySearch: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [available, setListings] = useState<any[]>([]);
   const [filteredListings, setFilteredListings] = useState<any[]>([]);
+  const [mapListings, setMapListings] = useState<any[]>([]);
   const [dateRange, setDateRange] = useState([{ startDate: addDays(new Date(), 1), endDate: addDays(new Date(), 3), key: 'selection' }]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
@@ -69,15 +70,11 @@ const AvailabilitySearch: React.FC = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
-  const [displayedItems, setDisplayedItems] = useState<number>(1); // Initialize with 1 item
-  const [nextSkip, setNextSkip] = useState<number | null>(0); // Initialize nextSkip
 
   const apiUrl = '/.netlify/functions/availability';
 
   const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
   const resultsContainerRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const lastListingElementRef = useRef<HTMLAnchorElement | null>(null);
 
   const cache = useRef<{ [key: string]: any[] }>({});
 
@@ -146,7 +143,7 @@ const AvailabilitySearch: React.FC = () => {
         console.log('Returning cached results');
         setListings(cache.current[cacheKey]);
         setFilteredListings(cache.current[cacheKey]);
-        setDisplayedItems(1); // Initialize with 1 item
+        setMapListings(cache.current[cacheKey]);
         setLoading(false);
         setIsResultsModalOpen(true);
         setIsSearchComplete(true);
@@ -177,6 +174,7 @@ const AvailabilitySearch: React.FC = () => {
         setError('No results found');
         setListings([]);
         setFilteredListings([]);
+        setMapListings([]);
         setIsResultsModalOpen(true);
         setIsSearchComplete(true);
         return;
@@ -186,7 +184,7 @@ const AvailabilitySearch: React.FC = () => {
 
       setListings(filteredListings);
       setFilteredListings(filteredListings);
-      setDisplayedItems(1); // Initialize with 1 item
+      setMapListings(filteredListings);
       cache.current[cacheKey] = filteredListings;
 
       console.log('Filtered Listings:', filteredListings);
@@ -197,11 +195,6 @@ const AvailabilitySearch: React.FC = () => {
 
       setIsResultsModalOpen(true);
       setIsSearchComplete(true);
-      setNextSkip(data.nextSkip || null); // Set nextSkip value
-
-      if (data.partial) {
-        await fetchRemainingResults(startDate, endDate, minOccupancy, selectedLocation, selectedBedroomAmount, tagsQuery, cacheKey, data.nextSkip);
-      }
     } catch (err) {
       console.error(err);
       setError(err.message || 'An error occurred');
@@ -213,59 +206,13 @@ const AvailabilitySearch: React.FC = () => {
   const handleCityClick = async (city: string): Promise<void> => {
     console.log(`City selected: ${city}`);
     setSelectedLocation(city);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        debouncedHandleSubmit(null);
-        resolve();
-      }, 0);
-    });
-  };
-
-  const fetchRemainingResults = async (startDate: string, endDate: string, minOccupancy: number, selectedLocation: string, selectedBedroomAmount: string, tagsQuery: string, cacheKey: string, skip: number | null) => {
-    let hasMoreResults = true;
-
-    while (hasMoreResults && skip !== null) {
-      try {
-        let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&skip=${skip}`;
-
-        if (selectedLocation) {
-          url += `&city=${encodeURIComponent(selectedLocation)}`;
-        }
-
-        if (selectedBedroomAmount) {
-          url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
-        }
-
-        console.log('Fetching remaining results from URL:', url);
-
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch remaining listings: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        console.log('Fetched remaining Data:', data);
-
-        if (data.results) {
-          const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
-          setListings(prevListings => [...prevListings, ...filteredListings]);
-          setFilteredListings(prevListings => [...prevListings, ...filteredListings]);
-          cache.current[cacheKey] = [...cache.current[cacheKey], ...filteredListings];
-        }
-
-        hasMoreResults = data.partial;
-        skip = data.nextSkip || null; // Update skip value
-      } catch (err) {
-        console.error('Error fetching remaining results:', err);
-        setError(err.message || 'An error occurred');
-        hasMoreResults = false;
-      }
-    }
+    debouncedHandleSubmit(null);
   };
 
   const clearResults = () => {
     setListings([]);
     setFilteredListings([]);
+    setMapListings([]);
     setSearchAttempted(false);
     setIsResultsModalOpen(false);
     setIsSearchComplete(false);
@@ -304,11 +251,13 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     setFilteredListings(filtered);
+    setMapListings(filtered);
   };
 
   const resetFilters = () => {
     setFilters({});
     setFilteredListings(available);
+    setMapListings(available);
   };
 
   const handleMarkerClick = (id: string) => {
@@ -327,38 +276,6 @@ const AvailabilitySearch: React.FC = () => {
       return 'grid-cols-2';
     }
   };
-
-  const currentListings = useMemo(() => {
-    return filteredListings.slice(0, displayedItems);
-  }, [filteredListings, displayedItems]);
-
-  const loadMoreListings = useCallback(() => {
-    if (displayedItems < filteredListings.length) {
-      setDisplayedItems(prev => prev + 1);
-    }
-  }, [displayedItems, filteredListings.length]);
-
-  useEffect(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    observerRef.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        loadMoreListings();
-      }
-    });
-
-    if (lastListingElementRef.current) {
-      observerRef.current.observe(lastListingElementRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [loadMoreListings]);
 
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
@@ -469,7 +386,7 @@ const AvailabilitySearch: React.FC = () => {
       <div className="w-full my-3"></div>
 
       <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
-        <div className={`bg-white overflow-auto m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
+        <div className={`bg-white m-0 p-2 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
           {error && <p>Error: {error}</p>}
           <div className="w-full">
             <FilterComponent
@@ -489,9 +406,9 @@ const AvailabilitySearch: React.FC = () => {
           </div>
           <CityNavigation cities={cities} onCityClick={handleCityClick} />
 
-          <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-screen h-screen">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-full h-screen">
             <div className="md:hidden h-80 flex flex-col w-full max-h-[100vh] mt-1">
-              <GoogleMap listings={filteredListings} onMarkerClick={null} selectedCity={selectedLocation} />
+              <GoogleMap listings={mapListings} onMarkerClick={null} selectedCity={selectedLocation} />
             </div>
             <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
               <div className="text-center py-1 md:py-4">
@@ -501,68 +418,38 @@ const AvailabilitySearch: React.FC = () => {
                 </p>
               </div>
               <div
-                className={`md:search-results h-full w-full overflow-y-auto flex flex-col items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
-              md:gap-x-6 md:gap-y-1 md:place-items-start md:justify-items-start px-2 pb-16 mb-16`}>
-                {currentListings.length > 0 ? (
-                  currentListings.map((property, index) => {
+                className={`md:search-results h-full w-full flex flex-col items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
+              md:gap-x-6 md:gap-y-1 md:place-items-start md:justify-items-start px-2 pb-16`}>
+                {filteredListings.length > 0 ? (
+                  filteredListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
-                    if (index === currentListings.length - 1) {
-                      return (
-                        <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
-                          <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-82 h-82 mb-4 rounded-xl relative">
-                            <div className="relative w-full h-72">
-                              <img
-                                className="absolute inset-0 w-full h-full object-cover"
-                                src={property.pictures[0].original}
-                                alt={property.picture.caption}
-                              />
-                              <div className="absolute inset-0 bg-neutral-950/50" />
+                    return (
+                      <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
+                        <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-82 h-82 mb-4 rounded-xl relative">
+                          <div className="relative w-full h-72">
+                            <img
+                              className="absolute inset-0 w-full h-full object-cover"
+                              src={property.pictures[0].original}
+                              alt={property.picture.caption}
+                            />
+                            <div className="absolute inset-0 bg-neutral-950/50" />
+                          </div>
+                          <div className="p-2 w-full bg-white flex flex-col justify-start ">
+                            <h4 className="font-sans text-wrap font-medium text-xl text-slate-900">
+                              {property.title}
+                            </h4>
+                            <p className="text-sm text-muted-400">
+                              {property.address.city}, {property.address.state}
+                            </p>
+                            <span className="hidden">{property.bedrooms}</span>
+                            <hr className="border border-muted-200 dark:border-muted-800 my-2" />
+                            <div className="flex items-end h-full">
+                              <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
                             </div>
-                            <div className="p-2 w-full bg-white flex flex-col justify-start ">
-                              <h4 className="font-sans text-wrap font-medium text-xl text-slate-900">
-                                {property.title}
-                              </h4>
-                              <p className="text-sm text-muted-400">
-                                {property.address.city}, {property.address.state}
-                              </p>
-                              <span className="hidden">{property.bedrooms}</span>
-                              <hr className="border border-muted-200 dark:border-muted-800 my-2" />
-                              <div className="flex items-end h-full">
-                                <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
-                              </div>
-                            </div>
-                          </article>
-                        </a>
-                      );
-                    } else {
-                      return (
-                        <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; lastListingElementRef.current = el; }}>
-                          <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30  w-82 h-82 mb-4 rounded-xl relative">
-                            <div className="relative w-full h-72">
-                              <img
-                                className="absolute inset-0 w-full h-full object-cover"
-                                src={property.pictures[0].original}
-                                alt={property.picture.caption}
-                              />
-                              <div className="absolute inset-0 bg-neutral-950/50" />
-                            </div>
-                            <div className="p-4 w-full bg-white flex flex-col justify-start">
-                              <h4 className="font-sans text-wrap font-medium text-normal lg:text-xl text-slate-900">
-                                {property.title}
-                              </h4>
-                              <p className="text-sm text-muted-400">
-                                {property.address.city}, {property.address.state}
-                              </p>
-                              <span className="hidden">{property.bedrooms}</span>
-                              <hr className="border border-muted-200 dark:border-muted-800 my-2" />
-                              <div className="flex items-end h-full">
-                                <p className="font-semibold text-sm lg:text-base text-nowrap">Starting at ${price} Per Night</p>
-                              </div>
-                            </div>
-                          </article>
-                        </a>
-                      );
-                    }
+                          </div>
+                        </article>
+                      </a>
+                    );
                   })
                 ) : (
                   <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
@@ -576,8 +463,8 @@ const AvailabilitySearch: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full md:h-full md:pb-20 xl:pr-4">
-              <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation} />
+            <div className="w-full md:h-full object">
+              <GoogleMap listings={mapListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation} />
             </div>
             <div className="md:hidden  flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
               <button
