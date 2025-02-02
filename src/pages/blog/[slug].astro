@@ -1,0 +1,24 @@
+---
+const { slug } = Astro.params;
+const API_URL = import.meta.env.PUBLIC_NOETICS_CMS_API_URL + `/posts/${slug}`;
+let post = null;
+
+try {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error(`Failed to fetch post: ${res.statusText}`);
+    post = await res.json();
+} catch (error) {
+    console.error("Error fetching blog post:", error);
+}
+
+// Default to 'basic' template if none is set
+const template = post?.template || "basic";
+---
+
+{
+    post ? (
+        <component src={`./templates/${template}.astro`} props={{ post }} />
+    ) : (
+        <p>Post not found.</p>
+    )
+}

@@ -8,6 +8,7 @@ import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
 import GoogleMap from './GoogleMap'; // Import the GoogleMap component
 import FilterComponent from './ui/FilterComponent';
+import CityNavigation from './CityNavigation';
 import { debounce } from 'lodash';
 
 interface Listing {
@@ -46,7 +47,6 @@ interface Listing {
 }
 
 const allowedTags = ["Pets"];
-const CACHE_EXPIRATION_MS = 5 * 60 * 1000; // 5 minutes
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
@@ -132,7 +132,7 @@ const AvailabilitySearch: React.FC = () => {
     debouncedHandleSubmit(e);
   };
 
-  const debouncedHandleSubmit = debounce(async (e: React.FormEvent) => {
+  const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
     setLoading(true);
     setError('');
     setSearchAttempted(true);
@@ -157,7 +157,7 @@ const AvailabilitySearch: React.FC = () => {
       let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
 
       if (selectedLocation) {
-        url += `&location=${encodeURIComponent(selectedLocation)}`;
+        url += `&city=${encodeURIComponent(selectedLocation)}`;
       }
 
       if (selectedBedroomAmount) {
@@ -205,7 +205,7 @@ const AvailabilitySearch: React.FC = () => {
       }
     } catch (err) {
       console.error(err);
-      setError(err.message || 'An error occurred');
+      setError('An error occurred. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -219,7 +219,7 @@ const AvailabilitySearch: React.FC = () => {
         let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&skip=${skip}`;
 
         if (selectedLocation) {
-          url += `&location=${encodeURIComponent(selectedLocation)}`;
+          url += `&city=${encodeURIComponent(selectedLocation)}`;
         }
 
         if (selectedBedroomAmount) {
@@ -308,7 +308,6 @@ const AvailabilitySearch: React.FC = () => {
     }
   };
 
-  // Determine the grid columns based on the number of filtered listings
   const getGridColsClass = () => {
     if (filteredListings.length >= 4) {
       return 'md:grid-cols-2 xxl:grid-cols-3';
@@ -350,6 +349,14 @@ const AvailabilitySearch: React.FC = () => {
       }
     };
   }, [loadMoreListings]);
+
+  const handleCityClick = (city: string) => {
+    setSelectedLocation(city);
+    setTimeout(() => {
+      debouncedHandleSubmit(null);
+    }, 0);
+  };
+
 
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
@@ -411,10 +418,16 @@ const AvailabilitySearch: React.FC = () => {
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="border border-slate-400 rounded-xl p-2 w-full"
                 >
-                  <option value="any">Any City</option>
-                  {cities.map((city) => (
-                    <option key={city} value={city}>{city}</option>
-                  ))}
+                  {cities.length === 0 ? (
+                    <option>Loading...</option>
+                  ) : (
+                    <>
+                      <option value="">Select a city</option>
+                      {cities.map((city) => (
+                        <option key={city} value={city}>{city}</option>
+                      ))}
+                    </>
+                  )}
                 </select>
               </div>
               <div className="w-full flex flex-col">
@@ -454,7 +467,7 @@ const AvailabilitySearch: React.FC = () => {
       <div className="w-full my-3"></div>
       <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
         <div className={`bg-white overflow-auto m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
-          {error && <p>Error: {error}</p>}
+          {error && <p className="text-center text-red-500">An error occurred. Please try again later.</p>}
           <div className="w-full">
             <FilterComponent
               onFilterChange={handleFilterChange}
@@ -470,25 +483,26 @@ const AvailabilitySearch: React.FC = () => {
               showBedroomFilter={selectedBedroomAmount === ''}
               bedroomOptions={bedroomOptions}
             />
+            <CityNavigation cities={cities} onCityClick={handleCityClick} />
           </div>
 
-          {available.length > 0 ? (
-            <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-screen h-screen">
-              <div className="md:hidden h-80 flex flex-col w-full max-h-[100vh] mt-1">
-                <GoogleMap listings={filteredListings} onMarkerClick={null} selectedCity={selectedLocation || "Myrtle Beach"} />
-              </div>
-              <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
-                <div className="text-center py-1 md:py-4">
-                  <h2 className="text-xl font-semibold">Available Listings</h2>
-                  <p className="text-sm text-muted-400">
-                    {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
-                  </p>
-                </div>
-                <div
-                  className={`md:search-results h-full w-full overflow-y-auto flex flex-col items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
+          <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-screen h-screen">
+            <div className="md:hidden h-80 flex flex-col w-full max-h-[100vh] mt-1">
+              <GoogleMap listings={filteredListings} onMarkerClick={null} selectedCity={selectedLocation || "North Myrtle Beach"} />
+            </div>
+            <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
+              {available.length > 0 ? (
+                <>
+                  <div className="text-center py-1 md:py-4">
+                    <h2 className="text-xl font-semibold">Available Listings</h2>
+                    <p className="text-sm text-muted-400">
+                      {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div
+                    className={`md:search-results h-full w-full overflow-y-auto flex flex-col items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
                   md:gap-x-6 md:gap-y-1 md:place-items-start md:justify-items-start px-2 pb-16 mb-16`}>
-                  {currentListings.length > 0 ? (
-                    currentListings.map((property, index) => {
+                    {currentListings.map((property, index) => {
                       const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
                       if (index === currentListings.length - 1) {
                         return (
@@ -547,61 +561,51 @@ const AvailabilitySearch: React.FC = () => {
                           </a>
                         );
                       }
-                    })
-                  ) : (
-                    <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
-                  )}
-                  <div className="flex justify-center items-center w-full ml-70 mt-12">
-                    {loading && available.length >= 6 && (
-                      <div className="h-40 w-full pl-96">
-                        <ClipLoader size={70} color={"#123abc"} loading={true} />
-                      </div>
-                    )}
+                    })}
+                    <div className="flex justify-center items-center w-full ml-70 mt-12">
+                      {loading && available.length >= 6 && (
+                        <div className="h-40 w-full pl-96">
+                          <ClipLoader size={70} color={"#123abc"} loading={true} />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="w-full md:h-full md:pb-20 xl:pr-4">
-                <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "Myrtle Beach"} />
-              </div>
-              <div className="md:hidden  flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
-                <button
-                  onClick={() => setIsFilterModalOpen(true)}
-                  className="w-2/3 flex gap-1 text-lg justify-center font-semibold bg-secondary text-white py-1.5 rounded-md"
-                >
-                  <SlidersHorizontal />  Filter
-                </button>
-                <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)} className=" z-40 h-3/4">
-                  <FilterComponent
-                    onFilterChange={handleFilterChange}
-                    onResetFilters={resetFilters}
-                    cities={cities}
-                    tags={tags}
-                    amenities={amenities}
-                    initialPriceOrder={filters.priceOrder || ''}
-                    initialBedroomCount={Number(filters.bedroomCount) || 0} // Ensure it's a number
-                    initialSelectedCity={filters.selectedCity || ''}
-                    initialSelectedAmenities={filters.selectedAmenities || []}
-                    initialSelectedTags={filters.selectedTags || []}
-                    showBedroomFilter={selectedBedroomAmount === ''}
-                    bedroomOptions={bedroomOptions}
-                  />
-                </Modal>
-              </div>
+                </>
+              ) : (
+                <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
+              )}
             </div>
-          ) : (
-            <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 w-screen h-screen">
-              <div className="h-full flex flex-col w-full md:w-2/3 max-h-[100vh]">
-                <div className="flex flex-col items-center justify-start h-full">
-                  <p className="pt-12 text-center">Sorry, no results were displayed. Please try your search again.</p>
-                  <button className="lp-button mt-4"><a href="/">Back to Search</a></button>
-                </div>
-              </div>
+            <div className="w-full md:h-full md:pb-20 xl:pr-4">
+              <GoogleMap listings={filteredListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation || "North Myrtle Beach"} />
             </div>
-          )}
+            <div className="md:hidden  flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
+              <button
+                onClick={() => setIsFilterModalOpen(true)}
+                className="w-2/3 flex gap-1 text-lg justify-center font-semibold bg-secondary text-white py-1.5 rounded-md"
+              >
+                <SlidersHorizontal />  Filter
+              </button>
+              <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)} className=" z-40 h-3/4">
+                <FilterComponent
+                  onFilterChange={handleFilterChange}
+                  onResetFilters={resetFilters}
+                  cities={cities}
+                  tags={tags}
+                  amenities={amenities}
+                  initialPriceOrder={filters.priceOrder || ''}
+                  initialBedroomCount={Number(filters.bedroomCount) || 0} // Ensure it's a number
+                  initialSelectedCity={filters.selectedCity || ''}
+                  initialSelectedAmenities={filters.selectedAmenities || []}
+                  initialSelectedTags={filters.selectedTags || []}
+                  showBedroomFilter={selectedBedroomAmount === ''}
+                  bedroomOptions={bedroomOptions}
+                />
+              </Modal>
+            </div>
+          </div>
         </div>
       </Modal>
     </div>
   );
 };
-
 export default AvailabilitySearch;

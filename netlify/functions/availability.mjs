@@ -56,7 +56,12 @@ const fetchAvailability = async (listingId, checkIn, checkOut) => {
     price: day.price
   }));
 
-  console.log(`Availability data for listing ${listingId}: ${JSON.stringify(availabilityData)}`);
+  const availableDates = availabilityData.filter(day => day.status === 'available');
+  if (availableDates.length > 0) {
+    console.log(`Availability data for listing ${listingId}: ${JSON.stringify(availableDates)}`);
+  } else {
+    console.log(`Listing ${listingId} has no available dates.`);
+  }
 
   return availabilityData;
 };
@@ -78,31 +83,63 @@ const fetchAllListings = async (url) => {
   return response.json();
 };
 
-const fetchListingsInBatches = async () => {
-  let allListings = [];
-  let skip = 0;
-  let hasMore = true;
-
-  while (hasMore) {
-    const url = `https://open-api.guesty.com/v1/listings?limit=100&skip=${skip}`;
-    const data = await fetchAllListings(url);
-    allListings = [...allListings, ...data.results];
-    skip += 100;
-    hasMore = data.results.length === 100;
+const fetchListingsInBatches = async (urls) => {
+  const results = [];
+  for (let i = 0; i < urls.length; i += CONCURRENCY_LIMIT) {
+    const batch = urls.slice(i, i + CONCURRENCY_LIMIT);
+    const batchResults = await Promise.all(batch.map(url => fetchAllListings(url)));
+    results.push(...batchResults.flatMap(result => result.results));
     await delay(RATE_LIMIT_INTERVAL); // Delay between batches to avoid rate limiting
   }
+  return results;
+};
 
-  return allListings;
+const prefetchOtherCities = async (currentCity, checkIn, checkOut, minOccupancy, bedroomAmount, allowedTags) => {
+  const citiesToPrefetch = ['North Myrtle Beach', 'Myrtle Beach', 'Little River', 'Surfside Beach', 'Murrells Inlet'].filter(city => city !== currentCity);
+
+  for (const city of citiesToPrefetch) {
+    const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}-${allowedTags.join(',')}`;
+    if (!cache[cacheKey]) {
+      try {
+        let url = `https://open-api.guesty.com/v1/listings?limit=100&skip=0&checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}&city=${encodeURIComponent(city)}`;
+        if (bedroomAmount) {
+          url += `&bedroomAmount=${encodeURIComponent(bedroomAmount)}`;
+        }
+        if (allowedTags.length > 0) {
+          url += `&tags=${encodeURIComponent(allowedTags.join(','))}`;
+        }
+        const response = await fetchWithRetry(url, {
+          headers: {
+            'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+            'Accept': 'application/json'
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          cache[cacheKey] = data.results;
+        }
+      } catch (error) {
+        console.error(`Error prefetching data for city ${city}:`, error);
+      }
+    }
+  }
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, skip = 0 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId } = event.queryStringParameters;
 
-  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, skip })}`);
+  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId })}`);
 
   if (fetchCities) {
     try {
-      const listings = await fetchListingsInBatches();
+      const urls = [
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=0',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=200',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=300'
+      ];
+
+      const listings = await fetchListingsInBatches(urls);
       const uniqueCities = Array.from(new Set(listings.map(listing => listing.address.city)));
 
       console.log(`Fetched unique cities: ${JSON.stringify(uniqueCities)}`);
@@ -130,7 +167,14 @@ export const handler = async (event, context) => {
 
   if (fetchBedrooms) {
     try {
-      const listings = await fetchListingsInBatches();
+      const urls = [
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=0',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=200',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=300'
+      ];
+
+      const listings = await fetchListingsInBatches(urls);
       const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
 
       console.log(`Fetched unique bedrooms: ${JSON.stringify(uniqueBedrooms)}`);
@@ -187,61 +231,77 @@ export const handler = async (event, context) => {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ error: error.message })
+        body: JSON.stringify({ error: 'Internal Server Error' })
       };
     }
   }
 
-  if (!checkIn || !checkOut || !minOccupancy) {
+  if (!checkIn || !checkOut || !minOccupancy || !city) {
     return {
       statusCode: 400,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ error: 'Missing required query parameters: checkIn, checkOut, minOccupancy' })
+      body: JSON.stringify({ error: 'Missing required query parameters: checkIn, checkOut, minOccupancy, city' })
     };
   }
 
   try {
-    const fetchListings = async (skip) => {
-      let url = `https://open-api.guesty.com/v1/listings?limit=100&skip=${skip}&nids=6616a8ae8d971e00122287c2`;
-      const queryParams = new URLSearchParams({
-        checkIn: checkIn,
-        checkOut: checkOut,
-        minOccupancy: minOccupancy
-      });
-      if (location) {
-        queryParams.append('location', location);
-      }
-      if (city) {
-        queryParams.append('city', city);
-      }
-      url += `&${queryParams.toString()}`;
-      console.log(`Fetching listings from URL: ${url}`);
+    const fetchListings = async () => {
+      let allListings = [];
+      let skip = 0;
+      let hasMore = true;
 
-      const response = await fetchWithRetry(url, {
-        headers: {
-          'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
-          'Accept': 'application/json'
+      while (hasMore) {
+        let url = `https://open-api.guesty.com/v1/listings?limit=100&skip=${skip}`;
+        const queryParams = new URLSearchParams({
+          checkIn: checkIn,
+          checkOut: checkOut,
+          minOccupancy: minOccupancy,
+          city: city
+        });
+        if (location) {
+          queryParams.append('location', location);
         }
-      });
+        if (bedroomAmount) {
+          queryParams.append('bedroomAmount', bedroomAmount);
+        }
+        url += `&${queryParams.toString()}`;
+        console.log(`Fetching listings from URL: ${url}`);
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`Guesty API error: ${errorText}`);
-        throw new Error(`Guesty API error: ${errorText}`);
+        const response = await fetchWithRetry(url, {
+          headers: {
+            'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+            'Accept': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`Guesty API error: ${errorText}`);
+          throw new Error(`Guesty API error: ${errorText}`);
+        }
+
+        const data = await response.json();
+        allListings.push(...data.results);
+
+        if (data.results.length < 100) {
+          hasMore = false;
+        } else {
+          skip += 100;
+        }
       }
 
-      return response.json();
+      return allListings;
     };
 
-    const data = await fetchListings(skip);
+    const data = await fetchListings();
 
-    console.log(`Fetched listings: ${JSON.stringify(data.results)}`);
+    console.log(`Fetched listings: ${JSON.stringify(data)}`);
 
     // Filter by bedroom amount if specified
-    let combinedResults = data.results;
+    let combinedResults = data;
     if (bedroomAmount) {
       combinedResults = combinedResults.filter(listing => listing.bedrooms === Number(bedroomAmount));
     }
@@ -254,24 +314,12 @@ export const handler = async (event, context) => {
       try {
         const availabilityData = await fetchAvailability(listing._id, checkIn, checkOut);
         const availableDates = availabilityData.filter(day => day.status === 'available').map(day => day.date);
-        const prices = availabilityData.filter(day => day.status === 'available').map(day => ({ date: day.date, price: day.price }));
+        const prices = availabilityData.map(day => ({ date: day.date, price: day.price }));
 
         if (availableDates.length > 0) {
           availableListings.push({ ...listing, prices });
-          if (availableListings.length % 6 === 0) {
-            console.log(`Fetched ${availableListings.length} available listings so far`);
-            // Return the results in batches of 6
-            return {
-              statusCode: 200,
-              headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ results: availableListings, partial: true, nextSkip: skip + 100 })
-            };
-          }
         } else {
-          console.log(`Listing ${listing._id} is not available for dates: ${JSON.stringify(availableDates)}`);
+          console.log(`Listing ${listing._id} has no available dates: ${JSON.stringify(availableDates)}`);
         }
       } catch (error) {
         console.error(`Error fetching availability for listing ${listing._id}: ${error.message}`);
@@ -280,13 +328,16 @@ export const handler = async (event, context) => {
 
     console.log(`Available listings: ${JSON.stringify(availableListings)}`);
 
+    // Prefetch availability data for other cities
+    prefetchOtherCities(city, checkIn, checkOut, minOccupancy, bedroomAmount, allowedTags);
+
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ results: availableListings, partial: false })
+      body: JSON.stringify({ results: availableListings })
     };
   } catch (error) {
     console.error(`Error fetching data: ${error.message}`);
