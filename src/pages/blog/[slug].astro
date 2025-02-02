@@ -1,22 +1,39 @@
 ---
 const { slug } = Astro.params;
 const API_URL = import.meta.env.PUBLIC_NOETICS_CMS_API_URL + `/posts/${slug}`;
+const CMS_TOKEN = import.meta.env.PUBLIC_NOETICS_CMS_TOKEN;
+
 let post = null;
+let error = null;
+let template = "basic"; // Default template
 
 try {
-    const res = await fetch(API_URL);
+    const res = await fetch(API_URL, {
+        headers: {
+            Authorization: `Bearer ${CMS_TOKEN}`,
+            Accept: "application/json",
+        },
+    });
+
     if (!res.ok) throw new Error(`Failed to fetch post: ${res.statusText}`);
     post = await res.json();
-} catch (error) {
-    console.error("Error fetching blog post:", error);
-}
 
-// Default to 'basic' template if none is set
-const template = post?.template || "basic";
+    if (post?.template) {
+        const availableTemplates = ["basic", "minimal", "modern"];
+        template = availableTemplates.includes(post.template)
+            ? post.template
+            : "basic";
+    }
+} catch (err) {
+    console.error("Error fetching blog post:", err);
+    error = "Failed to load blog post. Please try again later.";
+}
 ---
 
 {
-    post ? (
+    error ? (
+        <p class="text-red-500">{error}</p>
+    ) : post ? (
         <component src={`./templates/${template}.astro`} props={{ post }} />
     ) : (
         <p>Post not found.</p>
