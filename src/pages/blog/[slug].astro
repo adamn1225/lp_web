@@ -9,7 +9,7 @@ const CMS_TOKEN = import.meta.env.PUBLIC_DG_CMS_TOKEN;
 
 let post = null;
 let error = null;
-let template = Basic; // Default template (must be a component)
+let template = Basic; // Default to Basic template
 
 try {
     const res = await fetch(API_URL, {
