@@ -1,20 +1,17 @@
 ---
+import Basic from "../templates/basic.astro";
+import Minimal from "../templates/minimal.astro"; // Ensure this file exists or update the path
+import Modern from "../templates/modern.astro";
+
 const { slug } = Astro.params;
-const API_URL = import.meta.env.PUBLIC_NOETICS_CMS_API_URL + `/posts/${slug}`;
+const API_URL = `${import.meta.env.PUBLIC_NOETICS_CMS_API_URL}/posts/${slug}`;
 const CMS_TOKEN = import.meta.env.PUBLIC_DG_CMS_TOKEN;
 
-let post = { template: "", title: "" };
+let post = null;
 let error = null;
-const validTemplates = new Set(["basic", "minimal", "modern"]);
 let template = "basic"; // Default template
 
 try {
-    if (!CMS_TOKEN) {
-        throw new Error(
-            "CMS Token is missing. Check your environment variables.",
-        );
-    }
-
     const res = await fetch(API_URL, {
         headers: {
             Authorization: `Bearer ${CMS_TOKEN}`,
@@ -23,9 +20,15 @@ try {
     });
 
     if (!res.ok) throw new Error(`Failed to fetch post: ${res.statusText}`);
-
     post = await res.json();
-    template = validTemplates.has(post?.template) ? post.template : "basic";
+
+    // Determine which template to use
+    const availableTemplates = {
+        basic: Basic,
+        minimal: Minimal,
+        modern: Modern,
+    };
+    template = availableTemplates[post?.template] || Basic;
 } catch (err) {
     console.error("Error fetching blog post:", err);
     error = "Failed to load blog post. Please try again later.";
@@ -35,8 +38,8 @@ try {
 {
     error ? (
         <p class="text-red-500">{error}</p>
-    ) : post?.title ? (
-        <component src={`./templates/${template}.astro`} props={{ post }} />
+    ) : post ? (
+        <template post={post} />
     ) : (
         <p>Post not found.</p>
     )
