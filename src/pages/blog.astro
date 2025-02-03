@@ -1,14 +1,16 @@
 ---
-const res = await fetch(import.meta.env.PUBLIC_NOETICS_CMS_API_URL + "/posts");
+const API_URL = import.meta.env.PUBLIC_NOETICS_CMS_API_URL + "/posts";
+const res = await fetch(API_URL);
 const posts = await res.json();
 ---
 
 <h1>Blog</h1>
-{
-    posts.map((post: { title: unknown; content: unknown }) => (
-        <article>
-            <h2>{post.title}</h2>
-            <div set:html={post.content} />
-        </article>
-    ))
-}
+<ul>
+    {
+        posts.map((post) => (
+            <li>
+                <a href={`/blog/${post.slug}`}>{post.title}</a>
+            </li>
+        ))
+    }
+</ul>
