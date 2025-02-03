@@ -39,7 +39,7 @@ try {
     error ? (
         <p class="text-red-500">{error}</p>
     ) : post ? (
-        <component is={template} post={post} />
+        <template is={template} post={post} />
     ) : (
         <p>Post not found.</p>
     )
