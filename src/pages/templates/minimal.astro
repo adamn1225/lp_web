@@ -11,7 +11,6 @@ const { post } = Astro.props;
             />
         )
     }
-
     <div class="max-w-4xl mx-auto px-6 lg:px-12">
         <!-- Overlapping title card -->
         <div
@@ -21,7 +20,7 @@ const { post } = Astro.props;
                 {post.title}
             </h1>
             <p class="text-foreground mt-2 text-lg">
-                {post.published_at || "Unpublished"}
+                {post.created_at || "Unpublished"}
             </p>
         </div>
 
@@ -30,7 +29,7 @@ const { post } = Astro.props;
             class="mt-12 bg-white shadow-md rounded-lg p-6 lg:p-10 text-secondary"
         >
             <div
-                set:html={post.content}
+                set:html={post.content_html || post.content}
                 class="prose prose-lg text-muted max-w-full"
             />
         </article>
