@@ -125,6 +125,18 @@ const AvailabilitySearch: React.FC = () => {
     fetchInitialData();
   }, []);
 
+  const handleCityClick = async (city: string | null): Promise<void> => {
+    setSelectedLocation(city || '');
+    if (city) {
+      const filteredListings = available.filter(listing => listing.address.city === city);
+      setFilteredListings(filteredListings);
+      setMapListings(filteredListings);
+    } else {
+      setFilteredListings(available);
+      setMapListings(available);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedLocation) {
@@ -210,18 +222,6 @@ const AvailabilitySearch: React.FC = () => {
     }
   }, 300);
 
-  const handleCityClick = (city: string | null): void => {
-    setSelectedLocation(city || '');
-    if (city) {
-      const filteredListings = available.filter(listing => listing.address.city === city);
-      setFilteredListings(filteredListings);
-      setMapListings(filteredListings);
-    } else {
-      setFilteredListings(available);
-      setMapListings(available);
-    }
-  };
-
   const clearResults = () => {
     setListings([]);
     setFilteredListings([]);
@@ -287,7 +287,6 @@ const AvailabilitySearch: React.FC = () => {
 
   const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
       {loading && (
@@ -349,12 +348,12 @@ const AvailabilitySearch: React.FC = () => {
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="border border-slate-400 rounded-xl p-2 w-full"
                 >
-                  {selectedLocation.length === 0 ? (
+                  {cities.length === 0 ? (
                     <option>Loading...</option>
                   ) : (
                     <>
                       <option value=''>Select a City</option>
-                      {selectedLocation.map((city) => (
+                      {cities.map((city) => (
                         <option key={city} value={city}>{city}</option>
                       ))}
                     </>
@@ -415,6 +414,7 @@ const AvailabilitySearch: React.FC = () => {
               initialSelectedTags={filters.selectedTags || []}
               showBedroomFilter={selectedBedroomAmount === ''}
               bedroomOptions={bedroomOptions}
+              onCityClick={handleCityClick} // Pass handleCityClick as a prop
             />
           </div>
 
@@ -436,8 +436,8 @@ const AvailabilitySearch: React.FC = () => {
                 </p>
               </div>
               <div
-                className={`md:search-results h-full w-full flex flex-col justify-center xs:items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xl:grid-cols-3
-md:gap-x-6 md:gap-y-2 px-2 pb-16`}>
+                className={`md:search-results h-full w-full flex flex-col justify-center xs:items-stretch gap-4 md:gap-0 md:grid md:mr-0 md:grid-cols-2 xl:grid-cols-3
+md:gap-x-4 md:gap-y-1 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
@@ -468,8 +468,27 @@ md:gap-x-6 md:gap-y-2 px-2 pb-16`}>
                     );
                   })
                 ) : (
-                  <div className="flex justify-center w-full h-full col-span-3">
+                  <div className="flex justify-center w-full h-full col-span-4">
                     <p className="text-base text-center w-full text-nowrap">No results - try adjusting the filters or click on Reset Filters</p>
+                  </div>
+                )}
+                {filteredListings.length > itemsPerPage && (
+                  <div className="flex justify-center items-center w-full my-6 pb-6">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
+                    >
+                      Previous
+                    </button>
+                    <span className="px-4 py-2">{currentPage}</span>
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={paginatedListings.length < itemsPerPage}
+                      className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
+                    >
+                      Next
+                    </button>
                   </div>
                 )}
               </div>

@@ -17,6 +17,7 @@ interface FilterComponentProps {
   initialSelectedAmenities: string[];
   initialSelectedTags: string[];
   showBedroomFilter: boolean; // Add the showBedroomFilter prop
+  onCityClick: (city: string | null) => Promise<void>; // Add the onCityClick prop
 }
 
 const FilterComponent: React.FC<FilterComponentProps> = ({
@@ -31,7 +32,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   initialSelectedCity,
   initialSelectedAmenities,
   initialSelectedTags,
-  showBedroomFilter // Destructure the showBedroomFilter prop
+  showBedroomFilter, // Destructure the showBedroomFilter prop
+  onCityClick // Destructure the onCityClick prop
 }) => {
   const [priceOrder, setPriceOrder] = useState<string>(initialPriceOrder);
   const [bedroomCount, setBedroomCount] = useState<number | null>(initialBedroomCount);
@@ -144,7 +146,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
           </div>
         </div>
       </div>
-      <CityNavigation cities={cities} onCityClick={handleCityChange} />
+      <CityNavigation cities={cities} onCityClick={onCityClick} />
       <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)}>
         <div className="flex flex-col gap-2 p-6">
           <label className="font-semibold">Price Order:</label>

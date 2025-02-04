@@ -138,6 +138,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           initialSelectedTags={filters.selectedTags || []}
           showBedroomFilter={selectedBedroomAmount === ''}
           bedroomOptions={bedroomOptions}
+          onCityClick={(city) => setSelectedLocation(city)}
         />
       </Modal>
     </>
