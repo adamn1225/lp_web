@@ -90,9 +90,9 @@ const fetchListingsInBatches = async (urls) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
 
-  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
+  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
 
   if (fetchCities) {
     try {
@@ -225,9 +225,6 @@ export const handler = async (event, context) => {
       if (location) {
         queryParams.append('location', location);
       }
-      if (city) {
-        queryParams.append('city', city);
-      }
       url += `&${queryParams.toString()}`;
       console.log(`Fetching listings from URL: ${url}`);
 
@@ -251,16 +248,13 @@ export const handler = async (event, context) => {
 
     console.log(`Fetched listings: ${data.results.length} listings`);
 
-    // Filter by city and bedroom amount if specified
+    // Filter by bedroom amount if specified
     let combinedResults = data.results;
-    if (city) {
-      combinedResults = combinedResults.filter(listing => listing.address.city === city);
-    }
     if (bedroomAmount) {
       combinedResults = combinedResults.filter(listing => listing.bedrooms === Number(bedroomAmount));
     }
 
-    console.log(`Listings after filtering by city and bedroom amount: ${combinedResults.length} listings`);
+    console.log(`Listings after filtering by bedroom amount: ${combinedResults.length} listings`);
 
     // Fetch availability for each listing and filter out unavailable listings
     const availableListings = [];

@@ -8,7 +8,6 @@ import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
 import GoogleMap from './GoogleMap'; // Import the GoogleMap component
 import FilterComponent from './ui/FilterComponent';
-import CityNavigation from './CityNavigation';
 import { debounce } from 'lodash';
 
 interface Listing {
@@ -128,6 +127,10 @@ const AvailabilitySearch: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedLocation) {
+      setValidationError('Please select a city.');
+      return;
+    }
     setValidationError('');
     debouncedHandleSubmit(e);
   };
@@ -219,17 +222,6 @@ const AvailabilitySearch: React.FC = () => {
     }
   };
 
-  const filterListingsByCity = (city: string) => {
-    if (city) {
-      const filtered = available.filter(listing => listing.address.city === city);
-      setFilteredListings(filtered);
-      setMapListings(filtered);
-    } else {
-      setFilteredListings(available);
-      setMapListings(available);
-    }
-  };
-
   const clearResults = () => {
     setListings([]);
     setFilteredListings([]);
@@ -294,6 +286,7 @@ const AvailabilitySearch: React.FC = () => {
   };
 
   const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
 
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
@@ -417,13 +410,13 @@ const AvailabilitySearch: React.FC = () => {
               amenities={amenities}
               initialPriceOrder={filters.priceOrder || ''}
               initialBedroomCount={Number(filters.bedroomCount) || 0}
+              initialSelectedCity={filters.selectedCity || ''}
               initialSelectedAmenities={filters.selectedAmenities || []}
               initialSelectedTags={filters.selectedTags || []}
               showBedroomFilter={selectedBedroomAmount === ''}
               bedroomOptions={bedroomOptions}
             />
           </div>
-          <CityNavigation cities={cities} onCityClick={handleCityClick} />
 
           <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-full h-screen">
             <div className="md:hidden h-2/3 flex flex-col w-full max-h-[100vh] mt-1">
@@ -438,7 +431,7 @@ const AvailabilitySearch: React.FC = () => {
               </div>
               <div
                 className={`md:search-results h-full w-full flex flex-col justify-center items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xl:grid-cols-3
-            md:gap-x-6 md:gap-y-2 px-2 pb-16`}>
+    md:gap-x-6 md:gap-y-2 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
