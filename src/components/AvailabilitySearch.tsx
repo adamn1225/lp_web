@@ -424,7 +424,7 @@ const AvailabilitySearch: React.FC = () => {
               initialSelectedTags={filters.selectedTags || []}
               showBedroomFilter={selectedBedroomAmount === ''}
               bedroomOptions={bedroomOptions}
-              onCityClick={handleCityClick} // Pass handleCityClick as a prop
+              onCityClick={handleCityClick}
             />
           </div>
 

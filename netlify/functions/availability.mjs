@@ -90,9 +90,9 @@ const fetchListingsInBatches = async (urls) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
 
-  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
+  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
 
   if (fetchCities) {
     try {
@@ -219,8 +219,8 @@ export const handler = async (event, context) => {
         checkOut: checkOut,
         minOccupancy: minOccupancy
       });
-      if (location) {
-        queryParams.append('location', location);
+      if (city) {
+        queryParams.append('city', city);
       }
       url += `&${queryParams.toString()}`;
       console.log(`Fetching listings from URL: ${url}`);
