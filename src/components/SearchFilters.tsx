@@ -138,7 +138,10 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           initialSelectedTags={filters.selectedTags || []}
           showBedroomFilter={selectedBedroomAmount === ''}
           bedroomOptions={bedroomOptions}
-          onCityClick={(city) => setSelectedLocation(city)}
+          onCityClick={async (city) => {
+            setSelectedLocation(city);
+            return Promise.resolve();
+          }}
         />
       </Modal>
     </>

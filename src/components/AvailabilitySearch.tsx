@@ -287,6 +287,16 @@ const AvailabilitySearch: React.FC = () => {
 
   const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  const getGridColumns = (length: number) => {
+    if (length > 3 && length % 2 === 0) {
+      return 'md:grid-cols-2 xl:grid-cols-2';
+    } else if (length > 3 && length % 2 !== 0) {
+      return 'md:grid-cols-3 xl:grid-cols-3';
+    } else {
+      return 'md:grid-cols-2 xl:grid-cols-2';
+    }
+  };
+
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
       {loading && (
@@ -428,7 +438,7 @@ const AvailabilitySearch: React.FC = () => {
                 </p>
               </div>
             </div>
-            <div ref={resultsContainerRef} className=" pt-96 md:pt-0 h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
+            <div ref={resultsContainerRef} className="pt-96 md:pt-0 h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
               <div className="hidden md:block text-center py-1 md:py-8">
                 <h2 className="text-xl font-semibold">Available Listings</h2>
                 <p className="text-sm text-muted-400">
@@ -436,14 +446,13 @@ const AvailabilitySearch: React.FC = () => {
                 </p>
               </div>
               <div
-                className={`md:search-results h-full w-full flex flex-col justify-center xs:items-stretch gap-4 md:gap-0 md:grid md:mr-0 md:grid-cols-2 xl:grid-cols-3
-md:gap-x-4 md:gap-y-1 px-2 pb-16`}>
+                className={`md:search-results h-full w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:grid md:mr-0 ${getGridColumns(paginatedListings.length)} md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
                     return (
                       <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
-                        <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-80 mb-4 rounded-xl relative overflow-hidden">
+                        <article className="flex flex-col items-start bg-white shadow-lg shadow-muted-300/30 w-full h-80 rounded-xl relative overflow-hidden">
                           <div className="relative w-full h-48">
                             <img
                               className="absolute inset-0 w-full h-full object-cover"
