@@ -90,9 +90,9 @@ const fetchListingsInBatches = async (urls) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, skip = 0 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
 
-  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, skip })}`);
+  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, location, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
 
   if (fetchCities) {
     try {
@@ -213,7 +213,7 @@ export const handler = async (event, context) => {
 
   try {
     const fetchListings = async (skip) => {
-      let url = `https://open-api.guesty.com/v1/listings?limit=100&skip=${skip}`;
+      let url = `https://open-api.guesty.com/v1/listings?limit=${limit}&skip=${skip}`;
       const queryParams = new URLSearchParams({
         checkIn: checkIn,
         checkOut: checkOut,
@@ -244,7 +244,7 @@ export const handler = async (event, context) => {
       return response.json();
     };
 
-    const data = await fetchListings(Number(skip));
+    const data = await fetchListings((page - 1) * limit);
 
     console.log(`Fetched listings: ${JSON.stringify(data.results)}`);
 
@@ -269,18 +269,6 @@ export const handler = async (event, context) => {
 
         if (availableDates.length > 0) {
           availableListings.push({ ...listing, prices });
-          if (availableListings.length % 6 === 0) {
-            console.log(`Fetched ${availableListings.length} available listings so far`);
-            // Return the results in batches of 6
-            return {
-              statusCode: 200,
-              headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ results: availableListings, partial: true, nextSkip: Number(skip) + 100 })
-            };
-          }
         } else {
           console.log(`Listing ${listing._id} is not available for dates: ${JSON.stringify(availableDates)}`);
         }

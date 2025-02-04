@@ -1,5 +1,5 @@
 ---
-// Fetch all blog posts at build time
+export const prerender = true;
 export async function getStaticPaths() {
     const API_URL = import.meta.env.PUBLIC_NOETICS_CMS_API_URL + "/posts";
     const CMS_TOKEN = import.meta.env.PUBLIC_DG_CMS_TOKEN;

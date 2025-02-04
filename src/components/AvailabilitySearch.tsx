@@ -70,6 +70,8 @@ const AvailabilitySearch: React.FC = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage] = useState<number>(10); // Number of items per page
 
   const apiUrl = '/.netlify/functions/availability';
 
@@ -137,7 +139,7 @@ const AvailabilitySearch: React.FC = () => {
       const tagsQuery = allowedTags.join(',');
       const startDate = dateRange[0].startDate.toISOString().slice(0, 10);
       const endDate = dateRange[0].endDate.toISOString().slice(0, 10);
-      const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}`;
+      const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}-${currentPage}-${itemsPerPage}`;
 
       if (cache.current[cacheKey]) {
         console.log('Returning cached results');
@@ -150,7 +152,7 @@ const AvailabilitySearch: React.FC = () => {
         return;
       }
 
-      let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}`;
+      let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&page=${currentPage}&limit=${itemsPerPage}`;
 
       if (selectedLocation) {
         url += `&city=${encodeURIComponent(selectedLocation)}`;
@@ -206,6 +208,7 @@ const AvailabilitySearch: React.FC = () => {
   const handleCityClick = async (city: string): Promise<void> => {
     console.log(`City selected: ${city}`);
     setSelectedLocation(city);
+    setCurrentPage(1); // Reset to first page when city changes
     debouncedHandleSubmit(null);
   };
 
@@ -275,6 +278,11 @@ const AvailabilitySearch: React.FC = () => {
     } else {
       return 'grid-cols-2';
     }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    debouncedHandleSubmit(null);
   };
 
   return (
@@ -419,7 +427,7 @@ const AvailabilitySearch: React.FC = () => {
               </div>
               <div
                 className={`md:search-results h-full w-full flex flex-col items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
-              md:gap-x-6 md:gap-y-1 md:place-items-start md:justify-items-start px-2 pb-16`}>
+          md:gap-x-6 md:gap-y-1 md:place-items-start md:justify-items-start px-2 pb-16`}>
                 {filteredListings.length > 0 ? (
                   filteredListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
@@ -461,6 +469,23 @@ const AvailabilitySearch: React.FC = () => {
                     </div>
                   )}
                 </div>
+              </div>
+              <div className="flex justify-center items-center mt-4">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <span className="px-4 py-2">{currentPage}</span>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={filteredListings.length < itemsPerPage}
+                  className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
+                >
+                  Next
+                </button>
               </div>
             </div>
             <div className="w-full md:h-full object">
