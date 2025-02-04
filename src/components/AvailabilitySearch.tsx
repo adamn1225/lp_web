@@ -349,12 +349,12 @@ const AvailabilitySearch: React.FC = () => {
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="border border-slate-400 rounded-xl p-2 w-full"
                 >
-                  {cities.length === 0 ? (
+                  {selectedLocation.length === 0 ? (
                     <option>Loading...</option>
                   ) : (
                     <>
                       <option value=''>Select a City</option>
-                      {cities.map((city) => (
+                      {selectedLocation.map((city) => (
                         <option key={city} value={city}>{city}</option>
                       ))}
                     </>
