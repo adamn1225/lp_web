@@ -473,7 +473,7 @@ md:gap-x-4 md:gap-y-1 px-2 pb-16`}>
                   </div>
                 )}
                 {filteredListings.length > itemsPerPage && (
-                  <div className="flex justify-center items-center w-full my-6 pb-6">
+                  <div className="flex justify-center items-center w-full my-6 pb-6 col-span-3">
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
