@@ -70,7 +70,7 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(54); // Number of items per page
+  const [itemsPerPage] = useState<number>(200); // Number of items per page
   const [validationError, setValidationError] = useState<string>(''); // State for validation error message
 
   const apiUrl = '/.netlify/functions/availability';
