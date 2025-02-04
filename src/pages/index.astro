@@ -1,10 +1,8 @@
 ---
 import Layout from "@layouts/Split.astro";
 import Section from "@components/Section.astro";
-import AvailabilitySearch from "@/components/AvailabilitySearch";
 import App from "../components/App";
 import TagNavigation from "@components/TagNavigation";
-import FeaturedListings from "@components/FeaturedListings.astro";
 ---
 
 <Layout title="Properties">
@@ -13,6 +11,6 @@ import FeaturedListings from "@components/FeaturedListings.astro";
       <App client:only="react" />
     </div>
     <TagNavigation client:only="react" />
-    <FeaturedListings />
+    <!-- <FeaturedListings /> -->
   </Section>
 </Layout>

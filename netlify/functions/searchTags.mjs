@@ -66,7 +66,7 @@ export const handler = async (event, context) => {
         const data = await response.json();
         console.log('Guesty API response:', data); // Add logging to inspect the response
 
-        const allowedTags = ["Public_pool", "Ocean_view", "web_featured", "Ocean_front", "Pets"];
+        const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
         const filteredTags = data.filter((tag) => allowedTags.includes(tag));
 
         return {

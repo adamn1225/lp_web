@@ -13,8 +13,10 @@ const fetchWithRetry = async (url, options, retries = 3) => {
             const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
             console.warn(`Rate limit hit, retrying after ${delayMs}ms...`);
             await delay(delayMs);
-        } else {
+        } else if (response.ok) {
             return response;
+        } else {
+            console.error(`Error fetching data: ${response.status} ${response.statusText}`);
         }
     }
     throw new Error('Max retries reached');
@@ -22,9 +24,18 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 
 export const handler = async (event, context) => {
     const { tags } = event.queryStringParameters || {};
-    const apiUrl = tags
-        ? `https://open-api.guesty.com/v1/listings?tags=${tags}&limit=100&skip=0`
-        : 'https://open-api.guesty.com/v1/listings/tags';
+    if (!tags) {
+        return {
+            statusCode: 400,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ error: 'Missing required query parameter: tags' })
+        };
+    }
+
+    const apiUrl = `https://open-api.guesty.com/v1/listings?tags=${tags}&limit=100&skip=0`;
 
     const currentTime = Date.now();
     if (currentTime - lastRequestTime < RATE_LIMIT_INTERVAL) {

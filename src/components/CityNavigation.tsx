@@ -20,12 +20,12 @@ const CityNavigation: React.FC<CityNavigationProps> = ({ cities, onCityClick }) 
 
     return (
         <div className="city-navigation flex flex-col items-center gap-4 pt-2 bg-gray-100 py-2 relative w-full">
-            <div className={`flex justify-center gap-4 overflow-x-auto w-full ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
+            <div className={`flex justify-start md:justify-center gap-1 overflow-x-auto w-full ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
                 {cities.map((city) => (
                     <button
                         key={city}
                         onClick={() => handleCityClick(city)}
-                        className={`text-secondary font-semibold hover:underline px-4 py-2 rounded-md whitespace-nowrap ${activeCity === city ? 'bg-white underline text-secondary font-bold border border-secondary/90 shadow-md' : ''}`}
+                        className={`text-secondary text-sm md:text-base font-semibold hover:underline px-2 py-2 rounded-md whitespace-nowrap ${activeCity === city ? 'bg-white underline text-secondary font-bold border border-secondary/90 shadow-md' : ''}`}
                         disabled={loading} // Disable button while loading
                     >
                         {city}

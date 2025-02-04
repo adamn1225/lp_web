@@ -28,8 +28,8 @@ interface Listing {
 
 const TagNavigation: React.FC = () => {
     const [listings, setListings] = useState<Listing[]>([]);
-    const [selectedTag, setSelectedTag] = useState<string | null>(null);
-    const [tags, setTags] = useState<string[]>(["Ocean_front", "Ocean_view", "Public_pool", "Pets"]);
+    const [selectedTag, setSelectedTag] = useState<string>('web_featured'); // Set initial selected tag to 'web_featured'
+    const [tags, setTags] = useState<string[]>(["web_featured", "Ocean_front", "Ocean_view", "Public_pool", "Pets"]);
     const [tagsLoading, setTagsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -37,6 +37,7 @@ const TagNavigation: React.FC = () => {
     const tagsApiUrl = '/.netlify/functions/tags';
 
     const tagDisplayNames: { [key: string]: string } = {
+        "web_featured": "Featured",
         "Ocean_front": "Ocean Front",
         "Ocean_view": "Ocean View",
         "Public_pool": "Pool",
@@ -49,6 +50,8 @@ const TagNavigation: React.FC = () => {
 
     const getIconForTag = (tag: string) => {
         switch (tag) {
+            case "web_featured":
+                return <FiStar className="text-foreground size-7" />;
             case "Ocean_front":
                 return <FiSun className="text-foreground size-7" />;
             case "Ocean_view":
@@ -84,11 +87,19 @@ const TagNavigation: React.FC = () => {
         fetchTags();
     }, []);
 
+    useEffect(() => {
+        // Fetch listings for the initial selected tag when the component mounts
+        fetchListingsForTag('web_featured');
+    }, []);
+
     const fetchListingsForTag = async (tag: string) => {
         setLoading(true);
         setListings([]); // Clear previous listings
         try {
             const response = await fetch(`${tagsApiUrl}?tags=${tag}`);
+            if (response.status === 429) {
+                throw new Error('Too many requests');
+            }
             const data = await response.json();
             if (data.error) {
                 throw new Error(data.error);
@@ -96,17 +107,14 @@ const TagNavigation: React.FC = () => {
             setListings(data.results);
         } catch (err) {
             console.error('Error fetching listings:', err);
-            setError('Failed to load listings');
+            setError('');
         } finally {
             setLoading(false);
         }
     };
 
     const handleTagClick = (tag: string) => {
-        if (tag === selectedTag) {
-            setSelectedTag(null);
-            setListings([]);
-        } else {
+        if (tag !== selectedTag) {
             setSelectedTag(tag);
             fetchListingsForTag(tag);
         }

@@ -113,7 +113,7 @@ const AvailabilitySearch: React.FC = () => {
         if (tagsData.error) {
           throw new Error(tagsData.error);
         }
-        const allowedTags = ["Public_pool", "Ocean_view", "web_featured", "Ocean_front", "Pets"];
+        const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
         const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
         setTags(filteredTags);
       } catch (err) {
@@ -399,7 +399,7 @@ const AvailabilitySearch: React.FC = () => {
       <div className="w-full my-3"></div>
 
       <Modal isOpen={isResultsModalOpen} onClose={clearResults} fullScreen showCloseButton>
-        <div className={`bg-white m-0 p-2 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
+        <div className={`bg-white m-0 z-20 ${available.length > 0 ? 'h-screen' : ''}`}>
           {error && <p>Error: {error}</p>}
           <div className="w-full">
             <FilterComponent
@@ -419,19 +419,25 @@ const AvailabilitySearch: React.FC = () => {
           </div>
 
           <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-full h-screen">
-            <div className="md:hidden h-2/3 flex flex-col w-full max-h-[100vh] mt-1">
+            <div className="md:hidden h-1/2 flex flex-col w-full max-h-[100vh] mt-1">
               <GoogleMap listings={mapListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation} />
-            </div>
-            <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
               <div className="text-center py-1 md:py-8">
                 <h2 className="text-xl font-semibold">Available Listings</h2>
                 <p className="text-sm text-muted-400">
                   {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
                 </p>
               </div>
+            </div>
+            <div ref={resultsContainerRef} className=" pt-96 md:pt-0 h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
+              <div className="hidden md:block text-center py-1 md:py-8">
+                <h2 className="text-xl font-semibold">Available Listings</h2>
+                <p className="text-sm text-muted-400">
+                  {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
+                </p>
+              </div>
               <div
-                className={`md:search-results h-full w-full flex flex-col justify-center items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xl:grid-cols-3
-    md:gap-x-6 md:gap-y-2 px-2 pb-16`}>
+                className={`md:search-results h-full w-full flex flex-col justify-center xs:items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xl:grid-cols-3
+md:gap-x-6 md:gap-y-2 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
@@ -462,13 +468,14 @@ const AvailabilitySearch: React.FC = () => {
                     );
                   })
                 ) : (
-                  <p className="md:ml-72 text-xs text-center md:w-full text-nowrap">No results - try adjusting the filters or click on Reset Filters</p>
+                  <div className="flex justify-center w-full h-full col-span-3">
+                    <p className="text-base text-center w-full text-nowrap">No results - try adjusting the filters or click on Reset Filters</p>
+                  </div>
                 )}
               </div>
             </div>
 
-
-            <div className="w-full md:h-full object">
+            <div className="hidden md:flex w-full md:h-full object">
               <GoogleMap listings={mapListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation} />
             </div>
           </div>

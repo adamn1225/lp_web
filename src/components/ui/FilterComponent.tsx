@@ -60,13 +60,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     onFilterChange({ priceOrder, bedroomCount, selectedCity: city || '', selectedAmenities, selectedTags });
   };
 
-  const handleAmenityChange = (amenity: string) => {
-    const newSelectedAmenities = selectedAmenities.includes(amenity)
-      ? selectedAmenities.filter(a => a !== amenity)
-      : [...selectedAmenities, amenity];
-    setSelectedAmenities(newSelectedAmenities);
-  };
-
   const handleTagChange = (tag: string) => {
     const newSelectedTags = selectedTags.includes(tag)
       ? selectedTags.filter(t => t !== tag)
@@ -88,7 +81,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     const tagDisplayNames: { [key: string]: string } = {
       "Ocean_front": "Ocean Front",
       "Ocean_view": "Ocean View",
-      "web_featured": "Featured",
       "Public_pool": "Pool",
       "Pets": "Pet Friendly"
     };
@@ -100,8 +92,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
       case "Ocean_front":
         return <FiSun className="text-foreground size-8 desktop-icon" />;
       case "Ocean_view":
-        return <FiEye className="text-foreground size-8 desktop-icon" />;
-      case "web_featured":
         return <FiStar className="text-foreground size-8 desktop-icon" />;
       case "Public_pool":
         return <FiDroplet className="text-foreground size-8 desktop-icon" />;
@@ -118,8 +108,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
         return <FiSun className="text-foreground size-5 mobile-icon" />;
       case "Ocean_view":
         return <FiEye className="text-foreground size-5 mobile-icon" />;
-      case "web_featured":
-        return <FiStar className="text-foreground size-5 mobile-icon" />;
       case "Public_pool":
         return <FiDroplet className="text-foreground size-5 mobile-icon" />;
       case "Pets":
@@ -133,8 +121,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     <div className="filter-component flex flex-col items-center justify-start gap-4 w-full bg-primary/40 h-full">
       <div className='items-start justify-center text-sm md:text-base'>
         <div className="flex flex-col md:flex-row-reverse w-full items-center gap-2 justify-center amenities-filter mt-2">
-          <div className="flex md:flex-nowrap w-full items-center justify-center gap-4">
-            <div className="tags-container flex gap-6 justify-start md:justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
+          <div className="flex md:flex-nowrap w-full items-center justify-center">
+            <div className="tags-container flex justify-start md:justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
               {tags.map(tag => (
                 <button
                   key={tag}
