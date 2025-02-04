@@ -3,7 +3,6 @@ const API_URL = import.meta.env.PUBLIC_NOETICS_CMS_API_URL + "/posts";
 const CMS_TOKEN = import.meta.env.PUBLIC_DG_CMS_TOKEN;
 
 let posts = [];
-let error = null;
 
 try {
     const res = await fetch(API_URL, {
@@ -17,16 +16,13 @@ try {
     posts = await res.json();
 } catch (err) {
     console.error("Error fetching blog posts:", err);
-    error = "Failed to load blog posts. Please try again later.";
 }
 ---
 
 <h1 class="text-3xl font-bold text-center mb-8">Blog</h1>
 
 {
-    error ? (
-        <p class="text-red-500 text-center">{error}</p>
-    ) : posts.length > 0 ? (
+    posts.length > 0 ? (
         <ul class="space-y-6">
             {posts.map((post) => (
                 <li class="p-6 border rounded-lg shadow-md bg-white dark:bg-gray-800">
