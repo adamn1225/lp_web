@@ -128,10 +128,6 @@ const AvailabilitySearch: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedLocation) {
-      setValidationError('Please select a city.');
-      return;
-    }
     setValidationError('');
     debouncedHandleSubmit(e);
   };
@@ -211,11 +207,27 @@ const AvailabilitySearch: React.FC = () => {
     }
   }, 300);
 
-  const handleCityClick = async (city: string): Promise<void> => {
-    console.log(`City selected: ${city}`);
-    setSelectedLocation(city);
-    setCurrentPage(1); // Reset to first page when city changes
-    debouncedHandleSubmit(null);
+  const handleCityClick = (city: string | null): void => {
+    setSelectedLocation(city || '');
+    if (city) {
+      const filteredListings = available.filter(listing => listing.address.city === city);
+      setFilteredListings(filteredListings);
+      setMapListings(filteredListings);
+    } else {
+      setFilteredListings(available);
+      setMapListings(available);
+    }
+  };
+
+  const filterListingsByCity = (city: string) => {
+    if (city) {
+      const filtered = available.filter(listing => listing.address.city === city);
+      setFilteredListings(filtered);
+      setMapListings(filtered);
+    } else {
+      setFilteredListings(available);
+      setMapListings(available);
+    }
   };
 
   const clearResults = () => {
@@ -405,7 +417,6 @@ const AvailabilitySearch: React.FC = () => {
               amenities={amenities}
               initialPriceOrder={filters.priceOrder || ''}
               initialBedroomCount={Number(filters.bedroomCount) || 0}
-              initialSelectedCity={filters.selectedCity || ''}
               initialSelectedAmenities={filters.selectedAmenities || []}
               initialSelectedTags={filters.selectedTags || []}
               showBedroomFilter={selectedBedroomAmount === ''}
@@ -427,64 +438,40 @@ const AvailabilitySearch: React.FC = () => {
               </div>
               <div
                 className={`md:search-results h-full w-full flex flex-col justify-center items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xl:grid-cols-3
-          md:gap-x-6 md:gap-y-2 px-2 pb-16`}>
+            md:gap-x-6 md:gap-y-2 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
                     return (
-                      <>
-                        <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
-                          <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-80 mb-4 rounded-xl relative overflow-hidden">
-                            <div className="relative w-full h-48">
-                              <img
-                                className="absolute inset-0 w-full h-full object-cover"
-                                src={property.pictures[0].original}
-                                alt={property.picture.caption}
-                              />
-                              <div className="absolute inset-0 bg-neutral-950/50" />
+                      <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
+                        <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-80 mb-4 rounded-xl relative overflow-hidden">
+                          <div className="relative w-full h-48">
+                            <img
+                              className="absolute inset-0 w-full h-full object-cover"
+                              src={property.pictures[0].original}
+                              alt={property.picture.caption}
+                            />
+                            <div className="absolute inset-0 bg-neutral-950/50" />
+                          </div>
+                          <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
+                            <h4 className="font-sans text-wrap font-medium text-lg text-slate-900">
+                              {property.title}
+                            </h4>
+                            <p className="text-sm text-muted-400">
+                              {property.address.city}, {property.address.state}
+                            </p>
+                            <div className="flex items-end h-full">
+                              <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
                             </div>
-                            <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
-                              <h4 className="font-sans text-wrap font-medium text-lg text-slate-900">
-                                {property.title}
-                              </h4>
-                              <p className="text-sm text-muted-400">
-                                {property.address.city}, {property.address.state}
-                              </p>
-
-                              <div className="flex items-end h-full">
-                                <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
-                              </div>
-                            </div>
-                          </article>
-                        </a>
-
-                      </>
+                          </div>
+                        </article>
+                      </a>
                     );
                   })
                 ) : (
                   <p className="md:ml-72 text-xs text-center md:w-full text-nowrap">No results - try adjusting the filters or click on Reset Filters</p>
                 )}
-                {filteredListings.length > itemsPerPage && (
-                  <div className="flex justify-center items-center w-full my-6 pb-6">
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
-                    >
-                      Previous
-                    </button>
-                    <span className="px-4 py-2">{currentPage}</span>
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={paginatedListings.length < itemsPerPage}
-                      className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
-                    >
-                      Next
-                    </button>
-                  </div>
-                )}
               </div>
-
             </div>
 
 

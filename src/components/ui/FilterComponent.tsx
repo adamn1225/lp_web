@@ -12,7 +12,6 @@ interface FilterComponentProps {
   bedroomOptions: number[]; // Add bedroomOptions prop
   initialPriceOrder: string;
   initialBedroomCount: number | null;
-  initialSelectedCity: string;
   initialSelectedAmenities: string[];
   initialSelectedTags: string[];
   showBedroomFilter: boolean; // Add the showBedroomFilter prop
@@ -27,21 +26,19 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   bedroomOptions, // Destructure bedroomOptions prop
   initialPriceOrder,
   initialBedroomCount,
-  initialSelectedCity,
   initialSelectedAmenities,
   initialSelectedTags,
   showBedroomFilter // Destructure the showBedroomFilter prop
 }) => {
   const [priceOrder, setPriceOrder] = useState<string>(initialPriceOrder);
   const [bedroomCount, setBedroomCount] = useState<number | null>(initialBedroomCount);
-  const [selectedCity, setSelectedCity] = useState<string>(initialSelectedCity);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(initialSelectedAmenities);
   const [selectedTags, setSelectedTags] = useState<string[]>(initialSelectedTags);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags });
-  }, [priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags]);
+    onFilterChange({ priceOrder, bedroomCount, selectedAmenities, selectedTags });
+  }, [priceOrder, bedroomCount, selectedAmenities, selectedTags]);
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newPriceOrder = e.target.value;
@@ -51,12 +48,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   const handleBedroomChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newBedroomCount = Number(e.target.value);
     setBedroomCount(newBedroomCount);
-    onFilterChange({ priceOrder, bedroomCount: newBedroomCount, selectedCity, selectedAmenities, selectedTags });
-  };
-
-  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSelectedCity = e.target.value;
-    setSelectedCity(newSelectedCity);
+    onFilterChange({ priceOrder, bedroomCount: newBedroomCount, selectedAmenities, selectedTags });
   };
 
   const handleAmenityChange = (amenity: string) => {
@@ -71,13 +63,12 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
       ? selectedTags.filter(t => t !== tag)
       : [...selectedTags, tag];
     setSelectedTags(newSelectedTags);
-    onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags: newSelectedTags });
+    onFilterChange({ priceOrder, bedroomCount, selectedAmenities, selectedTags: newSelectedTags });
   };
 
   const handleResetFilters = () => {
     setPriceOrder('default');
     setBedroomCount(null);
-    setSelectedCity('');
     setSelectedAmenities([]);
     setSelectedTags([]);
     onResetFilters();
@@ -174,13 +165,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
               </select>
             </>
           )}
-          <label className="font-semibold">City:</label>
-          <select value={selectedCity} onChange={handleCityChange} className="border border-secondary/30 rounded-lg p-2 w-full">
-            <option value="">Any</option>
-            {cities.map(city => (
-              <option key={city} value={city}>{city}</option>
-            ))}
-          </select>
           <button onClick={() => setIsFilterModalOpen(false)} className="mt-4 bg-secondary w-full text-white px-2 py-2 rounded">
             Close Filters
           </button>
