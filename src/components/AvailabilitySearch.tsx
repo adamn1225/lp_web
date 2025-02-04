@@ -446,7 +446,7 @@ const AvailabilitySearch: React.FC = () => {
                 </p>
               </div>
               <div
-                className={`md:search-results h-full w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:grid md:mr-0 ${getGridColumns(paginatedListings.length)} md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
+                className={`md:search-results h-fit w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:grid md:mr-0 ${getGridColumns(paginatedListings.length)} md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
