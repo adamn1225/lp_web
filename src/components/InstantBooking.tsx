@@ -54,34 +54,34 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
         const apiUrl = isLocal
           ? `http://localhost:8888/.netlify/functions/fetchPricingData?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`
           : `/.netlify/functions/fetchPricingData?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`;
-    
+
         console.log('Fetching unavailable dates from:', apiUrl);
         console.log('isLocal:', isLocal);
-    
+
         const response = await fetch(apiUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         });
-    
+
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
-    
+
         const data = await response.json();
         console.log('Fetched unavailable dates:', data);
-    
+
         if (!data.unavailableDates || !Array.isArray(data.unavailableDates)) {
           throw new Error('Invalid data structure');
         }
-    
+
         const unavailable = data.unavailableDates.map((date: string) => new Date(date));
         const booked = data.bookedDates.map((date: string) => new Date(date));
-    
+
         console.log('Unavailable dates:', unavailable);
         console.log('Booked dates:', booked);
-    
+
         setUnavailableDates(unavailable);
         setBookedDates(booked);
       } catch (err) {
