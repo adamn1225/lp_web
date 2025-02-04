@@ -56,7 +56,7 @@ const fetchAvailability = async (listingId, checkIn, checkOut) => {
     price: day.price
   }));
 
-  console.log(`Availability data for listing ${listingId}: ${JSON.stringify(availabilityData)}`);
+  console.log(`Availability data for listing ${listingId}: ${availabilityData.length} days available`);
 
   return availabilityData;
 };
@@ -106,7 +106,7 @@ export const handler = async (event, context) => {
       const listings = await fetchListingsInBatches(urls);
       const uniqueCities = Array.from(new Set(listings.map(listing => listing.address.city)));
 
-      console.log(`Fetched unique cities: ${JSON.stringify(uniqueCities)}`);
+      console.log(`Fetched unique cities: ${uniqueCities.length} cities`);
 
       return {
         statusCode: 200,
@@ -141,7 +141,7 @@ export const handler = async (event, context) => {
       const listings = await fetchListingsInBatches(urls);
       const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
 
-      console.log(`Fetched unique bedrooms: ${JSON.stringify(uniqueBedrooms)}`);
+      console.log(`Fetched unique bedrooms: ${uniqueBedrooms.length} bedroom options`);
 
       return {
         statusCode: 200,
@@ -213,7 +213,10 @@ export const handler = async (event, context) => {
 
   try {
     const fetchListings = async (skip) => {
-      let url = `https://open-api.guesty.com/v1/listings?limit=${limit}&skip=${skip}`;
+      let url = ['https://open-api.guesty.com/v1/listings?limit=100&skip=0',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=100',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=200',
+        'https://open-api.guesty.com/v1/listings?limit=100&skip=300',];
       const queryParams = new URLSearchParams({
         checkIn: checkIn,
         checkOut: checkOut,
@@ -244,9 +247,9 @@ export const handler = async (event, context) => {
       return response.json();
     };
 
-    const data = await fetchListings((page - 1) * limit);
+    const data = await fetchListings((page - 1));
 
-    console.log(`Fetched listings: ${JSON.stringify(data.results)}`);
+    console.log(`Fetched listings: ${data.results.length} listings`);
 
     // Filter by city and bedroom amount if specified
     let combinedResults = data.results;
@@ -257,7 +260,7 @@ export const handler = async (event, context) => {
       combinedResults = combinedResults.filter(listing => listing.bedrooms === Number(bedroomAmount));
     }
 
-    console.log(`Listings after filtering by city and bedroom amount: ${JSON.stringify(combinedResults)}`);
+    console.log(`Listings after filtering by city and bedroom amount: ${combinedResults.length} listings`);
 
     // Fetch availability for each listing and filter out unavailable listings
     const availableListings = [];
@@ -270,14 +273,14 @@ export const handler = async (event, context) => {
         if (availableDates.length > 0) {
           availableListings.push({ ...listing, prices });
         } else {
-          console.log(`Listing ${listing._id} is not available for dates: ${JSON.stringify(availableDates)}`);
+          console.log(`Listing ${listing._id} is not available for dates: ${availableDates.length} days`);
         }
       } catch (error) {
         console.error(`Error fetching availability for listing ${listing._id}: ${error.message}`);
       }
     }
 
-    console.log(`Available listings: ${JSON.stringify(availableListings)}`);
+    console.log(`Available listings: ${availableListings.length} listings`);
 
     return {
       statusCode: 200,

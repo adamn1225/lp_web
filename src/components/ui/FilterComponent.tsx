@@ -132,8 +132,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     <div className="filter-component flex flex-col items-center justify-start gap-4 p-2 md:p-4 w-full bg-primary/40 h-full">
       <div className='items-start justify-center text-sm md:text-base'>
         <div className="flex flex-col md:flex-row-reverse w-full items-center gap-2 justify-center amenities-filter mt-2">
-          <div className="flex md:flex-nowrap w-full items-center justify-center gap-4">
-            <div className="tags-container flex gap-6 justify-start md:justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
+          <div className="flex  w-full items-center justify-center gap-2">
+            <div className="tags-container flex flex-wrap md:flex-nowrap gap-2 justify-center md:justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
               {tags.map(tag => (
                 <button
                   key={tag}

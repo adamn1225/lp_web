@@ -71,7 +71,8 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(10); // Number of items per page
+  const [itemsPerPage] = useState<number>(9); // Number of items per page
+  const [validationError, setValidationError] = useState<string>(''); // State for validation error message
 
   const apiUrl = '/.netlify/functions/availability';
 
@@ -127,6 +128,11 @@ const AvailabilitySearch: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedLocation) {
+      setValidationError('Please select a city.');
+      return;
+    }
+    setValidationError('');
     debouncedHandleSubmit(e);
   };
 
@@ -270,24 +276,16 @@ const AvailabilitySearch: React.FC = () => {
     }
   };
 
-  const getGridColsClass = () => {
-    if (filteredListings.length >= 4) {
-      return 'md:grid-cols-2 xxl:grid-cols-3';
-    } else if (filteredListings.length >= 1 && filteredListings.length <= 4) {
-      return 'grid-cols-2';
-    } else {
-      return 'grid-cols-2';
-    }
-  };
-
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
     debouncedHandleSubmit(null);
   };
 
+  const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
-      {loading && available.length < 6 && (
+      {loading && (
         <div className="progress-bar">
           <motion.div
             className="progress-bar-inner"
@@ -339,6 +337,7 @@ const AvailabilitySearch: React.FC = () => {
               </div>
               <div className="w-full flex flex-col">
                 <label htmlFor="location" className="text-slate-800 font-semibold">Search by City</label>
+                {validationError && <p className="text-red-500 text-sm">{validationError}</p>}
                 <select
                   id="location"
                   value={selectedLocation}
@@ -356,6 +355,7 @@ const AvailabilitySearch: React.FC = () => {
                     </>
                   )}
                 </select>
+
               </div>
               <div className="w-full flex flex-col">
                 <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
@@ -415,105 +415,81 @@ const AvailabilitySearch: React.FC = () => {
           <CityNavigation cities={cities} onCityClick={handleCityClick} />
 
           <div className="flex flex-col md:flex-row gap-3 md:gap-0 w-full h-screen">
-            <div className="md:hidden h-80 flex flex-col w-full max-h-[100vh] mt-1">
-              <GoogleMap listings={mapListings} onMarkerClick={null} selectedCity={selectedLocation} />
+            <div className="md:hidden h-2/3 flex flex-col w-full max-h-[100vh] mt-1">
+              <GoogleMap listings={mapListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation} />
             </div>
             <div ref={resultsContainerRef} className="h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
-              <div className="text-center py-1 md:py-4">
+              <div className="text-center py-1 md:py-8">
                 <h2 className="text-xl font-semibold">Available Listings</h2>
                 <p className="text-sm text-muted-400">
                   {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
                 </p>
               </div>
               <div
-                className={`md:search-results h-full w-full flex flex-col items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xxl:${getGridColsClass()} 
-          md:gap-x-6 md:gap-y-1 md:place-items-start md:justify-items-start px-2 pb-16`}>
-                {filteredListings.length > 0 ? (
-                  filteredListings.map((property, index) => {
+                className={`md:search-results h-full w-full flex flex-col justify-center items-stretch gap-4 md:grid md:mr-0 md:grid-cols-2 xl:grid-cols-3
+          md:gap-x-6 md:gap-y-2 px-2 pb-16`}>
+                {paginatedListings.length > 0 ? (
+                  paginatedListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
                     return (
-                      <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
-                        <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-82 h-82 mb-4 rounded-xl relative">
-                          <div className="relative w-full h-72">
-                            <img
-                              className="absolute inset-0 w-full h-full object-cover"
-                              src={property.pictures[0].original}
-                              alt={property.picture.caption}
-                            />
-                            <div className="absolute inset-0 bg-neutral-950/50" />
-                          </div>
-                          <div className="p-2 w-full bg-white flex flex-col justify-start ">
-                            <h4 className="font-sans text-wrap font-medium text-xl text-slate-900">
-                              {property.title}
-                            </h4>
-                            <p className="text-sm text-muted-400">
-                              {property.address.city}, {property.address.state}
-                            </p>
-                            <span className="hidden">{property.bedrooms}</span>
-                            <hr className="border border-muted-200 dark:border-muted-800 my-2" />
-                            <div className="flex items-end h-full">
-                              <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
+                      <>
+                        <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
+                          <article className="flex flex-col bg-white shadow-lg shadow-muted-300/30 w-full h-80 mb-4 rounded-xl relative overflow-hidden">
+                            <div className="relative w-full h-48">
+                              <img
+                                className="absolute inset-0 w-full h-full object-cover"
+                                src={property.pictures[0].original}
+                                alt={property.picture.caption}
+                              />
+                              <div className="absolute inset-0 bg-neutral-950/50" />
                             </div>
-                          </div>
-                        </article>
-                      </a>
+                            <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
+                              <h4 className="font-sans text-wrap font-medium text-lg text-slate-900">
+                                {property.title}
+                              </h4>
+                              <p className="text-sm text-muted-400">
+                                {property.address.city}, {property.address.state}
+                              </p>
+
+                              <div className="flex items-end h-full">
+                                <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
+                              </div>
+                            </div>
+                          </article>
+                        </a>
+
+                      </>
                     );
                   })
                 ) : (
-                  <p className="pt-12 text-center">No results - try adjusting the filters or click on Reset Filters</p>
+                  <p className="md:ml-72 text-xs text-center md:w-full text-nowrap">No results - try adjusting the filters or click on Reset Filters</p>
                 )}
-                <div className="flex justify-center items-center w-full ml-70 mt-12">
-                  {loading && available.length >= 6 && (
-                    <div className="h-40 w-full pl-96">
-                      <ClipLoader size={70} color={"#123abc"} loading={true} />
-                    </div>
-                  )}
-                </div>
+                {filteredListings.length > itemsPerPage && (
+                  <div className="flex justify-center items-center w-full my-6 pb-6">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
+                    >
+                      Previous
+                    </button>
+                    <span className="px-4 py-2">{currentPage}</span>
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={paginatedListings.length < itemsPerPage}
+                      className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
-              <div className="flex justify-center items-center mt-4">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
-                >
-                  Previous
-                </button>
-                <span className="px-4 py-2">{currentPage}</span>
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={filteredListings.length < itemsPerPage}
-                  className="px-4 py-2 mx-2 bg-secondary text-white rounded-md disabled:opacity-50"
-                >
-                  Next
-                </button>
-              </div>
+
             </div>
+
+
             <div className="w-full md:h-full object">
               <GoogleMap listings={mapListings} onMarkerClick={handleMarkerClick} selectedCity={selectedLocation} />
-            </div>
-            <div className="md:hidden  flex justify-center items-baseline mt-4 h-full w-full md:w-1/4">
-              <button
-                onClick={() => setIsFilterModalOpen(true)}
-                className="w-2/3 flex gap-1 text-lg justify-center font-semibold bg-secondary text-white py-1.5 rounded-md"
-              >
-                <SlidersHorizontal />  Filter
-              </button>
-              <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)} className=" z-40 h-3/4">
-                <FilterComponent
-                  onFilterChange={handleFilterChange}
-                  onResetFilters={resetFilters}
-                  cities={cities}
-                  tags={tags}
-                  amenities={amenities}
-                  initialPriceOrder={filters.priceOrder || ''}
-                  initialBedroomCount={Number(filters.bedroomCount) || 0} // Ensure it's a number
-                  initialSelectedCity={filters.selectedCity || ''}
-                  initialSelectedAmenities={filters.selectedAmenities || []}
-                  initialSelectedTags={filters.selectedTags || []}
-                  showBedroomFilter={selectedBedroomAmount === ''}
-                  bedroomOptions={bedroomOptions}
-                />
-              </Modal>
             </div>
           </div>
         </div>

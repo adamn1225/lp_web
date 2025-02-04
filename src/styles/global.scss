@@ -13,6 +13,11 @@ body {
   overflow-x: hidden;
 }
 
+/* filepath: /home/adam-noah/Desktop/lp_web/src/styles/global.scss */
+.no-scroll {
+  overflow-y: hidden !important;
+}
+
 .door-text {
   display: inline-block;
   transition: none;
