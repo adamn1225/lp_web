@@ -39,7 +39,7 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ sta
                 value={`${formattedStartDate} - ${formattedEndDate}`}
                 onClick={handleInputClick}
                 readOnly
-                className="border rounded-xl border-slate-400 p-2 w-full"
+                className="border rounded-xl border-slate-400 w-56"
             />
             {showPicker && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -57,7 +57,7 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ sta
                                 minDate={new Date()} // Prevent selection of past dates
                                 months={2} // Show two calendars
                                 direction="horizontal" // Show calendars in a row for desktop
-                                className="flex-1"
+                                className="flex-1 w-full"
                             />
                         </div>
                         <div className="flex justify-center mt-4">

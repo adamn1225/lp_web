@@ -273,6 +273,16 @@ export const handler = async (event, context) => {
 
     console.log(`Available listings: ${availableListings.length} listings`);
 
+    // Define the city order
+    const cityOrder = ['North Myrtle Beach', 'Little River', 'Myrtle Beach', 'Surfside Beach', 'Murrells Inlet'];
+
+    // Sort the available listings based on the city order
+    availableListings.sort((a, b) => {
+      const cityA = a.address.city;
+      const cityB = b.address.city;
+      return cityOrder.indexOf(cityA) - cityOrder.indexOf(cityB);
+    });
+
     return {
       statusCode: 200,
       headers: {

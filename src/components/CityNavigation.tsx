@@ -4,27 +4,31 @@ import { motion } from 'framer-motion';
 interface CityNavigationProps {
     cities: string[];
     onCityClick: (city: string | null) => Promise<void>;
+    setActiveCity: (city: string) => void; // Add this prop
 }
 
-const CityNavigation: React.FC<CityNavigationProps> = ({ cities, onCityClick }) => {
-    const [activeCity, setActiveCity] = useState<string | null>(null);
+const CityNavigation: React.FC<CityNavigationProps> = ({ cities, onCityClick, setActiveCity }) => {
+    const [activeCity, setActiveCityState] = useState<string | null>('All Locations');
     const [loading, setLoading] = useState<boolean>(false);
 
-    const handleCityClick = (city: string) => {
-        setActiveCity(city);
+    const handleCityClick = (city: string | null) => {
+        setActiveCityState(city);
+        setActiveCity(city || ''); // Call the callback to set the active city in AvailabilitySearch
         setLoading(true);
         onCityClick(city).finally(() => {
             setLoading(false);
         });
     };
 
+    const displayCities = ['All Locations', 'North Myrtle Beach', 'Myrtle Beach'];
+
     return (
         <div className="city-navigation flex flex-col items-center gap-4 pt-2 bg-gray-100 py-2 relative w-full">
             <div className={`flex justify-start md:justify-center gap-1 overflow-x-auto w-full ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
-                {cities.map((city) => (
+                {displayCities.map((city) => (
                     <button
                         key={city}
-                        onClick={() => handleCityClick(city)}
+                        onClick={() => handleCityClick(city === 'All Locations' ? null : city)}
                         className={`text-secondary text-sm md:text-base font-semibold hover:underline px-2 py-2 rounded-md whitespace-nowrap ${activeCity === city ? 'bg-white underline text-secondary font-bold border border-secondary/90 shadow-md' : ''}`}
                         disabled={loading} // Disable button while loading
                     >

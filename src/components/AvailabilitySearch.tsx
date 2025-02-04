@@ -58,7 +58,7 @@ const AvailabilitySearch: React.FC = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [tagsLoading, setTagsLoading] = useState<boolean>(false);
-  const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [selectedLocation, setSelectedLocation] = useState<string>('North Myrtle Beach');
   const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>('');
   const [cities, setCities] = useState<string[]>([]);
   const [amenities, setAmenities] = useState<string[]>([]);
@@ -70,7 +70,7 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(9); // Number of items per page
+  const [itemsPerPage] = useState<number>(54); // Number of items per page
   const [validationError, setValidationError] = useState<string>(''); // State for validation error message
 
   const apiUrl = '/.netlify/functions/availability';
@@ -128,7 +128,21 @@ const AvailabilitySearch: React.FC = () => {
   const handleCityClick = async (city: string | null): Promise<void> => {
     setSelectedLocation(city || '');
     if (city) {
-      const filteredListings = available.filter(listing => listing.address.city === city);
+      let filteredListings: Listing[];
+      if (city === 'Myrtle Beach') {
+        filteredListings = available.filter(listing =>
+          listing.address.city === 'Myrtle Beach' ||
+          listing.address.city === 'Surfside Beach' ||
+          listing.address.city === 'Murrells Inlet'
+        );
+      } else if (city === 'North Myrtle Beach') {
+        filteredListings = available.filter(listing =>
+          listing.address.city === 'North Myrtle Beach' ||
+          listing.address.city === 'Little River'
+        );
+      } else {
+        filteredListings = available.filter(listing => listing.address.city === city);
+      }
       setFilteredListings(filteredListings);
       setMapListings(filteredListings);
     } else {
@@ -136,6 +150,57 @@ const AvailabilitySearch: React.FC = () => {
       setMapListings(available);
     }
   };
+
+  const citySelection = async (city: string | null): Promise<void> => {
+    if (!city) {
+      setFilteredListings(available);
+      setMapListings(available);
+      return;
+    }
+
+    let filteredListings: Listing[] = [];
+
+    // Grouping related locations under each selection
+    const locationMapping: Record<string, string[]> = {
+      'Myrtle Beach': ['Myrtle Beach', 'Surfside Beach', 'Murrells Inlet'],
+      'North Myrtle Beach': ['North Myrtle Beach', 'Little River']
+    };
+
+    // If city is in mapping, filter by all associated locations
+    if (locationMapping[city]) {
+      filteredListings = available.filter(listing =>
+        locationMapping[city].includes(listing.address.city)
+      );
+    } else {
+      // If city is not in mapping, just filter by the exact city
+      filteredListings = available.filter(listing => listing.address.city === city);
+    }
+
+    // Update the state with the filtered results
+    setSelectedLocation(city);
+    setFilteredListings(filteredListings);
+    setMapListings(filteredListings);
+  };
+
+  // const filterListings = (city: string | null) => {
+  //   let filteredListings;
+  //   if (city === 'Myrtle Beach') {
+  //     filteredListings = available.filter(listing =>
+  //       listing.address.city === 'Myrtle Beach' ||
+  //       listing.address.city === 'Surfside Beach' ||
+  //       listing.address.city === 'Murrells Inlet'
+  //     );
+  //   } else if (city === 'North Myrtle Beach') {
+  //     filteredListings = available.filter(listing =>
+  //       listing.address.city === 'North Myrtle Beach' ||
+  //       listing.address.city === 'Little River'
+  //     );
+  //   } else {
+  //     filteredListings = available.filter(listing => listing.address.city === city);
+  //   }
+  //   setFilteredListings(filteredListings);
+  //   setMapListings(filteredListings);
+  // };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,16 +235,6 @@ const AvailabilitySearch: React.FC = () => {
       }
 
       let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&page=${currentPage}&limit=${itemsPerPage}`;
-
-      if (selectedLocation) {
-        url += `&city=${encodeURIComponent(selectedLocation)}`;
-      }
-
-      if (selectedBedroomAmount) {
-        url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
-      }
-
-      console.log('API URL:', url);
 
       const response = await fetch(url);
       if (!response.ok) {
@@ -236,6 +291,12 @@ const AvailabilitySearch: React.FC = () => {
     applyFilters(newFilters);
   };
 
+  const resetFilters = () => {
+    setFilters({});
+    setFilteredListings(available);
+    setMapListings(available);
+  };
+
   const applyFilters = (filters: any) => {
     let filtered = [...available];
 
@@ -260,17 +321,11 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     if (filters.selectedCity) {
-      filtered = filtered.filter(listing => listing.address.city === filters.selectedCity);
+      handleCityClick(filters.selectedCity);
+    } else {
+      setFilteredListings(filtered);
+      setMapListings(filtered);
     }
-
-    setFilteredListings(filtered);
-    setMapListings(filtered);
-  };
-
-  const resetFilters = () => {
-    setFilters({});
-    setFilteredListings(available);
-    setMapListings(available);
   };
 
   const handleMarkerClick = (id: string) => {
@@ -286,16 +341,6 @@ const AvailabilitySearch: React.FC = () => {
   };
 
   const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  const getGridColumns = (length: number) => {
-    if (length > 3 && length % 2 === 0) {
-      return 'md:grid-cols-2 xl:grid-cols-2';
-    } else if (length > 3 && length % 2 !== 0) {
-      return 'md:grid-cols-3 xl:grid-cols-3';
-    } else {
-      return 'md:grid-cols-2 xl:grid-cols-2';
-    }
-  };
 
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
@@ -317,10 +362,10 @@ const AvailabilitySearch: React.FC = () => {
           <span className="flex w-fit items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
         </button>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="z-30">
-        <form onSubmit={handleSubmit} className="flex flex-col justify-center bg-zinc-100 items-center h-full md:h-1/2 rounded-md p-7">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="z-30 mb-80">
+        <form onSubmit={handleSubmit} className="flex  justify-center bg-zinc-100 w-full h-full md:h-auto rounded-md p-7">
           <div className="flex flex-col items-center justify-center w-full px-6">
-            <div className="flex flex-col justify-center items-center gap-1 w-full">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full text-lg">
               <div className="w-full flex flex-col">
                 <label className="text-slate-800 font-semibold" htmlFor="dateRange">Select Dates:</label>
                 <DateRangePickerComponent
@@ -349,13 +394,16 @@ const AvailabilitySearch: React.FC = () => {
                   }}
                 />
               </div>
-              <div className="w-full flex flex-col">
+              {/* <div className="w-full flex flex-col">
                 <label htmlFor="location" className="text-slate-800 font-semibold">Search by City</label>
                 {validationError && <p className="text-red-500 text-sm">{validationError}</p>}
                 <select
                   id="location"
                   value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedLocation(e.target.value);
+                    citySelection(e.target.value); // Call citySelection when the city is selected
+                  }}
                   className="border border-slate-400 rounded-xl p-2 w-full"
                 >
                   {cities.length === 0 ? (
@@ -363,14 +411,12 @@ const AvailabilitySearch: React.FC = () => {
                   ) : (
                     <>
                       <option value=''>Select a City</option>
-                      {cities.map((city) => (
-                        <option key={city} value={city}>{city}</option>
-                      ))}
+                      <option value="North Myrtle Beach">North Myrtle Beach</option>
+                      <option value="Myrtle Beach">Myrtle Beach</option>
                     </>
                   )}
                 </select>
-
-              </div>
+              </div> */}
               <div className="w-full flex flex-col">
                 <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
                 <select
@@ -379,10 +425,16 @@ const AvailabilitySearch: React.FC = () => {
                   onChange={(e) => setSelectedBedroomAmount(e.target.value)}
                   className="border rounded-xl border-slate-400 p-2 w-full"
                 >
-                  <option value="">Any</option>
-                  {bedroomOptions.map(bedroom => (
-                    <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
-                  ))}
+                  {bedroomOptions.length === 0 ? (
+                    <option>Loading...</option>
+                  ) : (
+                    <>
+                      <option value="">Any</option>
+                      {bedroomOptions.map(bedroom => (
+                        <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
+                      ))}
+                    </>
+                  )}
                 </select>
               </div>
               <div className="w-full flex flex-col">
@@ -397,7 +449,7 @@ const AvailabilitySearch: React.FC = () => {
                 />
               </div>
               <div className="h-full flex items-end">
-                <button type="submit" className="w-fit h-fit flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
+                <button type="submit" className="w-fit h-fit text-lg flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold rounded-md text-slate-50">
                   <Search size={20} /> <p>Search</p>
                 </button>
               </div>
@@ -415,16 +467,17 @@ const AvailabilitySearch: React.FC = () => {
               onFilterChange={handleFilterChange}
               onResetFilters={resetFilters}
               cities={cities}
-              tags={tags}
               amenities={amenities}
+              tags={tags}
+              bedroomOptions={bedroomOptions}
               initialPriceOrder={filters.priceOrder || ''}
               initialBedroomCount={Number(filters.bedroomCount) || 0}
               initialSelectedCity={filters.selectedCity || ''}
               initialSelectedAmenities={filters.selectedAmenities || []}
               initialSelectedTags={filters.selectedTags || []}
               showBedroomFilter={selectedBedroomAmount === ''}
-              bedroomOptions={bedroomOptions}
               onCityClick={handleCityClick}
+              setActiveCity={setSelectedLocation}
             />
           </div>
 
@@ -446,7 +499,7 @@ const AvailabilitySearch: React.FC = () => {
                 </p>
               </div>
               <div
-                className={`md:search-results h-fit w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:grid md:mr-0 ${getGridColumns(paginatedListings.length)} md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
+                className={`md:search-results h-fit w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:mr-0 md:grid grid-cols-3 md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
                     const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
