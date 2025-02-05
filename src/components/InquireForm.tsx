@@ -27,6 +27,7 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
   const [verificationSent, setVerificationSent] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerified, setIsVerified] = useState(false);
+  const [verificationMessage, setVerificationMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,6 +54,7 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
     try {
       await axios.post('/.netlify/functions/sendVerificationCode', { phoneNumber: formattedPhone });
       setVerificationSent(true);
+      setVerificationMessage('SMS Verification Code Sent!');
     } catch (error) {
       console.error('Error sending verification code:', error);
       alert('Error sending verification code. Please check the phone number and try again.');
@@ -65,6 +67,7 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
       const response = await axios.post('/.netlify/functions/verifyCode', { phoneNumber: formattedPhone, code: verificationCode });
       if (response.data.status === 'approved') {
         setIsVerified(true);
+        setVerificationMessage('Phone number verified successfully!');
       } else {
         alert('Verification failed. Please try again.');
       }
@@ -145,14 +148,19 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
               defaultCountry="US"
               placeholder="(---) --- ----"
             />
-            <button
-              type="button"
-              onClick={sendVerificationCode}
-              className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
-            >
-              Send Verification Code
-            </button>
-            {verificationSent && (
+            {!verificationSent && (
+              <button
+                type="button"
+                onClick={sendVerificationCode}
+                className="bg-cyan-600 text-white px-4 py-2 rounded-lg w-full drop-shadow-lg"
+              >
+                Send Verification Code
+              </button>
+            )}
+            {verificationMessage && (
+              <p className="text-green-600">{verificationMessage}</p>
+            )}
+            {verificationSent && !isVerified && (
               <div>
                 <input
                   type="text"

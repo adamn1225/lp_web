@@ -40,7 +40,7 @@ const PaymentStep: React.FC<PaymentStepProps> = ({
             const options: GuestyTokenizationRenderOptions = {
                 containerId: 'payment-container',
                 providerId: '65667fb19986e2000e99278f',
-                amount: calculatedPrice || 0,
+                amount: calculatedPrice || null,
                 currency: 'USD',
                 onStatusChange: (isValid) => setIsFormValid(isValid),
                 initialValues: { firstName, lastName },
