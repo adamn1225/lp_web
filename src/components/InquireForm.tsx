@@ -110,7 +110,7 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ conversationId: data.reservationData._id, message: formData.message })
+        body: JSON.stringify({ conversationId: data.reservationData.conversationId, message: formData.message })
       });
 
       setModalIsOpen(false); // Close the modal on successful submission
@@ -161,21 +161,20 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
               defaultCountry="US"
               placeholder="(---) --- ----"
             />
-            <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className="hidden w-full px-4 py-2 border rounded" />
             <div className="flex gap-1">
               <input
                 type="date"
                 name="checkIn"
                 value={formData.checkIn}
                 onChange={handleChange}
-                className="hidden w-full px-4 py-2 border rounded"
+                className="w-full px-4 py-2 border rounded"
               />
               <input
                 type="date"
                 name="checkOut"
                 value={formData.checkOut}
                 onChange={handleChange}
-                className="hidden w-full px-4 py-2 border rounded"
+                className="w-full px-4 py-2 border rounded"
               />
             </div>
             {!verificationSent && (
