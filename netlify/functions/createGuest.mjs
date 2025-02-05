@@ -3,7 +3,8 @@ import fetch from 'node-fetch';
 export async function handler(event, context) {
   const { firstName, lastName, phone, email, checkIn, checkOut, listingId } = JSON.parse(event.body);
 
-  if (!firstName || !lastName || !phone || email || checkIn || checkOut || listingId) {
+  // Only validate firstName and lastName
+  if (!firstName || !lastName) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Missing required fields' })
@@ -42,11 +43,16 @@ export async function handler(event, context) {
       method: 'POST',
       headers,
       body: JSON.stringify({
+        guest: {
+          firstName,
+          lastName,
+          phone,
+          email
+        },
+        status: 'inquiry',
         listingId,
         checkInDateLocalized: checkIn,
-        checkOutDateLocalized: checkOut,
-        status: 'inquiry',
-        guestId
+        checkOutDateLocalized: checkOut
       })
     };
 
