@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 export async function handler(event, context) {
   const { firstName, lastName, phone, email, checkIn, checkOut, listingId } = JSON.parse(event.body);
 
-  if (!firstName || !lastName || !phone || email || !checkIn || !checkOut || listingId) {
+  if (!firstName || !lastName || !phone || email || checkIn || checkOut || listingId) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'Missing required fields' })
