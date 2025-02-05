@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Search } from "lucide-react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { Search, SlidersHorizontal } from "lucide-react";
 import { motion } from "framer-motion";
 import 'react-datepicker/dist/react-datepicker.css';
 import { addDays } from "date-fns";
-import { debounce } from 'lodash';
+import { ClipLoader } from 'react-spinners';
 import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
-import GoogleMap from './GoogleMap';
+import GoogleMap from './GoogleMap'; // Import the GoogleMap component
 import FilterComponent from './ui/FilterComponent';
+import { debounce } from 'lodash';
 
 interface Listing {
   _id: string;
@@ -43,22 +44,21 @@ interface Listing {
   amenities: string[];
   tags: string[];
 }
-
-const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
+const allowedTags = [];
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
   const [numGuests, setNumGuests] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [available, setListings] = useState<Listing[]>([]);
-  const [filteredListings, setFilteredListings] = useState<Listing[]>([]);
-  const [mapListings, setMapListings] = useState<Listing[]>([]);
+  const [available, setListings] = useState<any[]>([]);
+  const [filteredListings, setFilteredListings] = useState<any[]>([]);
+  const [mapListings, setMapListings] = useState<any[]>([]);
   const [dateRange, setDateRange] = useState([{ startDate: addDays(new Date(), 1), endDate: addDays(new Date(), 3), key: 'selection' }]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [tagsLoading, setTagsLoading] = useState<boolean>(false);
-  const [selectedLocation, setSelectedLocation] = useState<string>('North Myrtle Beach');
+  const [selectedLocation, setSelectedLocation] = useState<string>('Myrtle Beach');
   const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>('');
   const [cities, setCities] = useState<string[]>([]);
   const [amenities, setAmenities] = useState<string[]>([]);
@@ -71,14 +71,14 @@ const AvailabilitySearch: React.FC = () => {
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage] = useState<number>(300); // Number of items per page
-  const [validationError, setValidationError] = useState<string>(''); // State for validation error message
+  const [validationError, setValidationError] = useState<string>('');
 
   const apiUrl = '/.netlify/functions/availability';
 
   const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
   const resultsContainerRef = useRef<HTMLDivElement>(null);
 
-  const cache = useRef<{ [key: string]: Listing[] }>({});
+  const cache = useRef<{ [key: string]: any[] }>({});
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -113,6 +113,7 @@ const AvailabilitySearch: React.FC = () => {
         if (tagsData.error) {
           throw new Error(tagsData.error);
         }
+        const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
         const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
         setTags(filteredTags);
       } catch (err) {
@@ -181,6 +182,7 @@ const AvailabilitySearch: React.FC = () => {
     setMapListings(filteredListings);
   };
 
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedLocation) {
@@ -215,6 +217,16 @@ const AvailabilitySearch: React.FC = () => {
 
       let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&page=${currentPage}&limit=${itemsPerPage}`;
 
+      if (selectedLocation) {
+        url += `&city=${encodeURIComponent(selectedLocation)}`;
+      }
+
+      if (selectedBedroomAmount) {
+        url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
+      }
+
+      console.log('API URL:', url);
+
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch listings: ${response.statusText}`);
@@ -233,7 +245,7 @@ const AvailabilitySearch: React.FC = () => {
         return;
       }
 
-      const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= minOccupancy);
+      const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
 
       setListings(filteredListings);
       setFilteredListings(filteredListings);
@@ -270,12 +282,6 @@ const AvailabilitySearch: React.FC = () => {
     applyFilters(newFilters);
   };
 
-  const resetFilters = () => {
-    setFilters({});
-    setFilteredListings(available);
-    setMapListings(available);
-  };
-
   const applyFilters = (filters: any) => {
     let filtered = [...available];
 
@@ -300,11 +306,17 @@ const AvailabilitySearch: React.FC = () => {
     }
 
     if (filters.selectedCity) {
-      handleCityClick(filters.selectedCity);
-    } else {
-      setFilteredListings(filtered);
-      setMapListings(filtered);
+      filtered = filtered.filter(listing => listing.address.city === filters.selectedCity);
     }
+
+    setFilteredListings(filtered);
+    setMapListings(filtered);
+  };
+
+  const resetFilters = () => {
+    setFilters({});
+    setFilteredListings(available);
+    setMapListings(available);
   };
 
   const handleMarkerClick = (id: string) => {
@@ -320,6 +332,16 @@ const AvailabilitySearch: React.FC = () => {
   };
 
   const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const getGridColumns = (length: number) => {
+    if (length > 3 && length % 2 === 0) {
+      return 'md:grid-cols-2 xl:grid-cols-2';
+    } else if (length > 3 && length % 2 !== 0) {
+      return 'md:grid-cols-3 xl:grid-cols-3';
+    } else {
+      return 'md:grid-cols-2 xl:grid-cols-2';
+    }
+  };
 
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
@@ -381,16 +403,10 @@ const AvailabilitySearch: React.FC = () => {
                   onChange={(e) => setSelectedBedroomAmount(e.target.value)}
                   className="border rounded-xl border-slate-400 p-2 w-full"
                 >
-                  {bedroomOptions.length === 0 ? (
-                    <option>Loading...</option>
-                  ) : (
-                    <>
-                      <option value="">Any</option>
-                      {bedroomOptions.map(bedroom => (
-                        <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
-                      ))}
-                    </>
-                  )}
+                  <option value="">Any</option>
+                  {bedroomOptions.map(bedroom => (
+                    <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
+                  ))}
                 </select>
               </div>
               <div className="w-full flex flex-col">
@@ -405,7 +421,7 @@ const AvailabilitySearch: React.FC = () => {
                 />
               </div>
               <div className="h-full flex items-end">
-                <button type="submit" className="w-fit h-fit text-lg flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold rounded-md text-slate-50">
+                <button type="submit" className="w-fit h-fit flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
                   <Search size={20} /> <p>Search</p>
                 </button>
               </div>
@@ -446,6 +462,9 @@ const AvailabilitySearch: React.FC = () => {
                   {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
                 </p>
               </div>
+              <div className="w-full text-center py-2">
+                <p className="text-lg font-semibold">{filteredListings.length} results found</p>
+              </div>
             </div>
             <div ref={resultsContainerRef} className="pt-96 md:pt-0 h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
               <div className="hidden md:block text-center py-1 md:py-8">
@@ -454,42 +473,40 @@ const AvailabilitySearch: React.FC = () => {
                   {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
                 </p>
               </div>
+              <div className="w-full text-center py-2">
+                <p className="text-lg font-semibold">{filteredListings.length} results found</p>
+              </div>
               <div
-                className={`md:search-results h-fit w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:mr-0 md:grid grid-cols-3 md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
+                className={`md:search-results h-fit w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:grid md:mr-0 ${getGridColumns(paginatedListings.length)} md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
-                  <>
-                    <div className="w-full text-center py-2">
-                      <p className="text-lg font-semibold">{filteredListings.length} results found</p>
-                    </div>
-                    {paginatedListings.map((property, index) => {
-                      const price = property.prices.basePrice;
-                      return (
-                        <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
-                          <article className="flex flex-col items-start bg-white shadow-lg shadow-muted-300/30 w-full h-80 rounded-xl relative overflow-hidden">
-                            <div className="relative w-full h-48">
-                              <img
-                                className="absolute inset-0 w-full h-full object-cover"
-                                src={property.pictures[0].original}
-                                alt={property.picture.caption}
-                              />
-                              <div className="absolute inset-0 bg-neutral-950/50" />
+                  paginatedListings.map((property, index) => {
+                    const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
+                    return (
+                      <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
+                        <article className="flex flex-col items-start bg-white shadow-lg shadow-muted-300/30 w-full h-80 rounded-xl relative overflow-hidden">
+                          <div className="relative w-full h-48">
+                            <img
+                              className="absolute inset-0 w-full h-full object-cover"
+                              src={property.pictures[0].original}
+                              alt={property.picture.caption}
+                            />
+                            <div className="absolute inset-0 bg-neutral-950/50" />
+                          </div>
+                          <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
+                            <h4 className="font-sans text-wrap font-medium text-lg text-slate-900">
+                              {property.title}
+                            </h4>
+                            <p className="text-sm text-muted-400">
+                              {property.address.city}, {property.address.state}
+                            </p>
+                            <div className="flex items-end h-full">
+                              <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
                             </div>
-                            <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
-                              <h4 className="font-sans text-wrap font-medium text-lg text-slate-900">
-                                {property.title}
-                              </h4>
-                              <p className="text-sm text-muted-400">
-                                {property.address.city}, {property.address.state}
-                              </p>
-                              <div className="flex items-end h-full">
-                                <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
-                              </div>
-                            </div>
-                          </article>
-                        </a>
-                      );
-                    })}
-                  </>
+                          </div>
+                        </article>
+                      </a>
+                    );
+                  })
                 ) : (
                   <div className="flex justify-center w-full h-full col-span-4">
                     <p className="text-base text-center w-full text-nowrap">No results - try adjusting the filters or click on Reset Filters</p>
