@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 import 'react-datepicker/dist/react-datepicker.css';
 import { addDays } from "date-fns";
-import { ClipLoader } from 'react-spinners';
+import { debounce } from 'lodash';
 import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
-import GoogleMap from './GoogleMap'; // Import the GoogleMap component
+import GoogleMap from './GoogleMap';
 import FilterComponent from './ui/FilterComponent';
-import { debounce } from 'lodash';
 
 interface Listing {
   _id: string;
@@ -44,16 +43,17 @@ interface Listing {
   amenities: string[];
   tags: string[];
 }
-const allowedTags = [];
+
+const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
   const [numGuests, setNumGuests] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [available, setListings] = useState<any[]>([]);
-  const [filteredListings, setFilteredListings] = useState<any[]>([]);
-  const [mapListings, setMapListings] = useState<any[]>([]);
+  const [available, setListings] = useState<Listing[]>([]);
+  const [filteredListings, setFilteredListings] = useState<Listing[]>([]);
+  const [mapListings, setMapListings] = useState<Listing[]>([]);
   const [dateRange, setDateRange] = useState([{ startDate: addDays(new Date(), 1), endDate: addDays(new Date(), 3), key: 'selection' }]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
@@ -70,7 +70,7 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(200); // Number of items per page
+  const [itemsPerPage] = useState<number>(300); // Number of items per page
   const [validationError, setValidationError] = useState<string>(''); // State for validation error message
 
   const apiUrl = '/.netlify/functions/availability';
@@ -78,7 +78,7 @@ const AvailabilitySearch: React.FC = () => {
   const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
   const resultsContainerRef = useRef<HTMLDivElement>(null);
 
-  const cache = useRef<{ [key: string]: any[] }>({});
+  const cache = useRef<{ [key: string]: Listing[] }>({});
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -113,7 +113,6 @@ const AvailabilitySearch: React.FC = () => {
         if (tagsData.error) {
           throw new Error(tagsData.error);
         }
-        const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
         const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
         setTags(filteredTags);
       } catch (err) {
@@ -182,26 +181,6 @@ const AvailabilitySearch: React.FC = () => {
     setMapListings(filteredListings);
   };
 
-  // const filterListings = (city: string | null) => {
-  //   let filteredListings;
-  //   if (city === 'Myrtle Beach') {
-  //     filteredListings = available.filter(listing =>
-  //       listing.address.city === 'Myrtle Beach' ||
-  //       listing.address.city === 'Surfside Beach' ||
-  //       listing.address.city === 'Murrells Inlet'
-  //     );
-  //   } else if (city === 'North Myrtle Beach') {
-  //     filteredListings = available.filter(listing =>
-  //       listing.address.city === 'North Myrtle Beach' ||
-  //       listing.address.city === 'Little River'
-  //     );
-  //   } else {
-  //     filteredListings = available.filter(listing => listing.address.city === city);
-  //   }
-  //   setFilteredListings(filteredListings);
-  //   setMapListings(filteredListings);
-  // };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedLocation) {
@@ -254,7 +233,7 @@ const AvailabilitySearch: React.FC = () => {
         return;
       }
 
-      const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
+      const filteredListings = data.results.filter((listing: Listing) => listing.accommodates >= minOccupancy);
 
       setListings(filteredListings);
       setFilteredListings(filteredListings);
@@ -394,29 +373,6 @@ const AvailabilitySearch: React.FC = () => {
                   }}
                 />
               </div>
-              {/* <div className="w-full flex flex-col">
-                <label htmlFor="location" className="text-slate-800 font-semibold">Search by City</label>
-                {validationError && <p className="text-red-500 text-sm">{validationError}</p>}
-                <select
-                  id="location"
-                  value={selectedLocation}
-                  onChange={(e) => {
-                    setSelectedLocation(e.target.value);
-                    citySelection(e.target.value); // Call citySelection when the city is selected
-                  }}
-                  className="border border-slate-400 rounded-xl p-2 w-full"
-                >
-                  {cities.length === 0 ? (
-                    <option>Loading...</option>
-                  ) : (
-                    <>
-                      <option value=''>Select a City</option>
-                      <option value="North Myrtle Beach">North Myrtle Beach</option>
-                      <option value="Myrtle Beach">Myrtle Beach</option>
-                    </>
-                  )}
-                </select>
-              </div> */}
               <div className="w-full flex flex-col">
                 <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
                 <select
@@ -501,34 +457,39 @@ const AvailabilitySearch: React.FC = () => {
               <div
                 className={`md:search-results h-fit w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:mr-0 md:grid grid-cols-3 md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
-                  paginatedListings.map((property, index) => {
-                    const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
-                    return (
-                      <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
-                        <article className="flex flex-col items-start bg-white shadow-lg shadow-muted-300/30 w-full h-80 rounded-xl relative overflow-hidden">
-                          <div className="relative w-full h-48">
-                            <img
-                              className="absolute inset-0 w-full h-full object-cover"
-                              src={property.pictures[0].original}
-                              alt={property.picture.caption}
-                            />
-                            <div className="absolute inset-0 bg-neutral-950/50" />
-                          </div>
-                          <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
-                            <h4 className="font-sans text-wrap font-medium text-lg text-slate-900">
-                              {property.title}
-                            </h4>
-                            <p className="text-sm text-muted-400">
-                              {property.address.city}, {property.address.state}
-                            </p>
-                            <div className="flex items-end h-full">
-                              <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
+                  <>
+                    <div className="w-full text-center py-2">
+                      <p className="text-lg font-semibold">{filteredListings.length} results found</p>
+                    </div>
+                    {paginatedListings.map((property, index) => {
+                      const price = property.prices.basePrice;
+                      return (
+                        <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
+                          <article className="flex flex-col items-start bg-white shadow-lg shadow-muted-300/30 w-full h-80 rounded-xl relative overflow-hidden">
+                            <div className="relative w-full h-48">
+                              <img
+                                className="absolute inset-0 w-full h-full object-cover"
+                                src={property.pictures[0].original}
+                                alt={property.picture.caption}
+                              />
+                              <div className="absolute inset-0 bg-neutral-950/50" />
                             </div>
-                          </div>
-                        </article>
-                      </a>
-                    );
-                  })
+                            <div className="p-2 w-full bg-white flex flex-col justify-start flex-grow">
+                              <h4 className="font-sans text-wrap font-medium text-lg text-slate-900">
+                                {property.title}
+                              </h4>
+                              <p className="text-sm text-muted-400">
+                                {property.address.city}, {property.address.state}
+                              </p>
+                              <div className="flex items-end h-full">
+                                <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
+                              </div>
+                            </div>
+                          </article>
+                        </a>
+                      );
+                    })}
+                  </>
                 ) : (
                   <div className="flex justify-center w-full h-full col-span-4">
                     <p className="text-base text-center w-full text-nowrap">No results - try adjusting the filters or click on Reset Filters</p>
