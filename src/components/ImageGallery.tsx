@@ -36,15 +36,15 @@ const ImageGallery = ({ pictures }) => {
 
     return (
         <>
-            <div className="relative flex flex-col gap-2 justify-center overflow-y-auto no-scrollbar h-fit w-auto" ref={scrollContainerRef}>
+            <div className="relative flex flex-col gap-1 justify-stretcg overflow-y-auto no-scrollbar h-full w-auto" ref={scrollContainerRef}>
                 {pictures.slice(startIndex + 1, startIndex + 9).map((picture, index) => (
                     <img
                         key={index}
-                        className="object-cover max-h-24 w-auto shadow-md flex-1 cursor-pointer"
+                        className="object-cover max-h-28 w-80 shadow-md flex-1 cursor-pointer"
                         src={picture.original}
                         alt={`Sub image ${index + 1}`}
                         width={1750}
-                        height={1000}
+                        height={1200}
                         data-zoom
                         loading="lazy"
                         onClick={() => openModal(startIndex + index + 1)} // Adjust index to match sliced array

@@ -21,6 +21,7 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
     checkOut: '2050-01-06',
     listingId: listingId,
     status: '',
+    message: '',
   });
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -28,8 +29,9 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
   const [verificationCode, setVerificationCode] = useState('');
   const [isVerified, setIsVerified] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState('');
+  const [messagePlaceholder, setMessagePlaceholder] = useState('Verify your phone number first');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
@@ -68,6 +70,7 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
       if (response.data.status === 'approved') {
         setIsVerified(true);
         setVerificationMessage('Phone number verified successfully!');
+        setMessagePlaceholder('Enter your message'); // Update placeholder after verification
       } else {
         alert('Verification failed. Please try again.');
       }
@@ -100,6 +103,16 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
 
       const data = await response.json();
       console.log('Response from Netlify function:', data);
+
+      // Send message
+      await fetch('/.netlify/functions/sendMessage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ conversationId: data.reservationData._id, message: formData.message })
+      });
+
       setModalIsOpen(false); // Close the modal on successful submission
     } catch (error) {
       console.error('Error:', error);
@@ -178,6 +191,14 @@ const InquireForm: React.FC<ReservationFormProps> = ({ listingId, buttonText }) 
                 </button>
               </div>
             )}
+            <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              placeholder={messagePlaceholder}
+              className="w-full px-4 py-2 border rounded"
+              disabled={!isVerified}
+            />
             {isVerified && (
               <button
                 type="submit"

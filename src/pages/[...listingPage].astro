@@ -13,6 +13,7 @@ import { BedDouble } from "lucide-react";
 import BedTypes from "@components/ui/BedTypes.tsx";
 import ImageGallery from "@components/ImageGallery.tsx";
 import AirReviews from "@components/AirReviews.tsx";
+import ReservationForm from "@components/ReservationForm.tsx";
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
@@ -213,32 +214,136 @@ function capitalizeFirstLetter(string: string) {
             </div>
             <!-- property details -->
             <div
-              class="flex flex-col md:flex-row items-start justify-between mb-2"
+              class="flex flex-col md:flex-row items-start justify-start mb-2 w-full"
             >
               <div
-                class="hidden md:flex gap-1 justify-normal items-start w-3/4 h-full"
+                class="flex flex-col md:flex-row justify-normal gap-32 w-full mr-16"
               >
-                <div class="main-image w-full">
-                  <img
-                    class="block object-cover w-fit"
-                    src={pictures[0].original}
-                    alt="Main image"
-                    width={2000}
-                    height={1310}
-                    data-zoom
-                    loading="lazy"
-                  />
-                </div>
                 <div
-                  class="flex flex-col mt-1 w-1/5 overflow-y-auto no-scrollbar"
+                  class="hidden md:flex gap-1 justify-start items-start w-3/4 h-full"
                 >
-                  <ImageGallery pictures={pictures} client:only="react" />
+                  <div class="w-full">
+                    <img
+                      class="block w-full h-fit object-cover"
+                      src={pictures[0].original}
+                      alt="Main image"
+                      width={2000}
+                      height={1200}
+                      data-zoom
+                      loading="lazy"
+                    />
+                  </div>
+                  <div
+                    class="flex flex-col items-start h-screen mt-1 w-1/5 overflow-y-auto no-scrollbar"
+                  >
+                    <ImageGallery pictures={pictures} client:only="react" />
+                  </div>
+                </div>
+
+                <!-- right -->
+                <div
+                  class="xs:hidden sm:hidden md:flex w-full max-w-max flex-col justify-stretch items-stretch mt-6"
+                >
+                  <span class="xs:hidden">
+                    <InquireForm
+                      listingId={listingId}
+                      buttonText="Chat with a property Agent"
+                      client:load
+                    />
+                  </span>
+                  <div
+                    id="main"
+                    class="flex flex-col flex-nowrap justify-center items-center w-full"
+                  >
+                    <div class="flex gap-2 w-full justify-center items-center">
+                      <p>
+                        <span class="font-bold w-full">Check in: </span>{
+                          checkIn
+                        }
+                      </p>
+                      <p>
+                        <span class="font-bold text-base w-full"
+                          >Check Out:
+                        </span>{checkOut}
+                      </p>
+                    </div>
+                    <span
+                      class="text-base font-light flex justify-center items-center gap-1"
+                    >
+                      <span class="font-bold text-base">Note: </span> Checkin and
+                      Checkout times are in UTC.
+                    </span>
+                    <InstantBooking listingId={listingId} client:only="react" />
+                    <h4
+                      class="text-2xl mt-6 font-bold font-sans text-slate-900"
+                    >
+                      Amenities
+                    </h4>
+
+                    <div
+                      class="mb-3 grid grid-cols-2 gap-2 justify-items-center"
+                    >
+                      <!-- bedroom -->
+                      <div class="flex flex-col">
+                        <div
+                          class="flex items-center gap-2 text-muted-900 dark:text-white"
+                        >
+                          <p class="text-lg font-bold">{PropertyType}</p>
+                        </div>
+                        <p class="text-sm text-muted-400">Property Type</p>
+                      </div>
+                      <!-- bathroom -->
+                      <div class="flex flex-col">
+                        <div
+                          class="flex items-center gap-2 text-muted-900 dark:text-white"
+                        >
+                          <svg
+                            class="size-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            style="--darkreader-inline-stroke: currentColor;"
+                            data-darkreader-inline-stroke=""
+                            ><path
+                              d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                            ></path><line x1="10" y1="5" x2="8" y2="7"
+                            ></line><line x1="2" y1="12" x2="22" y2="12"
+                            ></line><line x1="7" y1="19" x2="7" y2="21"
+                            ></line><line x1="17" y1="19" x2="17" y2="21"
+                            ></line>
+                          </svg>
+                          <p class="text-lg font-bold">{bathrooms}</p>
+                        </div>
+                        <p class="text-sm text-muted-400">Bathrooms</p>
+                      </div>
+                    </div>
+                    <div class="">
+                      <BedTypes beds={beds} client:only="react" />
+                    </div>
+
+                    <div
+                      class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
+                    >
+                      <span class="sm:hidden mt-12">
+                        <InquireForm
+                          listingId={listingId}
+                          buttonText="Chat with a property Agent"
+                          client:load
+                        />
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <!-- right -->
+              <!-- mobile -->
               <div
-                class="xs:hidden sm:hidden md:flex w-full max-w-max flex-col justify-start items-stretch mr-12"
+                class="md:hidden flex w-full flex-col justify-start items-center px-7 md:px-2"
               >
                 <span class="xs:hidden">
                   <InquireForm
@@ -249,7 +354,7 @@ function capitalizeFirstLetter(string: string) {
                 </span>
                 <div
                   id="main"
-                  class="flex flex-col flex-nowrap justify-center items-center w-full"
+                  class="flex flex-col justify-center items-center md:w-full"
                 >
                   <div class="flex gap-2 w-full justify-center items-center">
                     <p>
@@ -267,21 +372,19 @@ function capitalizeFirstLetter(string: string) {
                     <span class="font-bold">Note: </span> Checkin and Checkout times
                     are in UTC.
                   </span>
+
                   <InstantBooking listingId={listingId} client:only="react" />
+                  <!-- <BookingFormWrapper
+                      listingId={listingId}
+                      client:only="react"
+                    /> -->
                   <h4 class="text-2xl mt-6 font-bold font-sans text-slate-900">
                     Amenities
                   </h4>
 
-                  <div class="mb-3 grid grid-cols-2 gap-2 justify-items-center">
+                  <div class="mb-6 grid grid-cols-2 gap-2 justify-items-center">
                     <!-- bedroom -->
-                    <div class="flex flex-col">
-                      <div
-                        class="flex items-center gap-2 text-muted-900 dark:text-white"
-                      >
-                        <p class="text-lg font-bold">{PropertyType}</p>
-                      </div>
-                      <p class="text-sm text-muted-400">Property Type</p>
-                    </div>
+
                     <!-- bathroom -->
                     <div class="flex flex-col">
                       <div
@@ -311,14 +414,31 @@ function capitalizeFirstLetter(string: string) {
                       </div>
                       <p class="text-sm text-muted-400">Bathrooms</p>
                     </div>
+
+                    <div class="flex flex-col">
+                      <div
+                        class="flex items-center gap-2 text-muted-900 dark:text-white"
+                      >
+                        <p class="text-lg font-bold">{PropertyType}</p>
+                      </div>
+                      <p class="text-sm text-muted-400">Propert Type</p>
+                    </div>
                   </div>
-                  <div class="">
+
+                  <div class="flex justify-center">
                     <BedTypes beds={beds} client:only="react" />
                   </div>
 
                   <div
                     class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
                   >
+                    <!-- <div
+                          class="flex items-center gap-2 justify-between text-sm"
+                        >
+                          <p class="text-muted-400">Type</p>
+                          <p class="text-muted-900">{PropertyType}</p>
+                        </div> -->
+
                     <span class="sm:hidden mt-12">
                       <InquireForm
                         listingId={listingId}
@@ -330,115 +450,6 @@ function capitalizeFirstLetter(string: string) {
                 </div>
               </div>
             </div>
-            <!-- mobile -->
-            <div
-              class="md:hidden flex w-full flex-col justify-start items-center px-7 md:px-2"
-            >
-              <span class="xs:hidden">
-                <InquireForm
-                  listingId={listingId}
-                  buttonText="Chat with a property Agent"
-                  client:load
-                />
-              </span>
-              <div
-                id="main"
-                class="flex flex-col justify-center items-center md:w-full"
-              >
-                <div class="flex gap-2 w-full justify-center items-center">
-                  <p>
-                    <span class="font-bold w-full">Check in: </span>{checkIn}
-                  </p>
-                  <p>
-                    <span class="font-bold w-full">Check Out: </span>{checkOut}
-                  </p>
-                </div>
-                <span
-                  class="text-sm font-light flex justify-center items-center gap-1"
-                >
-                  <span class="font-bold">Note: </span> Checkin and Checkout times
-                  are in UTC.
-                </span>
-
-                <InstantBooking listingId={listingId} client:only="react" />
-                <!-- <BookingFormWrapper
-                    listingId={listingId}
-                    client:only="react"
-                  /> -->
-                <h4 class="text-2xl mt-6 font-bold font-sans text-slate-900">
-                  Amenities
-                </h4>
-
-                <div class="mb-6 grid grid-cols-2 gap-2 justify-items-center">
-                  <!-- bedroom -->
-
-                  <!-- bathroom -->
-                  <div class="flex flex-col">
-                    <div
-                      class="flex items-center gap-2 text-muted-900 dark:text-white"
-                    >
-                      <svg
-                        class="size-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        style="--darkreader-inline-stroke: currentColor;"
-                        data-darkreader-inline-stroke=""
-                        ><path
-                          d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
-                        ></path><line x1="10" y1="5" x2="8" y2="7"></line><line
-                          x1="2"
-                          y1="12"
-                          x2="22"
-                          y2="12"></line><line x1="7" y1="19" x2="7" y2="21"
-                        ></line><line x1="17" y1="19" x2="17" y2="21"></line>
-                      </svg>
-                      <p class="text-lg font-bold">{bathrooms}</p>
-                    </div>
-                    <p class="text-sm text-muted-400">Bathrooms</p>
-                  </div>
-
-                  <div class="flex flex-col">
-                    <div
-                      class="flex items-center gap-2 text-muted-900 dark:text-white"
-                    >
-                      <p class="text-lg font-bold">{PropertyType}</p>
-                    </div>
-                    <p class="text-sm text-muted-400">Propert Type</p>
-                  </div>
-                </div>
-
-                <div class="flex justify-center">
-                  <BedTypes beds={beds} client:only="react" />
-                </div>
-
-                <div
-                  class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
-                >
-                  <!-- <div
-                        class="flex items-center gap-2 justify-between text-sm"
-                      >
-                        <p class="text-muted-400">Type</p>
-                        <p class="text-muted-900">{PropertyType}</p>
-                      </div> -->
-
-                  <span class="sm:hidden mt-12">
-                    <InquireForm
-                      listingId={listingId}
-                      buttonText="Chat with a property Agent"
-                      client:load
-                    />
-                  </span>
-                </div>
-              </div>
-            </div>
-
             <!-- property content -->
             <div class="relative" x-data="{ activeTab: 'tab-1' }">
               <div
