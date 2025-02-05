@@ -2,29 +2,22 @@ import fetch from 'node-fetch';
 
 export async function handler(event, context) {
   try {
-    const { conversationId, message } = JSON.parse(event.body);
+    const { conversationId } = JSON.parse(event.body);
 
-    if (!conversationId || !message) {
+    if (!conversationId) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Missing conversationId or message' }),
+        body: JSON.stringify({ error: 'Missing conversationId' }),
       };
     }
 
-    const url = `https://open-api.guesty.com/v1/communication/conversations/${conversationId}/send-message`;
+    const url = `https://open-api.guesty.com/v1/communication/conversations/${conversationId}/posts`;
     const options = {
-      method: 'POST',
+      method: 'GET',
       headers: {
         accept: 'application/json',
-        'content-type': 'application/json',
-        authorization: `Bearer ${process.env.VITE_API_TOKEN}`
-      },
-      body: JSON.stringify({
-        module: {
-          type: 'sms'
-        },
-        body: message
-      })
+        authorization: `Bearer ${process.env.VITE_API_TOKEN}` // Replace with your actual access token
+      }
     };
 
     const response = await fetch(url, options);
