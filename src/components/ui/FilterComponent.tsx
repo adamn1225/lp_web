@@ -53,10 +53,9 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     setPriceOrder(newPriceOrder);
   };
 
-  const handleBedroomChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newBedroomCount = Number(e.target.value);
-    setBedroomCount(newBedroomCount);
-    onFilterChange({ priceOrder, bedroomCount: newBedroomCount, selectedCity, selectedAmenities, selectedTags });
+  const handleBedroomChange = (bedroom: number | null) => {
+    setBedroomCount(bedroom);
+    onFilterChange({ priceOrder, bedroomCount: bedroom, selectedCity, selectedAmenities, selectedTags });
   };
 
   const handleCityChange = async (city: string | null): Promise<void> => {
@@ -148,6 +147,23 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
           </div>
         </div>
       </div>
+      <div className="bedroom-navigation flex justify-center items-center gap-2 mt-4">
+        <button
+          onClick={() => handleBedroomChange(null)}
+          className={`px-3 py-2 rounded ${bedroomCount === null ? 'bg-secondary text-white' : 'bg-white text-secondary'}`}
+        >
+          Any
+        </button>
+        {bedroomOptions.map(bedroom => (
+          <button
+            key={bedroom}
+            onClick={() => handleBedroomChange(bedroom)}
+            className={`px-3 py-2 rounded ${bedroomCount === bedroom ? 'bg-secondary text-white' : 'bg-white text-secondary'}`}
+          >
+            {bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}
+          </button>
+        ))}
+      </div>
       <CityNavigation cities={cities} onCityClick={onCityClick} setActiveCity={setActiveCity} />
       <Modal isOpen={isFilterModalOpen} onClose={() => setIsFilterModalOpen(false)}>
         <div className="flex flex-col gap-2 p-6">
@@ -157,31 +173,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             <option value="lowToHigh">Lowest to Highest</option>
             <option value="highToLow">Highest to Lowest</option>
           </select>
-          {showBedroomFilter && (
-            <>
-              <label className="font-semibold">Bedrooms:</label>
-              <select value={bedroomCount || ''} onChange={handleBedroomChange} className="border border-secondary/30 rounded-lg p-2 w-full">
-                <option value="">Any</option>
-                {bedroomOptions.map(bedroom => (
-                  <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
-                ))}
-              </select>
-            </>
-          )}
-          <label className="font-semibold">City:</label>
-          <select value={selectedCity} onChange={(e) => handleCityChange(e.target.value)} className="border border-secondary/30 rounded-lg p-2 w-full">
-            <option value="">Any</option>
-            {cities.map(city => (
-              <option key={city} value={city}>{city}</option>
-            ))}
-          </select>
-          <button onClick={() => setIsFilterModalOpen(false)} className="mt-4 bg-secondary w-full text-white px-2 py-2 rounded">
-            Close Filters
-          </button>
-          <button onClick={handleResetFilters} className="bg-gray-700 text-white px-2 py-2 rounded">
-            Reset Filters
-          </button>
-        </div>
+          </div>
       </Modal>
       <style>{`
         .no-scrollbar::-webkit-scrollbar {

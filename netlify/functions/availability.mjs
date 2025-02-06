@@ -6,7 +6,7 @@ dotenv.config();
 const RATE_LIMIT_INTERVAL = 1000; 
 const CONCURRENCY_LIMIT = 5; 
 const MAX_RESULTS = 300; 
-const BATCH_SIZE = 300; 
+const BATCH_SIZE = 100; 
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -29,7 +29,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingIds, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&ignoreInactiveChildAllotment=true&ignoreUnlistedChildAllotment=true`;
 
   console.log(`Fetching availability for listings ${listingIds.join(', ')} from URL: ${apiUrl}`);
 
@@ -234,7 +234,7 @@ export const handler = async (event, context) => {
       checkOut: checkOut,
       minOccupancy: minOccupancy
     });
-    if (city) {
+    if (city && city !== 'All') {
       queryParams.append('city', city);
     }
     const totalListings = 400;
