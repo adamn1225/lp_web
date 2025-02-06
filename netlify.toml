@@ -5,6 +5,7 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+  timeout = 900 # 15 minutes
 
 [build.environment]
   NODE_VERSION = "18.17.1"  # Update to a valid Node.js version
