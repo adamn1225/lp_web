@@ -433,9 +433,9 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
               <div className="h-full flex items-end">
               </div>
             </div>
-                {/* <button type="submit" className="mt-5 flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
+                <button type="submit" className="mt-5 flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
                   <Search size={20} /> <p>Search</p>
-                </button> */}
+                </button>
           </div>
         </form>
       </Modal>
