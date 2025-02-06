@@ -2,10 +2,11 @@
   "git.ignoreLimitWarning": true,
   "scss.lint.unknownAtRules": "ignore",
   "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.inlayHints.parameterNames.enabled": "all",
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "[html]": {
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true
-  }
+  },
 }

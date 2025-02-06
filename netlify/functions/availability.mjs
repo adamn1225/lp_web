@@ -3,10 +3,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 1000; // 1 second
-const CONCURRENCY_LIMIT = 5; // Adjust as needed
-const MAX_RESULTS = 300; // Maximum number of results to return
-const BATCH_SIZE = 300; // Number of listing IDs to fetch in a single request
+const RATE_LIMIT_INTERVAL = 1000; 
+const CONCURRENCY_LIMIT = 5; 
+const MAX_RESULTS = 300; 
+const BATCH_SIZE = 300; 
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -29,7 +29,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingIds, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&ignoreInactiveChildAllotment=true&ignoreUnlistedChildAllotment=true`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}`;
 
   console.log(`Fetching availability for listings ${listingIds.join(', ')} from URL: ${apiUrl}`);
 
@@ -106,7 +106,7 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
       break;
     }
 
-    await delay(RATE_LIMIT_INTERVAL); // Delay between batches to avoid rate limiting
+    await delay(RATE_LIMIT_INTERVAL); 
   }
   return results;
 };
@@ -237,13 +237,12 @@ export const handler = async (event, context) => {
     if (city) {
       queryParams.append('city', city);
     }
-    const totalListings = 400; // Adjust as needed
+    const totalListings = 400;
 
     const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
 
     console.log(`Fetched listings: ${listings.length} listings`);
 
-    // Filter by bedroom amount if specified
     let combinedResults = listings;
     if (bedroomAmount) {
       combinedResults = combinedResults.filter(listing => listing.bedrooms === Number(bedroomAmount));
@@ -251,7 +250,6 @@ export const handler = async (event, context) => {
 
     console.log(`Listings after filtering by bedroom amount: ${combinedResults.length} listings`);
 
-    // Fetch availability for each listing and filter out unavailable listings
     const availableListings = [];
     for (let i = 0; i < combinedResults.length; i += BATCH_SIZE) {
       if (availableListings.length >= MAX_RESULTS) {
@@ -282,10 +280,8 @@ export const handler = async (event, context) => {
 
     console.log(`Available listings: ${availableListings.length} listings`);
 
-    // Define the city order
     const cityOrder = ['North Myrtle Beach', 'Little River', 'Myrtle Beach', 'Surfside Beach', 'Murrells Inlet'];
 
-    // Sort the available listings based on the city order
     availableListings.sort((a, b) => {
       const cityA = a.address.city;
       const cityB = b.address.city;

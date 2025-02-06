@@ -6,7 +6,7 @@ import { addDays } from "date-fns";
 import { ClipLoader } from 'react-spinners';
 import DateRangePickerComponent from './ui/DateRangePickerComponent';
 import Modal from './ui/Modal';
-import GoogleMap from './GoogleMap'; // Import the GoogleMap component
+import GoogleMap from './GoogleMap';
 import FilterComponent from './ui/FilterComponent';
 import { debounce } from 'lodash';
 
