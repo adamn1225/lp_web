@@ -6,7 +6,7 @@ dotenv.config();
 const RATE_LIMIT_INTERVAL = 1000; 
 const CONCURRENCY_LIMIT = 5; 
 const MAX_RESULTS = 300; 
-const BATCH_SIZE = 100; 
+const BATCH_SIZE = 50; 
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
