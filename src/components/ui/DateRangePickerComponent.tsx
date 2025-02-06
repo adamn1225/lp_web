@@ -8,12 +8,15 @@ interface DateRangePickerComponentProps {
     state: any[];
     setState: (state: any[]) => void;
     disabledDates: Date[];
-    onClick?: () => void; // Add onClick prop
+    onDateChange?: () => void; // Rename onClick to onDateChange
 }
 
-const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ state, setState, disabledDates, onClick }) => {
+const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ state, setState, disabledDates, onDateChange }) => {
     const handleSelect = (ranges: any) => {
         setState([ranges.selection]);
+        if (onDateChange) {
+            onDateChange(); // Call the function when the date range is selected
+        }
     };
 
     const formattedStartDate = state[0].startDate ? format(state[0].startDate, 'MM/dd/yyyy') : '';

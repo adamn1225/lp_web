@@ -341,6 +341,27 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
     debouncedHandleSubmit(null);
   };
 
+  const handleDateChange = async () => {
+    const checkIn = dateRange[0].startDate.toISOString().split('T')[0];
+    const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
+    const minOccupancy = 1;
+    const city = 'All';
+    const bedroomAmount = 1;
+
+    const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
+    const cachedData = localStorage.getItem(cacheKey);
+
+    if (!cachedData) {
+      try {
+        const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
+        const data = await response.json();
+        localStorage.setItem(cacheKey, JSON.stringify(data));
+      } catch (error) {
+        console.error('Error prefetching data:', error);
+      }
+    }
+  };
+
   const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const getGridColumns = (length: number) => {
@@ -383,26 +404,7 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
                   state={dateRange}
                   setState={setDateRange}
                   disabledDates={[]}
-                  onClick={async () => {
-                    const checkIn = dateRange[0].startDate.toISOString().split('T')[0];
-                    const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
-                    const minOccupancy = 1;
-                    const city = 'All';
-                    const bedroomAmount = 1;
-
-                    const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
-                    const cachedData = localStorage.getItem(cacheKey);
-
-                    if (!cachedData) {
-                      try {
-                        const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
-                        const data = await response.json();
-                        localStorage.setItem(cacheKey, JSON.stringify(data));
-                      } catch (error) {
-                        console.error('Error prefetching data:', error);
-                      }
-                    }
-                  }}
+                  onDateChange={handleDateChange} // Use the new onDateChange prop
                 />
               </div>
             <div className="hidden w-full">
