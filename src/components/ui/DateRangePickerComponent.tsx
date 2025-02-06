@@ -34,9 +34,6 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ sta
                     className="flex-1 w-full"
                 />
             </div>
-            <div className="flex justify-center mt-4">
-                <button onClick={onClick} className="bg-secondary text-white px-3 py-1.5 rounded-md">Check Availability</button>
-            </div>
             <style>{`
                 .rdrMonth {
                     border: 1px solid #ddd;
