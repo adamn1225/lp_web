@@ -83,21 +83,25 @@ const AvailabilitySearch: React.FC = () => {
 useEffect(() => {
   const fetchInitialData = async () => {
     try {
-      const [citiesResponse, bedroomsResponse, tagsResponse, listingsResponse] = await Promise.all([
+      const [citiesResponse, bedroomsResponse, tagsResponse] = await Promise.all([
         fetch('/.netlify/functions/availability?fetchCities=true'),
         fetch('/.netlify/functions/availability?fetchBedrooms=true'),
-        fetch('/.netlify/functions/searchTags'),
-        fetch('/.netlify/functions/availability')
+        fetch('/.netlify/functions/searchTags')
       ]);
 
-      if (!citiesResponse.ok || !bedroomsResponse.ok || !tagsResponse.ok || !listingsResponse.ok) {
-        throw new Error('Failed to fetch initial data');
+      if (!citiesResponse.ok) {
+        throw new Error(`Failed to fetch cities: ${citiesResponse.statusText}`);
+      }
+      if (!bedroomsResponse.ok) {
+        throw new Error(`Failed to fetch bedrooms: ${bedroomsResponse.statusText}`);
+      }
+      if (!tagsResponse.ok) {
+        throw new Error(`Failed to fetch tags: ${tagsResponse.statusText}`);
       }
 
       const citiesData = await citiesResponse.json();
       const bedroomsData = await bedroomsResponse.json();
       const tagsData = await tagsResponse.json();
-      const listingsData = await listingsResponse.json();
 
       if (citiesData.results) {
         setCities(citiesData.results);
@@ -107,7 +111,6 @@ useEffect(() => {
 
       if (bedroomsData.results) {
         const sortedBedrooms = bedroomsData.results.sort((a: number, b: number) => a - b);
-        console.log('Fetched bedroom options:', sortedBedrooms); // Debugging log
         setBedroomOptions(sortedBedrooms);
       } else {
         setBedroomOptions([]);
@@ -119,16 +122,6 @@ useEffect(() => {
       const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
       const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
       setTags(filteredTags);
-
-      if (listingsData.results) {
-        setListings(listingsData.results);
-        setFilteredListings(listingsData.results);
-        setMapListings(listingsData.results);
-      } else {
-        setListings([]);
-        setFilteredListings([]);
-        setMapListings([]);
-      }
     } catch (err) {
       console.error('Error fetching initial data:', err);
       setError('Failed to load initial data');
@@ -352,11 +345,11 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
 
   const getGridColumns = (length: number) => {
     if (length > 3 && length % 2 === 0) {
-      return 'md:grid-cols-2 xl:grid-cols-2';
+      return 'md:grid-cols-2 xl:grid-cols-3';
     } else if (length > 3 && length % 2 !== 0) {
       return 'md:grid-cols-3 xl:grid-cols-3';
     } else {
-      return 'md:grid-cols-2 xl:grid-cols-2';
+      return 'md:grid-cols-2 xl:grid-cols-3';
     }
   };
 
@@ -375,9 +368,9 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
       <div className="flex flex-col md:flex-row justify-center align-middle w-full">
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-4/5 md:w-1/4 mx-auto h-fit z-30 flex flex-col items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 pb-0.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
+          className="w-4/5 md:w-1/4 mx-auto h-fit z-30 flex items-start gap-1 shadow-lg justify-start bg-gray-100 pt-2.5 px-3 font-bold text-base text-start rounded-lg text-secondary"
         >
-          <span className="flex w-fit items-start justify-start text-start gap-1"><Search size={20} /> <p>Search Where</p></span><span className="flex justify-center self-center items-end"><p>When - Where - Who</p></span>
+          <span className="flex w-fit items-start justify-start text-start"><Search size={20} /> <p>Search</p></span><span className="pt-4 pr-16 inline-flex justify-center text-center w-full self-center place-self-start"><p>When - Where</p></span>
         </button>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="z-30 mb-80 inline-flex items-center h-full">
