@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -12,6 +12,19 @@ interface DateRangePickerComponentProps {
 }
 
 const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ state, setState, disabledDates, onClick }) => {
+    const [showPicker, setShowPicker] = useState(false);
+
+    const handleInputClick = () => {
+        setShowPicker(true);
+        if (onClick) {
+            onClick(); // Call the onClick prop if provided
+        }
+    };
+
+    const handleClose = () => {
+        setShowPicker(false);
+    };
+
     const handleSelect = (ranges: any) => {
         setState([ranges.selection]);
     };
