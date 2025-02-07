@@ -34,8 +34,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, fullScreen = f
       <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
       <div className={`relative bg-white rounded-lg shadow-lg ${fullScreen ? 'w-full h-full overflow-scroll' : 'w-auto h-fit md:h-auto'}`}>
         {showCloseButton && (
-          <button onClick={onClose} className="absolute top-1 right-1 md:top-3 md:right-3 text-secondary hover:text-gray-700">
-            <X size={40} />
+          <button onClick={onClose} className="absolute top-2 font-bold right-1 md:top-3 md:right-3 text-secondary hover:text-gray-700">
+            <X size={22} />
           </button>
         )}
         <div className="">

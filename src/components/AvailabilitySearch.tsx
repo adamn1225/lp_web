@@ -394,18 +394,20 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
           <span className="flex w-fit items-start justify-start text-start"><Search size={20} /> <p>Search</p></span><span className="pt-4 pr-16 inline-flex justify-center text-center w-full self-center place-self-start"><p>When - Where</p></span>
         </button>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="z-30 mb-80 inline-flex items-center h-full">
-        <form onSubmit={handleSubmit} className="flex  justify-center items-center bg-zinc-100 w-full h-full md:h-auto rounded-md p-7">
-          <div className="flex flex-col items-center justify-center w-full px-6">
-            <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full text-lg">
-              <div className="w-full flex flex-col">
-                <label className="text-secondary underline underline-offset-8 mb-2 font-semibold text-center" htmlFor="dateRange">Select your planned checkin and checkout dates</label>
-                <DateRangePickerComponent
-                  state={dateRange}
-                  setState={setDateRange}
-                  disabledDates={[]}
-                  onDateChange={handleDateChange} // Use the new onDateChange prop
-                />
+<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="md:mb-80  items-center h-full" showCloseButton={true}>
+  <form onSubmit={handleSubmit} className="flex justify-center items-center bg-zinc-100 w-full h-full md:h-auto rounded-md py-5">
+    <div className="flex flex-col items-center justify-center w-full px-4">
+      <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full text-lg">
+        <div className="w-full flex flex-col">
+          <DateRangePickerComponent
+            state={dateRange}
+            setState={setDateRange}
+            disabledDates={[]}
+            onDateChange={handleDateChange} // Use the new onDateChange prop
+          />
+          <button type="submit" className="my-1 flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
+            <Search size={20} /> <p>Search</p>
+          </button>
               </div>
             <div className="hidden w-full">
               <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
@@ -435,9 +437,7 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
               <div className="h-full flex items-end">
               </div>
             </div>
-                <button type="submit" className="mt-5 flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
-                  <Search size={20} /> <p>Search</p>
-                </button>
+
           </div>
         </form>
       </Modal>
@@ -474,12 +474,9 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
                   {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}
                 </p>
               </div>
-              <div className="w-full text-center py-2">
-                <p className="text-lg font-semibold">{filteredListings.length} results found</p>
-              </div>
             </div>
-            <div ref={resultsContainerRef} className="pt-96 md:pt-0 h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
-              <div className="hidden md:block text-center py-1 md:py-8">
+            <div ref={resultsContainerRef} className=" h-full overflow-y-auto flex flex-col items-center w-full max-h-[100vh]">
+              <div className="hidden md:block text-center py-1 md:pt-8">
                 <h2 className="text-xl font-semibold">Available Listings</h2>
                 <p className="text-sm text-muted-400">
                   {dateRange[0].startDate.toLocaleDateString()} - {dateRange[0].endDate.toLocaleDateString()}

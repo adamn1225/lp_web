@@ -124,8 +124,8 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     <div className="filter-component flex flex-col items-center justify-start w-full bg-primary/40 h-full">
       <div className='items-start justify-center text-sm md:text-base'>
         <div className="flex flex-col md:flex-row-reverse w-full items-center justify-center amenities-filter mt-2">
-          <div className="flex md:flex-nowrap w-full items-center justify-center">
-            <div className="tags-container flex justify-start md:justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
+          <div className="flex md:flex-nowrap flex-col md:flex-row w-full items-center justify-center">
+            <div className="tags-container flex w-full justify-start md:justify-center items-center overflow-x-auto whitespace-nowrap no-scrollbar px-4">
               {tags.map(tag => (
                 <button
                   key={tag}
@@ -138,25 +138,25 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                   {formatTag(tag)}
                 </button>
               ))}
-                      <div className="flex flex-col gap-2 p-6 w-full">
-          <select value={priceOrder} onChange={handlePriceChange} className="border border-secondary/30 rounded-lg p-2 w-full">
-            <option value="">Sort by price</option>
-            <option value="default">Default</option>
-            <option value="lowToHigh">Lowest to Highest</option>
-            <option value="highToLow">Highest to Lowest</option>
-          </select>
-          </div>
             </div>
+                      <div className="flex flex-col gap-2 p-6 w-1/2">
+                   <select value={priceOrder} onChange={handlePriceChange} className="border border-secondary/30 rounded-lg p-2 w-full">
+                      <option value="">Sort by price</option>
+                      <option value="default">Default</option>
+                       <option value="lowToHigh">Lowest to Highest</option>
+                       <option value="highToLow">Highest to Lowest</option>
+                         </select>
+                        </div>
           </div>
 
         </div>
       </div>
-      <div className="bedroom-navigation flex justify-center items-center gap-2 py-2 bg-secondary w-full">
+      <div className="bedroom-navigation flex justify-start md:justify-center items-center gap-2 py-2 bg-secondary w-full overflow-x-auto no-scrollbar">
         {bedroomOptions.map(bedroom => (
           <button
             key={bedroom}
             onClick={() => handleBedroomChange(bedroom)}
-            className={`px-3 py-2 rounded ${bedroomCount === bedroom ? 'bg-secondary text-white' : 'bg-white text-secondary'}`}
+            className={`px-3 py-2 text-nowrap rounded ${bedroomCount === bedroom ? 'bg-secondary text-white' : 'bg-white text-secondary'}`}
           >
             {bedroom === 0 ? 'Any' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}
           </button>

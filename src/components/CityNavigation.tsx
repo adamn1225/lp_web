@@ -24,7 +24,7 @@ const CityNavigation: React.FC<CityNavigationProps> = ({ cities, onCityClick, se
 
     return (
         <div className="city-navigation flex flex-col items-center gap-4 bg-gray-100 py-2 relative w-full">
-            <div className={`flex justify-start md:justify-center gap-1 overflow-x-auto w-full ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
+            <div className={`flex justify-center gap-1 overflow-x-auto w-full ${loading ? 'opacity-50 pointer-events-none' : ''}`}>
                 {displayCities.map((city) => (
                     <button
                         key={city}
