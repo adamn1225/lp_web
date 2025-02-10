@@ -309,13 +309,12 @@ const AvailabilitySearch: React.FC = () => {
       filtered = filtered.filter(listing => filters.selectedTags.every(tag => listing.tags.includes(tag)));
     }
 
-    if (filters.selectedAmenities && filters.selectedAmenities.length > 0) {
-      filtered = filtered.filter(listing => filters.selectedAmenities.every(amenity => listing.amenities.includes(amenity)));
-    }
-
     if (filters.selectedCity) {
       filtered = filtered.filter(listing => listing.address.city === filters.selectedCity);
     }
+
+    // Randomize the filtered results
+    filtered = filtered.sort(() => Math.random() - 0.5);
 
     setFilteredListings(filtered);
     setMapListings(filtered);
