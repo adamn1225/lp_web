@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
-const CONCURRENCY_LIMIT = 5; 
-const MAX_RESULTS = 200; 
+const CONCURRENCY_LIMIT = 5;
+const MAX_RESULTS = 200;
 const BATCH_SIZE = 50; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -64,21 +64,9 @@ const fetchAvailability = async (listingIds, checkIn, checkOut) => {
   return availabilityData;
 };
 
-const fetchAllListings = async (url) => {
-  const response = await fetchWithRetry(url, {
-    headers: {
-      'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
-      'Accept': 'application/json'
-    }
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error(`Guesty API error: ${errorText}`);
-    throw new Error(`Guesty API error: ${errorText}`);
-  }
-
-  return response.json();
+const calculateAveragePrice = (availabilityData) => {
+  const total = availabilityData.reduce((sum, day) => sum + day.price, 0);
+  return total / availabilityData.length;
 };
 
 const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
@@ -106,7 +94,7 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
       break;
     }
 
-    await delay(RATE_LIMIT_INTERVAL); 
+    await delay(RATE_LIMIT_INTERVAL);
   }
   return results;
 };
@@ -265,6 +253,7 @@ export const handler = async (event, context) => {
 
           if (availableDates.length > 0) {
             listing.prices = prices;
+            listing.averagePrice = calculateAveragePrice(prices); // Calculate and add the average price
             return true;
           } else {
             console.log(`Listing ${listing._id} is not available for dates: ${availableDates.length} days`);

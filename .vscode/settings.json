@@ -5,6 +5,7 @@
   "typescript.inlayHints.parameterNames.enabled": "all",
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
+  "workbench.editor.wrapTabs": true,
   "[html]": {
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true
