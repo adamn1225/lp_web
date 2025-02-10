@@ -214,7 +214,7 @@ function capitalizeFirstLetter(string: string) {
             </div>
             <!-- property details -->
             <div
-              class="flex flex-col md:flex-row items-start justify-start mb-2 w-full"
+              class="flex flex-col md:flex-row items-start justify-start h-min w-full"
             >
               <div
                 class="flex flex-col md:flex-row justify-normal gap-32 w-full mr-16"
@@ -222,9 +222,9 @@ function capitalizeFirstLetter(string: string) {
                 <div
                   class="hidden md:flex gap-1 justify-start items-start w-3/4 h-full"
                 >
-                  <div class="w-full">
+                  <div class="w-full h-full">
                     <img
-                      class="block w-full h-fit object-cover"
+                      class="block w-full h-full object-cover"
                       src={pictures[0].original}
                       alt="Main image"
                       width={2000}
@@ -234,7 +234,7 @@ function capitalizeFirstLetter(string: string) {
                     />
                   </div>
                   <div
-                    class="flex flex-col items-start h-screen mt-1 w-1/5 overflow-y-auto no-scrollbar"
+                    class="flex flex-col items-start h-auto mt-1 w-1/5 overflow-y-auto no-scrollbar"
                   >
                     <ImageGallery pictures={pictures} client:only="react" />
                   </div>
@@ -242,7 +242,7 @@ function capitalizeFirstLetter(string: string) {
 
                 <!-- right -->
                 <div
-                  class="xs:hidden sm:hidden md:flex w-full max-w-max flex-col justify-stretch items-stretch mt-6"
+                  class="xs:hidden sm:hidden md:flex w-full max-w-max flex-col justify-start items-stretch mt-6"
                 >
                   <span class="xs:hidden">
                     <InquireForm
@@ -274,57 +274,60 @@ function capitalizeFirstLetter(string: string) {
                       Checkout times are in UTC.
                     </span>
                     <InstantBooking listingId={listingId} client:only="react" />
-                    <h4
-                      class="text-2xl mt-6 font-bold font-sans text-slate-900"
-                    >
-                      Amenities
-                    </h4>
-
-                    <div
-                      class="mb-3 grid grid-cols-2 gap-2 justify-items-center"
-                    >
-                      <!-- bedroom -->
-                      <div class="flex flex-col">
-                        <div
-                          class="flex items-center gap-2 text-muted-900 dark:text-white"
+                    <div class="flex justify-between items-center w-full">
+                      <div>
+                        <h4
+                          class="text-2xl mt-6 font-bold font-sans text-slate-900"
                         >
-                          <p class="text-lg font-bold">{PropertyType}</p>
-                        </div>
-                        <p class="text-sm text-muted-400">Property Type</p>
-                      </div>
-                      <!-- bathroom -->
-                      <div class="flex flex-col">
+                          Amenities
+                        </h4>
                         <div
-                          class="flex items-center gap-2 text-muted-900 dark:text-white"
+                          class="mb-3 grid grid-cols-2 gap-2 justify-items-center"
                         >
-                          <svg
-                            class="size-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            style="--darkreader-inline-stroke: currentColor;"
-                            data-darkreader-inline-stroke=""
-                            ><path
-                              d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
-                            ></path><line x1="10" y1="5" x2="8" y2="7"
-                            ></line><line x1="2" y1="12" x2="22" y2="12"
-                            ></line><line x1="7" y1="19" x2="7" y2="21"
-                            ></line><line x1="17" y1="19" x2="17" y2="21"
-                            ></line>
-                          </svg>
-                          <p class="text-lg font-bold">{bathrooms}</p>
+                          <!-- bedroom -->
+                          <div class="flex flex-col">
+                            <div
+                              class="flex items-center gap-2 text-muted-900 dark:text-white"
+                            >
+                              <p class="text-lg font-bold">{PropertyType}</p>
+                            </div>
+                            <p class="text-sm text-muted-400">Property Type</p>
+                          </div>
+                          <!-- bathroom -->
+                          <div class="flex flex-col">
+                            <div
+                              class="flex items-center gap-2 text-muted-900 dark:text-white"
+                            >
+                              <svg
+                                class="size-4"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                style="--darkreader-inline-stroke: currentColor;"
+                                data-darkreader-inline-stroke=""
+                                ><path
+                                  d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"
+                                ></path><line x1="10" y1="5" x2="8" y2="7"
+                                ></line><line x1="2" y1="12" x2="22" y2="12"
+                                ></line><line x1="7" y1="19" x2="7" y2="21"
+                                ></line><line x1="17" y1="19" x2="17" y2="21"
+                                ></line>
+                              </svg>
+                              <p class="text-lg font-bold">{bathrooms}</p>
+                            </div>
+                            <p class="text-sm text-muted-400">Bathrooms</p>
+                          </div>
                         </div>
-                        <p class="text-sm text-muted-400">Bathrooms</p>
                       </div>
-                    </div>
-                    <div class="">
-                      <BedTypes beds={beds} client:only="react" />
+                      <div class="">
+                        <BedTypes beds={beds} client:only="react" />
+                      </div>
                     </div>
 
                     <div

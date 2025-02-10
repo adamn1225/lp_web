@@ -6,7 +6,7 @@ dotenv.config();
 const MAX_RETRIES = 3;
 const RATE_LIMIT_INTERVAL = 1000; // 1 second
 const CACHE_TTL = 60 * 60 * 1000; // 1 hour
-const BATCH_SIZE = 100;
+const BATCH_SIZE = 50;
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -110,7 +110,7 @@ export async function handler(event) {
     const batch = event.queryStringParameters.batch || 'initial';
 
     try {
-        console.log(`Fetching reviews for property ID: ${propertyId}`);
+        console.log(`Fetching reviews for property ID: ${propertyId}`); // Log the propertyId for debugging
 
         if (!cache.reviews[propertyId] || (Date.now() - cache.timestamps[propertyId]) > CACHE_TTL) {
             const reviews = await fetchReviews(propertyId);
@@ -123,9 +123,9 @@ export async function handler(event) {
 
         let reviewsToFetch;
         if (batch === 'initial') {
-            reviewsToFetch = reviews.slice(0, 15);
+            reviewsToFetch = reviews.slice(0, 25);
         } else {
-            reviewsToFetch = reviews.slice(10);
+            reviewsToFetch = reviews.slice(20);
         }
 
         const reviewsWithFullNames = await fetchReviewsWithFullNames(reviewsToFetch);

@@ -42,6 +42,7 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
     };
 
     useEffect(() => {
+        console.log(`Listing ID: ${listingId}`); // Log the listingId for debugging
         fetchReviews('initial');
     }, [listingId]);
 
@@ -79,11 +80,6 @@ const AirReviews: React.FC<AirReviewsProps> = ({ listingId }) => {
 
     return (
         <div className='w-full flex flex-col items-center justify-center md:w-2/3'>
-            {/* <div className='flex gap-1 items-center mb-4'>
-                <button className='text-secondary flex items-center gap-1 border border-secondary bg-accent rounded-md px-2 shadow-sm' onClick={toggleSortOrder}>
-                    {sortOrder === 'desc' ? 'Highest to Lowest' : 'Lowest to Highest'} {sortOrder === 'desc' ? <ArrowDownWideNarrow size={16} /> : <ArrowUpWideNarrow size={16} />}
-                </button>
-            </div> */}
             <div className="flex flex-col justify-center w-full items-center md:items-start gap-y-2 md:gap-x-6">
                 {displayedReviews.map((review) => (
                     <div className="relative" key={review._id}>
