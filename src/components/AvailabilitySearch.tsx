@@ -80,56 +80,56 @@ const AvailabilitySearch: React.FC = () => {
 
   const cache = useRef<{ [key: string]: any[] }>({});
 
-useEffect(() => {
-  const fetchInitialData = async () => {
-    try {
-      const [citiesResponse, bedroomsResponse, tagsResponse] = await Promise.all([
-        fetch('/.netlify/functions/availability?fetchCities=true'),
-        fetch('/.netlify/functions/availability?fetchBedrooms=true'),
-        fetch('/.netlify/functions/searchTags')
-      ]);
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const [citiesResponse, bedroomsResponse, tagsResponse] = await Promise.all([
+          fetch('/.netlify/functions/availability?fetchCities=true'),
+          fetch('/.netlify/functions/availability?fetchBedrooms=true'),
+          fetch('/.netlify/functions/searchTags')
+        ]);
 
-      if (!citiesResponse.ok) {
-        throw new Error(`Failed to fetch cities: ${citiesResponse.statusText}`);
-      }
-      if (!bedroomsResponse.ok) {
-        throw new Error(`Failed to fetch bedrooms: ${bedroomsResponse.statusText}`);
-      }
-      if (!tagsResponse.ok) {
-        throw new Error(`Failed to fetch tags: ${tagsResponse.statusText}`);
-      }
+        if (!citiesResponse.ok) {
+          throw new Error(`Failed to fetch cities: ${citiesResponse.statusText}`);
+        }
+        if (!bedroomsResponse.ok) {
+          throw new Error(`Failed to fetch bedrooms: ${bedroomsResponse.statusText}`);
+        }
+        if (!tagsResponse.ok) {
+          throw new Error(`Failed to fetch tags: ${tagsResponse.statusText}`);
+        }
 
-      const citiesData = await citiesResponse.json();
-      const bedroomsData = await bedroomsResponse.json();
-      const tagsData = await tagsResponse.json();
+        const citiesData = await citiesResponse.json();
+        const bedroomsData = await bedroomsResponse.json();
+        const tagsData = await tagsResponse.json();
 
-      if (citiesData.results) {
-        setCities(citiesData.results);
-      } else {
-        setCities([]);
+        if (citiesData.results) {
+          setCities(citiesData.results);
+        } else {
+          setCities([]);
+        }
+
+        if (bedroomsData.results) {
+          const sortedBedrooms = bedroomsData.results.sort((a: number, b: number) => a - b);
+          setBedroomOptions(sortedBedrooms);
+        } else {
+          setBedroomOptions([]);
+        }
+
+        if (tagsData.error) {
+          throw new Error(tagsData.error);
+        }
+        const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
+        const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
+        setTags(filteredTags);
+      } catch (err) {
+        console.error('Error fetching initial data:', err);
+        setError('Failed to load initial data');
       }
+    };
 
-      if (bedroomsData.results) {
-        const sortedBedrooms = bedroomsData.results.sort((a: number, b: number) => a - b);
-        setBedroomOptions(sortedBedrooms);
-      } else {
-        setBedroomOptions([]);
-      }
-
-      if (tagsData.error) {
-        throw new Error(tagsData.error);
-      }
-      const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
-      const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
-      setTags(filteredTags);
-    } catch (err) {
-      console.error('Error fetching initial data:', err);
-      setError('Failed to load initial data');
-    }
-  };
-
-  fetchInitialData();
-}, []);
+    fetchInitialData();
+  }, []);
 
   const handleCityClick = async (city: string | null): Promise<void> => {
     setSelectedLocation(city || '');
@@ -193,37 +193,37 @@ useEffect(() => {
   };
 
 
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!selectedLocation) {
-    setValidationError('Please select a city.');
-    return;
-  }
-  setValidationError('');
-  debouncedHandleSubmit(e);
-};
-
-const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
-  setLoading(true);
-  setError('');
-  setSearchAttempted(true);
-
-  try {
-    const tagsQuery = allowedTags.join(',');
-    const startDate = dateRange[0].startDate.toISOString().slice(0, 10);
-    const endDate = dateRange[0].endDate.toISOString().slice(0, 10);
-    const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}-${currentPage}-${itemsPerPage}`;
-
-    if (cache.current[cacheKey]) {
-      console.log('Returning cached results');
-      setListings(cache.current[cacheKey]);
-      setFilteredListings(cache.current[cacheKey]);
-      setMapListings(cache.current[cacheKey]);
-      setLoading(false);
-      setIsResultsModalOpen(true);
-      setIsSearchComplete(true);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedLocation) {
+      setValidationError('Please select a city.');
       return;
     }
+    setValidationError('');
+    debouncedHandleSubmit(e);
+  };
+
+  const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
+    setLoading(true);
+    setError('');
+    setSearchAttempted(true);
+
+    try {
+      const tagsQuery = allowedTags.join(',');
+      const startDate = dateRange[0].startDate.toISOString().slice(0, 10);
+      const endDate = dateRange[0].endDate.toISOString().slice(0, 10);
+      const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}-${currentPage}-${itemsPerPage}`;
+
+      if (cache.current[cacheKey]) {
+        console.log('Returning cached results');
+        setListings(cache.current[cacheKey]);
+        setFilteredListings(cache.current[cacheKey]);
+        setMapListings(cache.current[cacheKey]);
+        setLoading(false);
+        setIsResultsModalOpen(true);
+        setIsSearchComplete(true);
+        return;
+      }
 
       let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&page=${currentPage}&limit=${itemsPerPage}`;
 
@@ -235,48 +235,48 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
         url += `&bedroomAmount=${encodeURIComponent(selectedBedroomAmount)}`;
       }
 
-    console.log('API URL:', url);
+      console.log('API URL:', url);
 
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch listings: ${response.statusText}`);
-    }
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch listings: ${response.statusText}`);
+      }
 
-    const data = await response.json();
-    console.log('Fetched Data:', data);
+      const data = await response.json();
+      console.log('Fetched Data:', data);
 
-    if (!data.results) {
-      setError('No results found');
-      setListings([]);
-      setFilteredListings([]);
-      setMapListings([]);
+      if (!data.results) {
+        setError('No results found');
+        setListings([]);
+        setFilteredListings([]);
+        setMapListings([]);
+        setIsResultsModalOpen(true);
+        setIsSearchComplete(true);
+        return;
+      }
+
+      const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
+
+      setListings(filteredListings);
+      setFilteredListings(filteredListings);
+      setMapListings(filteredListings);
+      cache.current[cacheKey] = filteredListings;
+
+      console.log('Filtered Listings:', filteredListings);
+
+      if (resultsContainerRef.current) {
+        resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+
       setIsResultsModalOpen(true);
       setIsSearchComplete(true);
-      return;
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'An error occurred');
+    } finally {
+      setLoading(false);
     }
-
-    const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
-
-    setListings(filteredListings);
-    setFilteredListings(filteredListings);
-    setMapListings(filteredListings);
-    cache.current[cacheKey] = filteredListings;
-
-    console.log('Filtered Listings:', filteredListings);
-
-    if (resultsContainerRef.current) {
-      resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    setIsResultsModalOpen(true);
-    setIsSearchComplete(true);
-  } catch (err) {
-    console.error(err);
-    setError(err.message || 'An error occurred');
-  } finally {
-    setLoading(false);
-  }
-}, 300);
+  }, 300);
 
   const clearResults = () => {
     setListings([]);
@@ -394,35 +394,35 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
           <span className="flex w-fit items-start justify-start text-start"><Search size={20} /> <p>Search</p></span><span className="pt-4 pr-16 inline-flex justify-center text-center w-full self-center place-self-start"><p>When - Where</p></span>
         </button>
       </div>
-<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="md:mb-80  items-center h-full" showCloseButton={true}>
-  <form onSubmit={handleSubmit} className="flex justify-center items-center bg-zinc-100 w-full h-full md:h-auto rounded-md py-5">
-    <div className="flex flex-col items-center justify-center w-full px-4">
-      <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full text-lg">
-        <div className="w-full flex flex-col">
-          <DateRangePickerComponent
-            state={dateRange}
-            setState={setDateRange}
-            disabledDates={[]}
-            onDateChange={handleDateChange} // Use the new onDateChange prop
-          />
-          <button type="submit" className="my-1 flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
-            <Search size={20} /> <p>Search</p>
-          </button>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="md:mb-80  items-center h-full" showCloseButton={true}>
+        <form onSubmit={handleSubmit} className="flex justify-center items-center bg-zinc-100 w-full h-full md:h-auto rounded-md py-5">
+          <div className="flex flex-col items-center justify-center w-full px-4">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full text-lg">
+              <div className="w-full flex flex-col">
+                <DateRangePickerComponent
+                  state={dateRange}
+                  setState={setDateRange}
+                  disabledDates={[]}
+                  onDateChange={handleDateChange} // Use the new onDateChange prop
+                />
+                <button type="submit" className="my-1 flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
+                  <Search size={20} /> <p>Search</p>
+                </button>
               </div>
-            <div className="hidden w-full">
-              <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
-              <select
-                id="bedroomAmount"
-                value={selectedBedroomAmount}
-                onChange={(e) => setSelectedBedroomAmount(e.target.value)}
-                className="border rounded-xl border-slate-400 p-2 w-full"
-              >
-                <option value="">Any</option>
-                {bedroomOptions.map(bedroom => (
-                  <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
-                ))}
-              </select>
-            </div>
+              <div className="hidden w-full">
+                <label htmlFor="bedroomAmount" className="text-slate-800 font-semibold">Bedroom Amount:</label>
+                <select
+                  id="bedroomAmount"
+                  value={selectedBedroomAmount}
+                  onChange={(e) => setSelectedBedroomAmount(e.target.value)}
+                  className="border rounded-xl border-slate-400 p-2 w-full"
+                >
+                  <option value="">Any</option>
+                  {bedroomOptions.map(bedroom => (
+                    <option key={bedroom} value={bedroom}>{bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}</option>
+                  ))}
+                </select>
+              </div>
               <div className=" hidden">
                 <label htmlFor="numGuests" className="text-slate-800 font-semibold">Number of Guests</label>
                 <input
@@ -509,7 +509,7 @@ const debouncedHandleSubmit = debounce(async (e: React.FormEvent | null) => {
                               {property.address.city}, {property.address.state}
                             </p>
                             <div className="flex items-end h-full">
-                              <p className="font-semibold text-base text-nowrap">Starting at ${price} Per Night</p>
+                              <p className="font-semibold text-base text-nowrap">Average price per night - ${price}</p>
                             </div>
                           </div>
                         </article>
