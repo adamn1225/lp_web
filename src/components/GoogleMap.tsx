@@ -88,23 +88,38 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ listings, onMarkerClick, selected
                     title: listing.address.full,
                 });
 
+                const URL = `https://line-properties.com/${listing._id}`;
+
+                const infoWindowContent = document.createElement('div');
+                infoWindowContent.innerHTML = `
+                    <div class="custom-info-window text-secondary flex flex-col justify-center gap-2">
+                        <h3 class="font-semibold text-base">${listing.title}</h3>
+                        <p class="font-medium text-sm">${listing.address.street} <br /> ${listing.address.city}, ${listing.address.state} ${listing.address.zipcode}</p>
+                        <p class="text-xs"><strong class="font-semibold">Starting at:</strong> <span class="font-normal">$${listing.prices.basePrice} Night</p></span>
+                        <img src="${listing.picture.thumbnail}" alt="${listing.picture.caption}" style="width:100px;height:auto;"/>
+                        <a href="#${listing._id}" class="info-window-link">
+                            <button class="info-window-button font-bold text-base">View Listing</button>
+                        </a>
+                    </div>
+                `;
+
                 const infoWindow = new window.google.maps.InfoWindow({
-                    content: `
-                        <div class="custom-info-window text-secondary flex flex-col justify-center gap-2">
-                            <h3 class="font-semibold text-base">${listing.title}</h3>
-                            <p class="font-medium text-sm">${listing.address.street} <br /> ${listing.address.city}, ${listing.address.state} ${listing.address.zipcode}</p>
-                            <p class="text-xs"><strong class="font-semibold">Starting at:</strong> <span class="font-normal">$${listing.prices.basePrice} Night</p></span>
-                            <img src="${listing.picture.thumbnail}" alt="${listing.picture.caption}" style="width:100px;height:auto;"/>
-                            <a href="#${listing._id}" class="info-window-link">
-                                <button class="info-window-button font-bold text-base">View Listing</button>
-                            </a>
-                        </div>
-                    `,
+                    content: infoWindowContent,
                 });
 
                 marker.addListener('click', () => {
                     infoWindow.open(mapInstance.current, marker);
-                    onMarkerClick(listing._id);
+                });
+
+                // Attach event listener after the info window content is added to the DOM
+                window.google.maps.event.addListener(infoWindow, 'domready', () => {
+                    const link = infoWindowContent.querySelector('.info-window-link');
+                    if (link) {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            onMarkerClick(listing._id);
+                        });
+                    }
                 });
 
                 markers.current.push(marker);
