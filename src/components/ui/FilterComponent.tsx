@@ -139,14 +139,14 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                 </button>
               ))}
             </div>
-                      <div className="flex flex-col gap-2 p-6 w-1/2">
-                   <select value={priceOrder} onChange={handlePriceChange} className="border border-secondary/30 rounded-lg p-2 w-full">
-                      <option value="">Sort by price</option>
-                      <option value="default">Default</option>
-                       <option value="lowToHigh">Lowest to Highest</option>
-                       <option value="highToLow">Highest to Lowest</option>
-                         </select>
-                        </div>
+            <div className="flex flex-col gap-2 p-6 w-1/2">
+              <select value={priceOrder} onChange={handlePriceChange} className="border border-secondary/30 rounded-lg p-2 w-full">
+                <option value="">Sort by price</option>
+                <option value="default">Default</option>
+                <option value="lowToHigh">Lowest to Highest</option>
+                <option value="highToLow">Highest to Lowest</option>
+              </select>
+            </div>
           </div>
 
         </div>

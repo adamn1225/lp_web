@@ -115,7 +115,6 @@ const AvailabilitySearch: React.FC = () => {
         } else {
           setBedroomOptions([]);
         }
-
         if (tagsData.error) {
           throw new Error(tagsData.error);
         }
@@ -213,7 +212,6 @@ const AvailabilitySearch: React.FC = () => {
       const startDate = dateRange[0].startDate.toISOString().slice(0, 10);
       const endDate = dateRange[0].endDate.toISOString().slice(0, 10);
       const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}-${currentPage}-${itemsPerPage}`;
-
       if (cache.current[cacheKey]) {
         console.log('Returning cached results');
         setListings(cache.current[cacheKey]);
