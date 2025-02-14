@@ -1,15 +1,30 @@
 ---
 import Layout from "@layouts/Split.astro";
 import Section from "@components/Section.astro";
-import App from "../components/App";
+import HomeHero from "@components/sections/HomeHero.astro";
 import TagNavigation from "@components/TagNavigation";
+import { Home } from "lucide-react";
+import RandomReviewsGrid from "@components/RandomReviewsSlider";
 ---
 
 <Layout title="Properties">
   <Section>
-    <div class="pt-20">
-      <App client:only="react" />
+    <div class="space-y-8">
+      <div><HomeHero /></div>
+      <div class="w-screen">
+        <RandomReviewsGrid client:only />
+      </div>
+      <div class="pt-20 grid grid-cols-2">
+        <div class="col-span-2 place-content-center">
+          <h2 class="text-3xl text-secondary font-bold text-center mt-8 mb-4">
+            Browse vacation properties by tag
+          </h2>
+        </div>
+
+        <div class="col-span-2 place-content-end">
+          <TagNavigation client:only="react" />
+        </div>
+      </div>
     </div>
-    <TagNavigation client:only />
   </Section>
 </Layout>

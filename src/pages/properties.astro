@@ -1,11 +1,11 @@
 ---
-import { Icon } from 'astro-icon/components'
-import Layout from '@layouts/Split.astro'
-import Section from '@components/Section.astro'
-import Container from '@components/Container.astro'
-import AvailabilitySearch from '@components/AvailabilitySearch'
-import AllListings from '@components/AllListings.astro'
-import GuestyListings from '@components/GuestyListings.astro'
+import { Icon } from "astro-icon/components";
+import Layout from "@layouts/Split.astro";
+import Section from "@components/Section.astro";
+import Container from "@components/Container.astro";
+import AvailabilitySearch from "@components/AvailabilitySearch";
+import AllListings from "@components/AllListings.astro";
+import GuestyListings from "@components/GuestyListings.astro";
 ---
 
 <Layout title="Properties">
@@ -15,29 +15,41 @@ import GuestyListings from '@components/GuestyListings.astro'
       <Container>
         <div class="w-full mx-auto mt-24">
           <div class="pt-16 pb-6">
-            <h1 class="text-5xl font-sans text-cyan-900 font-light text-center mb-2">Explore Vacation</h1>
-            <AvailabilitySearch client:only />
+            <h1
+              class="text-5xl font-sans text-cyan-900 font-light text-center mb-2"
+            >
+              Explore Vacation
+            </h1>
           </div>
         </div>
 
-        <h2 class="font-light font-sans text-cyan-900 mb-4 text-5xl text-center">Featured</h2>
-        <div class="py-3 md:px-12 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            
+        <h2
+          class="font-light font-sans text-cyan-900 mb-4 text-5xl text-center"
+        >
+          Featured
+        </h2>
+        <div
+          class="py-3 md:px-12 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
+        >
           <GuestyListings />
-          
         </div>
 
         <div class="mt-3">
-          <span id="listing2" class="hidden py-3 px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <span
+            id="listing2"
+            class="hidden py-3 px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
+          >
             <AllListings />
           </span>
           <span class="flex justify-center align-center mb-8">
-            <button id="showHide" class="bg-cyan-600 px-6 py-2 shadow-md shadow-cyan-500/30 rounded-3xl text-white mt-6"> Search through more of our listings </button>
+            <button
+              id="showHide"
+              class="bg-cyan-600 px-6 py-2 shadow-md shadow-cyan-500/30 rounded-3xl text-white mt-6"
+            >
+              Search through more of our listings
+            </button>
           </span>
         </div>
-          
-
-      
       </Container>
     </Section>
   </main>

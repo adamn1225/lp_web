@@ -1,31 +1,28 @@
 ---
-import SideStats from '@components/sections/SideStats.astro'
-import SideIllustrations from '@components/sections/SideIllustrations.astro'
-import IconMatrix from '@components/sections/IconMatrix.astro'
-import BoxedCta from '@components/sections/BoxedCta.astro'
-import CustomerLogos from '@components/sections/CustomerLogos.astro'
-import Testimonials from '@components/sections/Testimonials.astro'
-import Layout from '@layouts/Split.astro'
-import HeroAbout from '@components/sections/HeroAbout.astro'
+import SideStats from "@components/sections/SideStats.astro";
+import SideIllustrations from "@components/sections/SideIllustrations.astro";
+import IconMatrix from "@components/sections/IconMatrix.astro";
+import BoxedCta from "@components/sections/BoxedCta.astro";
+import CustomerLogos from "@components/sections/CustomerLogos.astro";
+import Testimonials from "@components/sections/Testimonials";
+import Layout from "@layouts/Split.astro";
+import HeroAbout from "@components/sections/HeroAbout.astro";
 ---
 
 <Layout title="About">
   <main id="About">
-    
     <!--Hero-->
     <HeroAbout />
-    <div  class="pt-16">
-  <SideStats />
+    <div class="pt-16">
+      <SideStats />
     </div>
-    
+
     <SideIllustrations />
 
     <!--Testimonials-->
     <Testimonials centerText={true} />
 
-    
-
-   <!--Icon matrix-->
+    <!--Icon matrix-->
     <IconMatrix />
 
     <!--Customer Logos-->

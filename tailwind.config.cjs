@@ -6,7 +6,7 @@ module.exports = {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      sans: ['Titillium Web', 'sans-serif'],
+      sans: ['Titillium Web', 'sans-serif'], // Ensure this font family is used
     },
     extend: {
       backgroundImage: {
