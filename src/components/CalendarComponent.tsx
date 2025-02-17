@@ -7,9 +7,10 @@ interface CalendarComponentProps {
   state: any[];
   setState: (state: any[]) => void;
   disabledDates: Date[];
+  datePrices: { [key: string]: number }; // Add datePrices prop
 }
 
-const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates }) => {
+const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates, datePrices }) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -23,6 +24,17 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
 
   console.log('Formatted disabled dates:', formattedDisabledDates);
 
+  const dayContentRenderer = (date) => {
+    const dateString = date.toISOString().split('T')[0];
+    const price = datePrices[dateString];
+    return (
+      <div>
+        <span>{date.getDate()}</span>
+        {price && <div className="text-xs text-gray-500">${price}</div>}
+      </div>
+    );
+  };
+
   return (
     <DateRange
       editableDateInputs={true}
@@ -31,6 +43,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
       ranges={state.length ? state : initialRange}
       disabledDates={formattedDisabledDates}
       minDate={today} // Prevent selection of past dates
+      dayContentRenderer={dayContentRenderer} // Use dayContentRenderer to display prices
     />
   );
 };

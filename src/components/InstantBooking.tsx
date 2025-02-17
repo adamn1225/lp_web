@@ -35,6 +35,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   ]);
   const [unavailableDates, setUnavailableDates] = useState<Date[]>([]);
   const [bookedDates, setBookedDates] = useState<Date[]>([]);
+  const [datePrices, setDatePrices] = useState<{ [key: string]: number }>({});
   const [isLocal, setIsLocal] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [guests, setGuests] = useState<number>(1);
@@ -84,6 +85,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
 
         setUnavailableDates(unavailable);
         setBookedDates(booked);
+        setDatePrices(data.datePrices); // Set datePrices from the fetched data
       } catch (err) {
         console.error('Error fetching unavailable dates:', err);
         setError(err.message);
@@ -120,6 +122,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
         state={state}
         setState={setState}
         disabledDates={disabledDates}
+        datePrices={datePrices} // Pass datePrices to CalendarComponent
       />
 
       <div className="flex flex-col justify-center items-center">
