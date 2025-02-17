@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "66dc8f6409d34e2fda46a4cc",
+    "guestId": "666f074481ff52dda06ae4f0",
+    "listingId": "656658c6acf21300106f1f37",
+    "overall_rating": 5,
+    "public_review": "We had a great stay and the condo was exactly what we needed. It was really cute and well maintained. The location was fantastic, beach access right across the street.\nEmily was great and responded to questions quickly.",
+    "guestFullName": "Annemarie Siegmund"
+  },
+  {
+    "_id": "6679d79b6b4d6b8b5cef08bd",
+    "guestId": "6566113298649f00129aeeda",
+    "listingId": "6566114aacf213001065b88e",
+    "overall_rating": 5,
+    "public_review": "We have stayed here 3 years in a row and have a pleasant experience every time. Emily is very responsive when we have questions. Love that we can bring the dogs . Will definitely stay again.",
+    "guestFullName": "Brenda Socko"
+  },
+  {
+    "_id": "66257c42945c603dc02ce71b",
+    "guestId": "660cf4237d8b67947995871a",
+    "listingId": "6566114aacf213001065b88e",
+    "overall_rating": 5,
+    "public_review": "Very peaceful and beautiful",
+    "guestFullName": "Jaedyn Owens"
+  }
+]
