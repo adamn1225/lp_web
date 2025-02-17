@@ -5,6 +5,7 @@ import HomeHero from "@components/sections/HomeHero.astro";
 import TagNavigation from "@components/TagNavigation";
 import { Home } from "lucide-react";
 import RandomReviewsGrid from "@components/RandomReviewsSlider";
+import PrefetchAvailability from "@components/PrefetchAvailability";
 ---
 
 <Layout title="Properties">
@@ -27,4 +28,5 @@ import RandomReviewsGrid from "@components/RandomReviewsSlider";
       </div>
     </div>
   </Section>
+  <PrefetchAvailability client:only="react" />
 </Layout>
