@@ -9,14 +9,14 @@ import RandomReviewsGrid from "@components/RandomReviewsSlider";
 
 <Layout title="Properties">
   <Section>
-    <div class="space-y-8">
-      <div><HomeHero /></div>
-      <div class="w-screen">
-        <RandomReviewsGrid client:only />
+    <div class="">
+      <div class="bg-secondary h-full w-full"><HomeHero /></div>
+      <div class="w-screen bg-secondary">
+        <RandomReviewsGrid client:only="react" />
       </div>
-      <div class="pt-20 grid grid-cols-2">
+      <div class="pt-12 grid grid-cols-2">
         <div class="col-span-2 place-content-center">
-          <h2 class="text-3xl text-secondary font-bold text-center mt-8 mb-4">
+          <h2 class="text-3xl text-secondary font-bold text-center mb-4">
             Browse vacation properties by tag
           </h2>
         </div>
