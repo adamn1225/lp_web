@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 const MAX_RETRIES = 3;
-const RATE_LIMIT_INTERVAL = 2000; // 1 second
+const RATE_LIMIT_INTERVAL = 2000; // 2 seconds
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -86,13 +86,6 @@ export const handler = async (event, context) => {
 
         // Extract base price from the first day in the days array
         const basePrice = data2.data.days.length > 0 ? data2.data.days[0].price : 0;
-
-        // Helper function to add a day to a date
-        const addDays = (date, days) => {
-            const result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result.toISOString().split('T')[0]; // Return date in YYYY-MM-DD format
-        };
 
         // Extract unavailable dates
         const unavailableDates = data2.data.days
