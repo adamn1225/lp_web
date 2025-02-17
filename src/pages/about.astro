@@ -4,9 +4,9 @@ import SideIllustrations from "@components/sections/SideIllustrations.astro";
 import IconMatrix from "@components/sections/IconMatrix.astro";
 import BoxedCta from "@components/sections/BoxedCta.astro";
 import CustomerLogos from "@components/sections/CustomerLogos.astro";
-import Testimonials from "@components/sections/Testimonials";
 import Layout from "@layouts/Split.astro";
 import HeroAbout from "@components/sections/HeroAbout.astro";
+import RandomReviewsGrid from "@components/RandomReviewsSlider";
 ---
 
 <Layout title="About">
@@ -20,8 +20,7 @@ import HeroAbout from "@components/sections/HeroAbout.astro";
     <SideIllustrations />
 
     <!--Testimonials-->
-    <Testimonials centerText={true} />
-
+    <RandomReviewsGrid client:only="react" />
     <!--Icon matrix-->
     <IconMatrix />
 
