@@ -166,24 +166,31 @@ article {
   padding-top: 2rem !important; // Adjust the padding as needed
 }
 
+// Add styles for the dates in between the start and end edges
+.rdrInRange {
+  padding-top: 1rem !important; // Adjust the padding as needed
+  padding-bottom: 1rem !important; // Adjust the padding as needed
+}
 
+.rdrInRange .rdrDayNumber {
+  padding-bottom: 1rem !important; // Adjust the padding as needed
+}
 
+.rdrInRange .rdrDayPrice {
+  padding-top: 1rem !important; // Adjust the padding as needed
+}
 
 .rdrDayNumber {
   font-size: 11px !important;
   padding-bottom: 0.5rem !important;
   padding-right: 0.5rem !important;
   color: #202020 !important;
-
 }
 
 .rdrDayPrice {
   font-size: 12px !important;
   padding-top: 0.5rem !important;
-  /* Adjust the font size as needed */
   color: #066d06 !important;
-  /* Adjust the color as needed */
-  /* Add some space between the date and the price */
 }
 
 .lp-button {
