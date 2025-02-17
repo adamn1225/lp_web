@@ -149,40 +149,40 @@ article {
   background-color: #ffffff00 !important;
 }
 
-
-
-.rdrDay {
-  width: 50px !important;
-  height: 50px !important;
-  display: flex;
-  align-items: center !important;
-  justify-content: space-between !important;
+.rdrStartEdge,
+.rdrEndEdge {
+  padding-top: 2rem !important; // Adjust the padding as needed
 }
 
-.rdrDayDisabled {
-  color: #3a37375d !important;
-  opacity: 0.5 !important;
+.rdrStartEdge .rdrDayNumber,
+.rdrEndEdge .rdrDayNumber {
+  padding-bottom: 2rem !important; // Adjust the padding as needed
+  position: relative;
+  z-index: 2;
+}
+
+.rdrStartEdge .rdrDayPrice,
+.rdrEndEdge .rdrDayPrice {
+  padding-top: 2rem !important; // Adjust the padding as needed
+}
+
+
+
+
+.rdrDayNumber {
+  font-size: 11px !important;
+  padding-bottom: 0.5rem !important;
+  padding-right: 0.5rem !important;
+  color: #202020 !important;
 
 }
 
 .rdrDayPrice {
-  font-size: 14px !important;
-  position: relative !important;
-  bottom: -10px !important;
-  right: 15px !important;
-  color: #066d06 !important;
-  text-decoration: underline !important;
-  text-underline-offset: 3px !important;
-}
-
-.rdrDayNumber {
-  font-size: 11px !important;
+  font-size: 12px !important;
+  padding-top: 0.5rem !important;
   /* Adjust the font size as needed */
-  color: #202020 !important;
+  color: #066d06 !important;
   /* Adjust the color as needed */
-  position: relative !important;
-  top: -5px !important;
-  left: 1px !important;
   /* Add some space between the date and the price */
 }
 

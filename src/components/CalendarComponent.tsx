@@ -30,7 +30,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
     const isDisabled = formattedDisabledDates.some(disabledDate => disabledDate.getTime() === date.getTime());
 
     return (
-      <div className="rdrDay">
+      <div className="rdrDay flex justify-between gap-5">
         <span className="rdrDayNumber">{date.getDate()}</span>
         {!isDisabled && price && <div className="rdrDayPrice">${price}</div>}
       </div>

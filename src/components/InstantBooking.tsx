@@ -118,14 +118,14 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
     <div className="mt-4">
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <CalendarComponent
-        state={state}
-        setState={setState}
-        disabledDates={disabledDates}
-        datePrices={datePrices} // Pass datePrices to CalendarComponent
-      />
+      <div className="flex flex-col justify-center gap-8 items-center">
+        <CalendarComponent
+          state={state}
+          setState={setState}
+          disabledDates={disabledDates}
+          datePrices={datePrices} // Pass datePrices to CalendarComponent
+        />
 
-      <div className="flex flex-col justify-center items-center">
         <button
           type="button"
           className="h-full shadow-lg shadow-secondary/40 lp-button m-0 drop-shadow-lg w-5/6 py-1 xs:mx-2 text-lg rounded-lg text-white"
