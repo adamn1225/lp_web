@@ -111,6 +111,9 @@ const AvailabilitySearch: React.FC = () => {
 
         if (bedroomsData.results) {
           const sortedBedrooms = bedroomsData.results.sort((a: number, b: number) => a - b);
+          if (!sortedBedrooms.includes(0)) {
+            sortedBedrooms.unshift(0); // Ensure '0' bedroom option is included
+          }
           setBedroomOptions(sortedBedrooms);
         } else {
           setBedroomOptions([]);
@@ -301,7 +304,7 @@ const AvailabilitySearch: React.FC = () => {
       }
     }
 
-    if (filters.bedroomCount) {
+    if (filters.bedroomCount !== null) {
       filtered = filtered.filter(listing => listing.bedrooms === Number(filters.bedroomCount));
     }
 
@@ -504,6 +507,9 @@ const AvailabilitySearch: React.FC = () => {
                             </h4>
                             <p className="text-sm text-muted-400">
                               {property.address.city}, {property.address.state}
+                            </p>
+                            <p className="hidden text-xs text-muted-400">
+                              {property.bedrooms} bedrooms
                             </p>
                             <div className="flex items-end h-full">
                               <p className="font-semibold text-base text-nowrap">Average price per night - ${price}</p>

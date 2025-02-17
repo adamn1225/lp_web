@@ -145,6 +145,11 @@ export const handler = async (event, context) => {
       const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
       const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
 
+      // Ensure '0' bedroom option is included
+      if (!uniqueBedrooms.includes(0)) {
+        uniqueBedrooms.unshift(0);
+      }
+
       console.log(`Fetched unique bedrooms: ${uniqueBedrooms.length} bedroom options`);
 
       return {
