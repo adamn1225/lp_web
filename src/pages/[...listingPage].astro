@@ -13,7 +13,7 @@ import { BedDouble } from "lucide-react";
 import BedTypes from "@components/ui/BedTypes.tsx";
 import ImageGallery from "@components/ImageGallery.tsx";
 import AirReviews from "@components/AirReviews.tsx";
-import ReservationForm from "@components/ReservationForm.tsx";
+import PrefetchAvailability from "@components/PrefetchAvailability";
 
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
@@ -617,6 +617,7 @@ function capitalizeFirstLetter(string: string) {
       </div>
     </Section>
   </main>
+  <PrefetchAvailability client:only="react" />
 </Layout>
 
 <script is:inline>
