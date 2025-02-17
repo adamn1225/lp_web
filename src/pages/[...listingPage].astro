@@ -214,17 +214,15 @@ function capitalizeFirstLetter(string: string) {
             </div>
             <!-- property details -->
             <div
-              class="flex flex-col md:flex-row items-start justify-start h-min w-full"
+              class="flex flex-col md:flex-row items-start justify-start h-min w-auto"
             >
               <div
-                class="flex flex-col md:flex-row justify-normal gap-32 w-full mr-16"
+                class="flex flex-col md:flex-row justify-normal gap-20 w-full mr-16"
               >
-                <div
-                  class="hidden md:flex gap-1 justify-start items-start w-3/4 h-full"
-                >
-                  <div class="w-full h-full">
+                <div class="hidden md:flex gap-1 justify-start items-start">
+                  <div class="w-auto h-full">
                     <img
-                      class="block w-full h-full object-cover main-image"
+                      class="block w-auto h-full object-cover main-image"
                       src={pictures[0].original}
                       alt="Main image"
                       width={2000}
@@ -234,7 +232,7 @@ function capitalizeFirstLetter(string: string) {
                     />
                   </div>
                   <div
-                    class="flex flex-col items-start h-auto mt-1 w-1/5 overflow-y-auto no-scrollbar"
+                    class="flex flex-col items-start h-full w-1/6 overflow-y-auto no-scrollbar"
                   >
                     <ImageGallery pictures={pictures} client:only="react" />
                   </div>
@@ -242,7 +240,7 @@ function capitalizeFirstLetter(string: string) {
 
                 <!-- right -->
                 <div
-                  class="xs:hidden sm:hidden md:flex w-full max-w-max flex-col justify-start items-stretch mt-6"
+                  class="xs:hidden sm:hidden md:flex flex-col justify-center items-center mt-6"
                 >
                   <span class="xs:hidden">
                     <InquireForm
@@ -268,10 +266,11 @@ function capitalizeFirstLetter(string: string) {
                       </p>
                     </div>
                     <span
-                      class="text-base font-light flex justify-center items-center gap-1"
+                      class="w-full text-base font-light flex justify-center items-center gap-1"
                     >
-                      <span class="font-bold text-base">Note: </span> Checkin and
-                      Checkout times are in UTC.
+                      <span class="font-bold text-base text-center"
+                        >Note:
+                      </span> Checkin and Checkout times are in UTC.
                     </span>
                     <InstantBooking listingId={listingId} client:only="react" />
                     <div class="flex justify-between items-center w-full">

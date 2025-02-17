@@ -27,10 +27,12 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
   const dayContentRenderer = (date) => {
     const dateString = date.toISOString().split('T')[0];
     const price = datePrices[dateString];
+    const isDisabled = formattedDisabledDates.some(disabledDate => disabledDate.getTime() === date.getTime());
+
     return (
-      <div>
-        <span>{date.getDate()}</span>
-        {price && <div className="text-xs text-gray-500">${price}</div>}
+      <div className="rdrDay">
+        <span className="rdrDayNumber">{date.getDate()}</span>
+        {!isDisabled && price && <div className="rdrDayPrice">${price}</div>}
       </div>
     );
   };
