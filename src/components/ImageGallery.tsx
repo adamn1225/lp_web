@@ -65,20 +65,24 @@ const ImageGallery = ({ pictures }) => {
             </div>
             {isModalOpen && (
                 <Modal isOpen={isModalOpen} onClose={closeModal}>
-                    <div className="relative flex items-center justify-center h-screen">
+                    <div className=''>
                         <button
-                            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2"
+                            className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2"
                             onClick={showPreviousImage}
                         >
                             <ChevronLeft />
                         </button>
-                        <img
-                            className="object-contain max-h-full"
-                            src={pictures[selectedImageIndex].original}
-                            alt={`Image ${selectedImageIndex + 1}`}
-                        />
+                        <div className="relative flex items-center justify-center h-2/3">
+
+                            <img
+                                className="object-contain max-h-[600px]"
+                                src={pictures[selectedImageIndex].original}
+                                alt={`Image ${selectedImageIndex + 1}`}
+                            />
+
+                        </div>
                         <button
-                            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2"
+                            className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2"
                             onClick={showNextImage}
                         >
                             <ChevronRight />
@@ -89,7 +93,16 @@ const ImageGallery = ({ pictures }) => {
             <style>
                 {`
                     .gallery-image {
-                        max-height: 88px; /* Adjust this value to match the height of the main image */
+                        max-height: 100px; /* Adjust this value to match the desired height */
+                    }
+
+                    .no-scrollbar::-webkit-scrollbar {
+                        display: none;
+                    }
+
+                    .no-scrollbar {
+                        -ms-overflow-style: none;  /* IE and Edge */
+                        scrollbar-width: none;  /* Firefox */
                     }
                 `}
             </style>

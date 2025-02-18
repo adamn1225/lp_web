@@ -90,7 +90,11 @@ export const handler = async (event, context) => {
         // Extract unavailable dates
         const unavailableDates = data2.data.days
             .filter(day => day.status === 'unavailable')
-            .map(day => day.date);
+            .map(day => {
+                const date = new Date(day.date);
+                date.setHours(0, 0, 0, 0); // Set time to midnight
+                return date.toISOString().split('T')[0];
+            });
 
         // Extract booked dates using checkInDateLocalized and checkOutDateLocalized
         const bookedDates = data2.data.days
@@ -99,12 +103,13 @@ export const handler = async (event, context) => {
                 const blockRefs = day.blockRefs || [];
                 return blockRefs.flatMap(blockRef => {
                     if (blockRef.reservation && blockRef.reservation.checkInDateLocalized && blockRef.reservation.checkOutDateLocalized) {
-                        const checkInDate = blockRef.reservation.checkInDateLocalized;
-                        const checkOutDate = blockRef.reservation.checkOutDateLocalized;
+                        const checkInDate = new Date(blockRef.reservation.checkInDateLocalized);
+                        const checkOutDate = new Date(blockRef.reservation.checkOutDateLocalized);
                         const dates = [];
                         let currentDate = new Date(checkInDate);
                         const endDate = new Date(checkOutDate);
                         while (currentDate <= endDate) { // Use <= to include the check-out date
+                            currentDate.setHours(0, 0, 0, 0); // Set time to midnight
                             dates.push(currentDate.toISOString().split('T')[0]);
                             currentDate.setDate(currentDate.getDate() + 1);
                         }

@@ -34,7 +34,7 @@ const SwiperComponent = ({ pictures }) => {
                         {pictures.map((picture, index) => (
                             <div className="swiper-slide flex justify-center items-center" key={index}>
                                 <img
-                                    className="max-w-full max-h-full object-contain"
+                                    className="max-w-full max-h-full object-cover"
                                     src={picture.original}
                                     alt={`Listing image ${index + 1}`}
                                     decoding="async"
@@ -53,7 +53,7 @@ const SwiperComponent = ({ pictures }) => {
             <style>{`
                 .swiper-container {
                     width: 100%;
-                    height: 100%;
+                    height: 300px; /* Set a fixed height for the swiper container */
                     display: flex;
                     flex-direction: column;
                 }
@@ -77,9 +77,9 @@ const SwiperComponent = ({ pictures }) => {
                 }
 
                 .swiper-slide img {
-                    max-width: 100%; /* Ensure the images take up the full width of the slide */
-                    max-height: 100%; /* Ensure the images take up the full height of the slide */
-                    object-fit: contain; /* Ensure the images cover the available space without distorting */
+                    width: 100%; /* Ensure the images take up the full width of the slide */
+                    height: 100%; /* Ensure the images take up the full height of the slide */
+                    object-fit: cover; /* Ensure the images cover the available space without distorting */
                 }
 
                 .swiper-container .swiper-pagination .swiper-pagination-bullet {
@@ -101,7 +101,6 @@ const SwiperComponent = ({ pictures }) => {
                     border-radius: 5px;
                     font-size: 14px;
                     z-index: 10;
-
                 }
             `}</style>
         </>

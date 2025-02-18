@@ -57,9 +57,9 @@ const BedTypes: React.FC<BedTypesProps> = ({ beds }) => {
     return (
         <div className="my-4">
             {hasBeds && <h3 className="text-xl font-bold mb-2 text-center">Bed Types</h3>}
-            <div className={`flex ${filteredBeds.length > 2 ? 'md:grid grid-cols-3' : 'flex'} justify-items-center place-items-center gap-x-2 gap-y-3`}>
+            <div className={`flex ${filteredBeds.length > 2 ? 'md:grid grid-cols-3' : 'flex'} justify-items-center place-items-center gap-x-4 gap-y-3`}>
                 {filteredBeds.map((bed, bedIndex) => (
-                    <div key={bedIndex} className="flex justify-center items-center gap-2">
+                    <div key={bedIndex} className="flex flex-col w-fit text-nowrap justify-center items-center gap-2">
                         {getBedIcon(bed.type)}
                         <p className="text-md">
                             {bed.type.replace('_', ' ').toLowerCase()}
