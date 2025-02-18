@@ -1,12 +1,13 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import _ from 'lodash';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
+const RATE_LIMIT_INTERVAL = 3000; // Increased rate limit interval
 const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 300;
-const BATCH_SIZE = 100; // Reduced batch size
+const MAX_RESULTS = 250;
+const BATCH_SIZE = 50; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -52,12 +53,16 @@ const fetchAvailability = async (listingIds, checkIn, checkOut) => {
     throw new Error('Invalid data structure');
   }
 
-  const availabilityData = data.data.days.map(day => ({
-    listingId: day.listingId,
-    date: day.date,
-    status: day.status,
-    price: day.price
-  }));
+  const availabilityData = data.data.days.map(day => {
+    const isAvailable = _.isNumber(day.allotment) ? day.allotment > 0 : day.status === 'available';
+    return {
+      listingId: day.listingId,
+      date: day.date,
+      status: isAvailable ? 'available' : 'unavailable',
+      price: day.price,
+      allotment: day.allotment // Include allotment information
+    };
+  });
 
   console.log(`Availability data for listings ${listingIds.join(', ')}: ${availabilityData.length} days available`);
 
@@ -100,7 +105,7 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 100 } = event.queryStringParameters;
 
   console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
 
