@@ -6,8 +6,8 @@ dotenv.config();
 
 const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
 const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 200;
-const BATCH_SIZE = 50; // Reduced batch size
+const MAX_RESULTS = 300;
+const BATCH_SIZE = 100; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -30,7 +30,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingIds, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&ignoreInactiveChildAllotment=true&ignoreUnlistedChildAllotment=true`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}`;
 
   console.log(`Fetching availability for listings ${listingIds.join(', ')} from URL: ${apiUrl}`);
 
@@ -104,7 +104,7 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 20 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 100 } = event.queryStringParameters;
 
   console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
 
