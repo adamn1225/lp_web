@@ -3,9 +3,7 @@ import Layout from "@layouts/Split.astro";
 import Section from "@components/Section.astro";
 import HomeHero from "@components/sections/HomeHero.astro";
 import TagNavigation from "@components/TagNavigation";
-import { Home } from "lucide-react";
 import RandomReviewsGrid from "@components/RandomReviewsSlider";
-import PrefetchAvailability from "@components/PrefetchAvailability";
 ---
 
 <Layout title="Properties">
@@ -30,5 +28,4 @@ import PrefetchAvailability from "@components/PrefetchAvailability";
       </div>
     </div>
   </Section>
-  <PrefetchAvailability client:only="react" />
 </Layout>
