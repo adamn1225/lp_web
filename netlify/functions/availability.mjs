@@ -3,9 +3,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
+const RATE_LIMIT_INTERVAL = 10000; // Increased rate limit interval to 10 seconds
 const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 250;
+const MAX_RESULTS = 245;
 const BATCH_SIZE = 50; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -16,6 +16,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
     if (response.status === 429) {
       const retryAfter = response.headers.get('Retry-After');
       const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
+      console.log(`Rate limited. Retrying after ${delayMs} ms`);
       await delay(delayMs);
     } else if (response.status === 401) {
       throw new Error('Not Authorized');
