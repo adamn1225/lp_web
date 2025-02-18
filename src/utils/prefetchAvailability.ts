@@ -14,8 +14,21 @@ export const prefetchAvailability = () => {
             const data = await response.json();
             console.log('Prefetched Availability Data:', data); // Debugging log
 
+            // Only store essential information in local storage
+            const essentialData = {
+                checkIn: '2025-01-01',
+                checkOut: '2025-01-10',
+                minOccupancy: 1,
+                listings: data.results.map(listing => ({
+                    id: listing._id,
+                    title: listing.title,
+                    price: listing.prices.basePrice
+                }))
+            };
+
             // Set the flag in local storage to indicate that the data has been prefetched
             localStorage.setItem('availabilityPrefetched', 'true');
+            localStorage.setItem('prefetchedAvailabilityData', JSON.stringify(essentialData));
         } catch (error) {
             console.error('Error prefetching availability data:', error);
         }
