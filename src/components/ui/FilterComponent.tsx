@@ -151,10 +151,10 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
         </div>
       </div>
-      <div className="bedroom-navigation flex justify-start md:justify-center items-center gap-2 py-2 bg-secondary w-full overflow-x-auto no-scrollbar">
+      <div className="bedroom-navigation flex justify-start md:justify-center items-center gap-2 py-2 bg-secondary/80 w-full overflow-x-auto no-scrollbar">
         <button
           onClick={() => handleBedroomChange(null)}
-          className={`px-3 py-2 text-nowrap rounded ${bedroomCount === null ? 'bg-secondary text-white' : 'bg-white text-secondary'}`}
+          className={`px-3 py-2 text-nowrap rounded ${bedroomCount === null ? 'bg-secondary text-white border border-white' : 'bg-primary/75 text-secondary'}`}
         >
           Any
         </button>
@@ -162,7 +162,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
           <button
             key={bedroom}
             onClick={() => handleBedroomChange(bedroom)}
-            className={`px-3 py-2 text-nowrap rounded ${bedroomCount === bedroom ? 'bg-secondary text-white' : 'bg-white text-secondary'}`}
+            className={`px-3 py-2 text-nowrap rounded ${bedroomCount === bedroom ? 'bg-secondary text-white border border-white' : 'bg-primary/75 text-secondary'}`}
           >
             {bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}
           </button>
