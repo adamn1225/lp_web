@@ -70,7 +70,7 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(100); // Number of items per page
+  const [itemsPerPage] = useState<number>(25); // Number of items per page
   const [validationError, setValidationError] = useState<string>('');
 
   const apiUrl = '/.netlify/functions/availability';
@@ -111,10 +111,14 @@ const AvailabilitySearch: React.FC = () => {
 
         if (bedroomsData.results) {
           const sortedBedrooms = bedroomsData.results.sort((a: number, b: number) => a - b);
+          if (!sortedBedrooms.includes(0)) {
+            sortedBedrooms.unshift(0); // Ensure '0' bedroom option is included
+          }
           setBedroomOptions(sortedBedrooms);
         } else {
           setBedroomOptions([]);
         }
+
         if (tagsData.error) {
           throw new Error(tagsData.error);
         }
