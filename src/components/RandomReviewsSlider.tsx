@@ -61,7 +61,7 @@ const RandomReviewsGrid = () => {
     };
 
     return (
-        <div className="bg-secondary rounded-lg shadow-lg max-w-screen w-full h-fit pt-32 pb-6 px-32">
+        <div className="bg-secondary rounded-lg shadow-lg max-w-screen w-full h-fit pt-8 md:pt-32 pb-6 px-4 md:px-32">
             <span className="text-white underline underline-offset-8 text-lg md:text-2xl font-semibold inline-flex w-full justify-center mb-4">
                 What our guests are saying</span>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

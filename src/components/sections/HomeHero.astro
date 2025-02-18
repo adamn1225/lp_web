@@ -7,15 +7,22 @@ import { SquareArrowRight } from "lucide-react";
     id="HeroSplit"
     class="relative bg-primary text-secondary h-[65vh] flex items-center justify-center px-6 font-sans"
 >
-    <div class="inline-flex justify-start items-center w-full">
-        <div class="pl-12 w-1/3 relative z-50 h-full flex flex-col justify-end">
-            <h1 class="text-5xl font-bold mb-4">
+    <div
+        class="inline-flex flex-col md:flex-row justify-start items-center w-full"
+    >
+        <div
+            class="pl-4 md:pl-12 w-full md:w-1/3 relative z-50 h-full flex flex-col justify-end"
+        >
+            <h1 class="text-3xl md:text-5xl font-bold mb-4">
                 Find Your Perfect Vacation Rental in Myrtle Beach
             </h1>
-            <p class="text-lg text-secondary mb-6">
+            <p class="text-base md:text-lg text-secondary mb-6">
                 Begin your search to see available vacation rentals.
             </p>
-            <a href="/property-search" class="lp-button relative z-50 w-1/3">
+            <a
+                href="/property-search"
+                class="lp-button relative z-50 w-full md:w-1/3"
+            >
                 <button class="flex flex-nowrap items-center gap-2 text-nowrap"
                     >Search Properties <SquareArrowRight /></button
                 ></a
