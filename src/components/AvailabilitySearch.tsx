@@ -349,17 +349,12 @@ const AvailabilitySearch: React.FC = () => {
     const city = 'All';
     const bedroomAmount = 1;
 
-    const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
-    const cachedData = localStorage.getItem(cacheKey);
-
-    if (!cachedData) {
-      try {
-        const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
-        const data = await response.json();
-        localStorage.setItem(cacheKey, JSON.stringify(data));
-      } catch (error) {
-        console.error('Error prefetching data:', error);
-      }
+    try {
+      const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
+      const data = await response.json();
+      console.log('Fetched data:', data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
   };
 
