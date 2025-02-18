@@ -1,12 +1,11 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import _ from 'lodash';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 1000; // Increased rate limit interval
+const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
 const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 250;
+const MAX_RESULTS = 275;
 const BATCH_SIZE = 50; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -30,7 +29,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingIds, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&includeAllotment=true`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&ignoreInactiveChildAllotment=true&ignoreUnlistedChildAllotment=true`;
 
   console.log(`Fetching availability for listings ${listingIds.join(', ')} from URL: ${apiUrl}`);
 
@@ -53,16 +52,12 @@ const fetchAvailability = async (listingIds, checkIn, checkOut) => {
     throw new Error('Invalid data structure');
   }
 
-  const availabilityData = data.data.days.map(day => {
-    const isAvailable = _.isNumber(day.allotment) ? day.allotment > 0 : day.status === 'available';
-    return {
-      listingId: day.listingId,
-      date: day.date,
-      status: isAvailable ? 'available' : 'unavailable',
-      price: day.price,
-      allotment: day.allotment // Include allotment information
-    };
-  });
+  const availabilityData = data.data.days.map(day => ({
+    listingId: day.listingId,
+    date: day.date,
+    status: day.status,
+    price: day.price
+  }));
 
   console.log(`Availability data for listings ${listingIds.join(', ')}: ${availabilityData.length} days available`);
 
@@ -105,7 +100,7 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 100 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
 
   console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
 
@@ -149,11 +144,6 @@ export const handler = async (event, context) => {
 
       const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
       const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
-
-      // Ensure '0' bedroom option is included
-      if (!uniqueBedrooms.includes(0)) {
-        uniqueBedrooms.unshift(0);
-      }
 
       console.log(`Fetched unique bedrooms: ${uniqueBedrooms.length} bedroom options`);
 
