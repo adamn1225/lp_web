@@ -3,10 +3,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 10000; // Increased rate limit interval to 10 seconds
+const RATE_LIMIT_INTERVAL = 20000; // Increased rate limit interval to 10 seconds
 const CONCURRENCY_LIMIT = 5;
 const MAX_RESULTS = 250;
-const BATCH_SIZE = 25; // Reduced batch size
+const BATCH_SIZE = 20; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
