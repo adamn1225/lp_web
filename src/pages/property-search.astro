@@ -2,6 +2,7 @@
 import Layout from "@layouts/Split.astro";
 import Section from "@components/Section.astro";
 import AvailabilitySearch from "@components/AvailabilitySearch";
+import GuestyListings from "@components/GuestyListings.astro";
 ---
 
 <Layout title="Properties">
@@ -15,6 +16,23 @@ import AvailabilitySearch from "@components/AvailabilitySearch";
                 </h1>
                 <div class="mt-6">
                     <AvailabilitySearch client:only="react" />
+                </div>
+            </div>
+            <div class="mt-[-10px]">
+                <h2
+                    class="font-bold text-slate-800 m-0 text-4xl pt-12 pb-3 text-center"
+                >
+                    Featured Listings
+                </h2>
+                <div
+                    class="py-8 flex flex-col lg:flex-row gap-6 bg-no-repeat"
+                    style="background-image: url('/images/shapes/1.svg');"
+                >
+                    <div
+                        class="pb-3 md:px-24 grid grid-cols-1 md:grid-cols-5 my-0 gap-6"
+                    >
+                        <GuestyListings />
+                    </div>
                 </div>
             </div>
         </div>
