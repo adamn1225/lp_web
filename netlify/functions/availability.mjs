@@ -4,10 +4,10 @@ import _ from 'lodash';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
+const RATE_LIMIT_INTERVAL = 3000; // Increased rate limit interval
 const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 300;
-const BATCH_SIZE = 100; // Reduced batch size
+const MAX_RESULTS = 285;
+const BATCH_SIZE = 50; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
