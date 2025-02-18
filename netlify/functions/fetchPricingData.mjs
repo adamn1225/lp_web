@@ -85,7 +85,7 @@ export const handler = async (event, context) => {
         }
 
         // Extract base price from the first day in the days array
-        const basePrice = data2.data.days.length > 0 ? data2.data.days[0].price : 0;
+        const basePrice = data2.data.days.length > 0 ? Math.round(data2.data.days[0].price) : 0;
 
         // Extract unavailable dates
         const unavailableDates = data2.data.days
@@ -128,7 +128,7 @@ export const handler = async (event, context) => {
 
         // Extract date-specific prices
         const datePrices = data2.data.days.reduce((acc, day) => {
-            acc[day.date] = day.price;
+            acc[day.date] = Math.round(day.price);
             return acc;
         }, {});
 

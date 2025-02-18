@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import _ from 'lodash';
 
 dotenv.config();
 
@@ -52,12 +53,15 @@ const fetchAvailability = async (listingIds, checkIn, checkOut) => {
     throw new Error('Invalid data structure');
   }
 
-  const availabilityData = data.data.days.map(day => ({
-    listingId: day.listingId,
-    date: day.date,
-    status: day.status,
-    price: day.price
-  }));
+  const availabilityData = data.data.days.map(day => {
+    const isAvailable = _.isNumber(day.allotment) ? day.allotment > 0 : day.status === 'available';
+    return {
+      listingId: day.listingId,
+      date: day.date,
+      status: isAvailable ? 'available' : 'unavailable',
+      price: day.price
+    };
+  });
 
   console.log(`Availability data for listings ${listingIds.join(', ')}: ${availabilityData.length} days available`);
 
