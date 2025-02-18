@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 20000; // Increased rate limit interval to 10 seconds
+const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval to 10 seconds
 const CONCURRENCY_LIMIT = 5;
 const MAX_RESULTS = 300;
 const BATCH_SIZE = 50; // Reduced batch size
@@ -101,7 +101,7 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 100 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
 
   console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
 
