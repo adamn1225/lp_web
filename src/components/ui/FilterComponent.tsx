@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { FiSun, FiEye, FiStar, FiDroplet, FiHeart } from "react-icons/fi";
-import { SlidersHorizontal } from "lucide-react";
-import Modal from './Modal'; // Import the Modal component
 import CityNavigation from '../CityNavigation'; // Import the CityNavigation component
 
 interface FilterComponentProps {
@@ -25,7 +23,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   onFilterChange,
   onResetFilters,
   cities,
-  amenities,
   tags,
   bedroomOptions, // Destructure bedroomOptions prop
   initialPriceOrder,
@@ -33,7 +30,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   initialSelectedCity,
   initialSelectedAmenities,
   initialSelectedTags,
-  showBedroomFilter, // Destructure the showBedroomFilter prop
   onCityClick, // Destructure the onCityClick prop
   setActiveCity // Destructure the setActiveCity prop
 }) => {
@@ -42,7 +38,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   const [selectedCity, setSelectedCity] = useState<string>(initialSelectedCity);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(initialSelectedAmenities);
   const [selectedTags, setSelectedTags] = useState<string[]>(initialSelectedTags);
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags });
@@ -69,15 +64,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
       : [...selectedTags, tag];
     setSelectedTags(newSelectedTags);
     onFilterChange({ priceOrder, bedroomCount, selectedCity, selectedAmenities, selectedTags: newSelectedTags });
-  };
-
-  const handleResetFilters = () => {
-    setPriceOrder('default');
-    setBedroomCount(null);
-    setSelectedCity('');
-    setSelectedAmenities([]);
-    setSelectedTags([]);
-    onResetFilters();
   };
 
   const formatTag = (tag: string): string => {
@@ -164,7 +150,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             onClick={() => handleBedroomChange(bedroom)}
             className={`px-3 py-2 text-nowrap rounded ${bedroomCount === bedroom ? 'bg-secondary text-white border border-white' : 'bg-primary/75 text-secondary'}`}
           >
-            {bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}
+            {bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 0 ? 's' : ''}`}
           </button>
         ))}
 
