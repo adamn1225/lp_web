@@ -4,9 +4,9 @@ import _ from 'lodash';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
+const RATE_LIMIT_INTERVAL = 3000; // Increased rate limit interval
 const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 300;
+const MAX_RESULTS = 285;
 const BATCH_SIZE = 50; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -30,7 +30,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingIds, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&ignoreInactiveChildAllotment=true&ignoreUnlistedChildAllotment=true`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&ignoreFlexibleBlocks=true&includeAllotment=true`;
 
   console.log(`Fetching availability for listings ${listingIds.join(', ')} from URL: ${apiUrl}`);
 
@@ -59,7 +59,8 @@ const fetchAvailability = async (listingIds, checkIn, checkOut) => {
       listingId: day.listingId,
       date: day.date,
       status: isAvailable ? 'available' : 'unavailable',
-      price: day.price
+      price: day.price,
+      allotment: day.allotment // Include allotment information
     };
   });
 
