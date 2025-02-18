@@ -1,6 +1,6 @@
 export const prefetchAvailability = () => {
     // Check if the data has already been prefetched
-    if (localStorage.getItem('availabilityPrefetched')) {
+    if (sessionStorage.getItem('availabilityPrefetched')) {
         console.log('Availability data already prefetched');
         return;
     }
@@ -14,7 +14,7 @@ export const prefetchAvailability = () => {
             const data = await response.json();
             console.log('Prefetched Availability Data:', data); // Debugging log
 
-            // Only store essential information in local storage
+            // Only store essential information in session storage
             const essentialData = {
                 checkIn: '2025-01-01',
                 checkOut: '2025-01-10',
@@ -26,9 +26,9 @@ export const prefetchAvailability = () => {
                 }))
             };
 
-            // Set the flag in local storage to indicate that the data has been prefetched
-            localStorage.setItem('availabilityPrefetched', 'true');
-            localStorage.setItem('prefetchedAvailabilityData', JSON.stringify(essentialData));
+            // Set the flag in session storage to indicate that the data has been prefetched
+            sessionStorage.setItem('availabilityPrefetched', 'true');
+            sessionStorage.setItem('prefetchedAvailabilityData', JSON.stringify(essentialData));
         } catch (error) {
             console.error('Error prefetching availability data:', error);
         }
