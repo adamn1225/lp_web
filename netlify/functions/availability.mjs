@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 3000; // Increased rate limit interval
+const RATE_LIMIT_INTERVAL = 1000; // Increased rate limit interval
 const CONCURRENCY_LIMIT = 5;
 const MAX_RESULTS = 250;
 const BATCH_SIZE = 50; // Reduced batch size
