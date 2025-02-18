@@ -304,7 +304,7 @@ const AvailabilitySearch: React.FC = () => {
       }
     }
 
-    if (filters.bedroomCount !== null) {
+    if (filters.bedroomCount !== null && filters.bedroomCount !== undefined) {
       filtered = filtered.filter(listing => listing.bedrooms === Number(filters.bedroomCount));
     }
 
@@ -350,6 +350,7 @@ const AvailabilitySearch: React.FC = () => {
 
     const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
     const cachedData = localStorage.getItem(cacheKey);
+
 
     if (!cachedData) {
       try {
