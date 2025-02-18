@@ -149,22 +149,9 @@ article {
   background-color: #ffffff00 !important;
 }
 
-.rdrStartEdge,
-.rdrEndEdge {
-  padding-top: 2rem !important; // Adjust the padding as needed
-}
 
-.rdrStartEdge .rdrDayNumber,
-.rdrEndEdge .rdrDayNumber {
-  padding-bottom: 2rem !important; // Adjust the padding as needed
-  position: relative;
-  z-index: 2;
-}
 
-.rdrStartEdge .rdrDayPrice,
-.rdrEndEdge .rdrDayPrice {
-  padding-top: 2rem !important; // Adjust the padding as needed
-}
+
 
 // Add styles for the dates in between the start and end edges
 .rdrInRange {
