@@ -1,7 +1,7 @@
 ---
 import Layout from "@layouts/Split.astro";
 import Section from "@components/Section.astro";
-import App from "@components/AvailabilitySearch";
+import AvailabilitySearch from "@components/AvailabilitySearch";
 ---
 
 <Layout title="Properties">
@@ -14,7 +14,7 @@ import App from "@components/AvailabilitySearch";
                     Explore Myrtle Beach Vacation Rentals
                 </h1>
                 <div class="mt-6">
-                    <App client:only="react" />
+                    <AvailabilitySearch client:only="react" />
                 </div>
             </div>
         </div>

@@ -60,7 +60,7 @@ const AvailabilitySearch: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [tagsLoading, setTagsLoading] = useState<boolean>(false);
   const [selectedLocation, setSelectedLocation] = useState<string>('All');
-  const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>();
+  const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>('Any');
   const [cities, setCities] = useState<string[]>([]);
   const [amenities, setAmenities] = useState<string[]>([]);
   const [bedroomOptions, setBedroomOptions] = useState<number[]>([]);
@@ -336,7 +336,7 @@ const AvailabilitySearch: React.FC = () => {
   const handleDateChange = async () => {
     const checkIn = dateRange[0].startDate.toISOString().split('T')[0];
     const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
-    const minOccupancy = 2;
+    const minOccupancy = 1;
     const city = 'All';
     const bedroomAmount = selectedBedroomAmount || 'Any';
 
@@ -353,7 +353,6 @@ const AvailabilitySearch: React.FC = () => {
       }
     }
   };
-
 
   const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 

@@ -27,7 +27,6 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({ sta
             <span className="text-secondary underline underline-offset-8 text-sm md:text-2xl font-semibold inline-flex w-full justify-center">
                 Select your planned checkin and checkout dates</span>
             <div className="rdrMonthsContainer">
-
                 <DateRange
                     editableDateInputs={true}
                     onChange={handleSelect}
