@@ -1,13 +1,12 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import pLimit from 'p-limit';
 
 dotenv.config();
 
 const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
-const CONCURRENCY_LIMIT = 10;
+const CONCURRENCY_LIMIT = 5;
 const MAX_RESULTS = 200;
-const BATCH_SIZE = 100; // Reduced batch size
+const BATCH_SIZE = 50; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -30,7 +29,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingIds, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&includeAllotment=true`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&ignoreInactiveChildAllotment=true&ignoreUnlistedChildAllotment=true`;
 
   console.log(`Fetching availability for listings ${listingIds.join(', ')} from URL: ${apiUrl}`);
 
@@ -53,59 +52,62 @@ const fetchAvailability = async (listingIds, checkIn, checkOut) => {
     throw new Error('Invalid data structure');
   }
 
-  const availabilityData = data.data.days
-    .filter(day => !day.blocks.bd && !day.blocks.sr && !day.blocks.o && !day.blocks.pt)
-    .map(day => ({
-      listingId: day.listingId,
-      date: day.date,
-      status: day.status,
-      price: day.price
-    }));
+  const availabilityData = data.data.days.map(day => ({
+    listingId: day.listingId,
+    date: day.date,
+    status: day.status,
+    price: day.price
+  }));
 
   console.log(`Availability data for listings ${listingIds.join(', ')}: ${availabilityData.length} days available`);
 
   return availabilityData;
 };
 
-const calculateAveragePrice = (availabilityData) => {
-  const total = availabilityData.reduce((sum, day) => sum + day.price, 0);
-  return total / availabilityData.length;
+const fetchAllListings = async (url) => {
+  const response = await fetchWithRetry(url, {
+    headers: {
+      'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+      'Accept': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Guesty API error: ${errorText}`);
+    throw new Error(`Guesty API error: ${errorText}`);
+  }
+
+  return response.json();
 };
 
 const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
   const results = [];
-  const limit = pLimit(CONCURRENCY_LIMIT);
-
-  const tasks = [];
   for (let skip = 0; skip < totalListings; skip += 100) {
-    const url = `${baseUrl}?limit=100&skip=${skip}&${queryParams.toString()}&fields=_id,address.city,bedrooms`; // Limit fields
-    tasks.push(limit(async () => {
-      console.log(`Fetching listings from URL: ${url}`);
-      const response = await fetchWithRetry(url, {
-        headers: {
-          'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
-          'Accept': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`Guesty API error: ${errorText}`);
-        throw new Error(`Guesty API error: ${errorText}`);
+    const url = `${baseUrl}?limit=100&skip=${skip}&${queryParams.toString()}`;
+    console.log(`Fetching listings from URL: ${url}`);
+    const response = await fetchWithRetry(url, {
+      headers: {
+        'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+        'Accept': 'application/json'
       }
+    });
 
-      const data = await response.json();
-      results.push(...data.results);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Guesty API error: ${errorText}`);
+      throw new Error(`Guesty API error: ${errorText}`);
+    }
 
-      if (results.length >= MAX_RESULTS) {
-        return;
-      }
+    const data = await response.json();
+    results.push(...data.results);
 
-      await delay(RATE_LIMIT_INTERVAL);
-    }));
+    if (results.length >= MAX_RESULTS) {
+      break;
+    }
+
+    await delay(RATE_LIMIT_INTERVAL);
   }
-
-  await Promise.all(tasks);
   return results;
 };
 
@@ -235,7 +237,7 @@ export const handler = async (event, context) => {
     if (city && city !== 'All') {
       queryParams.append('city', city);
     }
-    const totalListings = 300;
+    const totalListings = 400;
 
     const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
 
@@ -263,7 +265,6 @@ export const handler = async (event, context) => {
 
           if (availableDates.length > 0) {
             listing.prices = prices;
-            listing.averagePrice = calculateAveragePrice(prices); // Calculate and add the average price
             return true;
           } else {
             console.log(`Listing ${listing._id} is not available for dates: ${availableDates.length} days`);
