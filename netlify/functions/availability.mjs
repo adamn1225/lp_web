@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import NodeCache from 'node-cache';
 
 dotenv.config();
 
@@ -8,8 +7,6 @@ const RATE_LIMIT_INTERVAL = 7500; // Increased rate limit interval to 10 seconds
 const CONCURRENCY_LIMIT = 5;
 const MAX_RESULTS = 300;
 const BATCH_SIZE = 100; // Set batch size to 100
-
-const cache = new NodeCache({ stdTTL: 3600 }); // Cache with 1-hour TTL
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -225,16 +222,6 @@ export const handler = async (event, context) => {
       const cityA = a.address.city;
       const cityB = b.address.city;
       return cityOrder.indexOf(cityA) - cityOrder.indexOf(cityB);
-    });
-
-    // Cache static data
-    availableListings.forEach(listing => {
-      cache.set(listing._id, {
-        address: listing.address,
-        pictures: listing.pictures,
-        title: listing.title,
-        propertyType: listing.propertyType
-      });
     });
 
     return {

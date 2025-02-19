@@ -72,7 +72,6 @@ const AvailabilitySearch: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage] = useState<number>(50); // Number of items per page
   const [validationError, setValidationError] = useState<string>('');
-
   const apiUrl = '/.netlify/functions/availability';
 
   const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
@@ -88,7 +87,7 @@ const AvailabilitySearch: React.FC = () => {
           fetch('/.netlify/functions/fetchCities'),
           fetch('/.netlify/functions/fetchBedrooms'),
           fetch('/.netlify/functions/searchTags'),
-          fetch('/public/data/listings.json')
+          fetch('/data/listings.json')
         ]);
 
         if (!citiesResponse.ok) {
@@ -348,9 +347,6 @@ const AvailabilitySearch: React.FC = () => {
         // Store only essential data
         const essentialData = data.results.map((listing: any) => ({
           _id: listing._id,
-          title: listing.title,
-          address: listing.address,
-          pictures: listing.pictures,
           prices: listing.prices,
         }));
 
@@ -360,6 +356,7 @@ const AvailabilitySearch: React.FC = () => {
       }
     }
   };
+
 
   const paginatedListings = filteredListings.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
