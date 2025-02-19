@@ -181,6 +181,16 @@ const AvailabilitySearch: React.FC = () => {
       const startDate = dateRange[0].startDate.toISOString().slice(0, 10);
       const endDate = dateRange[0].endDate.toISOString().slice(0, 10);
       const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}-${currentPage}-${itemsPerPage}`;
+      if (cache.current[cacheKey]) {
+        console.log('Returning cached results');
+        setListings(cache.current[cacheKey]);
+        setFilteredListings(cache.current[cacheKey]);
+        setMapListings(cache.current[cacheKey]);
+        setLoading(false);
+        setIsResultsModalOpen(true);
+        setIsSearchComplete(true);
+        return;
+      }
 
       let url = `${apiUrl}?checkIn=${encodeURIComponent(startDate)}&checkOut=${encodeURIComponent(endDate)}&minOccupancy=${encodeURIComponent(minOccupancy.toString())}${tagsQuery ? `&tags=${encodeURIComponent(tagsQuery)}` : ''}&page=${currentPage}&limit=${itemsPerPage}`;
 
@@ -217,6 +227,7 @@ const AvailabilitySearch: React.FC = () => {
       setListings(filteredListings);
       setFilteredListings(filteredListings);
       setMapListings(filteredListings);
+      cache.current[cacheKey] = filteredListings;
 
       console.log('Filtered Listings:', filteredListings);
 
@@ -303,12 +314,17 @@ const AvailabilitySearch: React.FC = () => {
     const city = 'All';
     const bedroomAmount = 1;
 
-    try {
-      const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
-      const data = await response.json();
-      console.log('Fetched data:', data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
+    const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
+    const cachedData = localStorage.getItem(cacheKey);
+
+    if (!cachedData) {
+      try {
+        const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
+        const data = await response.json();
+        localStorage.setItem(cacheKey, JSON.stringify(data));
+      } catch (error) {
+        console.error('Error prefetching data:', error);
+      }
     }
   };
 
