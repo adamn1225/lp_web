@@ -6,8 +6,8 @@ dotenv.config();
 
 const RATE_LIMIT_INTERVAL = 7500; // Increased rate limit interval to 10 seconds
 const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 270;
-const BATCH_SIZE = 100; // Set batch size to 100
+const MAX_RESULTS = 200;
+const BATCH_SIZE = 50; // Set batch size to 100
 
 const cache = new NodeCache({ stdTTL: 3600 }); // Cache with 1-hour TTL
 
