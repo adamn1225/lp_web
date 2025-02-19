@@ -342,15 +342,7 @@ const AvailabilitySearch: React.FC = () => {
     if (!cachedData) {
       try {
         const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
-        const data = await response.json();
-
-        // Store only essential data
-        const essentialData = data.results.map((listing: any) => ({
-          _id: listing._id,
-          prices: listing.prices,
-        }));
-
-        localStorage.setItem(cacheKey, JSON.stringify(essentialData));
+        const data = await response.json()
       } catch (error) {
         console.error('Error prefetching data:', error);
       }
