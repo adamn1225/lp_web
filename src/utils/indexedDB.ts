@@ -25,7 +25,7 @@ export const setCache = async (key: string, value: any): Promise<void> => {
     await db.put(STORE_NAME, { value, timestamp } as CacheItem, key);
 };
 
-export const getCache = async (key) => {
+export const getCache = async (key: string): Promise<any | null> => {
     const db = await initDB();
     const cached = await db.get(STORE_NAME, key);
     if (cached) {
@@ -39,7 +39,7 @@ export const getCache = async (key) => {
     return null;
 };
 
-export const clearCache = async () => {
+export const clearCache = async (): Promise<void> => {
     const db = await initDB();
     await db.clear(STORE_NAME);
 };
