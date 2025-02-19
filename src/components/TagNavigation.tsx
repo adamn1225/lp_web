@@ -69,7 +69,7 @@ const TagNavigation: React.FC = () => {
         const fetchTags = async () => {
             setTagsLoading(true);
             try {
-                const response = await fetch(tagsApiUrl);
+                const response = await fetch(`${tagsApiUrl}?tags=${tags.join(',')}`);
                 const data = await response.json();
                 if (data.error) {
                     throw new Error(data.error);
@@ -78,7 +78,7 @@ const TagNavigation: React.FC = () => {
                 setTags(filteredTags);
             } catch (err) {
                 console.error('Error fetching tags:', err);
-                setError('');
+                setError('Error fetching tags');
             } finally {
                 setTagsLoading(false);
             }
@@ -107,7 +107,7 @@ const TagNavigation: React.FC = () => {
             setListings(data.results);
         } catch (err) {
             console.error('Error fetching listings:', err);
-            setError('');
+            setError('Error fetching listings');
         } finally {
             setLoading(false);
         }
