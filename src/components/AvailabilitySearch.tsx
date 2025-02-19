@@ -9,6 +9,7 @@ import Modal from './ui/Modal';
 import GoogleMap from './GoogleMap';
 import FilterComponent from './ui/FilterComponent';
 import { debounce } from 'lodash';
+import { setCache, getCache, clearCache } from '../utils/indexedDB';
 
 interface Listing {
   _id: string;
@@ -181,11 +182,12 @@ const AvailabilitySearch: React.FC = () => {
       const startDate = dateRange[0].startDate.toISOString().slice(0, 10);
       const endDate = dateRange[0].endDate.toISOString().slice(0, 10);
       const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}-${currentPage}-${itemsPerPage}`;
-      if (cache.current[cacheKey]) {
+      const cachedData = await getCache(cacheKey);
+      if (cachedData) {
         console.log('Returning cached results');
-        setListings(cache.current[cacheKey]);
-        setFilteredListings(cache.current[cacheKey]);
-        setMapListings(cache.current[cacheKey]);
+        setListings(cachedData);
+        setFilteredListings(cachedData);
+        setMapListings(cachedData);
         setLoading(false);
         setIsResultsModalOpen(true);
         setIsSearchComplete(true);
@@ -227,7 +229,7 @@ const AvailabilitySearch: React.FC = () => {
       setListings(filteredListings);
       setFilteredListings(filteredListings);
       setMapListings(filteredListings);
-      cache.current[cacheKey] = filteredListings;
+      await setCache(cacheKey, filteredListings);
 
       console.log('Filtered Listings:', filteredListings);
 
@@ -315,13 +317,13 @@ const AvailabilitySearch: React.FC = () => {
     const bedroomAmount = 1;
 
     const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
-    const cachedData = localStorage.getItem(cacheKey);
+    const cachedData = await getCache(cacheKey);
 
     if (!cachedData) {
       try {
         const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
         const data = await response.json();
-        localStorage.setItem(cacheKey, JSON.stringify(data));
+        await setCache(cacheKey, data);
       } catch (error) {
         console.error('Error prefetching data:', error);
       }
@@ -339,6 +341,7 @@ const AvailabilitySearch: React.FC = () => {
       return 'md:grid-cols-2 xl:grid-cols-3';
     }
   };
+
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
       {loading && (
