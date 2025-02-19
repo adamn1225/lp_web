@@ -60,7 +60,7 @@ const AvailabilitySearch: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [tagsLoading, setTagsLoading] = useState<boolean>(false);
   const [selectedLocation, setSelectedLocation] = useState<string>('All');
-  const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>('Any');
+  const [selectedBedroomAmount, setSelectedBedroomAmount] = useState<string>();
   const [cities, setCities] = useState<string[]>([]);
   const [amenities, setAmenities] = useState<string[]>([]);
   const [bedroomOptions, setBedroomOptions] = useState<number[]>([]);
@@ -71,24 +71,23 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(250); // Number of items per page
+  const [itemsPerPage] = useState<number>(100); // Number of items per page
   const [validationError, setValidationError] = useState<string>('');
+
   const apiUrl = '/.netlify/functions/availability';
 
   const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
   const resultsContainerRef = useRef<HTMLDivElement>(null);
 
-  const cache = useRef<{ [key: string]: any }>({});
-  const staticData = useRef<{ [key: string]: any }>({});
+  const cache = useRef<{ [key: string]: any[] }>({});
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [citiesResponse, bedroomsResponse, tagsResponse, listingsResponse] = await Promise.all([
-          fetch('/.netlify/functions/fetchCities'),
-          fetch('/.netlify/functions/fetchBedrooms'),
-          fetch('/.netlify/functions/searchTags'),
-          fetch('/data/listings.json')
+        const [citiesResponse, bedroomsResponse, tagsResponse] = await Promise.all([
+          fetch('/.netlify/functions/availability?fetchCities=true'),
+          fetch('/.netlify/functions/availability?fetchBedrooms=true'),
+          fetch('/.netlify/functions/searchTags')
         ]);
 
         if (!citiesResponse.ok) {
@@ -100,14 +99,10 @@ const AvailabilitySearch: React.FC = () => {
         if (!tagsResponse.ok) {
           throw new Error(`Failed to fetch tags: ${tagsResponse.statusText}`);
         }
-        if (!listingsResponse.ok) {
-          throw new Error(`Failed to fetch listings: ${listingsResponse.statusText}`);
-        }
 
         const citiesData = await citiesResponse.json();
         const bedroomsData = await bedroomsResponse.json();
         const tagsData = await tagsResponse.json();
-        const listingsData = await listingsResponse.json();
 
         if (citiesData.results) {
           setCities(citiesData.results);
@@ -117,24 +112,16 @@ const AvailabilitySearch: React.FC = () => {
 
         if (bedroomsData.results) {
           const sortedBedrooms = bedroomsData.results.sort((a: number, b: number) => a - b);
-          if (!sortedBedrooms.includes(0)) {
-            sortedBedrooms.unshift(0); // Ensure '0' bedroom option is included
-          }
           setBedroomOptions(sortedBedrooms);
         } else {
           setBedroomOptions([]);
         }
-
         if (tagsData.error) {
           throw new Error(tagsData.error);
         }
+        const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
         const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
         setTags(filteredTags);
-
-        // Store static data in a ref for later use
-        listingsData.forEach((listing: any) => {
-          staticData.current[listing._id] = listing;
-        });
       } catch (err) {
         console.error('Error fetching initial data:', err);
         setError('Failed to load initial data');
@@ -194,7 +181,6 @@ const AvailabilitySearch: React.FC = () => {
       const startDate = dateRange[0].startDate.toISOString().slice(0, 10);
       const endDate = dateRange[0].endDate.toISOString().slice(0, 10);
       const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}-${currentPage}-${itemsPerPage}`;
-
       if (cache.current[cacheKey]) {
         console.log('Returning cached results');
         setListings(cache.current[cacheKey]);
@@ -236,26 +222,14 @@ const AvailabilitySearch: React.FC = () => {
         return;
       }
 
-      const filteredListings = data.results.filter((listing: any) => {
-        const availableDates = listing.prices.filter((price: any) => !price.blocks || !Object.values(price.blocks).includes(true));
-        return availableDates.length > 0 && listing.accommodates >= minOccupancy;
-      });
+      const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
 
-      // Combine cached static data with fetched dynamic data
-      const combinedListings = filteredListings.map(listing => {
-        const staticListing = staticData.current[listing._id];
-        return {
-          ...listing,
-          ...staticListing
-        };
-      });
+      setListings(filteredListings);
+      setFilteredListings(filteredListings);
+      setMapListings(filteredListings);
+      cache.current[cacheKey] = filteredListings;
 
-      setListings(combinedListings);
-      setFilteredListings(combinedListings);
-      setMapListings(combinedListings);
-      cache.current[cacheKey] = combinedListings;
-
-      console.log('Filtered Listings:', combinedListings);
+      console.log('Filtered Listings:', filteredListings);
 
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -296,7 +270,7 @@ const AvailabilitySearch: React.FC = () => {
       }
     }
 
-    if (filters.bedroomCount !== null && filters.bedroomCount !== undefined) {
+    if (filters.bedroomCount) {
       filtered = filtered.filter(listing => listing.bedrooms === Number(filters.bedroomCount));
     }
 
@@ -338,7 +312,7 @@ const AvailabilitySearch: React.FC = () => {
     const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
     const minOccupancy = 1;
     const city = 'All';
-    const bedroomAmount = selectedBedroomAmount || 'Any';
+    const bedroomAmount = 1;
 
     const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
     const cachedData = localStorage.getItem(cacheKey);
@@ -347,7 +321,7 @@ const AvailabilitySearch: React.FC = () => {
       try {
         const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
         const data = await response.json();
-        // Handle the fetched data as needed
+        localStorage.setItem(cacheKey, JSON.stringify(data));
       } catch (error) {
         console.error('Error prefetching data:', error);
       }
@@ -365,8 +339,6 @@ const AvailabilitySearch: React.FC = () => {
       return 'md:grid-cols-2 xl:grid-cols-3';
     }
   };
-
-
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">
       {loading && (
@@ -452,7 +424,7 @@ const AvailabilitySearch: React.FC = () => {
               initialSelectedCity={filters.selectedCity || ''}
               initialSelectedAmenities={filters.selectedAmenities || []}
               initialSelectedTags={filters.selectedTags || []}
-              showBedroomFilter={selectedBedroomAmount === 'Any'}
+              showBedroomFilter={selectedBedroomAmount === ''}
               onCityClick={handleCityClick}
               setActiveCity={setSelectedLocation}
             />
@@ -482,7 +454,7 @@ const AvailabilitySearch: React.FC = () => {
                 className={`md:search-results h-fit w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:grid md:mr-0 ${getGridColumns(paginatedListings.length)} md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
-                    const price = property.prices && property.prices.length > 0 ? property.prices[0].price : null;
+                    const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
                     return (
                       <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
                         <article className="flex flex-col items-start bg-white shadow-lg shadow-muted-300/30 w-full h-80 rounded-xl relative overflow-hidden">
@@ -502,11 +474,7 @@ const AvailabilitySearch: React.FC = () => {
                               {property.address.city}, {property.address.state}
                             </p>
                             <div className="flex items-end h-full">
-                              {price !== null ? (
-                                <p className="font-semibold text-base text-nowrap">Average price per night - ${price}</p>
-                              ) : (
-                                <p className="hidden"></p>
-                              )}
+                              <p className="font-semibold text-base text-nowrap">Average price per night - ${price}</p>
                             </div>
                           </div>
                         </article>

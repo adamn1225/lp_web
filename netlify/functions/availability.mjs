@@ -1,12 +1,12 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import _ from 'lodash';
+import pLimit from 'p-limit';
 
 dotenv.config();
 
 const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
-const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 200;
+const CONCURRENCY_LIMIT = 10;
+const MAX_RESULTS = 300;
 const BATCH_SIZE = 100; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -30,7 +30,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingIds, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&includeAllotment=true`;
 
   console.log(`Fetching availability for listings ${listingIds.join(', ')} from URL: ${apiUrl}`);
 
@@ -53,20 +53,16 @@ const fetchAvailability = async (listingIds, checkIn, checkOut) => {
     throw new Error('Invalid data structure');
   }
 
-  const availabilityData = data.data.days.map(day => ({
-    listingId: day.listingId,
-    date: day.date,
-    status: day.status,
-    price: day.price,
-    blocks: day.blocks,
-    cta: day.cta,
-    ctd: day.ctd
-  }));
+  const availabilityData = data.data.days
+    .filter(day => !day.blocks.bd && !day.blocks.sr && !day.blocks.o && !day.blocks.pt)
+    .map(day => ({
+      listingId: day.listingId,
+      date: day.date,
+      status: day.status,
+      price: day.price
+    }));
 
   console.log(`Availability data for listings ${listingIds.join(', ')}: ${availabilityData.length} days available`);
-  availabilityData.forEach(day => {
-    console.log(`Listing ID: ${day.listingId}, Date: ${day.date}, Price: ${day.price}`);
-  });
 
   return availabilityData;
 };
@@ -78,48 +74,109 @@ const calculateAveragePrice = (availabilityData) => {
 
 const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
   const results = [];
-  const fetchBatch = async (skip) => {
-    const url = `${baseUrl}?limit=${BATCH_SIZE}&skip=${skip}&${queryParams.toString()}`;
-    console.log(`Fetching listings from URL: ${url}`);
-    const response = await fetchWithRetry(url, {
-      headers: {
-        'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
-        'Accept': 'application/json'
+  const limit = pLimit(CONCURRENCY_LIMIT);
+
+  const tasks = [];
+  for (let skip = 0; skip < totalListings; skip += 100) {
+    const url = `${baseUrl}?limit=100&skip=${skip}&${queryParams.toString()}`;
+    tasks.push(limit(async () => {
+      console.log(`Fetching listings from URL: ${url}`);
+      const response = await fetchWithRetry(url, {
+        headers: {
+          'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
+          'Accept': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Guesty API error: ${errorText}`);
+        throw new Error(`Guesty API error: ${errorText}`);
       }
-    });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Guesty API error: ${errorText}`);
-      throw new Error(`Guesty API error: ${errorText}`);
-    }
+      const data = await response.json();
+      results.push(...data.results);
 
-    const data = await response.json();
-    results.push(...data.results);
+      if (results.length >= MAX_RESULTS) {
+        return;
+      }
 
-    if (results.length >= MAX_RESULTS) {
-      return;
-    }
-
-    await delay(RATE_LIMIT_INTERVAL);
-  };
-
-  const promises = [];
-  for (let skip = 0; skip < totalListings; skip += BATCH_SIZE) {
-    promises.push(fetchBatch(skip));
-    if (promises.length >= CONCURRENCY_LIMIT) {
-      await Promise.all(promises);
-      promises.length = 0;
-    }
+      await delay(RATE_LIMIT_INTERVAL);
+    }));
   }
-  await Promise.all(promises);
-  return results.slice(0, MAX_RESULTS); // Limit the number of listings returned
+
+  await Promise.all(tasks);
+  return results;
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchBookedDates, listingId, page = 1, limit = 300 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
 
-  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchBookedDates, listingId, page, limit })}`);
+  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
+
+  if (fetchCities) {
+    try {
+      const baseUrl = 'https://open-api.guesty.com/v1/listings';
+      const queryParams = new URLSearchParams();
+      const totalListings = 400; // Adjust as needed
+
+      const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
+      const uniqueCities = Array.from(new Set(listings.map(listing => listing.address.city)));
+
+      console.log(`Fetched unique cities: ${uniqueCities.length} cities`);
+
+      return {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ results: uniqueCities })
+      };
+    } catch (error) {
+      console.error(`Error fetching cities: ${error.message}`);
+      return {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ error: 'Internal Server Error' })
+      };
+    }
+  }
+
+  if (fetchBedrooms) {
+    try {
+      const baseUrl = 'https://open-api.guesty.com/v1/listings';
+      const queryParams = new URLSearchParams();
+      const totalListings = 400; // Adjust as needed
+
+      const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
+      const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
+
+      console.log(`Fetched unique bedrooms: ${uniqueBedrooms.length} bedroom options`);
+
+      return {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ results: uniqueBedrooms })
+      };
+    } catch (error) {
+      console.error(`Error fetching bedrooms: ${error.message}`);
+      return {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ error: 'Internal Server Error' })
+      };
+    }
+  }
 
   if (fetchBookedDates) {
     if (!listingId || !checkIn || !checkOut) {
@@ -201,8 +258,8 @@ export const handler = async (event, context) => {
         const availabilityData = await fetchAvailability(batch, checkIn, checkOut);
         const availableListingsBatch = combinedResults.slice(i, i + BATCH_SIZE).filter(listing => {
           const listingAvailability = availabilityData.filter(day => day.listingId === listing._id);
-          const availableDates = listingAvailability.filter(day => day.status === 'available' && !day.cta && !day.ctd && !Object.values(day.blocks).includes(true)).map(day => day.date);
-          const prices = listingAvailability.filter(day => day.status === 'available' && !day.cta && !day.ctd && !Object.values(day.blocks).includes(true)).map(day => ({ date: day.date, price: day.price }));
+          const availableDates = listingAvailability.filter(day => day.status === 'available').map(day => day.date);
+          const prices = listingAvailability.filter(day => day.status === 'available').map(day => ({ date: day.date, price: day.price }));
 
           if (availableDates.length > 0) {
             listing.prices = prices;
@@ -230,17 +287,13 @@ export const handler = async (event, context) => {
       return cityOrder.indexOf(cityA) - cityOrder.indexOf(cityB);
     });
 
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedResults = availableListings.slice(startIndex, endIndex);
-
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ results: paginatedResults, total: availableListings.length, page, limit })
+      body: JSON.stringify({ results: availableListings.slice(0, MAX_RESULTS), partial: false })
     };
   } catch (error) {
     console.error(`Error fetching data: ${error.message}`);
