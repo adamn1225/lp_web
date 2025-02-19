@@ -6,8 +6,8 @@ dotenv.config();
 
 const RATE_LIMIT_INTERVAL = 7500; // Increased rate limit interval to 10 seconds
 const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 200;
-const BATCH_SIZE = 50; // Set batch size to 100
+const MAX_RESULTS = 300;
+const BATCH_SIZE = 100; // Set batch size to 100
 
 const cache = new NodeCache({ stdTTL: 3600 }); // Cache with 1-hour TTL
 
@@ -75,7 +75,7 @@ const calculateAveragePrice = (availabilityData) => {
 
 const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
   const results = [];
-  for (let skip = 0; skip < totalListings; skip += BATCH_SIZE) {
+  const fetchBatch = async (skip) => {
     const url = `${baseUrl}?limit=${BATCH_SIZE}&skip=${skip}&${queryParams.toString()}`;
     console.log(`Fetching listings from URL: ${url}`);
     const response = await fetchWithRetry(url, {
@@ -95,82 +95,28 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
     results.push(...data.results);
 
     if (results.length >= MAX_RESULTS) {
-      break;
+      return;
     }
 
     await delay(RATE_LIMIT_INTERVAL);
+  };
+
+  const promises = [];
+  for (let skip = 0; skip < totalListings; skip += BATCH_SIZE) {
+    promises.push(fetchBatch(skip));
+    if (promises.length >= CONCURRENCY_LIMIT) {
+      await Promise.all(promises);
+      promises.length = 0;
+    }
   }
+  await Promise.all(promises);
   return results;
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 100 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchBookedDates, listingId, page = 1, limit = 100 } = event.queryStringParameters;
 
-  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
-
-  if (fetchCities) {
-    try {
-      const baseUrl = 'https://open-api.guesty.com/v1/listings';
-      const queryParams = new URLSearchParams();
-      const totalListings = 400; // Adjust as needed
-
-      const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
-      const uniqueCities = Array.from(new Set(listings.map(listing => listing.address.city)));
-
-      console.log(`Fetched unique cities: ${uniqueCities.length} cities`);
-
-      return {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ results: uniqueCities })
-      };
-    } catch (error) {
-      console.error(`Error fetching cities: ${error.message}`);
-      return {
-        statusCode: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ error: 'Internal Server Error' })
-      };
-    }
-  }
-
-  if (fetchBedrooms) {
-    try {
-      const baseUrl = 'https://open-api.guesty.com/v1/listings';
-      const queryParams = new URLSearchParams();
-      const totalListings = 400; // Adjust as needed
-
-      const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
-      const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
-
-      console.log(`Fetched unique bedrooms: ${uniqueBedrooms.length} bedroom options`);
-
-      return {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ results: uniqueBedrooms })
-      };
-    } catch (error) {
-      console.error(`Error fetching bedrooms: ${error.message}`);
-      return {
-        statusCode: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ error: 'Internal Server Error' })
-      };
-    }
-  }
+  console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchBookedDates, listingId, page, limit })}`);
 
   if (fetchBookedDates) {
     if (!listingId || !checkIn || !checkOut) {

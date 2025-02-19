@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 import 'react-datepicker/dist/react-datepicker.css';
 import { addDays } from "date-fns";
@@ -70,7 +70,7 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(100); // Number of items per page
+  const [itemsPerPage] = useState<number>(50); // Number of items per page
   const [validationError, setValidationError] = useState<string>('');
 
   const apiUrl = '/.netlify/functions/availability';
@@ -84,8 +84,8 @@ const AvailabilitySearch: React.FC = () => {
     const fetchInitialData = async () => {
       try {
         const [citiesResponse, bedroomsResponse, tagsResponse] = await Promise.all([
-          fetch('/.netlify/functions/availability?fetchCities=true'),
-          fetch('/.netlify/functions/availability?fetchBedrooms=true'),
+          fetch('/.netlify/functions/fetchCities'),
+          fetch('/.netlify/functions/fetchBedrooms'),
           fetch('/.netlify/functions/searchTags')
         ]);
 
