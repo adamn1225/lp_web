@@ -78,7 +78,7 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
 
   const tasks = [];
   for (let skip = 0; skip < totalListings; skip += 100) {
-    const url = `${baseUrl}?limit=100&skip=${skip}&${queryParams.toString()}`;
+    const url = `${baseUrl}?limit=100&skip=${skip}&${queryParams.toString()}&fields=_id,address.city,bedrooms`; // Limit fields
     tasks.push(limit(async () => {
       console.log(`Fetching listings from URL: ${url}`);
       const response = await fetchWithRetry(url, {
@@ -235,7 +235,7 @@ export const handler = async (event, context) => {
     if (city && city !== 'All') {
       queryParams.append('city', city);
     }
-    const totalListings = 400;
+    const totalListings = 300;
 
     const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
 
