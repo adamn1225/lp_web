@@ -79,14 +79,16 @@ const AvailabilitySearch: React.FC = () => {
   const resultsContainerRef = useRef<HTMLDivElement>(null);
 
   const cache = useRef<{ [key: string]: any }>({});
+  const staticData = useRef<{ [key: string]: any }>({});
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [citiesResponse, bedroomsResponse, tagsResponse] = await Promise.all([
+        const [citiesResponse, bedroomsResponse, tagsResponse, listingsResponse] = await Promise.all([
           fetch('/.netlify/functions/fetchCities'),
           fetch('/.netlify/functions/fetchBedrooms'),
-          fetch('/.netlify/functions/searchTags')
+          fetch('/.netlify/functions/searchTags'),
+          fetch('/public/data/listings.json')
         ]);
 
         if (!citiesResponse.ok) {
@@ -98,10 +100,14 @@ const AvailabilitySearch: React.FC = () => {
         if (!tagsResponse.ok) {
           throw new Error(`Failed to fetch tags: ${tagsResponse.statusText}`);
         }
+        if (!listingsResponse.ok) {
+          throw new Error(`Failed to fetch listings: ${listingsResponse.statusText}`);
+        }
 
         const citiesData = await citiesResponse.json();
         const bedroomsData = await bedroomsResponse.json();
         const tagsData = await tagsResponse.json();
+        const listingsData = await listingsResponse.json();
 
         if (citiesData.results) {
           setCities(citiesData.results);
@@ -124,6 +130,11 @@ const AvailabilitySearch: React.FC = () => {
         }
         const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
         setTags(filteredTags);
+
+        // Store static data in a ref for later use
+        listingsData.forEach((listing: any) => {
+          staticData.current[listing._id] = listing;
+        });
       } catch (err) {
         console.error('Error fetching initial data:', err);
         setError('Failed to load initial data');
@@ -229,10 +240,10 @@ const AvailabilitySearch: React.FC = () => {
 
       // Combine cached static data with fetched dynamic data
       const combinedListings = filteredListings.map(listing => {
-        const cachedData = cache.current[listing._id];
+        const staticListing = staticData.current[listing._id];
         return {
           ...listing,
-          ...cachedData
+          ...staticListing
         };
       });
 
@@ -333,7 +344,17 @@ const AvailabilitySearch: React.FC = () => {
       try {
         const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
         const data = await response.json();
-        localStorage.setItem(cacheKey, JSON.stringify(data));
+
+        // Store only essential data
+        const essentialData = data.results.map((listing: any) => ({
+          _id: listing._id,
+          title: listing.title,
+          address: listing.address,
+          pictures: listing.pictures,
+          prices: listing.prices,
+        }));
+
+        localStorage.setItem(cacheKey, JSON.stringify(essentialData));
       } catch (error) {
         console.error('Error prefetching data:', error);
       }
