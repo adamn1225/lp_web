@@ -1,12 +1,15 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import NodeCache from 'node-cache';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 5000; // Increased rate limit interval to 10 seconds
+const RATE_LIMIT_INTERVAL = 7500; // Increased rate limit interval to 10 seconds
 const CONCURRENCY_LIMIT = 5;
-const MAX_RESULTS = 200;
-const BATCH_SIZE = 50; // Reduced batch size
+const MAX_RESULTS = 270;
+const BATCH_SIZE = 100; // Set batch size to 100
+
+const cache = new NodeCache({ stdTTL: 3600 }); // Cache with 1-hour TTL
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -30,7 +33,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingIds, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&includeAllotment=true&ignoreInactiveChildAllotment=true&ignoreUnlistedChildAllotment=true`;
 
   console.log(`Fetching availability for listings ${listingIds.join(', ')} from URL: ${apiUrl}`);
 
@@ -72,8 +75,8 @@ const calculateAveragePrice = (availabilityData) => {
 
 const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
   const results = [];
-  for (let skip = 0; skip < totalListings; skip += 100) {
-    const url = `${baseUrl}?limit=100&skip=${skip}&${queryParams.toString()}`;
+  for (let skip = 0; skip < totalListings; skip += BATCH_SIZE) {
+    const url = `${baseUrl}?limit=${BATCH_SIZE}&skip=${skip}&${queryParams.toString()}`;
     console.log(`Fetching listings from URL: ${url}`);
     const response = await fetchWithRetry(url, {
       headers: {
@@ -101,7 +104,7 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
 };
 
 export const handler = async (event, context) => {
-  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 10 } = event.queryStringParameters;
+  const { checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page = 1, limit = 100 } = event.queryStringParameters;
 
   console.log(`Received query parameters: ${JSON.stringify({ checkIn, checkOut, minOccupancy, bedroomAmount, city, fetchCities, fetchBedrooms, fetchBookedDates, listingId, page, limit })}`);
 
@@ -276,6 +279,16 @@ export const handler = async (event, context) => {
       const cityA = a.address.city;
       const cityB = b.address.city;
       return cityOrder.indexOf(cityA) - cityOrder.indexOf(cityB);
+    });
+
+    // Cache static data
+    availableListings.forEach(listing => {
+      cache.set(listing._id, {
+        address: listing.address,
+        pictures: listing.pictures,
+        title: listing.title,
+        propertyType: listing.propertyType
+      });
     });
 
     return {

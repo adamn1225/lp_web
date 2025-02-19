@@ -150,7 +150,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             onClick={() => handleBedroomChange(bedroom)}
             className={`px-3 py-2 text-nowrap rounded ${bedroomCount === bedroom ? 'bg-secondary text-white border border-white' : 'bg-primary/75 text-secondary'}`}
           >
-            {bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom >= 1 ? 's' : ''}`}
+            {bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}
           </button>
         ))}
 

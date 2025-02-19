@@ -44,7 +44,7 @@ interface Listing {
   amenities: string[];
   tags: string[];
 }
-const allowedTags = [];
+const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
 
 const AvailabilitySearch: React.FC = () => {
   const [minOccupancy, setMinOccupancy] = useState<number>(1);
@@ -78,7 +78,7 @@ const AvailabilitySearch: React.FC = () => {
   const listingRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
   const resultsContainerRef = useRef<HTMLDivElement>(null);
 
-  const cache = useRef<{ [key: string]: any[] }>({});
+  const cache = useRef<{ [key: string]: any }>({});
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -122,7 +122,6 @@ const AvailabilitySearch: React.FC = () => {
         if (tagsData.error) {
           throw new Error(tagsData.error);
         }
-        const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
         const filteredTags = tagsData.results.filter((tag: string) => allowedTags.includes(tag));
         setTags(filteredTags);
       } catch (err) {
@@ -164,38 +163,6 @@ const AvailabilitySearch: React.FC = () => {
     }
   };
 
-  const citySelection = async (city: string | null): Promise<void> => {
-    if (!city) {
-      setFilteredListings(available);
-      setMapListings(available);
-      return;
-    }
-
-    let filteredListings: Listing[] = [];
-
-    // Grouping related locations under each selection
-    const locationMapping: Record<string, string[]> = {
-      'Myrtle Beach': ['Myrtle Beach', 'Surfside Beach', 'Murrells Inlet'],
-      'North Myrtle Beach': ['North Myrtle Beach', 'Little River']
-    };
-
-    // If city is in mapping, filter by all associated locations
-    if (locationMapping[city]) {
-      filteredListings = available.filter(listing =>
-        locationMapping[city].includes(listing.address.city)
-      );
-    } else {
-      // If city is not in mapping, just filter by the exact city
-      filteredListings = available.filter(listing => listing.address.city === city);
-    }
-
-    // Update the state with the filtered results
-    setSelectedLocation(city);
-    setFilteredListings(filteredListings);
-    setMapListings(filteredListings);
-  };
-
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedLocation) {
@@ -216,6 +183,7 @@ const AvailabilitySearch: React.FC = () => {
       const startDate = dateRange[0].startDate.toISOString().slice(0, 10);
       const endDate = dateRange[0].endDate.toISOString().slice(0, 10);
       const cacheKey = `${startDate}-${endDate}-${minOccupancy}-${selectedLocation}-${selectedBedroomAmount}-${tagsQuery}-${currentPage}-${itemsPerPage}`;
+
       if (cache.current[cacheKey]) {
         console.log('Returning cached results');
         setListings(cache.current[cacheKey]);
@@ -259,12 +227,21 @@ const AvailabilitySearch: React.FC = () => {
 
       const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
 
-      setListings(filteredListings);
-      setFilteredListings(filteredListings);
-      setMapListings(filteredListings);
-      cache.current[cacheKey] = filteredListings;
+      // Combine cached static data with fetched dynamic data
+      const combinedListings = filteredListings.map(listing => {
+        const cachedData = cache.current[listing._id];
+        return {
+          ...listing,
+          ...cachedData
+        };
+      });
 
-      console.log('Filtered Listings:', filteredListings);
+      setListings(combinedListings);
+      setFilteredListings(combinedListings);
+      setMapListings(combinedListings);
+      cache.current[cacheKey] = combinedListings;
+
+      console.log('Filtered Listings:', combinedListings);
 
       if (resultsContainerRef.current) {
         resultsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -305,7 +282,7 @@ const AvailabilitySearch: React.FC = () => {
       }
     }
 
-    if (filters.bedroomCount) {
+    if (filters.bedroomCount !== null && filters.bedroomCount !== undefined) {
       filtered = filtered.filter(listing => listing.bedrooms === Number(filters.bedroomCount));
     }
 
@@ -347,14 +324,19 @@ const AvailabilitySearch: React.FC = () => {
     const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
     const minOccupancy = 1;
     const city = 'All';
-    const bedroomAmount = 1;
+    const bedroomAmount = 0;
 
-    try {
-      const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
-      const data = await response.json();
-      console.log('Fetched data:', data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
+    const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
+    const cachedData = localStorage.getItem(cacheKey);
+
+    if (!cachedData) {
+      try {
+        const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
+        const data = await response.json();
+        localStorage.setItem(cacheKey, JSON.stringify(data));
+      } catch (error) {
+        console.error('Error prefetching data:', error);
+      }
     }
   };
 
@@ -369,6 +351,7 @@ const AvailabilitySearch: React.FC = () => {
       return 'md:grid-cols-2 xl:grid-cols-3';
     }
   };
+
 
   return (
     <div className="availability-search w-full flex flex-col pt-5 justify-center items-center bg-secondary/10">

@@ -3,11 +3,21 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@layouts/*": ["src/layouts/*"],
-      "@components/*": ["src/components/*"],
-      "@utils/*": ["src/utils/*"],
-      "@data/*": ["src/data/*"],
-      "@/*": ["src/*"]
+      "@layouts/*": [
+        "src/layouts/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@data/*": [
+        "src/data/*"
+      ],
+      "@/*": [
+        "src/*"
+      ]
     },
     "plugins": [
       {
@@ -21,10 +31,25 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "types": ["astro/client", "express", "node"],
+    "types": [
+      "astro/client",
+      "express",
+      "node"
+    ],
     "jsx": "react-jsx",
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.astro", "middelware.ts", "src/types"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.astro",
+    "middelware.ts",
+    "src/types",
+    "src/pages/api/availabilitymjs"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
