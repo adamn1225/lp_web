@@ -71,7 +71,7 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(100); // Number of items per page
+  const [itemsPerPage] = useState<number>(300); // Number of items per page
   const [validationError, setValidationError] = useState<string>('');
   const apiUrl = '/.netlify/functions/availability';
 
@@ -336,9 +336,9 @@ const AvailabilitySearch: React.FC = () => {
   const handleDateChange = async () => {
     const checkIn = dateRange[0].startDate.toISOString().split('T')[0];
     const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
-    const minOccupancy = 1;
+    const minOccupancy = 2;
     const city = 'All';
-    const bedroomAmount = 0;
+    const bedroomAmount = selectedBedroomAmount || 'Any';
 
     const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
     const cachedData = localStorage.getItem(cacheKey);
@@ -483,7 +483,7 @@ const AvailabilitySearch: React.FC = () => {
                 className={`md:search-results h-fit w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:grid md:mr-0 ${getGridColumns(paginatedListings.length)} md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
-                    const price = property.prices && property.prices.length > 0 ? property.prices[0].price : property.basePrice;
+                    const price = property.prices && property.prices.length > 0 ? property.prices[0].price : null;
                     return (
                       <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
                         <article className="flex flex-col items-start bg-white shadow-lg shadow-muted-300/30 w-full h-80 rounded-xl relative overflow-hidden">
@@ -503,7 +503,11 @@ const AvailabilitySearch: React.FC = () => {
                               {property.address.city}, {property.address.state}
                             </p>
                             <div className="flex items-end h-full">
-                              <p className="font-semibold text-base text-nowrap">Average price per night - ${price}</p>
+                              {price !== null ? (
+                                <p className="font-semibold text-base text-nowrap">Average price per night - ${price}</p>
+                              ) : (
+                                <p className="hidden"></p>
+                              )}
                             </div>
                           </div>
                         </article>

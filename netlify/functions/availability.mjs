@@ -240,7 +240,7 @@ export const handler = async (event, context) => {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ results: paginatedResults, partial: false })
+      body: JSON.stringify({ results: paginatedResults, total: availableListings.length, page, limit })
     };
   } catch (error) {
     console.error(`Error fetching data: ${error.message}`);
