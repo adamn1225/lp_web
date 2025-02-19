@@ -338,7 +338,7 @@ const AvailabilitySearch: React.FC = () => {
     const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
     const minOccupancy = 2;
     const city = 'All';
-    const bedroomAmount = selectedBedroomAmount || 'Any';
+    const bedroomAmount = 0 || 'Any';
 
     const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
     const cachedData = localStorage.getItem(cacheKey);
