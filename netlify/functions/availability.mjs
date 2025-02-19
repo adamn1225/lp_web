@@ -1,12 +1,13 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import _ from 'lodash';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 7500; // Increased rate limit interval to 10 seconds
+const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
 const CONCURRENCY_LIMIT = 5;
 const MAX_RESULTS = 300;
-const BATCH_SIZE = 100; // Set batch size to 100
+const BATCH_SIZE = 50; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -16,7 +17,6 @@ const fetchWithRetry = async (url, options, retries = 3) => {
     if (response.status === 429) {
       const retryAfter = response.headers.get('Retry-After');
       const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
-      console.log(`Rate limited. Retrying after ${delayMs} ms`);
       await delay(delayMs);
     } else if (response.status === 401) {
       throw new Error('Not Authorized');
@@ -30,7 +30,7 @@ const fetchWithRetry = async (url, options, retries = 3) => {
 };
 
 const fetchAvailability = async (listingIds, checkIn, checkOut) => {
-  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}&includeAllotment=true&ignoreInactiveChildAllotment=true&ignoreUnlistedChildAllotment=true`;
+  const apiUrl = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings?listingIds=${encodeURIComponent(listingIds.join(','))}&startDate=${encodeURIComponent(checkIn)}&endDate=${encodeURIComponent(checkOut)}`;
 
   console.log(`Fetching availability for listings ${listingIds.join(', ')} from URL: ${apiUrl}`);
 
@@ -57,10 +57,16 @@ const fetchAvailability = async (listingIds, checkIn, checkOut) => {
     listingId: day.listingId,
     date: day.date,
     status: day.status,
-    price: day.price
+    price: day.price,
+    blocks: day.blocks,
+    cta: day.cta,
+    ctd: day.ctd
   }));
 
   console.log(`Availability data for listings ${listingIds.join(', ')}: ${availabilityData.length} days available`);
+  availabilityData.forEach(day => {
+    console.log(`Listing ID: ${day.listingId}, Date: ${day.date}, Price: ${day.price}`);
+  });
 
   return availabilityData;
 };
@@ -195,8 +201,8 @@ export const handler = async (event, context) => {
         const availabilityData = await fetchAvailability(batch, checkIn, checkOut);
         const availableListingsBatch = combinedResults.slice(i, i + BATCH_SIZE).filter(listing => {
           const listingAvailability = availabilityData.filter(day => day.listingId === listing._id);
-          const availableDates = listingAvailability.filter(day => day.status === 'available').map(day => day.date);
-          const prices = listingAvailability.filter(day => day.status === 'available').map(day => ({ date: day.date, price: day.price }));
+          const availableDates = listingAvailability.filter(day => day.status === 'available' && !day.cta && !day.ctd && !Object.values(day.blocks).includes(true)).map(day => day.date);
+          const prices = listingAvailability.filter(day => day.status === 'available' && !day.cta && !day.ctd && !Object.values(day.blocks).includes(true)).map(day => ({ date: day.date, price: day.price }));
 
           if (availableDates.length > 0) {
             listing.prices = prices;

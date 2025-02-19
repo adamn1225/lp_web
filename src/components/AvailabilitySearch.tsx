@@ -35,15 +35,16 @@ interface Listing {
     full: string;
   };
   prices: {
-    basePrice: number;
-    currency: string;
-  };
+    date: string;
+    price: number;
+  }[];
   bedrooms: number;
   bathrooms: number;
   accommodates: number;
   amenities: string[];
   tags: string[];
 }
+
 const allowedTags = ["Public_pool", "Ocean_view", "Ocean_front", "Pets"];
 
 const AvailabilitySearch: React.FC = () => {
@@ -235,7 +236,10 @@ const AvailabilitySearch: React.FC = () => {
         return;
       }
 
-      const filteredListings = data.results.filter((listing: any) => listing.accommodates >= minOccupancy);
+      const filteredListings = data.results.filter((listing: any) => {
+        const availableDates = listing.prices.filter((price: any) => !price.blocks || !Object.values(price.blocks).includes(true));
+        return availableDates.length > 0 && listing.accommodates >= minOccupancy;
+      });
 
       // Combine cached static data with fetched dynamic data
       const combinedListings = filteredListings.map(listing => {
@@ -332,9 +336,9 @@ const AvailabilitySearch: React.FC = () => {
   const handleDateChange = async () => {
     const checkIn = dateRange[0].startDate.toISOString().split('T')[0];
     const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
-    const minOccupancy = 1;
+    const minOccupancy = 2;
     const city = 'All';
-    const bedroomAmount = 0;
+    const bedroomAmount = selectedBedroomAmount || 'Any';
 
     const cacheKey = `${checkIn}-${checkOut}-${minOccupancy}-${city}-${bedroomAmount}`;
     const cachedData = localStorage.getItem(cacheKey);
@@ -342,7 +346,8 @@ const AvailabilitySearch: React.FC = () => {
     if (!cachedData) {
       try {
         const response = await fetch(`/.netlify/functions/availability?checkIn=${checkIn}&checkOut=${checkOut}&minOccupancy=${minOccupancy}&city=${city}&bedroomAmount=${bedroomAmount}`);
-        const data = await response.json()
+        const data = await response.json();
+        // Handle the fetched data as needed
       } catch (error) {
         console.error('Error prefetching data:', error);
       }
@@ -448,7 +453,7 @@ const AvailabilitySearch: React.FC = () => {
               initialSelectedCity={filters.selectedCity || ''}
               initialSelectedAmenities={filters.selectedAmenities || []}
               initialSelectedTags={filters.selectedTags || []}
-              showBedroomFilter={selectedBedroomAmount === ''}
+              showBedroomFilter={selectedBedroomAmount === 'Any'}
               onCityClick={handleCityClick}
               setActiveCity={setSelectedLocation}
             />
@@ -478,7 +483,7 @@ const AvailabilitySearch: React.FC = () => {
                 className={`md:search-results h-fit w-full sm:flex flex-col justify-start xs:items-stretch md:items-start gap-4 md:gap-0 md:grid md:mr-0 ${getGridColumns(paginatedListings.length)} md:gap-x-4 md:gap-y-4 px-2 pb-16`}>
                 {paginatedListings.length > 0 ? (
                   paginatedListings.map((property, index) => {
-                    const price = property.prices.length > 0 ? property.prices[0].price : property.basePrice;
+                    const price = property.prices && property.prices.length > 0 ? property.prices[0].price : property.basePrice;
                     return (
                       <a href={property._id} key={property._id} ref={(el) => { listingRefs.current[property._id] = el; }}>
                         <article className="flex flex-col items-start bg-white shadow-lg shadow-muted-300/30 w-full h-80 rounded-xl relative overflow-hidden">

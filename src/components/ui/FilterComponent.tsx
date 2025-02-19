@@ -34,7 +34,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   setActiveCity // Destructure the setActiveCity prop
 }) => {
   const [priceOrder, setPriceOrder] = useState<string>(initialPriceOrder);
-  const [bedroomCount, setBedroomCount] = useState<number | null>(initialBedroomCount);
+  const [bedroomCount, setBedroomCount] = useState<number | null>(initialBedroomCount === 0 ? null : initialBedroomCount); (initialBedroomCount);
   const [selectedCity, setSelectedCity] = useState<string>(initialSelectedCity);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>(initialSelectedAmenities);
   const [selectedTags, setSelectedTags] = useState<string[]>(initialSelectedTags);
@@ -153,7 +153,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             {bedroom === 0 ? 'Studio' : `${bedroom} Bedroom${bedroom > 1 ? 's' : ''}`}
           </button>
         ))}
-
       </div>
       <CityNavigation cities={cities} onCityClick={onCityClick} setActiveCity={setActiveCity} />
 
