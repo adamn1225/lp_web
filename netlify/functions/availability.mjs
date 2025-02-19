@@ -7,7 +7,7 @@ dotenv.config();
 const RATE_LIMIT_INTERVAL = 2000; // Increased rate limit interval
 const CONCURRENCY_LIMIT = 5;
 const MAX_RESULTS = 300;
-const BATCH_SIZE = 50; // Reduced batch size
+const BATCH_SIZE = 100; // Reduced batch size
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -113,7 +113,7 @@ const fetchListingsInBatches = async (baseUrl, queryParams, totalListings) => {
     }
   }
   await Promise.all(promises);
-  return results;
+  return results.slice(0, MAX_RESULTS); // Limit the number of listings returned
 };
 
 export const handler = async (event, context) => {
@@ -230,13 +230,17 @@ export const handler = async (event, context) => {
       return cityOrder.indexOf(cityA) - cityOrder.indexOf(cityB);
     });
 
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedResults = availableListings.slice(startIndex, endIndex);
+
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ results: availableListings.slice(0, MAX_RESULTS), partial: false })
+      body: JSON.stringify({ results: paginatedResults, partial: false })
     };
   } catch (error) {
     console.error(`Error fetching data: ${error.message}`);
