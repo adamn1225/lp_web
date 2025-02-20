@@ -35,9 +35,22 @@ const BookingFormStep1 = ({
 }) => {
     const totalPetFee = pets * petFee; // Calculate the total pet fee
     const [isChecked, setIsChecked] = useState(false); // State for checkbox
+    const [showError, setShowError] = useState(false); // State for showing error message
 
     const handleCheckboxChange = (e: any) => {
         setIsChecked(e.target.checked);
+        if (e.target.checked) {
+            setShowError(false); // Hide error message when checkbox is checked
+        }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!isChecked) {
+            setShowError(true); // Show error message if checkbox is not checked
+        } else {
+            onSubmit();
+        }
     };
 
     // Calculate the total accommodation fare based on the number of nights selected
@@ -48,7 +61,7 @@ const BookingFormStep1 = ({
     const totalAccommodationFare = basePrice * daysDiff;
 
     return (
-        <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="flex flex-col justify-center items-center w-full">
+        <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center w-full">
             <div className="w-full xs:px-1 md:px-4">
                 <div className='flex  flex-col items-center justify-around'>
                     <div className='flex justify-between gap-4 w-full'>
@@ -189,10 +202,13 @@ const BookingFormStep1 = ({
                     handleCheckboxChange={handleCheckboxChange}
                     error={!isChecked ? "Please accept the terms and conditions before proceeding" : ""}
                 />
+                {showError && !isChecked && (
+                    <p className="text-red-500 text-xs mt-1">Please accept the terms and conditions before proceeding.</p>
+                )}
                 <button
                     className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-2"
                     type="submit"
-                    disabled={loading || !isChecked} // Disable button if not checked
+                    disabled={loading} // Only disable button if loading
                 >
                     <CreditCard />  Proceed to Payment
                 </button>
