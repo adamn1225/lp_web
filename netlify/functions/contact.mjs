@@ -1,8 +1,9 @@
-const { google } = require('googleapis');
-const nodemailer = require('nodemailer');
+import { google } from 'googleapis';
+import nodemailer from 'nodemailer';
+
 const OAuth2 = google.auth.OAuth2;
 
-exports.handler = async (event) => {
+export async function handler(event) {
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
@@ -45,7 +46,7 @@ exports.handler = async (event) => {
 
     const mailOptions = {
         from: process.env.GMAIL_USER,
-        to: 'bicoastalequities@gmail.com', // Replace with your email address
+        to: process.env.RECIPIENT_EMAIL,
         subject: `New Contact Form Submission from ${name}`,
         text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     };
@@ -63,4 +64,4 @@ exports.handler = async (event) => {
             body: JSON.stringify({ message: 'Internal Server Error', error }),
         };
     }
-};
+}
