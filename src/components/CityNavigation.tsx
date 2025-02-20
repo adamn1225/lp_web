@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 interface CityNavigationProps {
     cities: string[];
     onCityClick: (city: string | null) => Promise<void>;
-    setActiveCity: (city: string) => void; // Add this prop
+    setActiveCity: (city: string) => void;
 }
 
 const CityNavigation: React.FC<CityNavigationProps> = ({ cities, onCityClick, setActiveCity }) => {
@@ -13,7 +13,7 @@ const CityNavigation: React.FC<CityNavigationProps> = ({ cities, onCityClick, se
 
     const handleCityClick = (city: string | null) => {
         setActiveCityState(city);
-        setActiveCity(city || ''); // Call the callback to set the active city in AvailabilitySearch
+        setActiveCity(city || '');
         setLoading(true);
         onCityClick(city).finally(() => {
             setLoading(false);
@@ -30,7 +30,7 @@ const CityNavigation: React.FC<CityNavigationProps> = ({ cities, onCityClick, se
                         key={city}
                         onClick={() => handleCityClick(city === 'All Locations' ? null : city)}
                         className={`text-secondary text-sm md:text-base font-semibold hover:underline px-2 py-2 rounded-md whitespace-nowrap ${activeCity === city ? 'bg-white underline text-secondary font-bold border border-secondary/90 shadow-md' : ''}`}
-                        disabled={loading} // Disable button while loading
+                        disabled={loading}
                     >
                         {city}
                     </button>

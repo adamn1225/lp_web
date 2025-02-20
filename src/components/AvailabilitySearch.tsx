@@ -71,7 +71,7 @@ const AvailabilitySearch: React.FC = () => {
   const [isResultsModalOpen, setIsResultsModalOpen] = useState<boolean>(false);
   const [isSearchComplete, setIsSearchComplete] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(50); // Number of items per page
+  const [itemsPerPage] = useState<number>(50);
   const [validationError, setValidationError] = useState<string>('');
 
   const apiUrl = '/.netlify/functions/availability';
@@ -282,7 +282,6 @@ const AvailabilitySearch: React.FC = () => {
       filtered = filtered.filter(listing => listing.address.city === filters.selectedCity);
     }
 
-    // Randomize the filtered results
     filtered = filtered.sort(() => Math.random() - 0.5);
 
     setFilteredListings(filtered);
@@ -309,7 +308,7 @@ const AvailabilitySearch: React.FC = () => {
 
   const handleDateChange = async () => {
     const checkIn = dateRange[0].startDate.toISOString().split('T')[0];
-    const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0]; // Default to one day if endDate is not selected
+    const checkOut = dateRange[0].endDate ? dateRange[0].endDate.toISOString().split('T')[0] : new Date(checkIn).toISOString().split('T')[0];
     const minOccupancy = 1;
     const city = 'All';
     const bedroomAmount = 1;
@@ -368,7 +367,7 @@ const AvailabilitySearch: React.FC = () => {
                   state={dateRange}
                   setState={setDateRange}
                   disabledDates={[]}
-                  onDateChange={handleDateChange} // Use the new onDateChange prop
+                  onDateChange={handleDateChange}
                 />
                 <button type="submit" className="my-1 flex items-center gap-1 shadow-lg justify-center text-nowrap md:justify-center bg-secondary m-0 pt-2.5 pb-2 px-3 font-bold text-base rounded-md text-slate-50">
                   <Search size={20} /> <p>Search</p>

@@ -12,7 +12,6 @@ export const handler = async (event) => {
       throw new Error('VITE_API_TOKEN environment variable is not set');
     }
 
-    // Create guest
     const guestUrl = 'https://open-api.guesty.com/v1/guests-crud';
     const guestRequestBody = {
       firstName: guestInfo.firstName,
@@ -47,7 +46,6 @@ export const handler = async (event) => {
     const guestData = JSON.parse(guestResponseText);
     console.log('Guest created:', guestData);
 
-    // Create reservation
     const reservationUrl = 'https://open-api.guesty.com/v1/reservations';
     const reservationRequestBody = {
       listingId,
@@ -84,11 +82,10 @@ export const handler = async (event) => {
     const reservationData = JSON.parse(reservationResponseText);
     console.log('Reservation created:', reservationData);
 
-    // Attach payment method to reservation
     const paymentMethodUrl = `https://open-api.guesty.com/v1/guests/${guestData._id}/payment-methods`;
     const paymentMethodRequestBody = {
-      _id: paymentMethod._id, // Assuming paymentMethod contains the tokenized payment method ID
-      paymentProviderId: paymentMethod.providerId, // Assuming paymentMethod contains the provider ID
+      _id: paymentMethod._id,
+      paymentProviderId: paymentMethod.providerId,
       reservationId: reservationData._id,
     };
 

@@ -15,6 +15,7 @@ import BedTypes from "@components/ui/BedTypes.tsx";
 import ImageGallery from "@components/ImageGallery.tsx";
 import AirReviews from "@components/AirReviews.tsx";
 
+// be careful here future developer
 export async function getStaticPaths() {
   const listings = await fetchAllListings();
   const paths = await Promise.all(
@@ -453,7 +454,6 @@ function capitalizeFirstLetter(string: string) {
                 <AirReviews listingId={listingId} client:idle />
               </div>
 
-              <!-- Display the review comments in two columns -->
               <div
                 class="flex flex-wrap items-start justify-start gap-y-8 gap-x-6"
               >
@@ -465,25 +465,8 @@ function capitalizeFirstLetter(string: string) {
 
       <!-- cards -->
       <div class="mt-12">
-        <div class="flex flex-col">
-          <!-- <h2
-                  class="font-sans text-2xl text-muted-900 text-center dark:text-white xs:text-center"
-                >
-                  You might also like
-                </h2>
-                <p
-                  class="text-muted-500 dark:text-muted-400 text-center leading-6 xs:text-center"
-                >
-                  Based on your previous matches
-                </p> -->
-          <!-- <div
-                  class="py-3 md:px-24 px-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"
-                >
-                  <GuestyListings />
-                </div> -->
-        </div>
+        <div class="flex flex-col"></div>
         <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- {properties.slice(0, 3).map((property) => <PropertyCard {...property} />)} -->
         </div>
       </div>
     </Section>
@@ -504,15 +487,12 @@ function capitalizeFirstLetter(string: string) {
         .then(() => console.log("Successful share"))
         .catch((error) => console.log("Error sharing", error));
     } else {
-      // Fallback for browsers that do not support navigator.share
       const shareUrl = encodeURIComponent(window.location.href);
       const shareText = encodeURIComponent("Check out this property!");
       const emailLink = `mailto:?subject=${shareData.title}&body=${shareText}%20${shareUrl}`;
       const facebookLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
       const twitterLink = `https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`;
       const smsLink = `sms:?body=${shareText}%20${shareUrl}`;
-
-      // Display fallback share options
       const fallbackShareOptions = `
           <div class="share-options">
             <a href="${emailLink}" target="_blank">Email</a>

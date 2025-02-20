@@ -21,7 +21,6 @@ interface Listing {
   _id: string;
 }
 
-// Fetch all listings concurrently and combine the results
 const [listingsOne] = await Promise.all([fetchFeaturedListings()]);
 
 const featured: Listing[] = [...listingsOne];

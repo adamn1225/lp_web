@@ -20,7 +20,7 @@ const ConversationPosts: React.FC<ConversationPostsProps> = ({ conversationId })
           method: 'GET',
           headers: {
             accept: 'application/json',
-            authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}` // Ensure this environment variable is set
+            authorization: `Bearer ${process.env.REACT_APP_API_TOKEN}`,
           }
         });
 

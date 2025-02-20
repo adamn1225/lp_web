@@ -31,7 +31,11 @@ const AcceptModal: React.FC<AcceptModalProps> = ({ isOpen, onRequestClose, onAcc
         >
             <div className="xs:w-full relative flex flex-col justify-center items-center max-h-full overflow-y-auto">
                 <h2 className="text-slate-800 text-3xl mb-4 underline">Accept Terms</h2>
-                <TextArea />
+                <TextArea
+                    isChecked={isChecked}
+                    handleCheckboxChange={(e) => setIsChecked(e.target.checked)}
+                    error={!isChecked ? "You must accept the terms and conditions" : ""}
+                />
                 <div className="flex items-center mt-4">
                     <input
                         type="checkbox"

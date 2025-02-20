@@ -444,7 +444,11 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     </div>
                   </div>
                 </div>
-                <TextArea />
+                <TextArea
+                  isChecked={false}
+                  handleCheckboxChange={() => { }}
+                  error={''}
+                />
                 <button
                   className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
                   type="submit"

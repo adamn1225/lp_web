@@ -30,7 +30,7 @@ export async function handler(event, context) {
             statusCode: 200,
             headers: {
                 'Content-Type': contentType,
-                'Cache-Control': 'public, max-age=31536000' // Cache for 1 year
+                'Cache-Control': 'public, max-age=31536000'
             },
             body: buffer.toString('base64'),
             isBase64Encoded: true

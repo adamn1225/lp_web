@@ -10,7 +10,6 @@ const client = new Twilio(accountSid, authToken);
 export async function handler(event, context) {
     const { phoneNumber } = JSON.parse(event.body);
 
-    // Ensure phone number is in E.164 format
     const parsedNumber = parsePhoneNumberFromString(phoneNumber);
     const e164PhoneNumber = parsedNumber ? parsedNumber.format('E.164') : phoneNumber;
 

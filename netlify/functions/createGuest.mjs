@@ -3,7 +3,6 @@ import fetch from 'node-fetch';
 export async function handler(event, context) {
   const { firstName, lastName, phone, email, checkIn, checkOut, listingId } = JSON.parse(event.body);
 
-  // Only validate firstName and lastName
   if (!firstName || !lastName) {
     return {
       statusCode: 400,
@@ -29,7 +28,6 @@ export async function handler(event, context) {
   };
 
   try {
-    // Create guest
     const guestResponse = await fetch(guestUrl, guestOptions);
     if (!guestResponse.ok) {
       throw new Error('Failed to create guest');
@@ -37,7 +35,6 @@ export async function handler(event, context) {
     const guestData = await guestResponse.json();
     const { _id: guestId } = guestData;
 
-    // Create reservation inquiry
     const reservationUrl = 'https://open-api.guesty.com/v1/reservations';
     const reservationOptions = {
       method: 'POST',

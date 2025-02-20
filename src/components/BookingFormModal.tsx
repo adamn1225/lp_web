@@ -74,7 +74,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 setCityTax(data.cityTax || 0);
                 setLocalTax(data.localTax || 0);
                 setAmenities(data.amenities || []);
-                setManagementFeePercentage(data.managementFeePercentage || 5); // Set default to 5 if not provided
+                setManagementFeePercentage(data.managementFeePercentage || 5);
 
                 const timeDiff = endDate.getTime() - startDate.getTime();
                 const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -160,7 +160,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                         dateRange={dateRange}
                         weeklyPriceFactor={weeklyPriceFactor}
                         calculatedPrice={calculatedPrice || 0}
-                        amenities={amenities} // Pass amenities to BookingForm
+                        amenities={amenities}
                     />
                 )}
                 {currentStep === 2 && (

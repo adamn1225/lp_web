@@ -1,13 +1,12 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 
-// Load environment variables from .env file
 dotenv.config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const NETLIFY_AUTH_TOKEN = process.env.NETLIFY_AUTH_TOKEN;
-const NETLIFY_SITE_ID = process.env.NETLIFY_SITE_ID; // Replace with your actual site ID
+const NETLIFY_SITE_ID = process.env.NETLIFY_SITE_ID;
 const ACCOUNT_SLUG = 'line-properties';
 
 async function triggerRedeploy() {
@@ -34,7 +33,6 @@ export async function handler(event, context) {
   try {
     console.log('Starting token refresh process...');
 
-    // Fetch new token from Guesty API
     const tokenResponse = await fetch('https://open-api.guesty.com/oauth2/token', {
       method: 'POST',
       headers: {
@@ -58,12 +56,11 @@ export async function handler(event, context) {
     const token = tokenData.access_token;
     console.log('Fetched new token:', token);
 
-    // Construct the URL for updating the environment variable
     const updateUrl = `https://api.netlify.com/api/v1/accounts/${ACCOUNT_SLUG}/env/VITE_API_TOKEN?site_id=${NETLIFY_SITE_ID}`;
 
-    // Update environment variable in Netlify
+
     const updateResponse = await fetch(updateUrl, {
-      method: 'PATCH', // Use PATCH method
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${NETLIFY_AUTH_TOKEN}`
@@ -71,7 +68,7 @@ export async function handler(event, context) {
       body: JSON.stringify({
         key: 'VITE_API_TOKEN',
         value: token,
-        context: 'production' // Set context to a valid value
+        context: 'production'
       })
     });
 
@@ -83,7 +80,6 @@ export async function handler(event, context) {
     const updateData = await updateResponse.json();
     console.log('Environment variable updated:', updateData);
 
-    // Trigger a redeploy
     await triggerRedeploy();
 
     return {
@@ -100,5 +96,5 @@ export async function handler(event, context) {
 }
 
 export const config = {
-  schedule: '@daily' // Runs once a day at midnight UTC
+  schedule: '@daily'
 };

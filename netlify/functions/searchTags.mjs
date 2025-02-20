@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 let lastRequestTime = 0;
-const RATE_LIMIT_INTERVAL = 1000; // 1 second
+const RATE_LIMIT_INTERVAL = 3000;
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 

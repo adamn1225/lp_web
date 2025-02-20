@@ -33,21 +33,21 @@ const BookingFormStep1 = ({
     calculatedPrice,
     amenities,
 }) => {
-    const totalPetFee = pets * petFee; // Calculate the total pet fee
-    const [isChecked, setIsChecked] = useState(false); // State for checkbox
-    const [showError, setShowError] = useState(false); // State for showing error message
+    const totalPetFee = pets * petFee;
+    const [isChecked, setIsChecked] = useState(false);
+    const [showError, setShowError] = useState(false);
 
     const handleCheckboxChange = (e: any) => {
         setIsChecked(e.target.checked);
         if (e.target.checked) {
-            setShowError(false); // Hide error message when checkbox is checked
+            setShowError(false);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!isChecked) {
-            setShowError(true); // Show error message if checkbox is not checked
+            setShowError(true);
         } else {
             try {
                 const response = await fetch('/.netlify/functions/generatedPdfAndEmail', {
@@ -85,7 +85,6 @@ const BookingFormStep1 = ({
         }
     };
 
-    // Calculate the total accommodation fare based on the number of nights selected
     const startDate = dateRange[0].startDate;
     const endDate = dateRange[0].endDate;
     const timeDiff = endDate.getTime() - startDate.getTime();
@@ -240,7 +239,7 @@ const BookingFormStep1 = ({
                 <button
                     className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-2"
                     type="submit"
-                    disabled={loading} // Only disable button if loading
+                    disabled={loading}
                 >
                     <CreditCard />  Proceed to Payment
                 </button>

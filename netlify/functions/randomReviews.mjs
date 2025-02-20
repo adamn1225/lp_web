@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const MAX_RETRIES = 3;
-const RATE_LIMIT_INTERVAL = 1000; // 1 second
-const CACHE_TTL = 60 * 60 * 1000; // 1 hour
+const RATE_LIMIT_INTERVAL = 1000;
+const CACHE_TTL = 60 * 60 * 1000;
 const BATCH_SIZE = 100;
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));

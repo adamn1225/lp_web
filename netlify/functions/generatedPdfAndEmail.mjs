@@ -19,17 +19,13 @@ export async function handler(event) {
     }
 
     try {
-        // Get the current date and time
         const submissionDate = new Date().toLocaleString();
 
-        // Get the user's IP address
         const userIp = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'IP not available';
 
-        // Create a new PDF document
         const pdfDoc = await PDFDocument.create();
         const page = pdfDoc.addPage([600, 400]);
 
-        // Add text to the PDF
         page.drawText(`Booking Details`, { x: 50, y: 350, size: 20, color: rgb(0, 0, 0) });
         page.drawText(`First Name: ${firstName}`, { x: 50, y: 320, size: 12, color: rgb(0, 0, 0) });
         page.drawText(`Last Name: ${lastName}`, { x: 50, y: 300, size: 12, color: rgb(0, 0, 0) });
@@ -48,10 +44,8 @@ export async function handler(event) {
         page.drawText(`Submission Date: ${submissionDate}`, { x: 50, y: 40, size: 12, color: rgb(0, 0, 0) });
         page.drawText(`User IP: ${userIp}`, { x: 50, y: 20, size: 12, color: rgb(0, 0, 0) });
 
-        // Serialize the PDF document to bytes
         const pdfBytes = await pdfDoc.save();
 
-        // Create a nodemailer transporter
         const transporter = createTransport({
             service: 'gmail',
             auth: {
@@ -63,7 +57,6 @@ export async function handler(event) {
             },
         });
 
-        // Send the email with the PDF attachment
         await transporter.sendMail({
             from: process.env.GMAIL_USER,
             to: process.env.RECIPIENT_EMAIL,

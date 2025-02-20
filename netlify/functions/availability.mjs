@@ -3,10 +3,10 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const RATE_LIMIT_INTERVAL = 5000; // Increased rate limit interval
+const RATE_LIMIT_INTERVAL = 2000;
 const CONCURRENCY_LIMIT = 5;
 const MAX_RESULTS = 200;
-const BATCH_SIZE = 100; // Reduced batch size
+const BATCH_SIZE = 100;
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -120,7 +120,7 @@ export const handler = async (event, context) => {
     try {
       const baseUrl = 'https://open-api.guesty.com/v1/listings';
       const queryParams = new URLSearchParams();
-      const totalListings = 400; // Adjust as needed
+      const totalListings = 300;
 
       const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
       const uniqueCities = Array.from(new Set(listings.map(listing => listing.address.city)));
@@ -152,7 +152,7 @@ export const handler = async (event, context) => {
     try {
       const baseUrl = 'https://open-api.guesty.com/v1/listings';
       const queryParams = new URLSearchParams();
-      const totalListings = 400; // Adjust as needed
+      const totalListings = 300;
 
       const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
       const uniqueBedrooms = Array.from(new Set(listings.map(listing => listing.bedrooms))).sort((a, b) => a - b);
@@ -237,7 +237,7 @@ export const handler = async (event, context) => {
     if (city && city !== 'All') {
       queryParams.append('city', city);
     }
-    const totalListings = 400;
+    const totalListings = 300;
 
     const listings = await fetchListingsInBatches(baseUrl, queryParams, totalListings);
 

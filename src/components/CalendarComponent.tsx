@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { DateRange } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main css file
-import "react-date-range/dist/theme/default.css"; // theme css file
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 
 interface CalendarComponentProps {
   state: any[];
   setState: (state: any[]) => void;
   disabledDates: Date[];
-  datePrices: { [key: string]: number }; // Add datePrices prop
-  minNights: number; // Add minNights prop
+  datePrices: { [key: string]: number };
+  minNights: number;
 }
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates, datePrices, minNights }) => {
@@ -92,17 +92,17 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
           />
         </div>
       </div>
-      <div style={{ width: '80%' }}> {/* Adjust the width as needed */}
+      <div style={{ width: '80%' }}>
         <DateRange
           editableDateInputs={true}
           onChange={handleDateRangeChange}
           moveRangeOnFirstSelection={false}
           ranges={state.length ? state : initialRange}
           disabledDates={formattedDisabledDates}
-          minDate={today} // Prevent selection of past dates
-          dayContentRenderer={dayContentRenderer} // Use dayContentRenderer to display prices
-          months={months} // Display one or two months based on screen size
-          direction="horizontal" // Display months side by side
+          minDate={today}
+          dayContentRenderer={dayContentRenderer}
+          months={months}
+          direction="horizontal"
         />
       </div>
     </div>

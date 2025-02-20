@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 const MAX_RETRIES = 3;
-const RATE_LIMIT_INTERVAL = 2000; // 2 seconds
+const RATE_LIMIT_INTERVAL = 2000;
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -77,19 +77,16 @@ export const handler = async (event, context) => {
             };
         }
 
-        // Extract base price from the first day in the days array
         const basePrice = data2.data.days.length > 0 ? Math.round(data2.data.days[0].price) : 0;
 
-        // Extract unavailable dates
         const unavailableDates = data2.data.days
             .filter(day => day.status === 'unavailable')
             .map(day => {
                 const date = new Date(day.date);
-                date.setHours(0, 0, 0, 0); // Set time to midnight
+                date.setHours(0, 0, 0, 0);
                 return date.toISOString().split('T')[0];
             });
 
-        // Extract booked dates using checkInDateLocalized and checkOutDateLocalized
         const bookedDates = data2.data.days
             .filter(day => day.status === 'booked')
             .flatMap(day => {
@@ -101,8 +98,8 @@ export const handler = async (event, context) => {
                         const dates = [];
                         let currentDate = new Date(checkInDate);
                         const endDate = new Date(checkOutDate);
-                        while (currentDate <= endDate) { // Use <= to include the check-out date
-                            currentDate.setHours(0, 0, 0, 0); // Set time to midnight
+                        while (currentDate <= endDate) {
+                            currentDate.setHours(0, 0, 0, 0);
                             dates.push(currentDate.toISOString().split('T')[0]);
                             currentDate.setDate(currentDate.getDate() + 1);
                         }
@@ -112,7 +109,6 @@ export const handler = async (event, context) => {
                 });
             });
 
-        // Combine unavailable dates and booked dates
         const allUnavailableDates = [...new Set([...unavailableDates, ...bookedDates])];
 
         const accommodates = data1.accommodates || 2;
@@ -123,17 +119,15 @@ export const handler = async (event, context) => {
 
         const { prices, amenities, terms } = data1;
         const { weeklyPriceFactor, monthlyPriceFactor, cleaningFee } = prices;
-        const minNights = terms.minNights || 2; // Default to 2 if not provided
+        const minNights = terms.minNights || 2;
 
-        // Extract date-specific prices
         const datePrices = data2.data.days.reduce((acc, day) => {
             acc[day.date] = Math.round(day.price);
             return acc;
         }, {});
 
-        const managementFeePercentage = 5; // Set management fee percentage to 5%
+        const managementFeePercentage = 5;
 
-        // Extract pet fee from the additional fees data
         const petFee = data3.find(fee => fee.type === 'PET')?.value || 0;
 
         return {
@@ -143,7 +137,7 @@ export const handler = async (event, context) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                unavailableDates: allUnavailableDates, // Use allUnavailableDates here
+                unavailableDates: allUnavailableDates,
                 bookedDates,
                 basePrice,
                 weeklyPriceFactor,
@@ -155,9 +149,9 @@ export const handler = async (event, context) => {
                 localTax,
                 cityTax,
                 accommodates,
-                managementFeePercentage, // Include management fee percentage in the response
-                amenities, // Include amenities in the response
-                minNights // Include minNights in the response
+                managementFeePercentage,
+                amenities,
+                minNights
             })
         };
     } catch (error) {

@@ -76,11 +76,9 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ listings, onMarkerClick, selected
 
     useEffect(() => {
         if (mapInstance.current) {
-            // Clear existing markers
             markers.current.forEach(marker => marker.setMap(null));
             markers.current = [];
 
-            // Add new markers
             listings.forEach((listing) => {
                 const marker = new window.google.maps.Marker({
                     position: { lat: listing.address.lat, lng: listing.address.lng },
@@ -111,7 +109,6 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ listings, onMarkerClick, selected
                     infoWindow.open(mapInstance.current, marker);
                 });
 
-                // Attach event listener after the info window content is added to the DOM
                 window.google.maps.event.addListener(infoWindow, 'domready', () => {
                     const link = infoWindowContent.querySelector('.info-window-link');
                     if (link) {

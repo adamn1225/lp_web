@@ -9,9 +9,9 @@ const GuestyPayment = () => {
     const initializeGuestyTokenization = async () => {
       const options: GuestyTokenizationRenderOptions = {
         containerId: 'payment-container',
-        providerId: '65667fb19986e2000e99278f', // Replace with your actual valid provider ID
-        amount: 100, // Replace with the actual amount
-        currency: 'USD', // Replace with the actual currency
+        providerId: '65667fb19986e2000e99278f',
+        amount: 100,
+        currency: 'USD',
         onStatusChange: (isValid) => {
           setIsFormValid(isValid);
           console.log('Form validity changed:', isValid);

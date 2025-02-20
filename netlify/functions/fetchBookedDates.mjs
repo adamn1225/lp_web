@@ -4,8 +4,8 @@ import NodeCache from 'node-cache';
 
 dotenv.config();
 
-const cache = new NodeCache({ stdTTL: 60 * 60 }); // Cache for 1 hour
-const RATE_LIMIT_INTERVAL = 1000; // 1 second
+const cache = new NodeCache({ stdTTL: 60 * 60 });
+const RATE_LIMIT_INTERVAL = 1000;
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -229,13 +229,12 @@ export const handler = async (event, context) => {
 
     const data = await fetchListings();
 
-    // Filter by bedroom amount if specified
     let combinedResults = data.results;
     if (bedroomAmount) {
       combinedResults = combinedResults.filter(listing => listing.bedrooms === Number(bedroomAmount));
     }
 
-    cache.set(cacheKey, { results: combinedResults }); // Cache the response data
+    cache.set(cacheKey, { results: combinedResults });
 
     return {
       statusCode: 200,

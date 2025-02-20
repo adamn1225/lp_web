@@ -47,15 +47,12 @@ export const handler = async (event, context) => {
       };
     }
 
-    // Log each day's status and date
     data.data.days.forEach(day => console.log(`Day status: ${day.status}, Day date: ${day.date}`));
 
-    // Extract unavailable dates
     const unavailableDates = data.data.days
       .filter(day => day.status === 'unavailable')
       .map(day => day.date);
 
-    // Extract booked dates
     const bookedDates = data.data.days
       .filter(day => day.status === 'booked')
       .map(day => day.date);

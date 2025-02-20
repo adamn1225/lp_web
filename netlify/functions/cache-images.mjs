@@ -2,7 +2,6 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import dotenv from 'dotenv';
 
-// Load environment variables from .env file
 dotenv.config();
 
 const apiToken = process.env.VITE_API_TOKEN;
@@ -27,7 +26,7 @@ async function fetchFromApi(url) {
         }
 
         const data = await response.json();
-        return data.results; // Return the listings
+        return data.results;
     } catch (error) {
         console.error(`Error fetching from ${url}:`, error);
         throw new Error(`Failed to fetch from ${url}`);

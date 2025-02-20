@@ -1,15 +1,14 @@
 import { Twilio } from 'twilio';
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID; 
-const authToken = process.env.TWILIO_AUTH_TOKEN; 
-const serviceSid = process.env.TWILIO_SERVICE_SID; 
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const serviceSid = process.env.TWILIO_SERVICE_SID;
 
 const client = new Twilio(accountSid, authToken);
 
 export async function handler(event, context) {
     const { phoneNumber, code } = JSON.parse(event.body);
 
-    // Ensure phone number is in E.164 format
     const e164PhoneNumber = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
 
     try {
