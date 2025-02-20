@@ -35,53 +35,45 @@ const BookingFormStep1 = ({
 }) => {
     const totalPetFee = pets * petFee;
     const [isChecked, setIsChecked] = useState(false);
-    const [showError, setShowError] = useState(false);
 
     const handleCheckboxChange = (e: any) => {
         setIsChecked(e.target.checked);
-        if (e.target.checked) {
-            setShowError(false);
-        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!isChecked) {
-            setShowError(true);
-        } else {
-            try {
-                const response = await fetch('/.netlify/functions/generatedPdfAndEmail', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        firstName,
-                        lastName,
-                        email,
-                        phone,
-                        guests,
-                        pets,
-                        dateRange,
-                        totalAccommodationFare: formatter.format(basePrice * daysDiff),
-                        cleaningFee: formatter.format(cleaningFee),
-                        managementFee: formatter.format(beforeTax * (managementFeePercentage / 100)),
-                        totalBeforeTax: formatter.format(beforeTax),
-                        totalAfterTax: formatter.format(calculatedPrice),
-                        termsAccepted: isChecked,
-                    }),
-                });
+        try {
+            const response = await fetch('/.netlify/functions/generatedPdfAndEmail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    guests,
+                    pets,
+                    dateRange,
+                    totalAccommodationFare: formatter.format(basePrice * daysDiff),
+                    cleaningFee: formatter.format(cleaningFee),
+                    managementFee: formatter.format(beforeTax * (managementFeePercentage / 100)),
+                    totalBeforeTax: formatter.format(beforeTax),
+                    totalAfterTax: formatter.format(calculatedPrice),
+                    termsAccepted: isChecked,
+                }),
+            });
 
-                const result = await response.json();
-                if (response.ok) {
-                    alert('Email sent successfully!');
-                } else {
-                    alert(`Error: ${result.message}`);
-                }
-            } catch (error) {
-                console.error('Error sending email:', error);
-                alert('Error sending email. Please try again later.');
+            const result = await response.json();
+            if (response.ok) {
+                alert('Email sent successfully!');
+            } else {
+                alert(`Error: ${result.message}`);
             }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            alert('Error sending email. Please try again later.');
         }
     };
 
@@ -233,9 +225,6 @@ const BookingFormStep1 = ({
                     handleCheckboxChange={handleCheckboxChange}
                     error={!isChecked ? "Please accept the terms and conditions before proceeding" : ""}
                 />
-                {showError && !isChecked && (
-                    <p className="text-red-500 text-xs mt-1">Please accept the terms and conditions before proceeding.</p>
-                )}
                 <button
                     className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-2"
                     type="submit"
