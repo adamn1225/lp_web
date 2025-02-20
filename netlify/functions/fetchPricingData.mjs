@@ -41,7 +41,7 @@ export const handler = async (event, context) => {
     const apiUrl2 = `https://open-api.guesty.com/v1/availability-pricing/api/calendar/listings/${listingId}?startDate=${startDate}&endDate=${endDate}`;
 
     try {
-        const [response1, response2, response3, response4] = await Promise.all([
+        const [response1, response2, response3] = await Promise.all([
             fetchWithRetry(apiUrl1, {
                 headers: {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
@@ -59,19 +59,12 @@ export const handler = async (event, context) => {
                     'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
                     'Accept': 'application/json'
                 }
-            }),
-            fetchWithRetry(manUrl, {
-                headers: {
-                    'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
-                    'Accept': 'application/json'
-                }
-            }),
+            })
         ]);
 
         const data1 = await response1.json();
         const data2 = await response2.json();
         const data3 = await response3.json();
-        const data4 = await response4.json();
 
         if (!data2.data || !Array.isArray(data2.data.days)) {
             return {
@@ -128,8 +121,9 @@ export const handler = async (event, context) => {
         const localTax = accountTaxes.length > 0 ? accountTaxes[0].amount : 0;
         const cityTax = accountTaxes.length > 1 ? accountTaxes[1].amount : 0;
 
-        const { prices, amenities } = data1;
+        const { prices, amenities, terms } = data1;
         const { weeklyPriceFactor, monthlyPriceFactor, cleaningFee } = prices;
+        const minNights = terms.minNights || 2; // Default to 2 if not provided
 
         // Extract date-specific prices
         const datePrices = data2.data.days.reduce((acc, day) => {
@@ -140,7 +134,7 @@ export const handler = async (event, context) => {
         const managementFeePercentage = 5; // Set management fee percentage to 5%
 
         // Extract pet fee from the additional fees data
-        const petFee = data4.find(fee => fee.type === 'PET')?.value || 0;
+        const petFee = data3.find(fee => fee.type === 'PET')?.value || 0;
 
         return {
             statusCode: 200,
@@ -162,7 +156,8 @@ export const handler = async (event, context) => {
                 cityTax,
                 accommodates,
                 managementFeePercentage, // Include management fee percentage in the response
-                amenities // Include amenities in the response
+                amenities, // Include amenities in the response
+                minNights // Include minNights in the response
             })
         };
     } catch (error) {

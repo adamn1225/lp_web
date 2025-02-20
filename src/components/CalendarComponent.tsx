@@ -8,9 +8,10 @@ interface CalendarComponentProps {
   setState: (state: any[]) => void;
   disabledDates: Date[];
   datePrices: { [key: string]: number }; // Add datePrices prop
+  minNights: number; // Add minNights prop
 }
 
-const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates, datePrices }) => {
+const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates, datePrices, minNights }) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -66,6 +67,10 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
     setState([{ startDate: newStartDate, endDate: newEndDate, key: 'selection' }]);
   };
 
+  const handleDateRangeChange = (item) => {
+    setState([item.selection]);
+  };
+
   return (
     <div className="flex flex-col-reverse md:flex-col">
       <div className="flex justify-center items-center gap-1 md:gap-4 -mt-1 md:mt-0 mb-4 md:-mb-2">
@@ -86,12 +91,11 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
             className="p-1 border rounded w-full"
           />
         </div>
-
       </div>
       <div style={{ width: '80%' }}> {/* Adjust the width as needed */}
         <DateRange
           editableDateInputs={true}
-          onChange={item => setState([item.selection])}
+          onChange={handleDateRangeChange}
           moveRangeOnFirstSelection={false}
           ranges={state.length ? state : initialRange}
           disabledDates={formattedDisabledDates}

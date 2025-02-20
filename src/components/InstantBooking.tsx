@@ -41,6 +41,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   const [guests, setGuests] = useState<number>(1);
   const [pets, setPets] = useState<number>(0);
   const [occupancy, setOccupancy] = useState<number>(2);
+  const [minNights, setMinNights] = useState<number>(2); // Add minNights state
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -86,6 +87,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
         setUnavailableDates(unavailable);
         setBookedDates(booked);
         setDatePrices(data.datePrices); // Set datePrices from the fetched data
+        setMinNights(data.minNights || 2); // Set minNights from the fetched data
       } catch (err) {
         console.error('Error fetching unavailable dates:', err);
         setError(err.message);
@@ -111,7 +113,16 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   // Combine unavailable and booked dates
   const disabledDates = [...unavailableDates, ...bookedDates];
 
-  const openModal = () => setIsModalOpen(true);
+  const openModal = () => {
+    const { startDate, endDate } = state[0];
+    if (endDate && (endDate.getTime() - startDate.getTime()) < (minNights * 24 * 60 * 60 * 1000)) {
+      setError(`Minimum stay is ${minNights} nights.`);
+    } else {
+      setError(null);
+      setIsModalOpen(true);
+    }
+  };
+
   const closeModal = () => setIsModalOpen(false);
 
   return (
@@ -133,6 +144,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
           setState={setState}
           disabledDates={disabledDates}
           datePrices={datePrices} // Pass datePrices to CalendarComponent
+          minNights={minNights} // Pass minNights to CalendarComponent
         />
 
         <button

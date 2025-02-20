@@ -36,7 +36,7 @@ const BookingFormStep1 = ({
     const totalPetFee = pets * petFee; // Calculate the total pet fee
     const [isChecked, setIsChecked] = useState(false); // State for checkbox
 
-    const handleCheckboxChange = (e) => {
+    const handleCheckboxChange = (e: any) => {
         setIsChecked(e.target.checked);
     };
 
