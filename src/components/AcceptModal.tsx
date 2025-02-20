@@ -47,14 +47,6 @@ const AcceptModal: React.FC<AcceptModalProps> = ({ isOpen, onRequestClose, onAcc
                     <label htmlFor="acceptCheckbox" className="text-slate-800">I accept the terms and conditions</label>
                 </div>
                 <button
-                    className={`bg-slate-500 drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4 ${!isChecked ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    type="button"
-                    onClick={handleAccept}
-                    disabled={!isChecked}
-                >
-                    Accept
-                </button>
-                <button
                     className="lp-button flex gap-2 text-xl font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
                     type="button"
                     onClick={handleAccept}

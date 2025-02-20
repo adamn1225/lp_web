@@ -265,10 +265,6 @@ const TextArea: React.FC<TextAreaProps> = ({ isChecked, handleCheckboxChange, er
                     <label htmlFor="terms" className="ml-2">I accept the terms and conditions</label>
                     {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
                 </div>
-
-                <button type="submit" className="mt-4 bg-blue-500 text-white py-1 px-4 rounded">
-                    Submit
-                </button>
             </form>
 
             <Modal
