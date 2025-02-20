@@ -1,3 +1,7 @@
+const { google } = require('googleapis');
+const nodemailer = require('nodemailer');
+const OAuth2 = google.auth.OAuth2;
+
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return {
@@ -15,35 +19,45 @@ exports.handler = async (event) => {
         };
     }
 
-    const sendEmail = async () => {
-        // Using Nodemailer (You can switch to another service like SendGrid or Netlify's built-in notifications)
-        const nodemailer = require('nodemailer');
+    const oauth2Client = new OAuth2(
+        process.env.G_CLIENT_ID,
+        process.env.G_CLIENT_SECRET,
+        'https://developers.google.com/oauthplayground'
+    );
 
-        let transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
+    oauth2Client.setCredentials({
+        refresh_token: process.env.REFRESH_TOKEN,
+    });
 
-        let mailOptions = {
-            from: email,
-            to: process.env.RECIPIENT_EMAIL,
-            subject: `New Contact Form Submission from ${name}`,
-            text: message,
-        };
+    const accessToken = await oauth2Client.getAccessToken();
 
-        return transporter.sendMail(mailOptions);
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            type: 'OAuth2',
+            user: process.env.GMAIL_USER,
+            clientId: process.env.G_CLIENT_ID,
+            clientSecret: process.env.G_CLIENT_SECRET,
+            refreshToken: process.env.REFRESH_TOKEN,
+            accessToken: accessToken.token,
+        },
+    });
+
+    const mailOptions = {
+        from: process.env.GMAIL_USER,
+        to: 'bicoastalequities@gmail.com', // Replace with your email address
+        subject: `New Contact Form Submission from ${name}`,
+        text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     };
 
     try {
-        await sendEmail();
+        await transporter.sendMail(mailOptions);
         return {
             statusCode: 200,
             body: JSON.stringify({ message: 'Message sent successfully!' }),
         };
     } catch (error) {
+        console.error('Error sending email:', error);
         return {
             statusCode: 500,
             body: JSON.stringify({ message: 'Internal Server Error', error }),
