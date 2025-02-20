@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -37,16 +37,71 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
     );
   };
 
+  const [months, setMonths] = useState(2);
+
+  useEffect(() => {
+    const updateMonths = () => {
+      if (window.innerWidth < 768) {
+        setMonths(1);
+      } else {
+        setMonths(2);
+      }
+    };
+
+    updateMonths();
+    window.addEventListener('resize', updateMonths);
+
+    return () => window.removeEventListener('resize', updateMonths);
+  }, []);
+
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newStartDate = new Date(e.target.value);
+    const newEndDate = state[0].endDate;
+    setState([{ startDate: newStartDate, endDate: newEndDate, key: 'selection' }]);
+  };
+
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newStartDate = state[0].startDate;
+    const newEndDate = new Date(e.target.value);
+    setState([{ startDate: newStartDate, endDate: newEndDate, key: 'selection' }]);
+  };
+
   return (
-    <DateRange
-      editableDateInputs={true}
-      onChange={item => setState([item.selection])}
-      moveRangeOnFirstSelection={false}
-      ranges={state.length ? state : initialRange}
-      disabledDates={formattedDisabledDates}
-      minDate={today} // Prevent selection of past dates
-      dayContentRenderer={dayContentRenderer} // Use dayContentRenderer to display prices
-    />
+    <div className="flex flex-col-reverse md:flex-col">
+      <div className="flex justify-center items-center gap-1 md:gap-4 -mt-1 md:mt-0 mb-4 md:-mb-2">
+        <div className="flex flex-col w-full">
+          <input
+            type="date"
+            value={state[0].startDate ? state[0].startDate.toISOString().split('T')[0] : ''}
+            onChange={handleStartDateChange}
+            className="p-1 border rounded w-full"
+          />
+        </div>
+
+        <div className="flex flex-col w-full">
+          <input
+            type="date"
+            value={state[0].endDate ? state[0].endDate.toISOString().split('T')[0] : ''}
+            onChange={handleEndDateChange}
+            className="p-1 border rounded w-full"
+          />
+        </div>
+
+      </div>
+      <div style={{ width: '80%' }}> {/* Adjust the width as needed */}
+        <DateRange
+          editableDateInputs={true}
+          onChange={item => setState([item.selection])}
+          moveRangeOnFirstSelection={false}
+          ranges={state.length ? state : initialRange}
+          disabledDates={formattedDisabledDates}
+          minDate={today} // Prevent selection of past dates
+          dayContentRenderer={dayContentRenderer} // Use dayContentRenderer to display prices
+          months={months} // Display one or two months based on screen size
+          direction="horizontal" // Display months side by side
+        />
+      </div>
+    </div>
   );
 };
 

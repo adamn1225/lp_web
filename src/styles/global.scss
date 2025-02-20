@@ -326,3 +326,27 @@ article {
   box-sizing: border-box;
   /* Ensure padding is included in the width */
 }
+
+.price-day {
+  position: relative;
+}
+
+.price-day::after {
+  content: attr(data-price);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+}
+
+.disabled-day {
+  color: gray;
+}
+
+.rdrDateDisplayWrapper {
+  display: none !important;
+}

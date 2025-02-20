@@ -38,7 +38,6 @@ const BookingFormStep1 = ({
         <div className="w-full xs:px-1 md:px-4">
             <div className='flex  flex-col items-center justify-around'>
                 <div className='flex justify-between gap-4 w-full'>
-                    <InquireForm listingId={listingId} buttonText='Chat with an agent' />
                     <button
                         type="button"
                         onClick={() => {
@@ -65,7 +64,7 @@ const BookingFormStep1 = ({
                         />
                     </label>
                 </div>
-                {amenities.some(amenity => amenity.toLowerCase().includes('pets')) && (
+                {amenities.some((amenity: string) => amenity.toLowerCase().includes('pets')) && (
                     <div className="flex-1">
                         <label htmlFor="pets" className="block text-slate-800">Number of Pets:
                             <input

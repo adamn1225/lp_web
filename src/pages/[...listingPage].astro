@@ -9,7 +9,8 @@ import InquireForm from "@components/InquireForm";
 import InstantBooking from "@components/InstantBooking.tsx";
 import { fetchAllListings } from "./api/dataFetcher";
 import SwiperComponent from "@components/SwiperComponent.tsx";
-import { BedDouble } from "lucide-react";
+import { IoIosBed } from "react-icons/io";
+import { FaBath } from "react-icons/fa";
 import BedTypes from "@components/ui/BedTypes.tsx";
 import ImageGallery from "@components/ImageGallery.tsx";
 import AirReviews from "@components/AirReviews.tsx";
@@ -36,7 +37,7 @@ export async function getStaticPaths() {
           otherAmenities: listing.otherAmenities,
           bathrooms: listing.bathrooms,
           pictures: listing.pictures,
-          beds: listing.listingRooms,
+          beds: listing.bedrooms,
           bedsCount: listing.beds,
           Description: listing.publicDescription,
           listingId: listing._id,
@@ -197,31 +198,42 @@ function capitalizeFirstLetter(string: string) {
                 </div>
               </div>
               <!-- right -->
-              <div
-                class="hidden md:flex flex-col justify-center xs:items-center md:items-end xs:w-full"
-              >
-                <a
-                  href="javascript:void(0);"
-                  class="gap-1 flex items-start font-medium px-3 py-1 rounded bg-zinc-300"
-                  onclick="shareListing()"
+              <div class="flex gap-2 items-center">
+                <div>
+                  <span class="xs:hidden">
+                    <InquireForm
+                      listingId={listingId}
+                      buttonText="Chat with a property Agent"
+                      client:load
+                    />
+                  </span>
+                </div>
+                <div
+                  class="hidden md:flex flex-col justify-center xs:items-center md:items-end xs:w-full mb-3"
                 >
-                  <Icon name="h-4 aspect-square" name="lucide:share-2" />
-                  <span class="relative">Share</span>
-                </a>
-                <div id="fallback-share" class="mt-4"></div>
+                  <a
+                    href="javascript:void(0);"
+                    class="gap-1 flex items-center font-medium px-3 py-2 rounded bg-zinc-300"
+                    onclick="shareListing()"
+                  >
+                    <Icon name="h-4 aspect-square" name="lucide:share-2" />
+                    <span class="relative">Share</span>
+                  </a>
+                  <div id="fallback-share" class="mt-4"></div>
+                </div>
               </div>
             </div>
             <!-- property details -->
             <div
-              class="flex flex-col md:flex-row items-start justify-start h-min w-auto"
+              class="flex flex-col md:flex-row items-start justify-start h-fit w-auto"
             >
               <div
-                class="flex flex-col md:flex-row justify-normal gap-20 w-full mr-16"
+                class="flex flex-col md:flex-row justify-normal gap-20 w-full mr-3"
               >
                 <div class="hidden md:flex gap-1 justify-start items-start">
-                  <div class="w-auto h-full">
+                  <div class="w-auto h-min">
                     <img
-                      class="block w-auto h-full object-cover main-image"
+                      class="block w-auto h-min object-cover main-image"
                       src={pictures[0].original}
                       alt="Main image"
                       width={2000}
@@ -236,48 +248,23 @@ function capitalizeFirstLetter(string: string) {
                     <ImageGallery pictures={pictures} client:only="react" />
                   </div>
                 </div>
-
                 <!-- right -->
                 <div
-                  class="xs:hidden sm:hidden md:flex flex-col justify-center items-center mt-6"
+                  class="xs:hidden sm:hidden md:flex flex-col justify-start items-center"
                 >
-                  <span class="xs:hidden">
-                    <InquireForm
-                      listingId={listingId}
-                      buttonText="Chat with a property Agent"
-                      client:load
-                    />
-                  </span>
                   <div
                     id="main"
-                    class="flex flex-col flex-nowrap justify-center items-center w-full"
+                    class="flex flex-col justify-center items-center w-full"
                   >
-                    <div class="flex gap-2 w-full justify-center items-center">
-                      <p>
-                        <span class="font-bold w-full">Check in: </span>{
-                          checkIn
-                        }
-                      </p>
-                      <p>
-                        <span class="font-bold text-base w-full"
-                          >Check Out:
-                        </span>{checkOut}
-                      </p>
+                    <div class="w-full flex justify-center items-center">
+                      <InstantBooking
+                        listingId={listingId}
+                        client:only="react"
+                      />
                     </div>
-                    <span
-                      class="w-full text-base font-light flex justify-center items-center gap-1"
-                    >
-                      <span class="font-bold text-base text-center"
-                        >Note:
-                      </span> Checkin and Checkout times are in UTC.
-                    </span>
-                    <InstantBooking listingId={listingId} client:only="react" />
-                    <div class="flex justify-center items-center w-full">
-                      <div class="">
-                        <BedTypes beds={beds} client:only="react" />
-                      </div>
+                    <div class="w-full flex justify-center">
+                      <BedTypes beds={beds} client:only="react" />
                     </div>
-
                     <div
                       class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
                     >
@@ -307,28 +294,7 @@ function capitalizeFirstLetter(string: string) {
                   id="main"
                   class="flex flex-col justify-center items-center md:w-full"
                 >
-                  <div class="flex gap-2 w-full justify-center items-center">
-                    <p>
-                      <span class="font-bold w-full">Check in: </span>{checkIn}
-                    </p>
-                    <p>
-                      <span class="font-bold w-full">Check Out: </span>{
-                        checkOut
-                      }
-                    </p>
-                  </div>
-                  <span
-                    class="text-sm font-light flex justify-center items-center gap-1 px-6"
-                  >
-                    <span class="font-bold">Note: </span> Checkin and Checkout times
-                    are in UTC.
-                  </span>
-
                   <InstantBooking listingId={listingId} client:only="react" />
-                  <!-- <BookingFormWrapper
-                      listingId={listingId}
-                      client:only="react"
-                    /> -->
 
                   <div class="flex justify-center">
                     <BedTypes beds={beds} client:only="react" />
@@ -347,6 +313,16 @@ function capitalizeFirstLetter(string: string) {
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="flex gap-4 items-center mt-6">
+              <span>
+                <IoIosBed size="24" />
+                {beds} bedrooms
+              </span>
+              <span>
+                <FaBath size="24" />
+                {bathrooms} bathrooms
+              </span>
             </div>
             <!-- property content -->
             <div class="relative" x-data="{ activeTab: 'tab-1' }">

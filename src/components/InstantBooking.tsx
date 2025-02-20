@@ -117,8 +117,17 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
   return (
     <div className="mt-4">
       {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      <div className="flex flex-col justify-center gap-8 items-center">
+      <div className="flex flex-col gap-2 w-full justify-center items-center" >
+        <div
+          className="flex gap-2 w-full justify-center items-center"
+        >
+          <p className="text-center">
+            <span className="font-bold">Check in: </span>16:00 UTC
+          </p>
+          <p className="text-center">
+            <span className="font-bold">Check Out: </span>11:00 UTC
+          </p>
+        </div>
         <CalendarComponent
           state={state}
           setState={setState}
@@ -128,7 +137,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
 
         <button
           type="button"
-          className="h-full shadow-lg shadow-secondary/40 lp-button m-0 drop-shadow-lg w-5/6 py-1 xs:mx-2 text-lg rounded-lg text-white"
+          className="h-min shadow-lg shadow-secondary/40 lp-button m-0 drop-shadow-lg w-5/6 py-1 xs:mx-2 text-lg rounded-lg text-white"
           onClick={openModal}
         >
           Get Pricing Details

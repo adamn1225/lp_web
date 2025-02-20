@@ -36,11 +36,11 @@ const ImageGallery = ({ pictures }) => {
 
     return (
         <>
-            <div className="relative top-0 flex flex-col gap-1 justify-stretch overflow-y-auto no-scrollbar h-auto w-auto" ref={scrollContainerRef}>
+            <div className="relative top-0 flex flex-col gap-1 justify-center overflow-y-auto no-scrollbar h-[34.5rem] w-auto" ref={scrollContainerRef}>
                 {pictures.slice(startIndex + 1, startIndex + 10).map((picture, index) => (
                     <img
                         key={index}
-                        className="object-cover max-h-64 w-64 shadow-md flex-1 cursor-pointer gallery-image"
+                        className="object-cover max-h-40 w-64 shadow-md flex-1 cursor-pointer gallery-image"
                         src={picture.original}
                         alt={`Sub image ${index + 1}`}
                         width={1650}
