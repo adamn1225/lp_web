@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import TextArea from './TextArea';
-import InquireForm from "./InquireForm";
 import { CreditCard } from 'lucide-react';
 
 const BookingFormStep1 = ({
