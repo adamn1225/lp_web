@@ -8,12 +8,11 @@ html {
 }
 
 body {
-  font-family: "Titillium Web", sans-serif; // Updated font-family
+  font-family: "Titillium Web", sans-serif;
   max-width: 100% !important;
   overflow-x: hidden;
 }
 
-/* filepath: /home/adam-noah/Desktop/lp_web/src/styles/global.scss */
 .no-scroll {
   overflow-y: hidden !important;
 }
@@ -74,7 +73,6 @@ article {
 
 .opened {
   transform: none;
-  /* Remove the skew transformation */
 }
 
 .welcome-mat {
@@ -151,33 +149,32 @@ article {
 
 .rdrStartEdge,
 .rdrEndEdge {
-  padding-top: 2rem !important; // Adjust the padding as needed
+  padding-top: 2rem !important;
 }
 
 .rdrStartEdge .rdrDayNumber,
 .rdrEndEdge .rdrDayNumber {
-  padding-bottom: 2rem !important; // Adjust the padding as needed
+  padding-bottom: 2rem !important;
   position: relative;
   z-index: 2;
 }
 
 .rdrStartEdge .rdrDayPrice,
 .rdrEndEdge .rdrDayPrice {
-  padding-top: 2rem !important; // Adjust the padding as needed
+  padding-top: 2rem !important;
 }
 
-// Add styles for the dates in between the start and end edges
 .rdrInRange {
-  padding-top: 1rem !important; // Adjust the padding as needed
-  padding-bottom: 1rem !important; // Adjust the padding as needed
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 .rdrInRange .rdrDayNumber {
-  padding-bottom: 1rem !important; // Adjust the padding as needed
+  padding-bottom: 1rem !important;
 }
 
 .rdrInRange .rdrDayPrice {
-  padding-top: 1rem !important; // Adjust the padding as needed
+  padding-top: 1rem !important;
 }
 
 .rdrDayNumber {
@@ -213,20 +210,16 @@ article {
   margin-bottom: 0.5rem;
   text-decoration: underline;
   color: #1a202c;
-  /* Adjust color as needed */
 }
 
 .share-options a:hover,
 .share-options button:hover {
   color: #102C57;
-  /* Adjust hover color as needed */
 }
 
 .text-display {
   overflow-y: auto;
-  /* Enable vertical scrolling */
   max-height: 100%;
-  /* Maximum height */
 }
 
 .modal-content {
@@ -256,15 +249,6 @@ article {
   z-index: 1000;
 }
 
-/* Remove the default focus ring and add a custom one */
-// input:focus,
-// select:focus,
-// textarea:focus,
-// button:focus {
-//   outline: none;
-//   box-shadow: 0 0 0 1px #DAC0A3 !important;
-// }
-
 .custom-focus-ring:focus {
   outline: none;
   box-shadow: 0 0 0 1px #DAC0A3;
@@ -278,7 +262,6 @@ article {
   border: none !important;
   box-shadow: none !important;
   background: transparent !important;
-  /* Optional: make the background transparent */
 }
 
 .custom-info-window .info-window-link {
@@ -317,14 +300,10 @@ article {
 
 .payment-step-container {
   width: 100%;
-  /* Adjust the width to match the modal */
   max-width: 80%;
-  /* Ensure it doesn't exceed the modal width */
   margin-top: 2rem;
   padding: 0 16px 18px;
-  /* Add padding if needed */
   box-sizing: border-box;
-  /* Ensure padding is included in the width */
 }
 
 .price-day {
