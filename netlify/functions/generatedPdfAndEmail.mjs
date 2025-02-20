@@ -19,6 +19,12 @@ export async function handler(event) {
     }
 
     try {
+        // Get the current date and time
+        const submissionDate = new Date().toLocaleString();
+
+        // Get the user's IP address
+        const userIp = event.headers['x-forwarded-for'] || event.headers['client-ip'] || 'IP not available';
+
         // Create a new PDF document
         const pdfDoc = await PDFDocument.create();
         const page = pdfDoc.addPage([600, 400]);
@@ -39,7 +45,8 @@ export async function handler(event) {
         page.drawText(`Total Before Taxes: ${totalBeforeTax}`, { x: 50, y: 100, size: 12, color: rgb(0, 0, 0) });
         page.drawText(`Total After Taxes: ${totalAfterTax}`, { x: 50, y: 80, size: 12, color: rgb(0, 0, 0) });
         page.drawText(`Terms Accepted: ${termsAccepted ? 'Yes' : 'No'}`, { x: 50, y: 60, size: 12, color: rgb(0, 0, 0) });
-        page.drawText(`Date: ${new Date().toLocaleDateString()}`, { x: 50, y: 40, size: 12, color: rgb(0, 0, 0) });
+        page.drawText(`Submission Date: ${submissionDate}`, { x: 50, y: 40, size: 12, color: rgb(0, 0, 0) });
+        page.drawText(`User IP: ${userIp}`, { x: 50, y: 20, size: 12, color: rgb(0, 0, 0) });
 
         // Serialize the PDF document to bytes
         const pdfBytes = await pdfDoc.save();
