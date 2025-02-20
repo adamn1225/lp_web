@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import TextArea from './TextArea';
@@ -35,6 +35,11 @@ const BookingFormStep1 = ({
     amenities,
 }) => {
     const totalPetFee = pets * petFee; // Calculate the total pet fee
+    const [isChecked, setIsChecked] = useState(false); // State for checkbox
+
+    const handleCheckboxChange = (e) => {
+        setIsChecked(e.target.checked);
+    };
 
     return (
         <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="flex flex-col justify-center items-center w-full">
@@ -169,11 +174,15 @@ const BookingFormStep1 = ({
                         </div>
                     </div>
                 </div>
-                <TextArea />
+                <TextArea
+                    isChecked={isChecked}
+                    handleCheckboxChange={handleCheckboxChange}
+                    error={!isChecked ? "Please accept the terms and conditions before proceeding" : ""}
+                />
                 <button
-                    className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-4"
+                    className="lp-button flex items-center justify-center gap-2 text-lg text-nowrap font-bold drop-shadow-lg text-white rounded-lg py-2 px-4 mt-2"
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !isChecked} // Disable button if not checked
                 >
                     <CreditCard />  Proceed to Payment
                 </button>

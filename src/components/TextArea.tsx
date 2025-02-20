@@ -1,27 +1,14 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 
-const TextArea: React.FC = () => {
-    const [isChecked, setIsChecked] = useState(false);
-    const [error, setError] = useState('');
+interface TextAreaProps {
+    isChecked: boolean;
+    handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    error: string;
+}
+
+const TextArea: React.FC<TextAreaProps> = ({ isChecked, handleCheckboxChange, error }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setIsChecked(e.target.checked);
-        if (e.target.checked) {
-            setError('');
-        }
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!isChecked) {
-            setError('You must accept the terms to proceed.');
-        } else {
-            // Handle form submission
-            console.log('Form submitted');
-        }
-    };
 
     const openModal = () => {
         setIsExpanded(true);
@@ -33,7 +20,7 @@ const TextArea: React.FC = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="px-4 w-full text-slate-800 text-sm mb-4 max-h-64 overflow-y-auto my-2 border border-gray-500/50 relative">
+            <form className="px-4 w-full text-slate-800 text-sm mb-4 max-h-64 overflow-y-auto my-2 border border-gray-500/50 relative">
                 <button
                     type="button"
                     onClick={openModal}
@@ -523,8 +510,6 @@ const TextArea: React.FC = () => {
                             <br />
                             Email Address: lineproperties.office@gmail.com
                             <br />
-                            Telephone number: 843-222-3769
-                            <br />
                             Effective as of October 20, 2024</p>
                         <div className="mt-4">
                             <input
@@ -536,10 +521,6 @@ const TextArea: React.FC = () => {
                             <label htmlFor="terms" className="ml-2">I accept the terms and conditions</label>
                             {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
                         </div>
-
-                        <button type="submit" className="mt-4 bg-blue-500 text-white py-1 px-4 rounded">
-                            Submit
-                        </button>
                     </div>
 
                 </div>
