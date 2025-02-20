@@ -1,0 +1,9 @@
+﻿{
+  "agentId": 21,
+  "agentName": "Bender",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus24.actions.githubusercontent.com/ibF4P1RBuA4eR8yc2gPAZdfLdN67HgerZjVd9Y86agUHO014F8/",
+  "gitHubUrl": "https://github.com/adamn1225/lp_web",
+  "workFolder": "_work"
+}
