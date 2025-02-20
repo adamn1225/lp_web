@@ -122,10 +122,10 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
           className="flex gap-2 w-full justify-center items-center"
         >
           <p className="text-center">
-            <span className="font-bold">Check in: </span>16:00 UTC
+            <span className="font-bold">Check in: </span>4:00 PM
           </p>
           <p className="text-center">
-            <span className="font-bold">Check Out: </span>11:00 UTC
+            <span className="font-bold">Check Out: </span>11:00 AM
           </p>
         </div>
         <CalendarComponent
