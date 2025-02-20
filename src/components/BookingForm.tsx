@@ -40,6 +40,13 @@ const BookingFormStep1 = ({
         setIsChecked(e.target.checked);
     };
 
+    // Calculate the total accommodation fare based on the number of nights selected
+    const startDate = dateRange[0].startDate;
+    const endDate = dateRange[0].endDate;
+    const timeDiff = endDate.getTime() - startDate.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const totalAccommodationFare = basePrice * daysDiff;
+
     return (
         <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="flex flex-col justify-center items-center w-full">
             <div className="w-full xs:px-1 md:px-4">
@@ -152,8 +159,8 @@ const BookingFormStep1 = ({
                             </div>
                         )}
                         <div className="text-base flex justify-between ">
-                            <span>Base Price:</span>
-                            <span>{formatter.format(basePrice)} Per Night</span>
+                            <span>Accommodation Fare:</span>
+                            <span>{formatter.format(totalAccommodationFare)}</span>
                         </div>
                         <div className="text-base flex justify-between ">
                             <span>Cleaning Fee:</span>
@@ -162,6 +169,10 @@ const BookingFormStep1 = ({
                         <div className="text-base flex justify-between ">
                             <span>Management Fee:</span>
                             <span>{formatter.format(beforeTax * (managementFeePercentage / 100))}</span>
+                        </div>
+                        <div className="text-base flex justify-between ">
+                            <span>Taxes</span>
+                            <span>{formatter.format(calculatedPrice - beforeTax)}</span>
                         </div>
                         <div className="text-base flex justify-between ">
                             <span>Total Before Taxes:</span>
