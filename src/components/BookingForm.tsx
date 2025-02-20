@@ -44,12 +44,44 @@ const BookingFormStep1 = ({
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!isChecked) {
             setShowError(true); // Show error message if checkbox is not checked
         } else {
-            onSubmit();
+            try {
+                const response = await fetch('/.netlify/functions/generatedPdfAndEmail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        guests,
+                        pets,
+                        dateRange,
+                        totalAccommodationFare: formatter.format(basePrice * daysDiff),
+                        cleaningFee: formatter.format(cleaningFee),
+                        managementFee: formatter.format(beforeTax * (managementFeePercentage / 100)),
+                        totalBeforeTax: formatter.format(beforeTax),
+                        totalAfterTax: formatter.format(calculatedPrice),
+                        termsAccepted: isChecked,
+                    }),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Email sent successfully!');
+                } else {
+                    alert(`Error: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error sending email:', error);
+                alert('Error sending email. Please try again later.');
+            }
         }
     };
 
