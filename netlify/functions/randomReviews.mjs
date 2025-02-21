@@ -4,9 +4,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const MAX_RETRIES = 5; // Increased retry limit
-const RATE_LIMIT_INTERVAL = 1000;
+const RATE_LIMIT_INTERVAL = 2000;
 const CACHE_TTL = 60 * 60 * 1000;
 const BATCH_SIZE = 21;
+const MAX_PROPERTIES = 15; // Limit the number of properties to fetch reviews from
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -113,7 +114,7 @@ const fetchReviewsWithFullNames = async (reviews) => {
 }
 
 const fetchListingIds = async () => {
-    const url = 'https://open-api.guesty.com/v1/listings?limit=100&skip=100';
+    const url = 'https://open-api.guesty.com/v1/listings?limit=100&skip=50';
     const response = await fetchWithRetry(url, {
         headers: {
             'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
@@ -126,13 +127,14 @@ const fetchListingIds = async () => {
 }
 
 export async function handler(event) {
-    const count = parseInt(event.queryStringParameters.count, 10) || 5;
+    const count = parseInt(event.queryStringParameters.count, 10) || 3;
 
     try {
         const propertyIds = await fetchListingIds();
+        const limitedPropertyIds = propertyIds.slice(0, MAX_PROPERTIES); // Limit the number of properties
         const allReviews = [];
 
-        const reviewPromises = propertyIds.map(async (propertyId) => {
+        const reviewPromises = limitedPropertyIds.map(async (propertyId) => {
             if (!cache.reviews[propertyId] || (Date.now() - cache.timestamps[propertyId]) > CACHE_TTL) {
                 const reviews = await fetchReviews(propertyId);
                 cache.reviews[propertyId] = reviews;

@@ -1,22 +1,26 @@
 import fetch from 'node-fetch';
 
 let lastRequestTime = 0;
-const RATE_LIMIT_INTERVAL = 1000;
+const RATE_LIMIT_INTERVAL = 2000;
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const fetchWithRetry = async (url, options, retries = 3) => {
     for (let i = 0; i < retries; i++) {
-        const response = await fetch(url, options);
-        if (response.status === 429) {
-            const retryAfter = response.headers.get('Retry-After');
-            const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
-            console.warn(`Rate limit hit, retrying after ${delayMs}ms...`);
-            await delay(delayMs);
-        } else if (response.ok) {
-            return response;
-        } else {
-            console.error(`Error fetching data: ${response.status} ${response.statusText}`);
+        try {
+            const response = await fetch(url, options);
+            if (response.status === 429) {
+                const retryAfter = response.headers.get('Retry-After');
+                const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
+                console.warn(`Rate limit hit, retrying after ${delayMs}ms... (Attempt ${i + 1} of ${retries})`);
+                await delay(delayMs);
+            } else if (response.ok) {
+                return response;
+            } else {
+                console.error(`Error fetching data: ${response.status} ${response.statusText} (Attempt ${i + 1} of ${retries})`);
+            }
+        } catch (error) {
+            console.error(`Network error: ${error.message} (Attempt ${i + 1} of ${retries})`);
         }
     }
     throw new Error('Max retries reached');
