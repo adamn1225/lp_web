@@ -4,7 +4,6 @@ import image from "@astrojs/image";
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import alpinejs from '@astrojs/alpinejs';
-import sitemap from '@astrojs/sitemap';
 import icon from "astro-icon";
 import react from '@astrojs/react';
 import netlify from '@astrojs/netlify';
