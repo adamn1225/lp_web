@@ -3,24 +3,28 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const MAX_RETRIES = 3;
-const RATE_LIMIT_INTERVAL = 2000;
+const MAX_RETRIES = 5; // Increased retry limit
+const RATE_LIMIT_INTERVAL = 1000;
 const CACHE_TTL = 60 * 60 * 1000;
-const BATCH_SIZE = 50;
+const BATCH_SIZE = 21;
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const fetchWithRetry = async (url, options, retries = MAX_RETRIES) => {
     for (let i = 0; i < retries; i++) {
-        const response = await fetch(url, options);
-        if (response.status === 429) {
-            const retryAfter = response.headers.get('Retry-After');
-            const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL;
-            await delay(delayMs);
-        } else if (response.ok) {
-            return response;
-        } else {
-            console.error(`Error fetching data: ${response.status} ${response.statusText}`);
+        try {
+            const response = await fetch(url, options);
+            if (response.status === 429) {
+                const retryAfter = response.headers.get('Retry-After');
+                const delayMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : RATE_LIMIT_INTERVAL * Math.pow(2, i); // Exponential backoff
+                await delay(delayMs);
+            } else if (response.ok) {
+                return response;
+            } else {
+                console.error(`Error fetching data: ${response.status} ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error(`Network error: ${error.message}`);
         }
     }
     throw new Error('Max retries reached');
@@ -88,16 +92,19 @@ const fetchReviewsWithFullNames = async (reviews) => {
     const uniqueReviews = Array.from(new Set(reviews.map(review => review._id)))
         .map(id => reviews.find(review => review._id === id));
 
-    for (const review of uniqueReviews) {
-        if (!cache.guestNames[review.guestId]) {
+    const guestIds = uniqueReviews.map(review => review.guestId);
+    const uniqueGuestIds = [...new Set(guestIds)];
+
+    await Promise.all(uniqueGuestIds.map(async (guestId) => {
+        if (!cache.guestNames[guestId]) {
             try {
-                cache.guestNames[review.guestId] = await fetchGuestFullName(review.guestId);
+                cache.guestNames[guestId] = await fetchGuestFullName(guestId);
             } catch (error) {
-                console.error(`Failed to fetch full name for guest ID: ${review.guestId}`, error);
-                cache.guestNames[review.guestId] = 'Unknown';
+                console.error(`Failed to fetch full name for guest ID: ${guestId}`, error);
+                cache.guestNames[guestId] = 'Unknown';
             }
         }
-    }
+    }));
 
     return uniqueReviews.map(review => ({
         ...review,
@@ -106,7 +113,7 @@ const fetchReviewsWithFullNames = async (reviews) => {
 }
 
 const fetchListingIds = async () => {
-    const url = 'https://open-api.guesty.com/v1/listings?limit=100';
+    const url = 'https://open-api.guesty.com/v1/listings?limit=100&skip=100';
     const response = await fetchWithRetry(url, {
         headers: {
             'Authorization': `Bearer ${process.env.VITE_API_TOKEN}`,
@@ -125,7 +132,7 @@ export async function handler(event) {
         const propertyIds = await fetchListingIds();
         const allReviews = [];
 
-        for (const propertyId of propertyIds) {
+        const reviewPromises = propertyIds.map(async (propertyId) => {
             if (!cache.reviews[propertyId] || (Date.now() - cache.timestamps[propertyId]) > CACHE_TTL) {
                 const reviews = await fetchReviews(propertyId);
                 cache.reviews[propertyId] = reviews;
@@ -134,7 +141,9 @@ export async function handler(event) {
 
             const reviews = cache.reviews[propertyId];
             allReviews.push(...reviews);
-        }
+        });
+
+        await Promise.all(reviewPromises);
 
         console.log(`Fetched reviews: ${JSON.stringify(allReviews)}`);
 
