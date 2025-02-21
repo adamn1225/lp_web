@@ -250,8 +250,6 @@ const TextArea: React.FC<TextAreaProps> = ({ isChecked, handleCheckboxChange, er
                     <br />
                     Email Address: lineproperties.office@gmail.com
                     <br />
-                    Telephone number: 843-222-3769
-                    <br />
                     Effective as of October 20, 2024</p>
 
 
