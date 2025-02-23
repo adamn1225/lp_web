@@ -138,10 +138,10 @@ article {
   -moz-appearance: textfield;
 }
 
-.rdrCalendarWrapper,
-.rdrCalendarWrapper .rdrCalendarWrapper .rdrDay span.rdrInRange {
-  background-color: rgba(248, 248, 248, 0.062) !important;
-}
+// .rdrCalendarWrapper,
+// .rdrCalendarWrapper .rdrCalendarWrapper .rdrDay span.rdrInRange {
+//   background-color: rgba(248, 248, 248, 0.062) !important;
+// }
 
 .rdrDayToday .rdrDayNumber span:after {
   background-color: #ffffff00 !important;
@@ -150,13 +150,6 @@ article {
 .rdrStartEdge,
 .rdrEndEdge {
   padding-top: 2rem !important;
-}
-
-.rdrStartEdge .rdrDayNumber,
-.rdrEndEdge .rdrDayNumber {
-  padding-bottom: 2rem !important;
-  position: relative;
-  z-index: 2;
 }
 
 .rdrStartEdge .rdrDayPrice,
@@ -194,12 +187,18 @@ article {
   text-underline-offset: 0.2rem !important;
 }
 
+.rdrDay.rdrDayPassive.rdrDayWeekend.rdrDayEndOfWeek {
+  pointer-events: none;
+  opacity: 0;
+}
 
+.rdrDay.rdrDayPassive.rdrDayToday.rdrDayWeekend.rdrDayStartOfWeek {
+  pointer-events: none;
+  opacity: 0;
+}
 
 .rdrDayPassive {
   pointer-events: none;
-  opacity: 0.5;
-  text-decoration: line-through;
 }
 
 .lp-button {
