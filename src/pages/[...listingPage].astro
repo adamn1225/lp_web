@@ -263,6 +263,16 @@ function capitalizeFirstLetter(string: string) {
                         client:only="react"
                       />
                     </div>
+                    <div class="flex gap-4 items-center mt-6">
+                      <span class="flex flex-col items-center justify-center">
+                        <span> <IoIosBed size="24" /></span>
+                        <span>{beds} bedrooms</span>
+                      </span>
+                      <span class="flex flex-col items-center justify-center">
+                        <span><FaBath size="24" /></span>
+                        <span>{bathrooms} bathrooms</span>
+                      </span>
+                    </div>
                     <div class="w-full flex justify-center">
                       <BedTypes beds={beds} client:only="react" />
                     </div>
@@ -296,7 +306,16 @@ function capitalizeFirstLetter(string: string) {
                   class="flex flex-col justify-center items-center md:w-full"
                 >
                   <InstantBooking listingId={listingId} client:only="react" />
-
+                  <div class="flex gap-4 items-center mt-6">
+                    <span>
+                      <IoIosBed size="24" />
+                      {beds} bedrooms
+                    </span>
+                    <span>
+                      <FaBath size="24" />
+                      {bathrooms} bathrooms
+                    </span>
+                  </div>
                   <div class="flex justify-center">
                     <BedTypes beds={beds} client:only="react" />
                   </div>
@@ -315,16 +334,7 @@ function capitalizeFirstLetter(string: string) {
                 </div>
               </div>
             </div>
-            <div class="flex gap-4 items-center mt-6">
-              <span>
-                <IoIosBed size="24" />
-                {beds} bedrooms
-              </span>
-              <span>
-                <FaBath size="24" />
-                {bathrooms} bathrooms
-              </span>
-            </div>
+
             <!-- property content -->
             <div class="relative" x-data="{ activeTab: 'tab-1' }">
               <div
@@ -357,7 +367,7 @@ function capitalizeFirstLetter(string: string) {
                     <a
                       @click.prevent="activeTab = 'tab-3'"
                       class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline w-full"
-                      >Comments</a
+                      >Reviews</a
                     >
                   </li>
                 </ul>
