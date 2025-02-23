@@ -120,7 +120,7 @@ article {
 .react-datepicker__day--in-selecting-range,
 .react-datepicker__day--in-range,
 .react-datepicker__day--keyboard-selected {
-  background-color: #102C57 !important;
+  background-color: #f8f0e5 !important;
 }
 
 .react-datepicker__day--today {
@@ -138,67 +138,50 @@ article {
   -moz-appearance: textfield;
 }
 
-// .rdrCalendarWrapper,
-// .rdrCalendarWrapper .rdrCalendarWrapper .rdrDay span.rdrInRange {
-//   background-color: rgba(248, 248, 248, 0.062) !important;
-// }
-
-.rdrDayToday .rdrDayNumber span:after {
-  background-color: #ffffff00 !important;
-}
-
-.rdrStartEdge,
-.rdrEndEdge {
-  padding-top: 2rem !important;
-}
-
-.rdrStartEdge .rdrDayPrice,
-.rdrEndEdge .rdrDayPrice {
-  padding-top: 2rem !important;
-}
-
-.rdrInRange {
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
-}
-
-.rdrInRange .rdrDayNumber {
-  padding-bottom: 1rem !important;
-}
-
-.rdrInRange .rdrDayPrice {
-  padding-top: 1rem !important;
+.react-datepicker__day {
+  width: 2rem !important;
+  height: 2.5rem !important;
+  position: relative;
 }
 
 .rdrDayNumber {
   font-size: 10px !important;
   font-weight: 600 !important;
-  padding-bottom: 0.5rem !important;
-  padding-right: 0.5rem !important;
-  color: #202020 !important;
+  position: absolute !important;
+  color: #102C57 !important;
+  top: 0rem !important;
+  left: 0rem !important;
+  text-decoration: underline !important;
 }
 
 .rdrDayPrice {
   font-size: 11px !important;
   font-weight: 400 !important;
-  padding-top: 0.5rem !important;
   color: #066d06 !important;
+  position: absolute !important;
+  bottom: 0rem !important;
+  right: 0rem !important;
   text-decoration: underline !important;
   text-underline-offset: 0.2rem !important;
 }
 
-.rdrDay.rdrDayPassive.rdrDayWeekend.rdrDayEndOfWeek {
-  pointer-events: none;
-  opacity: 0;
+.react-datepicker__current-month {
+  color: #f8f0e5 !important;
 }
 
-.rdrDay.rdrDayPassive.rdrDayToday.rdrDayWeekend.rdrDayStartOfWeek {
-  pointer-events: none;
-  opacity: 0;
+.react-datepicker__day-name {
+  color: #f8f0e5 !important;
 }
 
-.rdrDayPassive {
+.react-datepicker__header {
+  background-color: #102C57 !important;
+  color: #f8f0e5 !important;
+  border-bottom: 1px solid #214479 !important;
+}
+
+.disabled-date {
   pointer-events: none;
+  opacity: 0.2;
 }
 
 .lp-button {

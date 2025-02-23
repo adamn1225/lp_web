@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { DateRange } from "react-date-range";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "../styles/global.scss"; // Ensure the global styles are imported
 
 interface CalendarComponentProps {
@@ -13,104 +12,65 @@ interface CalendarComponentProps {
 }
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates, datePrices, minNights }) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const initialRange = [{ startDate: null, endDate: null, key: 'selection' }];
+  const handleStartDateChange = (date: Date | null) => {
+    setStartDate(date);
+    setState([{ startDate: date, endDate, key: 'selection' }]);
+  };
 
-  const formattedDisabledDates = disabledDates.map(date => {
-    const newDate = new Date(date);
-    newDate.setHours(0, 0, 0, 0);
-    return newDate;
-  });
+  const handleEndDateChange = (date: Date | null) => {
+    setEndDate(date);
+    setState([{ startDate, endDate: date, key: 'selection' }]);
+  };
 
-  console.log('Formatted disabled dates:', formattedDisabledDates);
+  const isDateDisabled = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today || disabledDates.some(disabledDate => disabledDate.getTime() === date.getTime());
+  };
 
-  const dayContentRenderer = (date) => {
+  const renderDayContents = (day: number, date: Date) => {
     const dateString = date.toISOString().split('T')[0];
     const price = datePrices[dateString];
-    const isDisabled = formattedDisabledDates.some(disabledDate => disabledDate.getTime() === date.getTime());
-    const isStartOfMonth = date.getDate() === 1;
-    const isEndOfMonth = date.getDate() === new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    const isPassive = date.getMonth() !== today.getMonth() && date.getMonth() !== nextMonth.getMonth();
+    const isDisabled = isDateDisabled(date);
 
     return (
-      <div className={`rdrDay flex justify-between gap-5 ${isStartOfMonth ? 'rdrDayStartOfMonth' : ''} ${isEndOfMonth ? 'rdrDayEndOfMonth' : ''} ${isPassive ? 'rdrDayPassive' : ''}`}>
-        <span className="rdrDayNumber">{date.getDate()}</span>
+      <div className="rdrDay flex justify-between gap-5">
+        <span className="rdrDayNumber">{day}</span>
         {!isDisabled && price && <div className="rdrDayPrice">${price}</div>}
       </div>
     );
   };
 
-  const [months, setMonths] = useState(2);
-
-  useEffect(() => {
-    const updateMonths = () => {
-      if (window.innerWidth < 768) {
-        setMonths(1);
-      } else {
-        setMonths(2);
-      }
-    };
-
-    updateMonths();
-    window.addEventListener('resize', updateMonths);
-
-    return () => window.removeEventListener('resize', updateMonths);
-  }, []);
-
-  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newStartDate = new Date(e.target.value);
-    const newEndDate = state[0].endDate;
-    setState([{ startDate: newStartDate, endDate: newEndDate, key: 'selection' }]);
-  };
-
-  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newStartDate = state[0].startDate;
-    const newEndDate = new Date(e.target.value);
-    setState([{ startDate: newStartDate, endDate: newEndDate, key: 'selection' }]);
-  };
-
-  const handleDateRangeChange = (item) => {
-    setState([item.selection]);
-  };
-
-  const nextMonth = new Date(today);
-  nextMonth.setMonth(today.getMonth() + 1);
-
   return (
-    <div className="flex flex-col-reverse md:flex-col">
-      <div className="flex justify-center items-center gap-1 md:gap-4 -mt-1 md:mt-0 mb-4 md:-mb-2">
-        <div className="flex flex-col w-full">
-          <input
-            type="date"
-            value={state[0].startDate ? state[0].startDate.toISOString().split('T')[0] : ''}
-            onChange={handleStartDateChange}
-            className="p-1 border rounded w-full"
-          />
-        </div>
-
-        <div className="flex flex-col w-full">
-          <input
-            type="date"
-            value={state[0].endDate ? state[0].endDate.toISOString().split('T')[0] : ''}
-            onChange={handleEndDateChange}
-            className="p-1 border rounded w-full"
-          />
-        </div>
+    <div className="flex items-center justify-center gap-2">
+      <div className="flex flex-col w-full mb-4">
+        <DatePicker
+          selected={startDate}
+          onChange={handleStartDateChange}
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+          placeholderText="Start Date"
+          className="p-1 border rounded w-full"
+          dayClassName={(date) => isDateDisabled(date) ? "disabled-date" : ""}
+          renderDayContents={renderDayContents}
+        />
       </div>
-      <div style={{ width: '80%' }}>
-        <DateRange
-          editableDateInputs={true}
-          onChange={handleDateRangeChange}
-          moveRangeOnFirstSelection={false}
-          ranges={state.length ? state : initialRange}
-          disabledDates={formattedDisabledDates}
-          minDate={today}
-          dayContentRenderer={dayContentRenderer}
-          months={months}
-          direction="horizontal"
-          shownDate={today}
+      <div className="flex flex-col w-full mb-4">
+        <DatePicker
+          selected={endDate}
+          onChange={handleEndDateChange}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+          placeholderText="End Date"
+          className="p-1 border rounded w-full"
+          dayClassName={(date) => isDateDisabled(date) ? "disabled-date" : ""}
+          renderDayContents={renderDayContents}
         />
       </div>
     </div>
