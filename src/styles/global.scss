@@ -295,3 +295,19 @@ article {
   padding: 0 16px 18px;
   box-sizing: border-box;
 }
+
+.main-image-container,
+.image-gallery-container {
+  height: 100%;
+}
+
+.main-image {
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-gallery-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

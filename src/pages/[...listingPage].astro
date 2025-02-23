@@ -9,7 +9,7 @@ import InquireForm from "@components/InquireForm";
 import InstantBooking from "@components/InstantBooking.tsx";
 import { fetchAllListings } from "./api/dataFetcher";
 import SwiperComponent from "@components/SwiperComponent.tsx";
-import { IoIosBed } from "react-icons/io";
+import { IoIosBed, IoMdPeople } from "react-icons/io";
 import { FaBath } from "react-icons/fa";
 import BedTypes from "@components/ui/BedTypes.tsx";
 import ImageGallery from "@components/ImageGallery.tsx";
@@ -42,9 +42,10 @@ export async function getStaticPaths() {
           bedsCount: listing.beds,
           Description: listing.publicDescription,
           listingId: listing._id,
-          bedrooms: listing.bedrooms,
+          bedrooms: listing.listingRooms,
           checkIn: listing.defaultCheckInTime,
           checkOut: listing.defaultCheckOutTime,
+          accommodates: listing.accommodates,
         },
       };
     }),
@@ -100,9 +101,10 @@ export async function get({ params }) {
     beds: listing.listingRooms,
     bedsCount: listing.beds,
     listingId: listing._id,
-    bedrooms: listing.bedrooms,
+    bedrooms: listing.listingRooms,
     checkIn: listing.defaultCheckInTime,
     checkOut: listing.defaultCheckOutTime,
+    accommodates: listing.accommodates,
   };
 }
 
@@ -126,6 +128,7 @@ const {
   checkIn,
   checkOut,
   bedrooms,
+  accommodates,
 } = Astro.props;
 
 function capitalizeFirstLetter(string: string) {
@@ -229,22 +232,24 @@ function capitalizeFirstLetter(string: string) {
               class="flex flex-col md:flex-row items-start justify-start h-fit w-auto"
             >
               <div
-                class="flex flex-col md:flex-row justify-normal gap-20 w-full mr-3"
+                class="flex flex-col md:flex-row justify-normal gap-20 w-full h-full mr-3"
               >
-                <div class="hidden md:flex gap-1 justify-start items-start">
-                  <div class="w-auto h-min">
+                <div
+                  class="hidden md:flex gap-1 justify-start items-start h-full w-5/6"
+                >
+                  <div class="main-image-container h-full">
                     <img
-                      class="block w-auto h-min object-cover main-image"
+                      class="block w-auto h-full object-cover main-image"
                       src={pictures[0].original}
                       alt="Main image"
                       width={2000}
-                      height={1200}
+                      height={1300}
                       data-zoom
                       loading="lazy"
                     />
                   </div>
                   <div
-                    class="flex flex-col items-start h-full w-1/6 overflow-y-auto no-scrollbar"
+                    class="image-gallery-container overflow-y-auto no-scrollbar"
                   >
                     <ImageGallery pictures={pictures} client:only="react" />
                   </div>
@@ -253,6 +258,20 @@ function capitalizeFirstLetter(string: string) {
                 <div
                   class="xs:hidden sm:hidden md:flex flex-col justify-start items-center"
                 >
+                  <div class="flex gap-4 items-center mt-6">
+                    <span class="flex flex-col items-center justify-center">
+                      <span> <IoIosBed size="24" /></span>
+                      <span>{beds} bedrooms</span>
+                    </span>
+                    <span class="flex flex-col items-center justify-center">
+                      <span><FaBath size="24" /></span>
+                      <span>{bathrooms} bathrooms</span>
+                    </span>
+                    <span class="flex flex-col items-center justify-center">
+                      <span><IoMdPeople size="24" /></span>
+                      <span>{accommodates} guests</span>
+                    </span>
+                  </div>
                   <div
                     id="main"
                     class="flex flex-col justify-center items-center w-full"
@@ -263,18 +282,9 @@ function capitalizeFirstLetter(string: string) {
                         client:only="react"
                       />
                     </div>
+
                     <div class="w-full flex justify-center">
-                      <BedTypes beds={beds} client:only="react" />
-                    </div>
-                    <div class="flex gap-4 items-center mt-6">
-                      <span class="flex flex-col items-center justify-center">
-                        <span> <IoIosBed size="24" /></span>
-                        <span>{beds} bedrooms</span>
-                      </span>
-                      <span class="flex flex-col items-center justify-center">
-                        <span><FaBath size="24" /></span>
-                        <span>{bathrooms} bathrooms</span>
-                      </span>
+                      <BedTypes beds={bedrooms} client:only="react" />
                     </div>
 
                     <div
@@ -318,7 +328,7 @@ function capitalizeFirstLetter(string: string) {
                     </span>
                   </div>
                   <div class="flex justify-center">
-                    <BedTypes beds={beds} client:only="react" />
+                    <BedTypes beds={bedrooms} client:only="react" />
                   </div>
 
                   <div
