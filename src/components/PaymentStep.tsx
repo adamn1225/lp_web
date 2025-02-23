@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CreditCard } from 'lucide-react';
 import { loadScript } from '@guestyorg/tokenization-js';
-import type { GuestyTokenizationNamespace, GuestyTokenizationRenderOptions } from '@guestyorg/tokenization-js';
+import type { GuestyTokenizationV1Namespace, GuestyTokenizationV1RenderOptions } from '@guestyorg/tokenization-js';
 
 interface PaymentStepProps {
     calculatedPrice: number;
@@ -32,12 +32,12 @@ const PaymentStep: React.FC<PaymentStepProps> = ({
     setLoading,
     setError,
 }) => {
-    const [guestyTokenization, setGuestyTokenization] = useState<GuestyTokenizationNamespace | null>(null);
+    const [guestyTokenization, setGuestyTokenization] = useState<GuestyTokenizationV1Namespace | null>(null);
     const [isFormValid, setIsFormValid] = useState(false);
 
     useEffect(() => {
         const initializeGuestyTokenization = async () => {
-            const options: GuestyTokenizationRenderOptions = {
+            const options: GuestyTokenizationV1RenderOptions = {
                 containerId: 'payment-container',
                 providerId: '65667fb19986e2000e99278f',
                 amount: calculatedPrice || null,
@@ -47,7 +47,7 @@ const PaymentStep: React.FC<PaymentStepProps> = ({
             };
 
             loadScript()
-                .then((guestyTokenization) => {
+                .then((guestyTokenization: GuestyTokenizationV1Namespace) => {
                     guestyTokenization.render(options);
                     setGuestyTokenization(guestyTokenization);
                 })

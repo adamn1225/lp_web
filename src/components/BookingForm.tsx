@@ -4,7 +4,7 @@ import 'react-phone-number-input/style.css';
 import TextArea from './TextArea';
 import { CreditCard } from 'lucide-react';
 
-const BookingFormStep1 = ({
+const BookingForm = ({
     guests,
     setGuests,
     pets,
@@ -42,6 +42,8 @@ const BookingFormStep1 = ({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        // Comment out or remove the Netlify function call for testing purposes
+        /*
         try {
             const response = await fetch('/.netlify/functions/generatedPdfAndEmail', {
                 method: 'POST',
@@ -75,6 +77,9 @@ const BookingFormStep1 = ({
             console.error('Error sending email:', error);
             alert('Error sending email. Please try again later.');
         }
+        */
+        // alert('Form submitted successfully!');
+        onSubmit(); // Call the onSubmit function to move to the next step
     };
 
     const startDate = dateRange[0].startDate;
@@ -87,18 +92,6 @@ const BookingFormStep1 = ({
         <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center w-full">
             <div className="w-full xs:px-1 md:px-4">
                 <div className='flex  flex-col items-center justify-around'>
-                    <div className='flex justify-between gap-4 w-full'>
-                        <button
-                            type="button"
-                            onClick={() => {
-                                closeModal();
-                                setIsInquireModalOpen(true); // Open new modal
-                            }}
-                            className="absolute top-0 right-0 md:mt-4 md:mr-4 lp-button text-muted-50 px-4 py-2 font-medium"
-                        >
-                            Close
-                        </button>
-                    </div>
                     <h2 className="xs:text-center xs:text-md text-slate-800 text-xl mb-4 underline self-center">Fill out the form below and reserve the date</h2>
                 </div>
                 <div className='flex gap-4 w-full'>
@@ -181,8 +174,8 @@ const BookingFormStep1 = ({
                     </div>
                 </div>
             </div>
-            <div className='xs:w-full flex flex-col items-center gap-0 w-fit'>
-                <div className='flex justify-between w-1/3 '>
+            <div className='xs:w-full flex flex-col items-center gap-0 w-full'>
+                <div className='flex justify-between gap-4 w-full'>
                     <div className="mt-4 w-full">
                         <div className="text-base flex justify-around mb-6">
                             <span><strong>Check-in: </strong>{dateRange[0].startDate.toLocaleDateString()}</span>
@@ -237,4 +230,4 @@ const BookingFormStep1 = ({
     );
 };
 
-export default BookingFormStep1;
+export default BookingForm;
