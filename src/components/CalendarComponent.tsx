@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import "../styles/global.scss"; // Ensure the global styles are imported
 
 interface CalendarComponentProps {
   state: any[];
@@ -29,9 +30,12 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
     const dateString = date.toISOString().split('T')[0];
     const price = datePrices[dateString];
     const isDisabled = formattedDisabledDates.some(disabledDate => disabledDate.getTime() === date.getTime());
+    const isStartOfMonth = date.getDate() === 1;
+    const isEndOfMonth = date.getDate() === new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    const isPassive = date.getMonth() !== today.getMonth() && date.getMonth() !== nextMonth.getMonth();
 
     return (
-      <div className="rdrDay flex justify-between gap-5">
+      <div className={`rdrDay flex justify-between gap-5 ${isStartOfMonth ? 'rdrDayStartOfMonth' : ''} ${isEndOfMonth ? 'rdrDayEndOfMonth' : ''} ${isPassive ? 'rdrDayPassive' : ''}`}>
         <span className="rdrDayNumber">{date.getDate()}</span>
         {!isDisabled && price && <div className="rdrDayPrice">${price}</div>}
       </div>
@@ -71,6 +75,9 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
     setState([item.selection]);
   };
 
+  const nextMonth = new Date(today);
+  nextMonth.setMonth(today.getMonth() + 1);
+
   return (
     <div className="flex flex-col-reverse md:flex-col">
       <div className="flex justify-center items-center gap-1 md:gap-4 -mt-1 md:mt-0 mb-4 md:-mb-2">
@@ -103,6 +110,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
           dayContentRenderer={dayContentRenderer}
           months={months}
           direction="horizontal"
+          shownDate={today}
         />
       </div>
     </div>

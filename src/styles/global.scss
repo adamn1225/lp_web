@@ -194,6 +194,14 @@ article {
   text-underline-offset: 0.2rem !important;
 }
 
+
+
+.rdrDayPassive {
+  pointer-events: none;
+  opacity: 0;
+  text-decoration: line-through;
+}
+
 .lp-button {
   @apply bg-secondary text-white rounded-lg px-4 py-2;
 }
@@ -304,28 +312,4 @@ article {
   margin-top: 2rem;
   padding: 0 16px 18px;
   box-sizing: border-box;
-}
-
-.price-day {
-  position: relative;
-}
-
-.price-day::after {
-  content: attr(data-price);
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-size: 0.75rem;
-}
-
-.disabled-day {
-  color: gray;
-}
-
-.rdrDateDisplayWrapper {
-  display: none !important;
 }
