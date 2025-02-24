@@ -88,8 +88,8 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                 }
 
                 // Apply the weekly or monthly factor to the total stay price
-                if (daysDiff >= 30) stayPrice *= data.monthlyPriceFactor || 1;
-                else if (daysDiff >= 7) stayPrice *= data.weeklyPriceFactor || 1;
+                if (daysDiff >= 28) stayPrice *= data.monthlyPriceFactor || 1;
+                else if (daysDiff >= 6) stayPrice *= data.weeklyPriceFactor || 1;
 
                 const petPrice = pets > 0 && amenities.some(amenity => amenity.toLowerCase().includes('pets')) ? data.petFee * pets : 0;
                 const totalPrice = stayPrice + data.cleaningFee + petPrice;
