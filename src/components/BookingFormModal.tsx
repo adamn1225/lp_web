@@ -87,6 +87,7 @@ const BookingFormModal: React.FC<BookingFormModalProps> = ({
                     stayPrice += data.datePrices?.[formattedDate] || data.basePrice;
                 }
 
+                // Apply the weekly or monthly factor to the total stay price
                 if (daysDiff >= 30) stayPrice *= data.monthlyPriceFactor || 1;
                 else if (daysDiff >= 7) stayPrice *= data.weeklyPriceFactor || 1;
 

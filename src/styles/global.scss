@@ -196,6 +196,23 @@ article {
   text-underline-offset: 0.2rem !important;
 }
 
+.rdrDayDisabled {
+  color: #747474 !important;
+  background-color: #8d8d8d !important;
+  cursor: not-allowed !important; // This will show a disabled symbol on hover
+  opacity: 0.90 !important; // Optional: Reduce opacity to indicate disabled state
+  pointer-events: none !important; // Optional: Disable pointer events to prevent click
+}
+
+.rdrDayDisabled::after {
+  content: "🚫";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1rem;
+}
+
 .lp-button {
   @apply bg-secondary text-white rounded-lg px-4 py-2;
 }
