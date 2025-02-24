@@ -7,26 +7,26 @@ import "../styles/global.scss"; // Ensure the global styles are imported
 interface CalendarComponentProps {
   state: any[];
   setState: (state: any[]) => void;
-  disabledDates: Date[];
+  disabledDates: string[];
   datePrices: { [key: string]: number };
   minNights: number;
 }
 
 const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, disabledDates, datePrices, minNights }) => {
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
 
   const initialRange = [{ startDate: null, endDate: null, key: 'selection' }];
 
+  // Push each disabled date one day ahead
   const formattedDisabledDates = disabledDates.map(date => {
     const newDate = new Date(date);
-    newDate.setHours(0, 0, 0, 0);
+    newDate.setDate(newDate.getDate() + 1);
     return newDate;
   });
 
   console.log('Formatted disabled dates:', formattedDisabledDates);
 
-  const dayContentRenderer = (date) => {
+  const dayContentRenderer = (date: Date) => {
     const dateString = date.toISOString().split('T')[0];
     const price = datePrices[dateString];
     const isDisabled = formattedDisabledDates.some(disabledDate => disabledDate.getTime() === date.getTime());
@@ -35,9 +35,13 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
     const isPassive = date.getMonth() !== state[0].startDate.getMonth();
 
     return (
-      <div className={`rdrDay flex justify-between gap-5 ${isStartOfMonth ? 'rdrDayStartOfMonth' : ''} ${isEndOfMonth ? 'rdrDayEndOfMonth' : ''} ${isPassive ? 'rdrDayPassive' : ''}`}>
+      <div className={`rdrDay flex justify-between gap-5 ${isStartOfMonth ? 'rdrDayStartOfMonth' : ''} ${isEndOfMonth ? 'rdrDayEndOfMonth' : ''}`}>
         <span className="rdrDayNumber">{date.getDate()}</span>
-        {!isDisabled && price && <div className="rdrDayPrice">${price}</div>}
+        {price && (
+          <div className={`rdrDayPrice ${isDisabled ? 'line-through opacity-50' : ''}`}>
+            ${price}
+          </div>
+        )}
       </div>
     );
   };

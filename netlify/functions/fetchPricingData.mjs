@@ -79,27 +79,18 @@ export const handler = async (event, context) => {
 
         const basePrice = data2.data.days.length > 0 ? Math.round(data2.data.days[0].price) : 0;
 
-        const unavailableDates = data2.data.days
-            .filter(day => day.status === 'unavailable')
-            .map(day => {
-                const date = new Date(day.date);
-                date.setHours(0, 0, 0, 0);
-                return date.toISOString().split('T')[0];
-            });
-
         const bookedDates = data2.data.days
-            .filter(day => day.status === 'booked')
+            .filter(day => day.status === 'booked' || day.status === 'confirmed')
             .flatMap(day => {
                 const blockRefs = day.blockRefs || [];
                 return blockRefs.flatMap(blockRef => {
                     if (blockRef.reservation && blockRef.reservation.checkInDateLocalized && blockRef.reservation.checkOutDateLocalized) {
-                        const checkInDate = new Date(blockRef.reservation.checkInDateLocalized);
-                        const checkOutDate = new Date(blockRef.reservation.checkOutDateLocalized);
+                        const checkInDate = blockRef.reservation.checkInDateLocalized;
+                        const checkOutDate = blockRef.reservation.checkOutDateLocalized;
                         const dates = [];
                         let currentDate = new Date(checkInDate);
                         const endDate = new Date(checkOutDate);
                         while (currentDate <= endDate) {
-                            currentDate.setHours(0, 0, 0, 0);
                             dates.push(currentDate.toISOString().split('T')[0]);
                             currentDate.setDate(currentDate.getDate() + 1);
                         }
@@ -109,7 +100,11 @@ export const handler = async (event, context) => {
                 });
             });
 
-        const allUnavailableDates = [...new Set([...unavailableDates, ...bookedDates])];
+        const unavailableDates = data2.data.days
+            .filter(day => day.allotment === 0)
+            .map(day => day.date);
+
+        const allUnavailableDates = [...new Set([...bookedDates, ...unavailableDates])];
 
         const accommodates = data1.accommodates || 2;
 
@@ -122,7 +117,8 @@ export const handler = async (event, context) => {
         const minNights = terms.minNights || 2;
 
         const datePrices = data2.data.days.reduce((acc, day) => {
-            acc[day.date] = Math.round(day.price);
+            const dateString = day.date;
+            acc[dateString] = Math.round(day.price);
             return acc;
         }, {});
 

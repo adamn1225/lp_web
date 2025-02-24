@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addDays } from "date-fns";
+import { addDays, addYears } from "date-fns";
 import CalendarComponent from "./CalendarComponent";
 import BookingFormModal from "./BookingFormModal";
 
@@ -33,8 +33,8 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
       key: 'selection'
     }
   ]);
-  const [unavailableDates, setUnavailableDates] = useState<Date[]>([]);
-  const [bookedDates, setBookedDates] = useState<Date[]>([]);
+  const [unavailableDates, setUnavailableDates] = useState<string[]>([]);
+  const [bookedDates, setBookedDates] = useState<string[]>([]);
   const [datePrices, setDatePrices] = useState<{ [key: string]: number }>({});
   const [isLocal, setIsLocal] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -52,7 +52,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
     const fetchUnavailableDates = async () => {
       try {
         const startDate = new Date().toISOString().slice(0, 10);
-        const endDate = '2028-08-24'; // Set end date to 2028-08-24
+        const endDate = addYears(new Date(), 1).toISOString().slice(0, 10); // Set end date to one year from today
         const apiUrl = isLocal
           ? `http://localhost:8888/.netlify/functions/fetchPricingData?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`
           : `/.netlify/functions/fetchPricingData?listingId=${listingId}&startDate=${startDate}&endDate=${endDate}`;
@@ -78,8 +78,8 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
           throw new Error('Invalid data structure');
         }
 
-        const unavailable = data.unavailableDates.map((date: string) => new Date(date));
-        const booked = data.bookedDates.map((date: string) => new Date(date));
+        const unavailable = data.unavailableDates;
+        const booked = data.bookedDates;
 
         console.log('Unavailable dates:', unavailable);
         console.log('Booked dates:', booked);
@@ -102,7 +102,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
       setState([
         {
           startDate: new Date(),
-          endDate: addDays(new Date(), 4),
+          endDate: addDays(new Date(), 7),
           key: 'selection'
         }
       ]);
