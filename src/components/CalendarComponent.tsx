@@ -84,7 +84,7 @@ const CalendarComponent: React.FC<CalendarComponentProps> = ({ state, setState, 
 
   return (
     <div className="flex flex-col-reverse md:flex-col">
-      <div className="flex justify-center items-center gap-1 md:gap-4 -mt-1 md:mt-0 mb-4 md:-mb-2">
+      <div className="flex justify-center items-center gap-1 md:gap-4 -mt-1 md:mt-0 mb-4 md:mb-3">
         <div className="flex flex-col w-full">
           <input
             type="date"
