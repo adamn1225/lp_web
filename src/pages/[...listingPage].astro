@@ -176,7 +176,7 @@ function capitalizeFirstLetter(string: string) {
             </nav>
             <!-- property details title -->
             <div
-              class="flex flex-col md:flex-row items-end justify-between md:mb-6"
+              class="flex flex-col md:flex-row items-center justify-between md:mb-6"
             >
               <!-- left -->
               <div class="left mb-8 md:m-0">
@@ -229,36 +229,42 @@ function capitalizeFirstLetter(string: string) {
             </div>
             <!-- property details -->
             <div
-              class="flex flex-col md:flex-row items-start justify-start h-fit w-auto"
+              class="flex flex-col md:flex-row justify-center w-full h-full gap-4 mr-3"
             >
               <div
-                class="flex flex-col md:flex-row justify-normal gap-20 w-full h-full mr-3"
+                class="hidden md:flex gap-1 justify-start items-start h-full w-5/6"
+              >
+                <div class="main-image-container h-full">
+                  <img
+                    class="block w-auto h-full object-cover main-image"
+                    src={pictures[0].original}
+                    alt="Main image"
+                    width={2000}
+                    height={1300}
+                    data-zoom
+                    loading="lazy"
+                  />
+                </div>
+                <div
+                  class="image-gallery-container w-1/4 overflow-y-auto no-scrollbar"
+                >
+                  <ImageGallery pictures={pictures} client:only="react" />
+                </div>
+              </div>
+              <!-- right -->
+              <div
+                class="xs:hidden sm:hidden md:flex flex-col justify-start items-start w-1/2"
               >
                 <div
-                  class="hidden md:flex gap-1 justify-start items-start h-full w-5/6"
+                  id="main"
+                  class="flex flex-col justify-center items-center w-full"
                 >
-                  <div class="main-image-container h-full">
-                    <img
-                      class="block w-auto h-full object-cover main-image"
-                      src={pictures[0].original}
-                      alt="Main image"
-                      width={2000}
-                      height={1300}
-                      data-zoom
-                      loading="lazy"
-                    />
-                  </div>
-                  <div
-                    class="image-gallery-container overflow-y-auto no-scrollbar"
+                  <h3
+                    class="text-xl font-bold text-center mb-2 underline underline-offset-4"
                   >
-                    <ImageGallery pictures={pictures} client:only="react" />
-                  </div>
-                </div>
-                <!-- right -->
-                <div
-                  class="xs:hidden sm:hidden md:flex flex-col justify-start items-center"
-                >
-                  <div class="flex gap-4 items-center mt-6">
+                    Property details
+                  </h3>
+                  <div class="flex gap-4 items-center">
                     <span class="flex flex-col items-center justify-center">
                       <span> <IoIosBed size="24" /></span>
                       <span>{beds} bedrooms</span>
@@ -272,69 +278,18 @@ function capitalizeFirstLetter(string: string) {
                       <span>{accommodates} guests</span>
                     </span>
                   </div>
-                  <div
-                    id="main"
-                    class="flex flex-col justify-center items-center w-full"
-                  >
-                    <div class="w-full flex justify-center items-center">
-                      <InstantBooking
-                        listingId={listingId}
-                        client:only="react"
-                      />
-                    </div>
-
-                    <div class="w-full flex justify-center">
-                      <BedTypes beds={bedrooms} client:only="react" />
-                    </div>
-
-                    <div
-                      class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
-                    >
-                      <span class="sm:hidden mt-12">
-                        <InquireForm
-                          listingId={listingId}
-                          buttonText="Chat with a property Agent"
-                          client:load
-                        />
-                      </span>
-                    </div>
+                  <div class="w-full flex justify-center items-center">
+                    <InstantBooking listingId={listingId} client:only="react" />
                   </div>
-                </div>
-              </div>
-              <!-- mobile -->
-              <div
-                class="md:hidden flex w-full flex-col justify-start items-center px-7 md:px-2"
-              >
-                <span class="xs:hidden">
-                  <InquireForm
-                    listingId={listingId}
-                    buttonText="Chat with a property Agent"
-                    client:load
-                  />
-                </span>
-                <div
-                  id="main"
-                  class="flex flex-col justify-center items-center md:w-full"
-                >
-                  <InstantBooking listingId={listingId} client:only="react" />
-                  <div class="flex gap-4 items-center mt-6">
-                    <span>
-                      <IoIosBed size="24" />
-                      {beds} bedrooms
-                    </span>
-                    <span>
-                      <FaBath size="24" />
-                      {bathrooms} bathrooms
-                    </span>
-                  </div>
-                  <div class="flex justify-center">
+
+                  <div class="w-full flex justify-center">
                     <BedTypes beds={bedrooms} client:only="react" />
                   </div>
 
                   <div
-                    class="flex flex-col gap-4 mt-6 border-b border-muted-200 dark:border-muted-800"
+                    class="flex flex-col gap-4 pb-6 mb-6 border-b border-muted-200 dark:border-muted-800"
                   >
-                    <span class="sm:hidden">
+                    <span class="sm:hidden mt-12">
                       <InquireForm
                         listingId={listingId}
                         buttonText="Chat with a property Agent"
@@ -345,152 +300,191 @@ function capitalizeFirstLetter(string: string) {
                 </div>
               </div>
             </div>
-
-            <!-- property content -->
-            <div class="relative" x-data="{ activeTab: 'tab-1' }">
+            <!-- mobile -->
+            <div
+              class="md:hidden flex w-full flex-col justify-start items-center px-7 md:px-2"
+            >
+              <span class="xs:hidden">
+                <InquireForm
+                  listingId={listingId}
+                  buttonText="Chat with a property Agent"
+                  client:load
+                />
+              </span>
               <div
-                class="tabs mb-6 max-w-fit flex flex-wrap text-base justify-between"
+                id="main"
+                class="flex flex-col justify-center items-center md:w-full"
               >
-                <ul
-                  class="flex max-w-fit items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none"
+                <InstantBooking listingId={listingId} client:only="react" />
+                <div class="flex gap-4 items-center mt-6">
+                  <span>
+                    <IoIosBed size="24" />
+                    {beds} bedrooms
+                  </span>
+                  <span>
+                    <FaBath size="24" />
+                    {bathrooms} bathrooms
+                  </span>
+                </div>
+                <div class="flex justify-center">
+                  <BedTypes beds={bedrooms} client:only="react" />
+                </div>
+
+                <div
+                  class="flex flex-col gap-4 mt-6 border-b border-muted-200 dark:border-muted-800"
                 >
-                  <li
-                    :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
-                  >
-                    <a
-                      @click.prevent="activeTab = 'tab-1'"
-                      class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
-                      >Description</a
-                    >
-                  </li>
-                  <li
-                    :class="activeTab === 'tab-2' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
-                  >
-                    <a
-                      @click.prevent="activeTab = 'tab-2'"
-                      class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
-                      >Amenities</a
-                    >
-                  </li>
-                  <li
-                    :class="activeTab === 'tab-3' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
-                  >
-                    <a
-                      @click.prevent="activeTab = 'tab-3'"
-                      class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline w-full"
-                      >Reviews</a
-                    >
-                  </li>
-                </ul>
+                  <span class="sm:hidden">
+                    <InquireForm
+                      listingId={listingId}
+                      buttonText="Chat with a property Agent"
+                      client:load
+                    />
+                  </span>
+                </div>
               </div>
-              <div
-                x-cloak
-                x-show="activeTab === 'tab-1'"
-                class="relative md:w-2/3"
+            </div>
+          </section>
+
+          <!-- property content -->
+          <div class="relative" x-data="{ activeTab: 'tab-1' }">
+            <div
+              class="tabs mb-6 max-w-fit flex flex-wrap text-base justify-between"
+            >
+              <ul
+                class="flex max-w-fit items-center flex-grow border-b dark:border-muted-800 border-muted-200 list-none"
               >
-                {
-                  Description?.summary && (
-                    <>
-                      <p class="text-muted-500 text-base xs:text-center">
-                        {Description.summary}
-                      </p>
-                      <br />
-                    </>
-                  )
-                }
-
-                {
-                  Description?.space && (
-                    <>
-                      <p class="text-muted-500 text-base xs:text-center">
-                        {Description.space}
-                      </p>
-                      <br />
-                    </>
-                  )
-                }
-
-                {
-                  Description?.notes && (
-                    <>
-                      <p class="text-muted-500 text-base xs:text-center">
-                        {Description.notes}
-                      </p>
-                      <br />
-                    </>
-                  )
-                }
-
-                {
-                  Description?.access && (
-                    <>
-                      <p class="text-muted-500 text-base xs:text-center">
-                        {Description.access}
-                      </p>
-                    </>
-                  )
-                }
-              </div>
-              <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
-                <div class="boxed-amenities flex flex-wrap justify-start gap-3">
-                  <!-- Amenity -->
-                  <div
-                    class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
+                <li
+                  :class="activeTab === 'tab-1' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
+                >
+                  <a
+                    @click.prevent="activeTab = 'tab-1'"
+                    class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                    >Description</a
                   >
-                    <div
-                      class="font-bold gap-2 flex justify-center items-center text-muted-900"
-                    >
-                      <div class="flex flex-wrap gap-4">
-                        {
-                          amenities.map((amenity: string) => {
-                            const iconName = amenitiesIcons[amenity];
-                            const IconComponent = loadIcon(iconName);
-                            console.log(
-                              `Loading icon for ${amenity}:`,
-                              iconName,
-                              IconComponent,
-                            );
-                            return (
-                              <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
-                                <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
-                                  {IconComponent ? (
-                                    <IconComponent class="text-2xl h-6" />
-                                  ) : null}
-                                  {amenity}
-                                </div>
+                </li>
+                <li
+                  :class="activeTab === 'tab-2' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
+                >
+                  <a
+                    @click.prevent="activeTab = 'tab-2'"
+                    class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline -mb-px"
+                    >Amenities</a
+                  >
+                </li>
+                <li
+                  :class="activeTab === 'tab-3' && 'is-active [&>a]:border-b-2 [&>a]:border-cyan-500 [&>a]:text-muted-900 dark:[&>a]:text-white'"
+                >
+                  <a
+                    @click.prevent="activeTab = 'tab-3'"
+                    class="flex justify-center items-center py-2 px-4 border-b border-transparent text-muted-400 cursor-pointer no-underline w-full"
+                    >Reviews</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div
+              x-cloak
+              x-show="activeTab === 'tab-1'"
+              class="relative md:w-2/3"
+            >
+              {
+                Description?.summary && (
+                  <>
+                    <p class="text-muted-500 text-base xs:text-center">
+                      {Description.summary}
+                    </p>
+                    <br />
+                  </>
+                )
+              }
+
+              {
+                Description?.space && (
+                  <>
+                    <p class="text-muted-500 text-base xs:text-center">
+                      {Description.space}
+                    </p>
+                    <br />
+                  </>
+                )
+              }
+
+              {
+                Description?.notes && (
+                  <>
+                    <p class="text-muted-500 text-base xs:text-center">
+                      {Description.notes}
+                    </p>
+                    <br />
+                  </>
+                )
+              }
+
+              {
+                Description?.access && (
+                  <>
+                    <p class="text-muted-500 text-base xs:text-center">
+                      {Description.access}
+                    </p>
+                  </>
+                )
+              }
+            </div>
+            <div x-cloak x-show="activeTab === 'tab-2'" class="relative">
+              <div class="boxed-amenities flex flex-wrap justify-start gap-3">
+                <!-- Amenity -->
+                <div
+                  class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white"
+                >
+                  <div
+                    class="font-bold gap-2 flex justify-center items-center text-muted-900"
+                  >
+                    <div class="flex flex-wrap gap-4">
+                      {
+                        amenities.map((amenity: string) => {
+                          const iconName = amenitiesIcons[amenity];
+                          const IconComponent = loadIcon(iconName);
+                          console.log(
+                            `Loading icon for ${amenity}:`,
+                            iconName,
+                            IconComponent,
+                          );
+                          return (
+                            <div class="dark:border-muted-800 text-center p-5 border border-muted-200 dark:bg-muted-950 bg-white">
+                              <div class="font-bold gap-2 flex justify-center items-center text-muted-900">
+                                {IconComponent ? (
+                                  <IconComponent class="text-2xl h-6" />
+                                ) : null}
+                                {amenity}
                               </div>
-                            );
-                          })
-                        }
-                      </div>
+                            </div>
+                          );
+                        })
+                      }
                     </div>
                   </div>
                 </div>
               </div>
-              <div
-                x-cloak
-                x-show="activeTab === 'tab-3'"
-                class="relative w-full"
-              >
-                <AirReviews listingId={listingId} client:idle />
-              </div>
-
-              <div
-                class="flex flex-wrap items-start justify-start gap-y-8 gap-x-6"
-              >
-              </div>
             </div>
-          </section>
-        </div>
-      </div>
+            <div x-cloak x-show="activeTab === 'tab-3'" class="relative w-full">
+              <AirReviews listingId={listingId} client:idle />
+            </div>
 
-      <!-- cards -->
-      <div class="mt-12">
-        <div class="flex flex-col"></div>
-        <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+              class="flex flex-wrap items-start justify-start gap-y-8 gap-x-6"
+            >
+            </div>
+          </div>
         </div>
       </div>
     </Section>
+
+    <!-- cards -->
+    <div class="mt-12">
+      <div class="flex flex-col"></div>
+      <div class="py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      </div>
+    </div>
   </main>
 </Layout>
 

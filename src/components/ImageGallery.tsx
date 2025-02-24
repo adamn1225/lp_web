@@ -40,7 +40,7 @@ const ImageGallery = ({ pictures }) => {
                 {pictures.slice(startIndex + 1, startIndex + 10).map((picture, index) => (
                     <img
                         key={index}
-                        className="object-cover max-h-36 w-56 shadow-md flex-1 cursor-pointer gallery-image"
+                        className="object-cover gallery-image cursor-pointer"
                         src={picture.original}
                         alt={`Sub image ${index + 1}`}
                         width={15000}
@@ -93,7 +93,8 @@ const ImageGallery = ({ pictures }) => {
             <style>
                 {`
                     .gallery-image {
-                        max-height: 100px; /* Adjust this value to match the desired height */
+                        height: 100px; /* Adjust this value to match the desired height */
+                        object-fit: cover;
                     }
 
                     .no-scrollbar::-webkit-scrollbar {

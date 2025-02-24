@@ -102,7 +102,7 @@ const InstantBooking: React.FC<{ listingId: string }> = ({ listingId }) => {
       setState([
         {
           startDate: new Date(),
-          endDate: addDays(new Date(), 7),
+          endDate: addDays(new Date(), 4),
           key: 'selection'
         }
       ]);
